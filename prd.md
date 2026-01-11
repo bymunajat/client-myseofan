@@ -1,18 +1,21 @@
-# Project Progress Report – Instagram Downloader App
+# Instagram Downloader App  
+## Project Progress Report
 
-## 1. Completed Features (User Side)
+---
 
-| No | Feature                             | Status       | Notes                                      |
-|----|-------------------------------------|--------------|--------------------------------------------|
-| 1  | Download Image                      | Completed    | Supports single image download             |
-| 2  | Download Video                      | Completed    | Supports single video download             |
-| 3  | Download Carousel (Images & Videos) | Completed    | Works with mixed carousel posts            |
-| 4  | Language Translation                | Completed    | UI and content support multiple languages  |
-| 5  | Paste Instagram Link Button         | Completed    | Allows quick link pasting                  |
+## 1. User Features (Completed)
+
+| No | Feature                              | Status    | Notes                                   |
+|----|--------------------------------------|-----------|-----------------------------------------|
+| 1  | Image Download                       | Completed | Supports single image                   |
+| 2  | Video Download                       | Completed | Supports single video                   |
+| 3  | Carousel Download (Image & Video)    | Completed | Supports mixed carousel posts           |
+| 4  | Multi-Language Support               | Completed | UI & content in multiple languages      |
+| 5  | Paste Instagram URL Button           | Completed | Quick link input                        |
 
 **Summary**
-- Core user features are fully implemented
-- Tested across multiple devices and browsers
+- All core user-facing features are completed  
+- Tested on multiple browsers and devices  
 
 ---
 
@@ -20,99 +23,146 @@
 
 ### 2.1 Website Settings
 
-| No | Feature         | Description                              |
-|----|-----------------|------------------------------------------|
-| 1  | Favicon Upload  | Upload and manage website favicon        |
-| 2  | Logo Upload     | Upload and manage website logo           |
-| 3  | Header Manager  | Add or edit custom header content        |
-| 4  | Footer Manager  | Add or edit custom footer content        |
+| Feature        | Description                         |
+|----------------|-------------------------------------|
+| Favicon Upload | Manage website favicon              |
+| Logo Upload    | Manage website logo                 |
+| Header Manager | Custom header content               |
+| Footer Manager | Custom footer content               |
 
 ---
 
 ### 2.2 SEO Management
 
-#### Global SEO
+#### Global SEO Settings
 
-| No | SEO Item                | Description                          |
-|----|-------------------------|--------------------------------------|
-| 1  | Website Name            | Global website name                  |
-| 2  | Default Meta Title      | Default meta title for all pages     |
-| 3  | Default Meta Description| Default meta description             |
-| 4  | OG Tags                 | Open Graph tags                      |
-| 5  | Schema Markup           | Default schema markup                |
+| SEO Item                 | Description                          |
+|--------------------------|--------------------------------------|
+| Website Name             | Global website identity              |
+| Default Meta Title       | Default title for all pages          |
+| Default Meta Description | Default meta description             |
+| Open Graph Tags          | Social media sharing metadata        |
+| Schema Markup            | Default JSON-LD schema               |
 
 #### Page-Level SEO
 
-| No | Page Type  | SEO Configuration                         |
-|----|-----------|--------------------------------------------|
-| 1  | Home Page | Custom meta title, description, OG, schema |
-| 2  | Video Page| Page-specific meta description             |
-| 3  | Reels Page| Page-specific meta description             |
-| 4  | Story Page| Page-specific meta description             |
-| 5  | Other     | Individual meta tags per page              |
+| Page Type | Configuration                                  |
+|----------|------------------------------------------------|
+| Home     | Custom meta title, description, OG, schema     |
+| Video    | Page-specific meta title & description         |
+| Reels    | Page-specific meta title & description         |
+| Story    | Page-specific meta title & description         |
+| Image    | Page-specific meta title & description         |
+| Custom   | Individual SEO per page                        |
 
 ---
 
 ### 2.3 Blog System
 
-| No | Feature     | Description                    |
-|----|-------------|--------------------------------|
-| 1  | Create Post | Add new blog posts             |
-| 2  | Edit Post   | Modify existing blog posts     |
-| 3  | Delete Post | Remove blog posts              |
-| 4  | SEO Fields  | Meta title & description       |
+| Feature     | Description                |
+|-------------|----------------------------|
+| Create Post | Add new blog articles      |
+| Edit Post   | Update existing posts      |
+| Delete Post | Remove blog posts          |
+| SEO Fields  | Meta title & description   |
 
 ---
 
 ### 2.4 Page Management
 
-| No | Page Name                 | Description                 |
-|----|---------------------------|-----------------------------|
-| 1  | Video Downloader Page     | Editable content area       |
-| 2  | Reels Downloader Page     | Editable content area       |
-| 3  | Story Downloader Page     | Editable content area       |
-| 4  | Image Downloader Page     | Editable content area       |
-| 5  | Privacy Policy Page       | Editable legal page         |
-| 6  | Terms & Conditions Page   | Editable legal page         |
-| 7  | Custom Pages              | Create and manage pages     |
+| Page Name               | Description           |
+|-------------------------|-----------------------|
+| Video Downloader        | Editable content      |
+| Reels Downloader        | Editable content      |
+| Story Downloader        | Editable content      |
+| Image Downloader        | Editable content      |
+| Privacy Policy          | Legal content page    |
+| Terms & Conditions      | Legal content page    |
+| Custom Pages            | User-defined pages    |
 
 ---
 
 ### 2.5 Redirect Management
 
-| No | Feature       | Example                          |
-|----|---------------|----------------------------------|
-| 1  | URL Redirect  | mydomain.com → mydomain.com/en1  |
+| Feature      | Example                         |
+|--------------|---------------------------------|
+| URL Redirect | mydomain.com → mydomain.com/en   |
 
 ---
 
 ### 2.6 Multi-Language System
 
-| No | Feature              | Description                                |
-|----|----------------------|--------------------------------------------|
-| 1  | Supported Languages  | 6–7 languages                              |
-| 2  | Language Switcher    | User-selectable language option            |
-| 3  | Auto Content Change  | Content updates per selected language      |
-| 4  | SEO per Language     | Language-based SEO support                 |
+| Feature             | Description                          |
+|---------------------|--------------------------------------|
+| Supported Languages | 6–7 languages                        |
+| Language Switcher   | User-selectable language             |
+| Dynamic Content     | Content changes per language         |
+| SEO per Language    | SEO settings per language            |
 
 ---
 
 ## 3. Homepage Requirements
 
-| Area        | Requirement                         |
-|-------------|-------------------------------------|
-| Design      | Modern, clean, professional         |
-| Reference   | Inspired by provided design         |
-| UX          | Simple and user-friendly            |
-| Responsive  | Mobile-first design                 |
-| SEO         | Optimized structure and metadata    |
+| Area        | Requirement                       |
+|-------------|-----------------------------------|
+| Design      | Modern, clean, professional       |
+| UX          | Simple & user-friendly            |
+| Responsive  | Mobile-first                      |
+| SEO         | Optimized structure & metadata    |
 
 ---
 
-## 4. Current Status
+## 4. Technology Stack
 
-| Area          | Status                |
-|---------------|-----------------------|
-| User Features | Completed             |
-| Homepage      | In Progress           |
-| Admin Panel   | Pending Development   |
+### 4.1 Backend
+
+| Technology        | Description                                         |
+|-------------------|-----------------------------------------------------|
+| PHP (Native)      | Lightweight backend without framework               |
+| cobalt.tools API  | Instagram media fetching & processing engine        |
+| MySQL             | Stores settings, pages, SEO & language data         |
+| REST Endpoints    | PHP-based API endpoints                             |
+
+---
+
+### 4.2 Frontend
+
+| Technology        | Description                                  |
+|-------------------|----------------------------------------------|
+| HTML5             | Semantic & SEO-friendly markup               |
+| Tailwind CSS      | Utility-first modern UI framework            |
+| JavaScript        | Vanilla JS for interactions & logic          |
+| Fetch API / AJAX  | Async communication with backend             |
+
+---
+
+### 4.3 Admin Panel Stack
+
+| Component         | Description                                  |
+|-------------------|----------------------------------------------|
+| PHP (Native)      | Authentication & CRUD operations             |
+| Tailwind CSS      | Clean & consistent admin UI                  |
+| JavaScript        | Dynamic settings & live updates              |
+| Access Control    | Admin-only role-based access                 |
+
+---
+
+### 4.4 SEO & Performance
+
+| Feature           | Implementation                               |
+|-------------------|-----------------------------------------------|
+| Dynamic Meta Tags | Generated dynamically via PHP                |
+| Open Graph        | Auto-generated OG tags                       |
+| Schema Markup     | JSON-LD per page                             |
+| Clean URLs        | SEO-friendly URL structure                   |
+| Performance       | Minimal JS, no heavy frameworks              |
+
+---
+
+## 5. Project Status
+
+| Area          | Status               |
+|---------------|----------------------|
+| User Features | Completed            |
+| Homepage      | In Progress          |
+| Admin Panel   | Pending Development  |

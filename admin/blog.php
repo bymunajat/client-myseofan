@@ -24,11 +24,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $lang = $_POST['lang_code'] ?? 'en';
     $m_title = $_POST['meta_title'] ?? '';
     $m_desc = $_POST['meta_description'] ?? '';
+    $category = $_POST['category'] ?? 'General';
 
     if ($action === 'add') {
         try {
-            $stmt = $pdo->prepare("INSERT INTO blog_posts (title, slug, content, thumbnail, lang_code, meta_title, meta_description) VALUES (?, ?, ?, ?, ?, ?, ?)");
-            $stmt->execute([$title, $slug, $content, $thumbnail, $lang, $m_title, $m_desc]);
+            $stmt = $pdo->prepare("INSERT INTO blog_posts (title, slug, content, thumbnail, lang_code, meta_title, meta_description, category) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt->execute([$title, $slug, $content, $thumbnail, $lang, $m_title, $m_desc, $category]);
             $message = "Post created successfully!";
             $action = 'list';
         } catch (\Exception $e) {
@@ -36,8 +37,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     } elseif ($action === 'edit' && $id) {
         try {
-            $stmt = $pdo->prepare("UPDATE blog_posts SET title=?, slug=?, content=?, thumbnail=?, lang_code=?, meta_title=?, meta_description=? WHERE id=?");
-            $stmt->execute([$title, $slug, $content, $thumbnail, $lang, $m_title, $m_desc, $id]);
+            $stmt = $pdo->prepare("UPDATE blog_posts SET title=?, slug=?, content=?, thumbnail=?, lang_code=?, meta_title=?, meta_description=?, category=? WHERE id=?");
+            $stmt->execute([$title, $slug, $content, $thumbnail, $lang, $m_title, $m_desc, $category, $id]);
             $message = "Post updated successfully!";
             $action = 'list';
         } catch (\Exception $e) {
@@ -71,6 +72,17 @@ if ($action === 'list') {
     <title>Blog Manager - MySeoFan Admin</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+        tinymce.init({
+            selector: 'textarea[name="content"]',
+            plugins: 'advlist autolink lists link image charmap preview anchor pagebreak',
+            toolbar_mode: 'floating',
+            height: 500,
+            skin: 'oxide',
+            content_css: 'default'
+        });
+    </script>
     <style>
         body {
             font-family: 'Outfit', sans-serif;
@@ -102,6 +114,11 @@ if ($action === 'list') {
                     <path
                         d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                 </svg><span>Dashboard</span></a>
+            <a href="profile.php"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-800 transition-all text-gray-400 hover:text-white"><svg
+                    class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg><span>Admin Profile</span></a>
             <a href="settings.php"
                 class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-800 transition-all text-gray-400 hover:text-white"><svg
                     class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -114,6 +131,11 @@ if ($action === 'list') {
                     class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg><span>SEO Manager</span></a>
+            <a href="media.php"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-800 transition-all text-gray-400 hover:text-white"><svg
+                    class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h14a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg><span>Media Library</span></a>
             <a href="blog.php" class="flex items-center gap-3 px-4 py-3 rounded-xl nav-active"><svg class="w-5 h-5"
                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
@@ -164,7 +186,7 @@ if ($action === 'list') {
                         <thead class="bg-gray-50 border-b">
                             <tr>
                                 <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest">Title</th>
-                                <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest">Slug</th>
+                                <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest">Category</th>
                                 <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest">Lang</th>
                                 <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest text-right">
                                     Actions</th>
@@ -177,7 +199,7 @@ if ($action === 'list') {
                                         <?php echo htmlspecialchars($p['title']); ?>
                                     </td>
                                     <td class="px-8 py-5 text-gray-500 text-sm">
-                                        <?php echo htmlspecialchars($p['slug']); ?>
+                                        <?php echo htmlspecialchars($p['category'] ?? 'General'); ?>
                                     </td>
                                     <td class="px-8 py-5">
                                         <span
@@ -224,6 +246,16 @@ if ($action === 'list') {
                                 </select>
                             </div>
                             <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Category</label>
+                                <select name="category"
+                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white focus:border-emerald-500 outline-none transition-all">
+                                    <option value="General" <?php echo ($current_post['category'] ?? '') == 'General' ? 'selected' : ''; ?>>General</option>
+                                    <option value="Tutorial" <?php echo ($current_post['category'] ?? '') == 'Tutorial' ? 'selected' : ''; ?>>Tutorial</option>
+                                    <option value="News" <?php echo ($current_post['category'] ?? '') == 'News' ? 'selected' : ''; ?>>News</option>
+                                    <option value="Tips" <?php echo ($current_post['category'] ?? '') == 'Tips' ? 'selected' : ''; ?>>Tips</option>
+                                </select>
+                            </div>
+                            <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Thumbnail URL</label>
                                 <input type="text" name="thumbnail"
                                     value="<?php echo htmlspecialchars($current_post['thumbnail'] ?? ''); ?>"
@@ -246,10 +278,39 @@ if ($action === 'list') {
                                 </div>
                                 <div>
                                     <label class="block text-sm font-semibold text-gray-700 mb-2">Meta Description</label>
-                                    <textarea name="meta_description" rows="2"
+                                    <textarea name="meta_description" rows="2" id="meta_desc"
                                         class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white focus:border-emerald-500 outline-none transition-all"><?php echo htmlspecialchars($current_post['meta_description'] ?? ''); ?></textarea>
                                 </div>
                             </div>
+                            <!-- Google Preview -->
+                            <div class="mt-6 p-6 bg-gray-50 rounded-2xl border border-gray-100">
+                                <p class="text-xs font-bold text-gray-400 uppercase mb-4">Google Search Preview</p>
+                                <div class="max-w-md">
+                                    <p class="text-[14px] text-[#202124] mb-1 truncate" id="preview_title">
+                                        <?php echo $current_post['meta_title'] ?? 'Post Title - MySeoFan'; ?>
+                                    </p>
+                                    <p class="text-[12px] text-[#006621] mb-1 truncate">
+                                        myseofan.com › blog › <?php echo $current_post['slug'] ?? 'post-slug'; ?>
+                                    </p>
+                                    <p class="text-[13px] text-[#545454] line-clamp-2" id="preview_desc">
+                                        <?php echo $current_post['meta_description'] ?? 'Your post description will appear here in Google search results...'; ?>
+                                    </p>
+                                </div>
+                            </div>
+                            <script>
+                                const titleInput = document.querySelector('input[name="meta_title"]');
+                                const descInput = document.querySelector('textarea[name="meta_description"]');
+                                const pTitle = document.getElementById('preview_title');
+                                const pDesc = document.getElementById('preview_desc');
+
+                                const updatePreview = () => {
+                                    pTitle.textContent = titleInput.value || 'Post Title - MySeoFan';
+                                    pDesc.textContent = descInput.value || 'Your post description will appear here in Google search results...';
+                                };
+
+                                titleInput.addEventListener('input', updatePreview);
+                                descInput.addEventListener('input', updatePreview);
+                            </script>
                         </div>
                         <button type="submit"
                             class="w-full bg-emerald-600 text-white py-4 rounded-xl font-bold hover:bg-emerald-700 shadow-xl shadow-emerald-100 transition-all">Save

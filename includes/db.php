@@ -76,6 +76,17 @@ try {
     $pdo->exec("CREATE TABLE IF NOT EXISTS blog_posts (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, slug TEXT UNIQUE, content TEXT, thumbnail TEXT, lang_code TEXT DEFAULT 'en', meta_title TEXT, meta_description TEXT, created_at DATETIME DEFAULT CURRENT_TIMESTAMP)");
     $pdo->exec("CREATE TABLE IF NOT EXISTS pages (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, slug TEXT UNIQUE, content TEXT, lang_code TEXT DEFAULT 'en', meta_title TEXT, meta_description TEXT)");
 
+    // Migration Check: Add category to blog_posts
+    $cols = $pdo->query("PRAGMA table_info(blog_posts)")->fetchAll();
+    $hasCat = false;
+    foreach ($cols as $col) {
+        if ($col['name'] == 'category')
+            $hasCat = true;
+    }
+    if (!$hasCat) {
+        $pdo->exec("ALTER TABLE blog_posts ADD COLUMN category TEXT DEFAULT 'General'");
+    }
+
 } catch (\Exception $e) {
     // Log error if needed
 }

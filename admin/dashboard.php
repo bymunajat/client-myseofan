@@ -8,6 +8,12 @@ if (!isset($_SESSION['admin_id'])) {
 }
 
 $settings = getSiteSettings($pdo);
+
+// Fetch Stats
+$postCount = $pdo->query("SELECT COUNT(*) FROM blog_posts")->fetchColumn();
+$pageCount = $pdo->query("SELECT COUNT(*) FROM pages")->fetchColumn();
+$transCount = $pdo->query("SELECT COUNT(*) FROM translations")->fetchColumn();
+$recentPosts = $pdo->query("SELECT title, created_at FROM blog_posts ORDER BY created_at DESC LIMIT 5")->fetchAll();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -51,6 +57,14 @@ $settings = getSiteSettings($pdo);
                 </svg>
                 <span>Dashboard</span>
             </a>
+            <a href="profile.php"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-800 transition-all text-gray-400 hover:text-white">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                <span>Admin Profile</span>
+            </a>
             <a href="settings.php"
                 class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-800 transition-all text-gray-400 hover:text-white">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -66,6 +80,14 @@ $settings = getSiteSettings($pdo);
                     <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
                 <span>SEO Manager</span>
+            </a>
+            <a href="media.php"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-800 transition-all text-gray-400 hover:text-white">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-width="2"
+                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h14a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <span>Media Library</span>
             </a>
             <a href="translations.php"
                 class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-800 transition-all text-gray-400 hover:text-white">
@@ -118,42 +140,72 @@ $settings = getSiteSettings($pdo);
 
         <div class="p-8">
             <!-- Stats -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
                 <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
-                    <p class="text-sm text-gray-500 font-medium mb-1">Current Site Name</p>
-                    <h4 class="text-2xl font-bold">
-                        <?php echo htmlspecialchars($settings['site_name'] ?? 'Not Set'); ?>
-                    </h4>
+                    <p class="text-sm text-gray-500 font-medium mb-1">Blog Posts</p>
+                    <h4 class="text-3xl font-bold text-emerald-600"><?php echo $postCount; ?></h4>
+                </div>
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
+                    <p class="text-sm text-gray-500 font-medium mb-1">Static Pages</p>
+                    <h4 class="text-3xl font-bold text-blue-600"><?php echo $pageCount; ?></h4>
+                </div>
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
+                    <p class="text-sm text-gray-500 font-medium mb-1">Translations</p>
+                    <h4 class="text-3xl font-bold text-purple-600"><?php echo $transCount; ?></h4>
                 </div>
                 <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
                     <p class="text-sm text-gray-500 font-medium mb-1">PHP Version</p>
-                    <h4 class="text-2xl font-bold">
-                        <?php echo phpversion(); ?>
-                    </h4>
-                </div>
-                <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
-                    <p class="text-sm text-gray-500 font-medium mb-1">API Endpoint</p>
-                    <h4 class="text-sm font-bold text-emerald-600 truncate">
-                        <?php echo COBALT_API_URL; ?>
-                    </h4>
+                    <h4 class="text-3xl font-bold text-gray-800"><?php echo phpversion(); ?></h4>
                 </div>
             </div>
 
-            <div
-                class="bg-emerald-600 rounded-3xl p-10 text-white relative overflow-hidden shadow-2xl shadow-emerald-200">
-                <div class="relative z-10 max-w-lg">
-                    <h2 class="text-3xl font-bold mb-4">Welcome to Your Premium Dashboard</h2>
-                    <p class="opacity-90 leading-relaxed">
-                        From here you can manage your SEO, site branding, and multi-language content. Your changes will
-                        reflect instantly on the frontend.
-                    </p>
-                    <a href="../index.php" target="_blank"
-                        class="inline-block mt-8 px-6 py-3 bg-white text-emerald-600 rounded-xl font-bold hover:bg-gray-100 transition-all">
-                        View Live Site
-                    </a>
+            <div class="grid md:grid-cols-3 gap-8 mb-10">
+                <!-- Welcome Card -->
+                <div
+                    class="md:col-span-2 bg-emerald-600 rounded-[2.5rem] p-10 text-white relative overflow-hidden shadow-2xl shadow-emerald-200">
+                    <div class="relative z-10">
+                        <h2 class="text-3xl font-bold mb-4">Welcome to Your CMS</h2>
+                        <p class="opacity-90 leading-relaxed max-w-md">
+                            Your content platform is now fully dynamic. Manage translations, articles, and SEO from one
+                            centralized hub.
+                        </p>
+                        <div class="flex gap-4 mt-8">
+                            <a href="../index.php" target="_blank"
+                                class="px-6 py-3 bg-white text-emerald-600 rounded-xl font-bold hover:bg-gray-100 transition-all">
+                                Live Site
+                            </a>
+                            <a href="blog.php?action=add"
+                                class="px-6 py-3 bg-emerald-500 text-white rounded-xl font-bold hover:bg-emerald-400 transition-all border border-emerald-400/50">
+                                New Post
+                            </a>
+                        </div>
+                    </div>
+                    <div
+                        class="absolute -right-20 -bottom-20 w-80 h-80 bg-emerald-500 rounded-full opacity-50 blur-3xl">
+                    </div>
                 </div>
-                <!-- Abstract Circle -->
-                <div class="absolute -right-20 -bottom-20 w-80 h-80 bg-emerald-500 rounded-full opacity-50 blur-3xl">
+
+                <!-- Recent Activity -->
+                <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-100">
+                    <h4 class="text-lg font-bold mb-6">Recent Blog Posts</h4>
+                    <div class="space-y-4">
+                        <?php foreach ($recentPosts as $p): ?>
+                            <div class="flex items-start gap-4 pb-4 border-b border-gray-50 last:border-0 last:pb-0">
+                                <div class="w-2 h-2 mt-2 bg-emerald-500 rounded-full"></div>
+                                <div>
+                                    <p class="font-bold text-gray-800 line-clamp-1">
+                                        <?php echo htmlspecialchars($p['title']); ?>
+                                    </p>
+                                    <p class="text-xs text-gray-400 mt-1">
+                                        <?php echo date('M d, Y', strtotime($p['created_at'])); ?>
+                                    </p>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                        <?php if (empty($recentPosts)): ?>
+                            <p class="text-gray-400 text-sm">No posts yet.</p>
+                        <?php endif; ?>
+                    </div>
                 </div>
             </div>
         </div>

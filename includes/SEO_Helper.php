@@ -5,6 +5,7 @@ class SEO_Helper
     private $page;
     private $settings;
     private $seo;
+    private $lang;
 
     public function __construct($pdo, $page = 'home', $lang = 'en')
     {
@@ -12,6 +13,7 @@ class SEO_Helper
         $this->page = $page;
         $this->settings = getSiteSettings($pdo);
         $this->seo = getSEOData($pdo, $page, $lang);
+        $this->lang = $lang;
     }
 
     public function getTitle()
@@ -36,6 +38,44 @@ class SEO_Helper
         <meta property=\"og:image\" content=\"$image\">
         <meta property=\"og:type\" content=\"website\">
         ";
+    }
+
+    public function getHreflangTags()
+    {
+        if (!$this->pdo)
+            return "";
+
+        $tags = "";
+        $host = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]";
+
+        // Base URL logic - assumes current file is index.php/blog.php/pages.php
+        $file = basename($_SERVER['PHP_SELF']);
+
+        if ($this->page === 'home') {
+            $langs = ['en', 'id', 'es', 'fr', 'de', 'ja'];
+            foreach ($langs as $l) {
+                $tags .= "<link rel=\"alternate\" hreflang=\"$l\" href=\"$host/$file?lang=$l\">\n";
+            }
+        } elseif ($this->page === 'blog_detail' || $this->page === 'static_page') {
+            $table = ($this->page === 'blog_detail') ? 'blog_posts' : 'pages';
+            $slug = $_GET['slug'] ?? '';
+
+            // Find the group of the current item
+            $stmt = $this->pdo->prepare("SELECT translation_group FROM $table WHERE slug = ? LIMIT 1");
+            $stmt->execute([$slug]);
+            $group = $stmt->fetchColumn();
+
+            if ($group) {
+                $stmt = $this->pdo->prepare("SELECT lang_code, slug FROM $table WHERE translation_group = ?");
+                $stmt->execute([$group]);
+                $variants = $stmt->fetchAll();
+                foreach ($variants as $v) {
+                    $tags .= "<link rel=\"alternate\" hreflang=\"{$v['lang_code']}\" href=\"$host/$file?lang={$v['lang_code']}&slug={$v['slug']}\">\n";
+                }
+            }
+        }
+
+        return $tags;
     }
 
     public function getSchemaMarkup()

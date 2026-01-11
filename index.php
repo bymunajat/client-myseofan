@@ -103,11 +103,12 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
     </title>
     <meta name="description" content="<?php echo $seoHelper->getDescription(); ?>">
     <?php echo $seoHelper->getOGTags(); ?>
+    <?php echo $seoHelper->getHreflangTags(); ?>
     <?php echo $seoHelper->getSchemaMarkup(); ?>
 
     <!-- Favicon -->
     <?php if (!empty($settings['favicon_path'])): ?>
-            <link rel="icon" type="image/x-icon" href="<?php echo htmlspecialchars($settings['favicon_path']); ?>">
+        <link rel="icon" type="image/x-icon" href="<?php echo htmlspecialchars($settings['favicon_path']); ?>">
     <?php endif; ?>
 
     <!-- Fonts -->
@@ -241,18 +242,18 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
             <a href="index.php?lang=<?php echo $lang; ?>" class="flex items-center gap-3 group">
                 <div class="flex items-center">
                     <?php if (!empty($settings['logo_path'])): ?>
-                            <img src="<?php echo htmlspecialchars($settings['logo_path']); ?>" class="h-10 w-auto"
-                                alt="<?php echo htmlspecialchars($settings['site_name']); ?>">
+                        <img src="<?php echo htmlspecialchars($settings['logo_path']); ?>" class="h-10 w-auto"
+                            alt="<?php echo htmlspecialchars($settings['site_name']); ?>">
                     <?php else: ?>
-                            <div
-                                class="w-10 h-10 bg-emerald-600 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-200 group-hover:rotate-12 transition-transform">
-                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-width="2.5"
-                                        d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                                </svg>
-                            </div>
-                            <span
-                                class="ml-3 text-xl font-black tracking-tighter text-gray-800"><?php echo htmlspecialchars($settings['site_name']); ?></span>
+                        <div
+                            class="w-10 h-10 bg-emerald-600 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-200 group-hover:rotate-12 transition-transform">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-width="2.5"
+                                    d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                            </svg>
+                        </div>
+                        <span
+                            class="ml-3 text-xl font-black tracking-tighter text-gray-800"><?php echo htmlspecialchars($settings['site_name']); ?></span>
                     <?php endif; ?>
                 </div>
             </a>
@@ -262,17 +263,51 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                     id="navHome"><?php echo $t['home']; ?></a>
                 <a href="#" class="nav-link hover:text-emerald-600 transition-colors py-1" data-page="how"
                     id="navHow"><?php echo $t['how']; ?></a>
-                <a href="#" class="nav-link hover:text-emerald-600 transition-colors py-1" data-page="about" id="navAbout"><?php echo $t['about']; ?></a>
+                <a href="#" class="nav-link hover:text-emerald-600 transition-colors py-1" data-page="about"
+                    id="navAbout"><?php echo $t['about']; ?></a>
 
                 <!-- Language Switcher -->
                 <div class="relative group">
-                    <select id="langSelector" class="appearance-none bg-gray-50 border border-gray-200 text-gray-700 font-bold py-2 pl-4 pr-10 rounded-xl outline-none focus:border-emerald-500 transition-all cursor-pointer">
-                        <option value="en" <?php echo $lang === 'en' ? 'selected' : ''; ?>>🇺🇸 EN</option>
-                        <option value="id" <?php echo $lang === 'id' ? 'selected' : ''; ?>>🇮🇩 ID</option>
-                        <option value="es" <?php echo $lang === 'es' ? 'selected' : ''; ?>>🇪🇸 ES</option>
-                        <option value="fr" <?php echo $lang === 'fr' ? 'selected' : ''; ?>>🇫🇷 FR</option>
-                        <option value="de" <?php echo $lang === 'de' ? 'selected' : ''; ?>>🇩🇪 DE</option>
-                        <option value="ja" <?php echo $lang === 'ja' ? 'selected' : ''; ?>>🇯🇵 JA</option>
+                    <select id="langSelector"
+                        onchange="location.href = this.value"
+                        class="appearance-none bg-gray-50 border border-gray-200 text-gray-700 font-bold py-2 pl-4 pr-10 rounded-xl outline-none focus:border-emerald-500 transition-all cursor-pointer">
+                        <?php
+                        $langs = [
+                            'en' => '🇺🇸 EN',
+                            'id' => '🇮🇩 ID',
+                            'es' => '🇪🇸 ES',
+                            'fr' => '🇫🇷 FR',
+                            'de' => '🇩🇪 DE',
+                            'ja' => '🇯🇵 JA'
+                        ];
+                        foreach ($langs as $code => $label):
+                            // For home, we just change ?lang=
+                            // For grouped items, we find the relevant slug
+                            $targetUrl = "index.php?lang=$code";
+                            if ($lang === $code) {
+                                $selected = 'selected';
+                            } else {
+                                $selected = '';
+                                // If we are on a grouped page, try to find the specific URL for this language
+                                if ($seoHelper->getPage() === 'blog_detail' || $seoHelper->getPage() === 'static_page') {
+                                    $table = ($seoHelper->getPage() === 'blog_detail') ? 'blog_posts' : 'pages';
+                                    $currentSlug = $_GET['slug'] ?? '';
+                                    $stmt = $pdo->prepare("SELECT translation_group FROM $table WHERE slug = ? LIMIT 1");
+                                    $stmt->execute([$currentSlug]);
+                                    $group = $stmt->fetchColumn();
+                                    if ($group) {
+                                        $stmt = $this->pdo->prepare("SELECT slug FROM $table WHERE translation_group = ? AND lang_code = ? LIMIT 1");
+                                        $stmt->execute([$group, $code]);
+                                        $targetSlug = $stmt->fetchColumn();
+                                        if ($targetSlug) {
+                                            $targetUrl = basename($_SERVER['PHP_SELF']) . "?lang=$code&slug=$targetSlug";
+                                        }
+                                    }
+                                }
+                            }
+                        ?>
+                        <option value="<?php echo $targetUrl; ?>" <?php echo $lang === $code ? 'selected' : ''; ?>><?php echo $label; ?></option>
+                        <?php endforeach; ?>
                     </select>
                 </div>
             </nav>
@@ -346,7 +381,8 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                 </div>
                 <h4 class="text-xl font-bold mb-3" id="feat1_title"><?php echo $t['feat1_t']; ?></h4>
                 <p class="text-gray-500 leading-relaxed text-sm md:text-base" id="feat1_desc">
-                    <?php echo $t['feat1_d']; ?></p>
+                    <?php echo $t['feat1_d']; ?>
+                </p>
             </div>
             <div class="glass-card p-8 rounded-[2rem] hover:translate-y-[-8px] transition-all duration-500">
                 <div class="w-14 h-14 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mb-6">
@@ -357,7 +393,8 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                 </div>
                 <h4 class="text-xl font-bold mb-3" id="feat2_title"><?php echo $t['feat2_t']; ?></h4>
                 <p class="text-gray-500 leading-relaxed text-sm md:text-base" id="feat2_desc">
-                    <?php echo $t['feat2_d']; ?></p>
+                    <?php echo $t['feat2_d']; ?>
+                </p>
             </div>
             <div class="glass-card p-8 rounded-[2rem] hover:translate-y-[-8px] transition-all duration-500">
                 <div class="w-14 h-14 bg-purple-100 text-purple-600 rounded-2xl flex items-center justify-center mb-6">
@@ -368,7 +405,8 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                 </div>
                 <h4 class="text-xl font-bold mb-3" id="feat3_title"><?php echo $t['feat3_t']; ?></h4>
                 <p class="text-gray-500 leading-relaxed text-sm md:text-base" id="feat3_desc">
-                    <?php echo $t['feat3_d']; ?></p>
+                    <?php echo $t['feat3_d']; ?>
+                </p>
             </div>
         </div>
 
@@ -391,14 +429,16 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                         class="w-16 h-16 bg-emerald-600 text-white rounded-2xl flex items-center justify-center mb-8 font-black text-2xl shadow-xl shadow-emerald-200 mx-auto">
                         2</div>
                     <h4 class="text-xl font-bold mb-4 text-center" id="guide2_title"><?php echo $t['guide2_t']; ?></h4>
-                    <p class="text-gray-500 text-center leading-relaxed" id="guide2_desc"><?php echo $t['guide2_d']; ?></p>
+                    <p class="text-gray-500 text-center leading-relaxed" id="guide2_desc"><?php echo $t['guide2_d']; ?>
+                    </p>
                 </div>
                 <div class="relative bg-white p-8 rounded-3xl border border-gray-100 shadow-sm z-10">
                     <div
                         class="w-16 h-16 bg-emerald-600 text-white rounded-2xl flex items-center justify-center mb-8 font-black text-2xl shadow-xl shadow-emerald-200 mx-auto">
                         3</div>
                     <h4 class="text-xl font-bold mb-4 text-center" id="guide3_title"><?php echo $t['guide3_t']; ?></h4>
-                    <p class="text-gray-500 text-center leading-relaxed" id="guide3_desc"><?php echo $t['guide3_d']; ?></p>
+                    <p class="text-gray-500 text-center leading-relaxed" id="guide3_desc"><?php echo $t['guide3_d']; ?>
+                    </p>
                 </div>
             </div>
         </div>

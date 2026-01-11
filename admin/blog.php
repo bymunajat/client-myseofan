@@ -25,11 +25,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $m_title = $_POST['meta_title'] ?? '';
     $m_desc = $_POST['meta_description'] ?? '';
     $category = $_POST['category'] ?? 'General';
+    $t_group = $_POST['translation_group'] ?? uniqid('group_', true);
 
     if ($action === 'add') {
         try {
-            $stmt = $pdo->prepare("INSERT INTO blog_posts (title, slug, content, thumbnail, lang_code, meta_title, meta_description, category) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-            $stmt->execute([$title, $slug, $content, $thumbnail, $lang, $m_title, $m_desc, $category]);
+            $stmt = $pdo->prepare("INSERT INTO blog_posts (title, slug, content, thumbnail, lang_code, meta_title, meta_description, category, translation_group) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt->execute([$title, $slug, $content, $thumbnail, $lang, $m_title, $m_desc, $category, $t_group]);
             $message = "Post created successfully!";
             $action = 'list';
         } catch (\Exception $e) {
@@ -37,8 +38,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     } elseif ($action === 'edit' && $id) {
         try {
-            $stmt = $pdo->prepare("UPDATE blog_posts SET title=?, slug=?, content=?, thumbnail=?, lang_code=?, meta_title=?, meta_description=?, category=? WHERE id=?");
-            $stmt->execute([$title, $slug, $content, $thumbnail, $lang, $m_title, $m_desc, $category, $id]);
+            $stmt = $pdo->prepare("UPDATE blog_posts SET title=?, slug=?, content=?, thumbnail=?, lang_code=?, meta_title=?, meta_description=?, category=?, translation_group=? WHERE id=?");
+            $stmt->execute([$title, $slug, $content, $thumbnail, $lang, $m_title, $m_desc, $category, $t_group, $id]);
             $message = "Post updated successfully!";
             $action = 'list';
         } catch (\Exception $e) {
@@ -173,6 +174,15 @@ if ($action === 'list') {
                     <form action="?action=<?php echo $action; ?><?php echo $id ? '&id=' . $id : ''; ?>" method="POST"
                         class="space-y-6">
                         <div class="grid md:grid-cols-2 gap-6">
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Translation Group ID
+                                    (Advanced)</label>
+                                <input type="text" name="translation_group"
+                                    value="<?php echo htmlspecialchars($current_post['translation_group'] ?? uniqid('group_', true)); ?>"
+                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 text-gray-500 text-xs focus:bg-white focus:border-emerald-500 outline-none transition-all">
+                                <p class="text-[10px] text-gray-400 mt-1">Posts with the same ID are linked as translations
+                                    of each other.</p>
+                            </div>
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Post Title</label>
                                 <input type="text" name="title"

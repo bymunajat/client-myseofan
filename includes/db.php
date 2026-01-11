@@ -87,6 +87,25 @@ try {
         $pdo->exec("ALTER TABLE blog_posts ADD COLUMN category TEXT DEFAULT 'General'");
     }
 
+    // Migration Check: Add translation_group to blog_posts and pages
+    $colsPost = $pdo->query("PRAGMA table_info(blog_posts)")->fetchAll();
+    $hasGroupPost = false;
+    foreach ($colsPost as $col) {
+        if ($col['name'] == 'translation_group')
+            $hasGroupPost = true;
+    }
+    if (!$hasGroupPost)
+        $pdo->exec("ALTER TABLE blog_posts ADD COLUMN translation_group TEXT");
+
+    $colsPage = $pdo->query("PRAGMA table_info(pages)")->fetchAll();
+    $hasGroupPage = false;
+    foreach ($colsPage as $col) {
+        if ($col['name'] == 'translation_group')
+            $hasGroupPage = true;
+    }
+    if (!$hasGroupPage)
+        $pdo->exec("ALTER TABLE pages ADD COLUMN translation_group TEXT");
+
 } catch (\Exception $e) {
     // Log error if needed
 }

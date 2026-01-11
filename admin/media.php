@@ -58,33 +58,7 @@ if (is_dir($uploadsDir)) {
 </head>
 
 <body class="flex">
-    <aside class="sidebar w-64 hidden md:block">
-        <div class="p-8">
-            <h2 class="text-xl font-bold text-emerald-500">MySeoFan Admin</h2>
-        </div>
-        <nav class="mt-4 px-4 space-y-2">
-            <a href="dashboard.php"
-                class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-800 transition-all text-gray-400 hover:text-white"><span>Dashboard</span></a>
-            <a href="settings.php"
-                class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-800 transition-all text-gray-400 hover:text-white"><span>Site
-                    Settings</span></a>
-            <a href="seo.php"
-                class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-800 transition-all text-gray-400 hover:text-white"><span>SEO
-                    Manager</span></a>
-            <a href="media.php" class="flex items-center gap-3 px-4 py-3 rounded-xl nav-active"><span>Media
-                    Library</span></a>
-            <a href="translations.php"
-                class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-800 transition-all text-gray-400 hover:text-white"><span>Translations</span></a>
-            <a href="blog.php"
-                class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-800 transition-all text-gray-400 hover:text-white"><span>Blog
-                    Posts</span></a>
-            <a href="pages.php"
-                class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-800 transition-all text-gray-400 hover:text-white"><span>Page
-                    Manager</span></a>
-            <a href="logout.php"
-                class="flex items-center gap-3 px-4 py-3 rounded-xl text-red-400 hover:bg-red-400/10 transition-all"><span>Logout</span></a>
-        </nav>
-    </aside>
+    <?php include 'includes/sidebar.php'; ?>
 
     <main class="flex-1 min-h-screen">
         <header class="bg-white border-b border-gray-200 px-8 h-20 flex items-center justify-between">

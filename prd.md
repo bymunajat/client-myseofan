@@ -120,7 +120,7 @@
 |-------------------|-----------------------------------------------------|
 | PHP (Native)      | Lightweight backend without framework               |
 | cobalt.tools API  | Instagram media fetching & processing engine        |
-| MySQL             | Stores settings, pages, SEO & language data         |
+|  SQLITE             | Stores settings, pages, SEO & language data         |
 | REST Endpoints    | PHP-based API endpoints                             |
 
 ---

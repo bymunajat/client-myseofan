@@ -1,0 +1,24 @@
+RewriteEngine On
+RewriteBase /
+
+# Redirect root to default language if no lang param
+# This is handled in index.php logic, but we can help it here
+# RewriteRule ^$ /en [L,R=301]
+
+# Language Slugs: /en, /id, /es, etc.
+RewriteRule ^([a-z]{2})$ index.php?lang=$1 [QSA,L]
+RewriteRule ^([a-z]{2})/$ index.php?lang=$1 [QSA,L]
+
+# SEO Friendly URLs for Blog
+RewriteRule ^blog/([a-z]{2})$ blog.php?lang=$1 [QSA,L]
+RewriteRule ^post/([^/]+)/([a-z]{2})$ post.php?slug=$1&lang=$2 [QSA,L]
+RewriteRule ^post/([^/]+)$ post.php?slug=$1 [QSA,L]
+
+# SEO Friendly URLs for Static Pages
+RewriteRule ^page/([^/]+)/([a-z]{2})$ page.php?slug=$1&lang=$2 [QSA,L]
+RewriteRule ^page/([^/]+)$ page.php?slug=$1 [QSA,L]
+
+# Remove .php from URL (as fallback)
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}\.php -f
+RewriteRule ^([^\.]+)$ $1.php [NC,L]

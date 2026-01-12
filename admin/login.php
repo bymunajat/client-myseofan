@@ -13,14 +13,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'] ?? '';
     $password = $_POST['password'] ?? '';
 
-    // Hardcoded fallback for testing without database
-    if ($username === 'admin' && $password === 'password') {
-        $_SESSION['admin_id'] = 999;
-        $_SESSION['username'] = 'admin (Demo)';
-        header('Location: dashboard.php');
-        exit;
-    }
-
     if ($pdo) {
         $stmt = $pdo->prepare("SELECT * FROM admins WHERE username = ?");
         $stmt->execute([$username]);
@@ -29,6 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($user && password_verify($password, $user['password_hash'])) {
             $_SESSION['admin_id'] = $user['id'];
             $_SESSION['username'] = $user['username'];
+            $_SESSION['role'] = $user['role'] ?? 'super_admin';
             header('Location: dashboard.php');
             exit;
         } else {

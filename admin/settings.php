@@ -2,8 +2,8 @@
 session_start();
 require_once '../includes/db.php';
 
-if (!isset($_SESSION['admin_id'])) {
-    header('Location: login.php');
+if (!isset($_SESSION['admin_id']) || ($_SESSION['role'] ?? '') !== 'super_admin') {
+    header('Location: dashboard.php');
     exit;
 }
 

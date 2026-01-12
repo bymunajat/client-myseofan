@@ -106,6 +106,24 @@ try {
     if (!$hasGroupPage)
         $pdo->exec("ALTER TABLE pages ADD COLUMN translation_group TEXT");
 
+    // Migration Check: Add role to admins
+    $colsAdmin = $pdo->query("PRAGMA table_info(admins)")->fetchAll();
+    $hasRole = false;
+    foreach ($colsAdmin as $col) {
+        if ($col['name'] == 'role')
+            $hasRole = true;
+    }
+    if (!$hasRole) {
+        $pdo->exec("ALTER TABLE admins ADD COLUMN role TEXT DEFAULT 'super_admin'");
+    }
+
+    // Auto-heal session Role for legacy login sessions
+    if (isset($_SESSION['admin_id']) && !isset($_SESSION['role'])) {
+        $stmt = $pdo->prepare("SELECT role FROM admins WHERE id = ?");
+        $stmt->execute([$_SESSION['admin_id']]);
+        $_SESSION['role'] = $stmt->fetchColumn() ?: 'super_admin';
+    }
+
 } catch (\Exception $e) {
     // Log error if needed
 }

@@ -15,6 +15,7 @@ $message = '';
 $error = '';
 $action = $_GET['action'] ?? 'list';
 $id = $_GET['id'] ?? null;
+$menu_type = $_GET['menu_type'] ?? null; // 'header' or 'footer'
 
 $available_langs = [
     'en' => '🇺🇸 English',
@@ -41,6 +42,27 @@ if (isset($_GET['filter_lang'])) {
 if (!array_key_exists($_curr_lang, $available_langs))
     $_curr_lang = 'en';
 $_SESSION['last_page_lang'] = $_curr_lang;
+
+// AJAX Reorder Handler
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'reorder') {
+    $order = $_POST['order'] ?? [];
+    try {
+        $pdo->beginTransaction();
+        foreach ($order as $index => $id) {
+            $stmt = $pdo->prepare("UPDATE pages SET menu_order = ? WHERE id = ?");
+            $stmt->execute([$index, $id]);
+        }
+        $pdo->commit();
+        header('Content-Type: application/json');
+        echo json_encode(['success' => true]);
+        exit;
+    } catch (\Exception $e) {
+        $pdo->rollBack();
+        header('Content-Type: application/json', true, 500);
+        echo json_encode(['error' => $e->getMessage()]);
+        exit;
+    }
+}
 
 // Handle CRUD Logic
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -99,7 +121,13 @@ $pages = [];
 $cu_p = null;
 if ($action === 'list') {
     try {
-        $stmt = $pdo->prepare("SELECT * FROM pages WHERE lang_code = ? ORDER BY menu_order ASC, id ASC");
+        if ($menu_type === 'header') {
+            $stmt = $pdo->prepare("SELECT * FROM pages WHERE lang_code = ? AND show_in_header = 1 ORDER BY menu_order ASC, id ASC");
+        } elseif ($menu_type === 'footer') {
+            $stmt = $pdo->prepare("SELECT * FROM pages WHERE lang_code = ? AND show_in_footer = 1 ORDER BY menu_order ASC, id ASC");
+        } else {
+            $stmt = $pdo->prepare("SELECT * FROM pages WHERE lang_code = ? ORDER BY menu_order ASC, id ASC");
+        }
         $stmt->execute([$_curr_lang]);
         $pages = $stmt->fetchAll();
     } catch (\Exception $e) {
@@ -110,14 +138,21 @@ if ($action === 'list') {
     $stmt->execute([$id]);
     $cu_p = $stmt->fetch();
 }
+
+$page_title = "Static Page Manager";
+if ($menu_type === 'header')
+    $page_title = "Header Menu Manager";
+if ($menu_type === 'footer')
+    $page_title = "Footer Menu Manager";
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
-    <title>Page Manager - MySeoFan Admin</title>
+    <title><?php echo $page_title; ?> - MySeoFan Admin</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
     <script>
@@ -141,6 +176,19 @@ if ($action === 'list') {
             background: #111827;
             color: white;
         }
+
+        .sortable-ghost {
+            background-color: #f0fdf4;
+            opacity: 0.5;
+        }
+
+        .drag-handle {
+            cursor: grab;
+        }
+
+        .drag-handle:active {
+            cursor: grabbing;
+        }
     </style>
 </head>
 
@@ -149,14 +197,14 @@ if ($action === 'list') {
 
     <main class="flex-1 min-h-screen">
         <header class="bg-white border-b border-gray-200 px-8 h-20 flex items-center justify-between">
-            <h3 class="text-xl font-bold text-gray-800">Static Page Manager</h3>
+            <h3 class="text-xl font-bold text-gray-800"><?php echo $page_title; ?></h3>
             <div class="flex items-center gap-4">
                 <?php if ($action === 'list'): ?>
-                    <a href="?action=add&lang_code=<?php echo $_curr_lang; ?>"
+                    <a href="?action=add&lang_code=<?php echo $_curr_lang; ?><?php echo $menu_type ? '&menu_type='.$menu_type : ''; ?>"
                         class="bg-emerald-600 text-white px-6 py-2 rounded-xl font-bold hover:bg-emerald-700 transition-all">+
                         New Page</a>
                 <?php else: ?>
-                    <a href="?action=list&filter_lang=<?php echo $_curr_lang; ?>"
+                    <a href="?action=list&filter_lang=<?php echo $_curr_lang; ?><?php echo $menu_type ? '&menu_type='.$menu_type : ''; ?>"
                         class="text-gray-500 hover:text-gray-800 font-bold">← Back to List</a>
                 <?php endif; ?>
             </div>
@@ -165,18 +213,20 @@ if ($action === 'list') {
         <div class="p-8">
             <?php if ($message): ?>
                 <div class="bg-emerald-50 text-emerald-600 p-4 rounded-xl mb-6 font-medium border border-emerald-100">
-                    <?php echo $message; ?></div>
+                    <?php echo $message; ?>
+                </div>
             <?php endif; ?>
             <?php if ($error): ?>
                 <div class="bg-red-50 text-red-600 p-4 rounded-xl mb-6 font-medium border border-red-100">
-                    <?php echo $error; ?></div>
+                    <?php echo $error; ?>
+                </div>
             <?php endif; ?>
 
             <?php if ($action === 'list'): ?>
                 <!-- Language Navigation Tabs -->
                 <div class="flex flex-wrap gap-2 mb-8 bg-white p-2 rounded-2xl shadow-sm border border-gray-100">
                     <?php foreach ($available_langs as $code => $label): ?>
-                        <a href="?filter_lang=<?php echo $code; ?>"
+                        <a href="?action=list&filter_lang=<?php echo $code; ?><?php echo $menu_type ? '&menu_type='.$menu_type : ''; ?>"
                             class="px-6 py-3 rounded-xl font-bold transition-all flex items-center gap-2 <?php echo $_curr_lang === $code ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-200' : 'text-gray-500 hover:bg-gray-50'; ?>">
                             <?php echo $label; ?>
                         </a>
@@ -185,13 +235,13 @@ if ($action === 'list') {
 
                 <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
                     <table class="w-full text-left">
-                        <thead class="bg-gray-50 border-b">
+                        <thead class="bg-gray-50 border-b text-center">
                             <tr>
-                                <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest">Order</th>
-                                <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest">Page Title
-                                </th>
-                                <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest">Visibility
-                                </th>
+                                <th class="w-16 py-4"></th>
+                                <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest text-left">
+                                    Page Title</th>
+                                <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest text-left">
+                                    Visibility</th>
                                 <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest text-right">
                                     Actions</th>
                             </tr>
@@ -201,7 +251,8 @@ if ($action === 'list') {
                                 <tr>
                                     <td colspan="4" class="px-8 py-12 text-center">
                                         <div class="text-gray-400 font-medium mb-4">No pages found in
-                                            <?php echo $available_langs[$_curr_lang] ?? $_curr_lang; ?>.</div>
+                                            <?php echo $available_langs[$_curr_lang] ?? $_curr_lang; ?>.
+                                        </div>
                                         <div class="flex justify-center gap-4">
                                             <a href="?action=add&lang_code=<?php echo $_curr_lang; ?>"
                                                 class="bg-emerald-50 text-emerald-600 px-4 py-2 rounded-lg font-bold hover:bg-emerald-100">Create
@@ -211,30 +262,33 @@ if ($action === 'list') {
                                 </tr>
                             <?php endif; ?>
                             <?php foreach ($pages as $p): ?>
-                                <tr>
-                                    <td class="px-8 py-5 text-gray-400 font-bold text-center w-32 border-r border-gray-50">
-                                        <span
-                                            class="bg-gray-50 px-3 py-1 rounded-lg text-gray-600 border border-gray-200"><?php echo $p['menu_order']; ?></span>
+                                <tr data-id="<?php echo $p['id']; ?>" class="group hover:bg-gray-50/50 transition-colors">
+                                    <td class="px-6 py-5 border-r border-gray-50">
+                                        <div
+                                            class="drag-handle flex items-center justify-center text-gray-300 hover:text-emerald-500 transition-colors">
+                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M4 8h16M4 16h16" />
+                                            </svg>
+                                        </div>
                                     </td>
                                     <td class="px-8 py-5">
                                         <div class="font-bold text-gray-800"><?php echo htmlspecialchars($p['title']); ?></div>
                                         <div class="text-[10px] text-gray-400 uppercase tracking-tighter">
                                             /page.php?slug=<?php echo htmlspecialchars($p['slug'] ?? ''); ?></div>
                                     </td>
-                                    <td class="px-8 py-5 flex flex-wrap gap-2">
-                                        <span
-                                            class="px-2 py-1 text-[10px] font-black uppercase rounded <?php echo $p['show_in_header'] ? 'bg-emerald-100 text-emerald-600' : 'bg-gray-100 text-gray-400'; ?>">Header</span>
-                                        <span
-                                            class="px-2 py-1 text-[10px] font-black uppercase rounded <?php echo $p['show_in_footer'] ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-400'; ?>">Footer</span>
-                                        <?php if ($p['show_in_footer']): ?>
+                                    <td class="px-8 py-5">
+                                        <div class="flex flex-wrap gap-2">
                                             <span
-                                                class="px-2 py-1 text-[10px] font-black uppercase rounded bg-orange-100 text-orange-600"><?php echo htmlspecialchars($p['footer_section'] ?: 'legal'); ?></span>
-                                        <?php endif; ?>
+                                                class="px-2 py-1 text-[10px] font-black uppercase rounded <?php echo $p['show_in_header'] ? 'bg-emerald-100 text-emerald-600' : 'bg-gray-100 text-gray-400'; ?>">Header</span>
+                                            <span
+                                                class="px-2 py-1 text-[10px] font-black uppercase rounded <?php echo $p['show_in_footer'] ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-400'; ?>">Footer</span>
+                                        </div>
                                     </td>
                                     <td class="px-8 py-5 text-right space-x-2 text-sm">
-                                        <a href="?action=edit&id=<?php echo $p['id']; ?>"
+                                        <a href="?action=edit&id=<?php echo $p['id']; ?><?php echo $menu_type ? '&menu_type=' . $menu_type : ''; ?>"
                                             class="text-emerald-600 hover:text-emerald-800 font-bold">Edit</a>
-                                        <a href="?action=delete&id=<?php echo $p['id']; ?>"
+                                        <a href="?action=delete&id=<?php echo $p['id']; ?><?php echo $menu_type ? '&menu_type=' . $menu_type : ''; ?>"
                                             onclick="return confirm('Delete this page permanently?')"
                                             class="text-red-400 hover:text-red-600 font-bold">Delete</a>
                                     </td>
@@ -245,8 +299,9 @@ if ($action === 'list') {
                 </div>
             <?php else: ?>
                 <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 max-w-4xl mx-auto">
-                    <form action="?action=<?php echo $action; ?><?php echo $id ? '&id=' . $id : ''; ?>" method="POST"
-                        class="space-y-6">
+                    <form
+                        action="?action=<?php echo $action; ?><?php echo $id ? '&id=' . $id : ''; ?><?php echo $menu_type ? '&menu_type=' . $menu_type : ''; ?>"
+                        method="POST" class="space-y-6">
                         <div class="grid md:grid-cols-2 gap-6">
                             <div
                                 class="md:col-span-2 p-6 bg-gray-50 rounded-2xl border border-gray-100 flex flex-wrap items-center gap-8">
@@ -296,7 +351,8 @@ if ($action === 'list') {
                                     class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white outline-none font-bold">
                                     <?php foreach ($available_langs as $code => $label): ?>
                                         <option value="<?php echo $code; ?>" <?php echo (($cu_p['lang_code'] ?? ($_GET['lang_code'] ?? $_curr_lang)) == $code) ? 'selected' : ''; ?>>
-                                            <?php echo $label; ?></option>
+                                            <?php echo $label; ?>
+                                        </option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
@@ -342,6 +398,59 @@ if ($action === 'list') {
             <?php endif; ?>
         </div>
     </main>
+
+    <div id="toast"
+        class="fixed bottom-8 right-8 bg-gray-900 text-white px-6 py-3 rounded-2xl shadow-2xl transition-all duration-300 transform translate-y-20 opacity-0 pointer-events-none z-[100] flex items-center gap-3">
+        <div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+        <span class="font-bold text-sm"></span>
+    </div>
+
+    <script>
+        function showToast(msg, type = 'success') {
+            const toast = document.getElementById('toast');
+            const span = toast.querySelector('span');
+            const dot = toast.querySelector('div');
+
+            span.innerText = msg;
+            dot.className = `w-2 h-2 rounded-full animate-pulse ${type === 'success' ? 'bg-emerald-500' : 'bg-red-500'}`;
+
+            toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+            }, 3000);
+        }
+
+        const el = document.querySelector('tbody');
+        if (el) {
+            Sortable.create(el, {
+                handle: '.drag-handle',
+                animation: 150,
+                ghostClass: 'sortable-ghost',
+                onEnd: function () {
+                    const rows = el.querySelectorAll('tr[data-id]');
+                    const order = Array.from(rows).map(row => row.getAttribute('data-id'));
+
+                    const formData = new FormData();
+                    formData.append('action', 'reorder');
+                    order.forEach(id => formData.append('order[]', id));
+
+                    fetch(window.location.href, {
+                        method: 'POST',
+                        body: formData
+                    })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.success) {
+                                showToast('Order saved successfully!');
+                            } else {
+                                showToast('Error saving order', 'error');
+                            }
+                        })
+                        .catch(() => showToast('Network error', 'error'));
+                }
+            });
+        }
+    </script>
 </body>
 
 </html>

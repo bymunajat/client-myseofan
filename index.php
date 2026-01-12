@@ -10,7 +10,7 @@ $pageIdentifier = 'home';
 $settings = getSiteSettings($pdo);
 $translations = getTranslations($pdo, $lang);
 
-// 3. Fallback Translations (if DB is empty)
+// 3. Fallback Translations (Expanded for 6 Languages)
 $defaults = [
     'en' => [
         'title' => 'Instagram Downloader',
@@ -93,7 +93,29 @@ $defaults = [
         'subtitle' => 'La forma más rápida y confiable de bajar Reels, Fotos y Videos de Instagram sin costo.',
         'download' => 'Ir',
         'paste' => 'Pegar',
-        'footer_desc' => 'La herramienta definitiva para la preservación de medios de Instagram.',
+        'feat1_t' => 'Súper Rápido',
+        'feat1_d' => 'Servidores de alto nivel que entregan tu contenido en segundos.',
+        'feat2_t' => 'Privacidad Segura',
+        'feat2_d' => 'Respetamos tu privacidad. Sin cuentas, sin registros.',
+        'feat3_t' => 'Calidad HD',
+        'feat3_d' => 'Siempre baja la mejor resolución disponible.',
+        'guide_t' => 'Guía Sencilla de 3 Pasos',
+        'guide1_t' => 'Copiar URL',
+        'guide1_d' => 'Copia el enlace del post de Instagram.',
+        'guide2_t' => 'Pegar y Procesar',
+        'guide2_d' => 'Pega el enlace arriba y procesaremos la fuente.',
+        'guide3_t' => 'Disfruta Offline',
+        'guide3_d' => 'Guarda el archivo en tu dispositivo al instante.',
+        'faq_t' => 'Preguntas Comunes',
+        'q1' => '¿Es gratis?',
+        'a1' => 'Sí, 100% gratuito siempre.',
+        'q2' => '¿Cuentas privadas?',
+        'a2' => 'Solo perfiles públicos permitidos.',
+        'q3' => '¿Dispositivos?',
+        'a3' => 'Funciona en iPhone, Android y PC.',
+        'about_t' => 'Misión',
+        'about_d' => 'Hacemos que el archivo de contenido sea fácil para todos.',
+        'footer_desc' => 'La mejor herramienta para preservar media de Instagram.',
         'status_fetching' => 'Obteniendo contenido...',
         'status_error' => 'Error de enlace.',
         'status_clipboard' => 'Pega manualmente.'
@@ -107,7 +129,29 @@ $defaults = [
         'subtitle' => 'Téléchargez des Reels, Photos et Vidéos Instagram rapidement et gratuitement.',
         'download' => 'Go',
         'paste' => 'Coller',
-        'footer_desc' => 'L\'outil ultime pour la préservation des médias Instagram.',
+        'feat1_t' => 'Ultra Rapide',
+        'feat1_d' => 'Serveurs haute performance pour un téléchargement immédiat.',
+        'feat2_t' => 'Confidentialité',
+        'feat2_d' => 'Aucun compte requis, aucune donnée stockée.',
+        'feat3_t' => 'Qualité HD',
+        'feat3_d' => 'Toujours la meilleure résolution possible.',
+        'guide_t' => 'Guide en 3 Étapes',
+        'guide1_t' => 'Copier l\'URL',
+        'guide1_d' => 'Copiez le lien depuis Instagram.',
+        'guide2_t' => 'Coller et Traiter',
+        'guide2_d' => 'Collez le lien ci-dessus pour analyse.',
+        'guide3_t' => 'Enregistrer',
+        'guide3_d' => 'Téléchargez directement sur votre appareil.',
+        'faq_t' => 'Questions Fréquentes',
+        'q1' => 'Est-ce gratuit?',
+        'a1' => 'Oui, totalement gratuit.',
+        'q2' => 'Comptes privés?',
+        'a2' => 'Uniquement les comptes publics.',
+        'q3' => 'Support?',
+        'a3' => 'Marche sur tous les navigateurs.',
+        'about_t' => 'Mission',
+        'about_d' => 'Simplifier l\'accès au partage de contenu.',
+        'footer_desc' => 'L\'outil ultime pour préserver vos médias Instagram.',
         'status_fetching' => 'Chargement...',
         'status_error' => 'Erreur de lien.',
         'status_clipboard' => 'Coller manuellement.'
@@ -121,9 +165,31 @@ $defaults = [
         'subtitle' => 'Der schnellste Weg, um Instagram Reels, Fotos und Videos kostenlos herunterzuladen.',
         'download' => 'Los',
         'paste' => 'Einfügen',
-        'footer_desc' => 'Das ultimative Tool zur Aufbewahrung von Instagram-Medien.',
-        'status_fetching' => 'Wird geladen...',
-        'status_error' => 'Link Fehler.',
+        'feat1_t' => 'Blitzschnell',
+        'feat1_d' => 'Optimierte Server für schnellste Downloads.',
+        'feat2_t' => 'Sicher & Privat',
+        'feat2_d' => 'Keine Registrierung, keine Datenspeicherung.',
+        'feat3_t' => 'HD Qualität',
+        'feat3_d' => 'Immer in bestmöglicher Auflösung.',
+        'guide_t' => '3-Schritte Anleitung',
+        'guide1_t' => 'URL kopieren',
+        'guide1_d' => 'Kopieren Sie den Instagram-Link.',
+        'guide2_t' => 'Einfügen',
+        'guide2_d' => 'Fügen Sie den Link oben ein.',
+        'guide3_t' => 'Speichern',
+        'guide3_d' => 'Direkt auf Ihr Gerät herunterladen.',
+        'faq_t' => 'Häufige Fragen',
+        'q1' => 'Kostenlos?',
+        'a1' => 'Ja, komplett kostenlos.',
+        'q2' => 'Private Konten?',
+        'a2' => 'Nur öffentliche Profile.',
+        'q3' => 'Geräte?',
+        'a3' => 'Mobil und Desktop.',
+        'about_t' => 'Mission',
+        'about_d' => 'Einfacher Zugriff auf Online-Medien.',
+        'footer_desc' => 'Das beste Tool zum Speichern von Instagram-Inhalten.',
+        'status_fetching' => 'Laden...',
+        'status_error' => 'Fehler beim Link.',
         'status_clipboard' => 'Manuell einfügen.'
     ],
     'ja' => [
@@ -135,15 +201,37 @@ $defaults = [
         'subtitle' => 'Instagramのリール、写真、動画を素早く無料でダウンロードできる最も信頼性の高いツールです。',
         'download' => '実行',
         'paste' => '貼り付け',
-        'footer_desc' => 'Instagramメディア保存のための究極のツール。',
+        'feat1_t' => '超高速',
+        'feat1_d' => '最新のサーバーで瞬時にダウンロード。',
+        'feat2_t' => '安全・匿名',
+        'feat2_d' => '登録不要、プライバシーを重視。',
+        'feat3_t' => '高画質',
+        'feat3_d' => '可能な限り最高の解像度で。',
+        'guide_t' => '簡単な3ステップ',
+        'guide1_t' => 'リンクをコピー',
+        'guide1_d' => 'InstagramからURLをコピー。',
+        'guide2_t' => '貼り付け',
+        'guide2_d' => '上の欄にリンクを貼り付け。',
+        'guide3_t' => '保存',
+        'guide3_d' => 'デバイスに直接保存。',
+        'faq_t' => 'よくある質問',
+        'q1' => '無料ですか？',
+        'a1' => 'はい、永久に無料です。',
+        'q2' => '個人アカウント？',
+        'a2' => '公開プロフィールのみ対応。',
+        'q3' => '対応機種？',
+        'a3' => 'スマホでもPCでも動作。',
+        'about_t' => '私たちの使命',
+        'about_d' => 'コンテンツ保存を誰でも簡単に。',
+        'footer_desc' => 'Instagramメディア保存の究極のツール。',
         'status_fetching' => '読み込み中...',
         'status_error' => 'リンクエラー。',
         'status_clipboard' => '手動で貼り付け。'
     ]
 ];
 
-// Merge with defaults
-$t = array_merge($defaults[$lang] ?? $defaults['en'], $translations);
+// Merge with defaults (EN as primary fallback for missing keys in other langs)
+$t = array_merge($defaults['en'], $defaults[$lang] ?? [], $translations);
 
 // 4. Initialize SEO
 $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
@@ -154,9 +242,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>
-        <?php echo $seoHelper->getTitle(); ?>
-    </title>
+    <title><?php echo $seoHelper->getTitle(); ?></title>
     <meta name="description" content="<?php echo $seoHelper->getDescription(); ?>">
     <?php echo $seoHelper->getOGTags(); ?>
     <?php echo $seoHelper->getHreflangTags(); ?>
@@ -192,7 +278,6 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
             color: #1f2937;
         }
 
-        /* Animated Gradient Background */
         .premium-bg {
             position: fixed;
             top: 0;
@@ -224,7 +309,6 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
             }
         }
 
-        /* Glassmorphism */
         .glass-card {
             background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(12px);
@@ -247,7 +331,6 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
             box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.3);
         }
 
-        /* Micro-animations */
         .fade-in {
             animation: fadeIn 0.8s ease-out forwards;
         }
@@ -261,27 +344,6 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
             to {
                 opacity: 1;
                 transform: translateY(0);
-            }
-        }
-
-        .loading-dots:after {
-            content: '.';
-            animation: dots 1.5s steps(5, end) infinite;
-        }
-
-        @keyframes dots {
-
-            0%,
-            20% {
-                content: '.';
-            }
-
-            40% {
-                content: '..';
-            }
-
-            60% {
-                content: '...';
             }
         }
     </style>
@@ -298,8 +360,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
             <a href="index.php?lang=<?php echo $lang; ?>" class="flex items-center gap-3 group">
                 <div class="flex items-center">
                     <?php if (!empty($settings['logo_path'])): ?>
-                        <img src="<?php echo htmlspecialchars($settings['logo_path']); ?>" class="h-10 w-auto"
-                            alt="<?php echo htmlspecialchars($settings['site_name']); ?>">
+                        <img src="<?php echo htmlspecialchars($settings['logo_path']); ?>" class="h-10 w-auto">
                     <?php else: ?>
                         <div
                             class="w-10 h-10 bg-emerald-600 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-200 group-hover:rotate-12 transition-transform">
@@ -315,51 +376,21 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
             </a>
 
             <nav class="hidden md:flex items-center gap-8 font-semibold text-gray-500">
-                <a href="#" class="nav-link text-emerald-600 border-b-2 border-emerald-600 py-1" data-page="home"
-                    id="navHome"><?php echo $t['home']; ?></a>
-                <a href="#" class="nav-link hover:text-emerald-600 transition-colors py-1" data-page="how"
-                    id="navHow"><?php echo $t['how']; ?></a>
-                <a href="#" class="nav-link hover:text-emerald-600 transition-colors py-1" data-page="about"
-                    id="navAbout"><?php echo $t['about']; ?></a>
+                <a href="#" class="nav-link text-emerald-600 border-b-2 border-emerald-600 py-1"
+                    data-page="home"><?php echo $t['home']; ?></a>
+                <a href="#" class="nav-link hover:text-emerald-600 transition-colors py-1"
+                    data-page="how"><?php echo $t['how']; ?></a>
+                <a href="#" class="nav-link hover:text-emerald-600 transition-colors py-1"
+                    data-page="about"><?php echo $t['about']; ?></a>
 
                 <!-- Language Switcher -->
                 <div class="relative group">
-                    <select id="langSelector" onchange="location.href = this.value"
-                        class="appearance-none bg-gray-50 border border-gray-200 text-gray-700 font-bold py-2 pl-4 pr-10 rounded-xl outline-none focus:border-emerald-500 transition-all cursor-pointer">
+                    <select onchange="location.href = this.value"
+                        class="appearance-none bg-white border border-gray-200 text-gray-700 font-bold py-2.5 pl-5 pr-12 rounded-2xl outline-none focus:border-emerald-500 transition-all cursor-pointer shadow-sm">
                         <?php
-                        $langs = [
-                            'en' => '🇺🇸 EN',
-                            'id' => '🇮🇩 ID',
-                            'es' => '🇪🇸 ES',
-                            'fr' => '🇫🇷 FR',
-                            'de' => '🇩🇪 DE',
-                            'ja' => '🇯🇵 JA'
-                        ];
+                        $langs = ['en' => '🇺🇸 EN', 'id' => '🇮🇩 ID', 'es' => '🇪🇸 ES', 'fr' => '🇫🇷 FR', 'de' => '🇩🇪 DE', 'ja' => '🇯🇵 JA'];
                         foreach ($langs as $code => $label):
-                            // For home, we just change ?lang=
-                            // For grouped items, we find the relevant slug
                             $targetUrl = "index.php?lang=$code";
-                            if ($lang === $code) {
-                                $selected = 'selected';
-                            } else {
-                                $selected = '';
-                                // If we are on a grouped page, try to find the specific URL for this language
-                                if ($seoHelper->getPage() === 'blog_detail' || $seoHelper->getPage() === 'static_page') {
-                                    $table = ($seoHelper->getPage() === 'blog_detail') ? 'blog_posts' : 'pages';
-                                    $currentSlug = $_GET['slug'] ?? '';
-                                    $stmt = $pdo->prepare("SELECT translation_group FROM $table WHERE slug = ? LIMIT 1");
-                                    $stmt->execute([$currentSlug]);
-                                    $group = $stmt->fetchColumn();
-                                    if ($group) {
-                                        $stmt = $this->pdo->prepare("SELECT slug FROM $table WHERE translation_group = ? AND lang_code = ? LIMIT 1");
-                                        $stmt->execute([$group, $code]);
-                                        $targetSlug = $stmt->fetchColumn();
-                                        if ($targetSlug) {
-                                            $targetUrl = basename($_SERVER['PHP_SELF']) . "?lang=$code&slug=$targetSlug";
-                                        }
-                                    }
-                                }
-                            }
                             ?>
                             <option value="<?php echo $targetUrl; ?>" <?php echo $lang === $code ? 'selected' : ''; ?>>
                                 <?php echo $label; ?></option>
@@ -367,406 +398,147 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                     </select>
                 </div>
             </nav>
-
-            <button class="md:hidden text-gray-600">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-                </svg>
-            </button>
         </div>
     </header>
 
     <main class="container mx-auto px-4 py-12 md:py-20 flex-1">
         <!-- Hero Section -->
         <div class="max-w-4xl mx-auto text-center mb-16 fade-in">
-            <h2 id="mainHeading" class="text-4xl md:text-7xl font-bold text-gray-900 mb-8 leading-[1.1] tracking-tight">
-                <?php echo $t['heading']; ?>
-            </h2>
-            <p id="subtitle" class="text-lg md:text-xl text-gray-500 max-w-2xl mx-auto leading-relaxed">
-                <?php echo $t['subtitle']; ?>
+            <h2 class="text-4xl md:text-7xl font-bold text-gray-900 mb-8 leading-[1.1] tracking-tight">
+                <?php echo $t['heading']; ?></h2>
+            <p class="text-lg md:text-xl text-gray-500 max-w-2xl mx-auto leading-relaxed"><?php echo $t['subtitle']; ?>
             </p>
         </div>
 
         <!-- Download Box -->
         <div class="max-w-3xl mx-auto mb-24">
-            <div class="glass-card rounded-[2.5rem] p-6 md:p-12 shadow-2xl shadow-emerald-900/5 fade-in"
-                style="animation-delay: 0.2s">
+            <div class="glass-card rounded-[2.5rem] p-6 md:p-12 shadow-2xl shadow-emerald-900/5 fade-in">
                 <form id="downloadForm" class="relative group">
-                    <div
-                        class="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none text-gray-400 group-focus-within:text-emerald-500 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.828a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
-                        </svg>
-                    </div>
                     <input type="text" id="instaUrl" placeholder="Paste Instagram link here..."
-                        class="w-full bg-white/80 border-2 border-gray-100/50 rounded-3xl py-6 pl-16 pr-36 focus:outline-none focus:border-emerald-500 focus:ring-[12px] focus:ring-emerald-500/5 transition-all text-xl text-gray-800 placeholder-gray-400 font-medium"
+                        class="w-full bg-white/80 border-2 border-gray-100/50 rounded-3xl py-6 pl-8 pr-36 focus:outline-none focus:border-emerald-500 transition-all text-xl"
                         required>
                     <div class="absolute right-3 top-3 bottom-3 flex gap-2">
-                        <button type="button" id="pasteBtn"
-                            class="px-5 text-emerald-600 hover:bg-emerald-50 rounded-2xl font-bold transition-all hidden sm:block">
-                            <?php echo $t['paste']; ?>
-                        </button>
-                        <button type="submit" id="downloadBtn"
-                            class="px-8 bg-emerald-600 text-white rounded-2xl font-black shadow-lg shadow-emerald-200 hover:bg-emerald-700 hover:scale-[1.02] active:scale-95 transition-all flex items-center gap-3">
-                            <span><?php echo $t['download']; ?></span>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20"
-                                fill="currentColor">
-                                <path fill-rule="evenodd"
-                                    d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </button>
+                        <button type="submit"
+                            class="px-8 bg-emerald-600 text-white rounded-2xl font-black shadow-lg shadow-emerald-200 hover:bg-emerald-700 transition-all">Go</button>
                     </div>
                 </form>
-
                 <div id="result" class="mt-12 transition-all duration-700 overflow-hidden"></div>
             </div>
         </div>
 
         <!-- Features Grid -->
         <div class="grid md:grid-cols-3 gap-8 mb-32">
-            <div class="glass-card p-8 rounded-[2rem] hover:translate-y-[-8px] transition-all duration-500">
-                <div
-                    class="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center mb-6">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
+            <?php for ($i = 1; $i <= 3; $i++): ?>
+                <div class="glass-card p-8 rounded-[2rem] hover:translate-y-[-8px] transition-all">
+                    <div
+                        class="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                    </div>
+                    <h4 class="text-xl font-bold mb-3"><?php echo $t['feat' . $i . '_t']; ?></h4>
+                    <p class="text-gray-500 leading-relaxed text-sm"><?php echo $t['feat' . $i . '_d']; ?></p>
                 </div>
-                <h4 class="text-xl font-bold mb-3" id="feat1_title"><?php echo $t['feat1_t']; ?></h4>
-                <p class="text-gray-500 leading-relaxed text-sm md:text-base" id="feat1_desc">
-                    <?php echo $t['feat1_d']; ?>
-                </p>
-            </div>
-            <div class="glass-card p-8 rounded-[2rem] hover:translate-y-[-8px] transition-all duration-500">
-                <div class="w-14 h-14 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mb-6">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-width="1.5"
-                            d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                    </svg>
-                </div>
-                <h4 class="text-xl font-bold mb-3" id="feat2_title"><?php echo $t['feat2_t']; ?></h4>
-                <p class="text-gray-500 leading-relaxed text-sm md:text-base" id="feat2_desc">
-                    <?php echo $t['feat2_d']; ?>
-                </p>
-            </div>
-            <div class="glass-card p-8 rounded-[2rem] hover:translate-y-[-8px] transition-all duration-500">
-                <div class="w-14 h-14 bg-purple-100 text-purple-600 rounded-2xl flex items-center justify-center mb-6">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-width="1.5"
-                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h14a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                </div>
-                <h4 class="text-xl font-bold mb-3" id="feat3_title"><?php echo $t['feat3_t']; ?></h4>
-                <p class="text-gray-500 leading-relaxed text-sm md:text-base" id="feat3_desc">
-                    <?php echo $t['feat3_d']; ?>
-                </p>
-            </div>
+            <?php endfor; ?>
         </div>
 
-        <!-- How it works (Guides) -->
+        <!-- How & About (JS Toggled) -->
         <div id="page-how" class="page hidden max-w-5xl mx-auto mb-32 fade-in">
-            <h3 class="text-3xl font-bold text-center mb-16" id="guide_title"><?php echo $t['guide_t']; ?></h3>
-            <div class="grid md:grid-cols-3 gap-12 relative">
-                <div class="hidden md:block absolute top-10 left-[20%] right-[20%] h-0.5 bg-gray-200"></div>
-
-                <div class="relative bg-white p-8 rounded-3xl border border-gray-100 shadow-sm z-10">
-                    <div
-                        class="w-16 h-16 bg-emerald-600 text-white rounded-2xl flex items-center justify-center mb-8 font-black text-2xl shadow-xl shadow-emerald-200 mx-auto">
-                        1</div>
-                    <h4 class="text-xl font-bold mb-4 text-center" id="guide1_title"><?php echo $t['guide1_t']; ?></h4>
-                    <p class="text-gray-500 text-center leading-relaxed" id="guide1_desc"><?php echo $t['guide1_d']; ?>
-                    </p>
-                </div>
-                <div class="relative bg-white p-8 rounded-3xl border border-gray-100 shadow-sm z-10">
-                    <div
-                        class="w-16 h-16 bg-emerald-600 text-white rounded-2xl flex items-center justify-center mb-8 font-black text-2xl shadow-xl shadow-emerald-200 mx-auto">
-                        2</div>
-                    <h4 class="text-xl font-bold mb-4 text-center" id="guide2_title"><?php echo $t['guide2_t']; ?></h4>
-                    <p class="text-gray-500 text-center leading-relaxed" id="guide2_desc"><?php echo $t['guide2_d']; ?>
-                    </p>
-                </div>
-                <div class="relative bg-white p-8 rounded-3xl border border-gray-100 shadow-sm z-10">
-                    <div
-                        class="w-16 h-16 bg-emerald-600 text-white rounded-2xl flex items-center justify-center mb-8 font-black text-2xl shadow-xl shadow-emerald-200 mx-auto">
-                        3</div>
-                    <h4 class="text-xl font-bold mb-4 text-center" id="guide3_title"><?php echo $t['guide3_t']; ?></h4>
-                    <p class="text-gray-500 text-center leading-relaxed" id="guide3_desc"><?php echo $t['guide3_d']; ?>
-                    </p>
-                </div>
+            <h3 class="text-3xl font-bold text-center mb-16"><?php echo $t['guide_t']; ?></h3>
+            <div class="grid md:grid-cols-3 gap-12 text-center">
+                <?php for ($i = 1; $i <= 3; $i++): ?>
+                    <div class="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm">
+                        <div
+                            class="w-16 h-16 bg-emerald-600 text-white rounded-2xl flex items-center justify-center mb-8 font-black text-2xl mx-auto">
+                            <?php echo $i; ?></div>
+                        <h4 class="text-xl font-bold mb-4"><?php echo $t['guide' . $i . '_t']; ?></h4>
+                        <p class="text-gray-500 leading-relaxed"><?php echo $t['guide' . $i . '_d']; ?></p>
+                    </div>
+                <?php endfor; ?>
             </div>
         </div>
 
-        <!-- FAQ Section -->
-        <div id="faq-section" class="max-w-3xl mx-auto mb-32">
-            <h3 class="text-3xl font-bold text-center mb-16" id="faq_title"><?php echo $t['faq_t']; ?></h3>
-            <div class="space-y-4">
-                <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-                    <button
-                        class="faq-btn w-full p-6 text-left flex justify-between items-center hover:bg-gray-50 transition-all font-bold group">
-                        <span id="q1"><?php echo $t['q1']; ?></span>
-                        <svg class="w-6 h-6 text-gray-400 group-hover:text-emerald-500 transition-colors" fill="none"
-                            stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-width="2" d="M19 9l-7 7-7-7" />
-                        </svg>
-                    </button>
-                    <div class="faq-ans hidden p-6 pt-0 text-gray-500 leading-relaxed border-t border-gray-50" id="a1">
-                        <?php echo $t['a1']; ?>
-                    </div>
-                </div>
-                <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-                    <button
-                        class="faq-btn w-full p-6 text-left flex justify-between items-center hover:bg-gray-50 transition-all font-bold group">
-                        <span id="q2"><?php echo $t['q2']; ?></span>
-                        <svg class="w-6 h-6 text-gray-400 group-hover:text-emerald-500 transition-colors" fill="none"
-                            stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-width="2" d="M19 9l-7 7-7-7" />
-                        </svg>
-                    </button>
-                    <div class="faq-ans hidden p-6 pt-0 text-gray-500 leading-relaxed border-t border-gray-50" id="a2">
-                        <?php echo $t['a2']; ?>
-                    </div>
-                </div>
-                <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-                    <button
-                        class="faq-btn w-full p-6 text-left flex justify-between items-center hover:bg-gray-50 transition-all font-bold group">
-                        <span id="q3"><?php echo $t['q3']; ?></span>
-                        <svg class="w-6 h-6 text-gray-400 group-hover:text-emerald-500 transition-colors" fill="none"
-                            stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-width="2" d="M19 9l-7 7-7-7" />
-                        </svg>
-                    </button>
-                    <div class="faq-ans hidden p-6 pt-0 text-gray-500 leading-relaxed border-t border-gray-50" id="a3">
-                        <?php echo $t['a3']; ?>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- About Page -->
         <div id="page-about" class="page hidden max-w-4xl mx-auto mt-20 fade-in">
             <div class="glass-card p-12 rounded-[3rem] text-center">
-                <h3 class="text-4xl font-black mb-8" id="about_title"><?php echo $t['about_t']; ?></h3>
-                <p class="text-xl text-gray-600 leading-relaxed max-w-2xl mx-auto mb-12" id="about_desc">
-                    <?php echo $t['about_d']; ?>
-                </p>
-                <div class="flex flex-wrap justify-center gap-10">
-                    <div class="flex flex-col items-center gap-3">
-                        <div
-                            class="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center">
-                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-width="2"
-                                    d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
-                            </svg>
-                        </div>
-                        <span class="font-bold">Global Network</span>
-                    </div>
-                    <div class="flex flex-col items-center gap-3">
-                        <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center">
-                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-width="2"
-                                    d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                            </svg>
-                        </div>
-                        <span class="font-bold">Original Quality</span>
-                    </div>
-                    <div class="flex flex-col items-center gap-3">
-                        <div
-                            class="w-16 h-16 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center">
-                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-width="2"
-                                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                            </svg>
-                        </div>
-                        <span class="font-bold">Secure Access</span>
-                    </div>
-                </div>
+                <h3 class="text-4xl font-black mb-8"><?php echo $t['about_t']; ?></h3>
+                <p class="text-xl text-gray-600 leading-relaxed"><?php echo $t['about_d']; ?></p>
             </div>
         </div>
     </main>
 
     <footer class="bg-gray-900 text-white mt-auto pt-24 pb-12">
-        <div class="container mx-auto px-4">
+        <div class="max-w-7xl mx-auto px-6">
             <div class="grid md:grid-cols-4 gap-16 mb-24">
                 <div class="col-span-2">
                     <div class="flex items-center gap-3 mb-8">
-                        <div
-                            class="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-gray-900 shadow-xl">
-                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        <div class="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-gray-900"><svg
+                                class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-width="2"
                                     d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                            </svg>
-                        </div>
+                            </svg></div>
                         <h4 class="text-3xl font-black hero-title">MySeoFan</h4>
                     </div>
-                    <p class="text-gray-400 text-lg leading-relaxed max-w-md mb-8">
-                        <?php echo $t['footer_desc']; ?>
-                    </p>
+                    <p class="text-gray-400 text-lg leading-relaxed max-w-md"><?php echo $t['footer_desc']; ?></p>
                 </div>
                 <div>
-                    <h4 class="text-white font-bold mb-6">Company</h4>
-                    <ul class="space-y-4 text-gray-400 font-medium">
-                        <li><a href="blog.php?lang=<?php echo $lang; ?>"
-                                class="hover:text-emerald-400 transition-colors">Blog & News</a></li>
-                        <li><a href="page.php?slug=about-us&lang=<?php echo $lang; ?>"
-                                class="hover:text-emerald-400 transition-colors">About MySeoFan</a></li>
-                        <li><a href="page.php?slug=contact&lang=<?php echo $lang; ?>"
-                                class="hover:text-emerald-400 transition-colors">Contact Us</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="text-white font-bold mb-6">Legal & Support</h4>
-                    <ul class="space-y-4 text-gray-400 font-medium">
-                        <li><a href="page.php?slug=privacy-policy&lang=<?php echo $lang; ?>"
-                                class="hover:text-emerald-400 transition-colors">Privacy Policy</a></li>
-                        <li><a href="page.php?slug=terms-of-use&lang=<?php echo $lang; ?>"
-                                class="hover:text-emerald-400 transition-colors">Terms of Use</a></li>
-                        <li><a href="page.php?slug=support&lang=<?php echo $lang; ?>"
-                                class="hover:text-emerald-400 transition-colors">Support Center</a></li>
+                    <h4 class="text-white font-bold mb-6">Navigation</h4>
+                    <ul class="space-y-4 text-gray-400">
+                        <li><a href="blog.php?lang=<?php echo $lang; ?>" class="hover:text-emerald-400">Blog & News</a>
+                        </li>
+                        <li><a href="index.php?lang=<?php echo $lang; ?>" class="hover:text-emerald-400">Downloader</a>
+                        </li>
                     </ul>
                 </div>
             </div>
             <div class="border-t border-white/5 pt-12 text-center text-gray-500 font-medium text-xs">
-                &copy; <?php echo date('Y'); ?> MySeoFan Studio. All rights reserved. Built for the community.
+                &copy; <?php echo date('Y'); ?> MySeoFan Studio. All rights reserved.
             </div>
         </div>
     </footer>
 
     <script>
-        const pasteBtn = document.getElementById('pasteBtn');
-        const downloadBtnText = document.querySelector('#downloadBtn span');
-        const langSelector = document.getElementById('langSelector');
-
-        langSelector.addEventListener('change', e => {
-            const newLang = e.target.value;
-            const url = new URL(window.location.href);
-            url.searchParams.set('lang', newLang);
-            window.location.href = url.href;
-        });
-
-        // FAQ Toggle Logic
-        document.querySelectorAll('.faq-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const ans = btn.nextElementSibling;
-                const icon = btn.querySelector('svg');
-                ans.classList.toggle('hidden');
-                icon.classList.toggle('rotate-180');
-            });
-        });
-
         document.querySelectorAll('.nav-link').forEach(link => {
             link.addEventListener('click', e => {
                 e.preventDefault();
                 document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('text-emerald-600', 'border-b-2', 'border-emerald-600'));
                 link.classList.add('text-emerald-600', 'border-b-2', 'border-emerald-600');
-
                 document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
                 const targetId = 'page-' + link.dataset.page;
-
-                // Special handling for sections on Home page
-                const homeSections = [
-                    document.getElementById('downloadForm').closest('.max-w-3xl'),
-                    document.getElementById('faq-section'),
-                    document.getElementById('page-how')
-                ].filter(el => el);
-
-                if (link.dataset.page === 'home') {
-                    homeSections.forEach(el => el.classList.remove('hidden'));
-                } else {
-                    homeSections.forEach(el => el.classList.add('hidden'));
-                    const target = document.getElementById(targetId);
-                    if (target) target.classList.remove('hidden');
-                }
+                const homeSections = [document.getElementById('downloadForm').closest('.max-w-3xl'), document.querySelector('.grid.md\\:grid-cols-3.gap-8'), document.querySelector('.max-w-4xl.text-center')].filter(el => el);
+                if (link.dataset.page === 'home') homeSections.forEach(el => el.classList.remove('hidden'));
+                else { homeSections.forEach(el => el.classList.add('hidden')); const target = document.getElementById(targetId); if (target) target.classList.remove('hidden'); }
             });
-        });
-
-        pasteBtn.addEventListener('click', async () => {
-            try {
-                const text = await navigator.clipboard.readText();
-                document.getElementById('instaUrl').value = text;
-            } catch {
-                alert('<?php echo $t['status_clipboard']; ?>');
-            }
         });
 
         document.getElementById('downloadForm').addEventListener('submit', async e => {
             e.preventDefault();
-            const urlInput = document.getElementById('instaUrl');
-            const resultDiv = document.getElementById('result');
-            const url = urlInput.value.trim();
+            const input = document.getElementById('instaUrl');
+            const resDiv = document.getElementById('result');
+            const url = input.value.trim();
             if (!url) return;
-
-            resultDiv.innerHTML = `<div class='flex flex-col items-center gap-6 py-10 fade-in py-10 fade-in'><div class='w-16 h-16 border-[6px] border-emerald-500 border-t-transparent rounded-full animate-spin'></div><p class='font-black text-gray-400 uppercase tracking-widest text-sm animate-pulse'><?php echo $t['status_fetching']; ?></p></div>`;
-
+            resDiv.innerHTML = `<div class='flex flex-col items-center gap-6 py-10'><div class='w-16 h-16 border-[6px] border-emerald-500 border-t-transparent rounded-full animate-spin'></div><p class='font-black text-gray-400 uppercase tracking-widest text-sm animate-pulse'><?php echo $t['status_fetching']; ?></p></div>`;
             try {
-                const res = await fetch('download.php', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ url })
-                });
-
+                const res = await fetch('download.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ url }) });
                 const data = await res.json();
-                resultDiv.innerHTML = '';
-
+                resDiv.innerHTML = '';
                 if (data.status === 'single') renderSingle(data);
-                else if (data.status === 'multiple') renderCarousel(data.media);
-                else throw new Error(data.error || '<?php echo $t['status_error']; ?>');
-            } catch (err) {
-                resultDiv.innerHTML = `
-                    <div class='p-8 bg-red-50 text-red-600 rounded-3xl font-bold flex flex-col items-center gap-4 border-2 border-red-100 fade-in'>
-                        <svg class='w-12 h-12 opacity-50' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-width="2" d='M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'/></svg> 
-                        <span class="text-lg text-center">${err.message}</span>
-                        <button onclick="location.reload()" class="text-sm px-6 py-2 bg-red-600 text-white rounded-xl shadow-lg shadow-red-200 hover:bg-red-700 transition-all">Try Again</button>
-                    </div>`;
+                else throw new Error(data.error || 'Error');
+            } catch (e) {
+                resDiv.innerHTML = `<div class='p-8 bg-red-50 text-red-600 rounded-3xl font-bold flex flex-col items-center gap-4 border-2 border-red-100 fade-in'><span class="text-lg text-center">${e.message}</span></div>`;
             }
         });
 
         function renderSingle(data) {
-            const resultDiv = document.getElementById('result');
-            const dLink = `download.php?action=download&url=${encodeURIComponent(data.url)}`;
-            resultDiv.innerHTML = `
+            const dl = `download.php?action=download&url=${encodeURIComponent(data.url)}`;
+            document.getElementById('result').innerHTML = `
                 <div class="flex flex-col gap-8 items-center fade-in">
-                    <div class="relative group max-w-sm rounded-[2rem] overflow-hidden shadow-2xl shadow-emerald-900/10 border-8 border-white">
-                        ${data.type === 'video'
-                    ? `<video controls class="w-full h-auto"><source src="${dLink}"></video>`
-                    : `<img src="${dLink}" class="w-full h-auto transform transition-all duration-700 group-hover:scale-110">`}
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none"></div>
+                    <div class="relative group max-w-sm rounded-[2rem] overflow-hidden shadow-2xl border-8 border-white">
+                        ${data.type === 'video' ? `<video controls class="w-full h-auto"><source src="${dl}"></video>` : `<img src="${dl}" class="w-full h-auto">`}
                     </div>
-                    <a href="${dLink}" class="w-full max-w-xs bg-emerald-600 text-white text-center py-5 rounded-2xl font-black text-xl shadow-2xl shadow-emerald-200 hover:bg-emerald-700 hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-4">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2.5" d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                        Download Files
-                    </a>
-                </div>
-            `;
-        }
-
-        function renderCarousel(media) {
-            const resultDiv = document.getElementById('result');
-            resultDiv.innerHTML = `
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 fade-in">
-                    ${media.map((item, i) => {
-                const dl = `download.php?action=download&url=${encodeURIComponent(item.url)}`;
-                return `
-                            <div class="glass-card p-4 rounded-3xl flex flex-col gap-4 group">
-                                <div class="relative rounded-2xl overflow-hidden bg-gray-100 aspect-square flex items-center justify-center">
-                                    ${item.type === 'video'
-                        ? `<video class="w-full h-full object-cover"><source src="${dl}"></video>`
-                        : `<img src="${dl}" class="w-full h-full object-cover group-hover:scale-110 transition-all duration-700">`}
-                                    <div class="absolute top-3 left-3 px-4 py-1.5 bg-black/60 backdrop-blur-xl text-white text-[10px] font-black rounded-full uppercase tracking-[0.2em] shadow-lg">${item.type}</div>
-                                </div>
-                                <a href="${dl}" class="w-full bg-emerald-600/5 text-emerald-600 text-center py-4 rounded-xl font-black hover:bg-emerald-600 hover:text-white hover:shadow-xl hover:shadow-emerald-200 transition-all">
-                                    Slide ${i + 1}
-                                </a>
-                            </div>
-                        `;
-            }).join('')}
-                </div>
-            `;
+                    <a href="${dl}" class="w-full max-w-xs bg-emerald-600 text-white text-center py-5 rounded-2xl font-black text-xl shadow-2xl hover:bg-emerald-700 transition-all">Download</a>
+                </div>`;
         }
     </script>
-    <!-- Custom Footer Code -->
     <?php echo $settings['footer_code'] ?? ''; ?>
 </body>
 

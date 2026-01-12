@@ -16,6 +16,11 @@ class SEO_Helper
         $this->lang = $lang;
     }
 
+    public function getPage()
+    {
+        return $this->page;
+    }
+
     public function getTitle()
     {
         return $this->seo['meta_title'] ?? ($this->settings['site_name'] ?? 'Instagram Downloader');

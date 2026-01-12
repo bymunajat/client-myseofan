@@ -153,8 +153,23 @@ if ($action === 'list') {
                                         <?php echo htmlspecialchars($p['category'] ?? 'General'); ?>
                                     </td>
                                     <td class="px-8 py-5">
+                                        <?php
+                                        $badgeClass = 'bg-gray-100 text-gray-600';
+                                        if ($p['lang_code'] == 'en')
+                                            $badgeClass = 'bg-emerald-100 text-emerald-600';
+                                        elseif ($p['lang_code'] == 'id')
+                                            $badgeClass = 'bg-blue-100 text-blue-600';
+                                        elseif ($p['lang_code'] == 'es')
+                                            $badgeClass = 'bg-yellow-100 text-yellow-600';
+                                        elseif ($p['lang_code'] == 'fr')
+                                            $badgeClass = 'bg-indigo-100 text-indigo-600';
+                                        elseif ($p['lang_code'] == 'de')
+                                            $badgeClass = 'bg-orange-100 text-orange-600';
+                                        elseif ($p['lang_code'] == 'ja')
+                                            $badgeClass = 'bg-purple-100 text-purple-600';
+                                        ?>
                                         <span
-                                            class="px-2 py-1 text-[10px] font-black uppercase rounded <?php echo $p['lang_code'] == 'en' ? 'bg-emerald-100 text-emerald-600' : 'bg-blue-100 text-blue-600'; ?>">
+                                            class="px-2 py-1 text-[10px] font-black uppercase rounded <?php echo $badgeClass; ?>">
                                             <?php echo $p['lang_code']; ?>
                                         </span>
                                     </td>
@@ -203,6 +218,10 @@ if ($action === 'list') {
                                     class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white focus:border-emerald-500 outline-none transition-all">
                                     <option value="en" <?php echo ($current_post['lang_code'] ?? '') == 'en' ? 'selected' : ''; ?>>English</option>
                                     <option value="id" <?php echo ($current_post['lang_code'] ?? '') == 'id' ? 'selected' : ''; ?>>Indonesia</option>
+                                    <option value="es" <?php echo ($current_post['lang_code'] ?? '') == 'es' ? 'selected' : ''; ?>>Español</option>
+                                    <option value="fr" <?php echo ($current_post['lang_code'] ?? '') == 'fr' ? 'selected' : ''; ?>>Français</option>
+                                    <option value="de" <?php echo ($current_post['lang_code'] ?? '') == 'de' ? 'selected' : ''; ?>>Deutsch</option>
+                                    <option value="ja" <?php echo ($current_post['lang_code'] ?? '') == 'ja' ? 'selected' : ''; ?>>日本語</option>
                                 </select>
                             </div>
                             <div>

@@ -83,6 +83,62 @@ $defaults = [
         'status_fetching' => 'Mengambil konten media...',
         'status_error' => 'Periksa privasi akun atau tautan.',
         'status_clipboard' => 'Izinkan akses papan klip atau tempel secara manual.'
+    ],
+    'es' => [
+        'title' => 'Descargador de Instagram',
+        'home' => 'Inicio',
+        'how' => 'Guías',
+        'about' => 'Acerca de',
+        'heading' => "Guarda <span class='text-emerald-600 border-b-4 border-emerald-400/30'>Cualquier</span> Contenido de Instagram",
+        'subtitle' => 'La forma más rápida y confiable de bajar Reels, Fotos y Videos de Instagram sin costo.',
+        'download' => 'Ir',
+        'paste' => 'Pegar',
+        'footer_desc' => 'La herramienta definitiva para la preservación de medios de Instagram.',
+        'status_fetching' => 'Obteniendo contenido...',
+        'status_error' => 'Error de enlace.',
+        'status_clipboard' => 'Pega manualmente.'
+    ],
+    'fr' => [
+        'title' => 'Téléchargeur Instagram',
+        'home' => 'Accueil',
+        'how' => 'Guides',
+        'about' => 'À propos',
+        'heading' => "Enregistrez <span class='text-emerald-600 border-b-4 border-emerald-400/30'>Tout</span> Media Instagram",
+        'subtitle' => 'Téléchargez des Reels, Photos et Vidéos Instagram rapidement et gratuitement.',
+        'download' => 'Go',
+        'paste' => 'Coller',
+        'footer_desc' => 'L\'outil ultime pour la préservation des médias Instagram.',
+        'status_fetching' => 'Chargement...',
+        'status_error' => 'Erreur de lien.',
+        'status_clipboard' => 'Coller manuellement.'
+    ],
+    'de' => [
+        'title' => 'Instagram Downloader',
+        'home' => 'Startseite',
+        'how' => 'Anleitungen',
+        'about' => 'Über uns',
+        'heading' => "Speichere <span class='text-emerald-600 border-b-4 border-emerald-400/30'>Jedes</span> Instagram-Medium",
+        'subtitle' => 'Der schnellste Weg, um Instagram Reels, Fotos und Videos kostenlos herunterzuladen.',
+        'download' => 'Los',
+        'paste' => 'Einfügen',
+        'footer_desc' => 'Das ultimative Tool zur Aufbewahrung von Instagram-Medien.',
+        'status_fetching' => 'Wird geladen...',
+        'status_error' => 'Link Fehler.',
+        'status_clipboard' => 'Manuell einfügen.'
+    ],
+    'ja' => [
+        'title' => 'Instagram ダウンローダー',
+        'home' => 'ホーム',
+        'how' => 'ガイド',
+        'about' => 'サイトについて',
+        'heading' => "Instagram メディアを <span class='text-emerald-600 border-b-4 border-emerald-400/30'>即座に</span> 保存",
+        'subtitle' => 'Instagramのリール、写真、動画を素早く無料でダウンロードできる最も信頼性の高いツールです。',
+        'download' => '実行',
+        'paste' => '貼り付け',
+        'footer_desc' => 'Instagramメディア保存のための究極のツール。',
+        'status_fetching' => '読み込み中...',
+        'status_error' => 'リンクエラー。',
+        'status_clipboard' => '手動で貼り付け。'
     ]
 ];
 
@@ -268,8 +324,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
 
                 <!-- Language Switcher -->
                 <div class="relative group">
-                    <select id="langSelector"
-                        onchange="location.href = this.value"
+                    <select id="langSelector" onchange="location.href = this.value"
                         class="appearance-none bg-gray-50 border border-gray-200 text-gray-700 font-bold py-2 pl-4 pr-10 rounded-xl outline-none focus:border-emerald-500 transition-all cursor-pointer">
                         <?php
                         $langs = [
@@ -305,8 +360,9 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                                     }
                                 }
                             }
-                        ?>
-                        <option value="<?php echo $targetUrl; ?>" <?php echo $lang === $code ? 'selected' : ''; ?>><?php echo $label; ?></option>
+                            ?>
+                            <option value="<?php echo $targetUrl; ?>" <?php echo $lang === $code ? 'selected' : ''; ?>>
+                                <?php echo $label; ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>

@@ -139,18 +139,7 @@ if ($action === 'list') {
     <?php include 'includes/sidebar.php'; ?>
 
     <main class="flex-1 min-h-screen">
-        <header class="bg-white border-b-4 border-emerald-300 px-8 h-20 flex items-center justify-between shadow-sm">
-            <div>
-                <h1 class="text-2xl font-bold text-gray-800">Admin Management</h1>
-                <p class="text-xs text-gray-400 mt-1">Manage platform access and permissions</p>
-            </div>
-            <div class="flex items-center gap-4">
-                <span
-                    class="px-4 py-1.5 bg-emerald-50 text-emerald-600 rounded-full text-[10px] font-bold uppercase tracking-widest">
-                    Super Admin Mode
-                </span>
-            </div>
-        </header>
+
 
         <div class="p-8">
             <!-- Alert Messages -->
@@ -227,7 +216,6 @@ if ($action === 'list') {
                 <div class="flex justify-between items-center mb-8">
                     <div>
                         <h3 class="text-lg font-bold text-gray-700 uppercase tracking-tighter">System Administrators</h3>
-                        <p class="text-xs text-gray-400 mt-0.5">Found <?php echo count($users); ?> accounts</p>
                     </div>
                     <a href="?action=add"
                         class="bg-gradient-to-r from-emerald-500 to-emerald-600 text-white px-8 py-3.5 rounded-2xl font-bold hover:shadow-xl hover:shadow-emerald-100 transition-all flex items-center gap-2">

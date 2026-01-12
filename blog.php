@@ -1,71 +1,38 @@
 <?php
 require_once 'includes/db.php';
 require_once 'includes/SEO_Helper.php';
+require_once 'includes/Translator.php';
+
+// Helper function for auto-translation
+if (!function_exists('__')) {
+    function __($text, $lang) {
+        return Translator::translate($text, $lang);
+    }
+}
 
 $lang = $_GET['lang'] ?? 'en';
 $settings = getSiteSettings($pdo);
 $translations = getTranslations($pdo, $lang);
 
-// 3. Fallback Translations (Expanded for 6 Languages)
-$defaults = [
-    'en' => [
-        'home' => 'Home',
-        'blog' => 'Blog',
-        'blog_title' => 'Instagram <span class="text-emerald-600">Insights</span>',
-        'blog_subtitle' => 'Expert tips, tricks, and updates on Instagram media preservation and creative archiving.',
-        'read_more' => 'Read Story',
-        'coming_soon' => 'New articles are being prepared. Stay tuned!',
-        'back' => 'Back to Home'
-    ],
-    'id' => [
-        'home' => 'Beranda',
-        'blog' => 'Blog',
-        'blog_title' => 'Wawasan <span class="text-emerald-600">Instagram</span>',
-        'blog_subtitle' => 'Tips ahli, trik, dan pembaruan tentang pengarsipan media Instagram dan kreativitas.',
-        'read_more' => 'Baca Artikel',
-        'coming_soon' => 'Artikel baru sedang disiapkan. Tunggu saja!',
-        'back' => 'Kembali ke Beranda'
-    ],
-    'es' => [
-        'home' => 'Inicio',
-        'blog' => 'Blog',
-        'blog_title' => 'Ideas de <span class="text-emerald-600">Instagram</span>',
-        'blog_subtitle' => 'Consejos de expertos, trucos y actualizaciones sobre la preservación de medios de Instagram.',
-        'read_more' => 'Leer Más',
-        'coming_soon' => 'Nuevos artículos próximamente.',
-        'back' => 'Volver'
-    ],
-    'fr' => [
-        'home' => 'Accueil',
-        'blog' => 'Blog',
-        'blog_title' => 'Infos <span class="text-emerald-600">Instagram</span>',
-        'blog_subtitle' => 'Conseils d\'experts, astuces et mises à jour sur la préservation des médias Instagram.',
-        'read_more' => 'Lire la Suite',
-        'coming_soon' => 'De nouveaux articles arrivent bientôt.',
-        'back' => 'Retour'
-    ],
-    'de' => [
-        'home' => 'Startseite',
-        'blog' => 'Blog',
-        'blog_title' => 'Instagram <span class="text-emerald-600">Insights</span>',
-        'blog_subtitle' => 'Expertentipps, Tricks und Updates zur Archivierung von Instagram-Medien.',
-        'read_more' => 'Weiterlesen',
-        'coming_soon' => 'Neue Artikel sind in Vorbereitung.',
-        'back' => 'Zurück'
-    ],
-    'ja' => [
-        'home' => 'ホーム',
-        'blog' => 'ブログ',
-        'blog_title' => 'Instagram <span class="text-emerald-600">インサイト</span>',
-        'blog_subtitle' => 'Instagramメディアの保存とクリエイティブなアーカイブに関するエキスパートのヒントと更新情報。',
-        'read_more' => '詳しく読む',
-        'coming_soon' => '新しい記事を準備中です。',
-        'back' => '戻る'
-    ]
+// 3. Translations Logic
+$t = [
+    'home' => __('Home', $lang),
+    'blog' => __('Blog', $lang),
+    'blog_title' => __('Instagram Insights', $lang),
+    'blog_subtitle' => __('Expert tips, tricks, and updates on Instagram media preservation and creative archiving.', $lang),
+    'read_more' => __('Read Story', $lang),
+    'coming_soon' => __('New articles are being prepared. Stay tuned!', $lang),
+    'back' => __('Back to Home', $lang),
+    'footer_desc' => __('The ultimate tool for Instagram media preservation. We help creators and fans archive their favorite moments with ease and style.', $lang)
 ];
 
-// Merge with defaults (EN as primary fallback)
-$t = array_merge($defaults['en'], $defaults[$lang] ?? [], $translations);
+// Special handle for HTML in title
+if ($lang !== 'en') {
+    $t['blog_title'] = str_replace("Insights", '<span class="text-emerald-600">Insights</span>', $t['blog_title']);
+} else {
+    $t['blog_title'] = 'Instagram <span class="text-emerald-600">Insights</span>';
+}
+
 
 // Fetch dynamic navigation links
 // Fetch dynamic navigation links using New Menu System
@@ -78,6 +45,19 @@ $seoHelper = new SEO_Helper($pdo, 'blog', $lang);
 $stmt = $pdo->prepare("SELECT * FROM blog_posts WHERE lang_code = ? AND status = 'published' ORDER BY created_at DESC");
 $stmt->execute([$lang]);
 $posts = $stmt->fetchAll();
+
+// If no posts in current language, fetch English and Translate
+if (empty($posts) && $lang !== 'en') {
+    $stmt = $pdo->prepare("SELECT * FROM blog_posts WHERE lang_code = 'en' AND status = 'published' ORDER BY created_at DESC");
+    $stmt->execute();
+    $posts = $stmt->fetchAll();
+    
+    foreach ($posts as &$p) {
+        $p['title'] = Translator::translate($p['title'], $lang);
+        $p['lang_code'] = $lang;
+    }
+}
+
 
 $pageIdentifier = 'blog';
 ?>

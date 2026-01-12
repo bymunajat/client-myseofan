@@ -188,16 +188,24 @@ function getMenuTree($pdo, $location, $lang)
     if (!$pdo)
         return [];
 
-    // 1. Fetch raw items
+    // 1. Fetch raw items (Always from English as the Master Source)
     $stmt = $pdo->prepare("
         SELECT mi.*, p.slug as page_slug 
         FROM menu_items mi 
         LEFT JOIN pages p ON mi.related_id = p.id 
-        WHERE mi.menu_location = ? AND mi.lang_code = ? 
+        WHERE mi.menu_location = ? AND mi.lang_code = 'en'
         ORDER BY mi.sort_order ASC
     ");
-    $stmt->execute([$location, $lang]);
+    $stmt->execute([$location]);
     $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // 2. Translate labels on-the-fly if not English
+    if (!empty($items) && $lang !== 'en') {
+        require_once __DIR__ . '/Translator.php';
+        foreach ($items as &$item) {
+            $item['label'] = Translator::translate($item['label'], $lang);
+        }
+    }
 
     // 2. Build Tree
     $tree = [];

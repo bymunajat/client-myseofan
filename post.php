@@ -1,14 +1,28 @@
 <?php
 require_once 'includes/db.php';
 require_once 'includes/SEO_Helper.php';
+require_once 'includes/Translator.php';
 
 $slug = $_GET['slug'] ?? '';
 $lang = $_GET['lang'] ?? 'en';
 
-// Fetch post
+// Fetch post (Try requested language first)
 $stmt = $pdo->prepare("SELECT * FROM blog_posts WHERE slug = ? AND lang_code = ?");
 $stmt->execute([$slug, $lang]);
 $post = $stmt->fetch();
+
+// If not found, try English version to auto-translate
+if (!$post && $lang !== 'en') {
+    $stmt = $pdo->prepare("SELECT * FROM blog_posts WHERE slug = ? AND lang_code = 'en'");
+    $stmt->execute([$slug]);
+    $post = $stmt->fetch();
+
+    if ($post) {
+        $post['title'] = Translator::translate($post['title'], $lang);
+        $post['content'] = Translator::translate($post['content'], $lang);
+        $post['lang_code'] = $lang;
+    }
+}
 
 if (!$post) {
     header("Location: blog.php?lang=$lang");
@@ -16,7 +30,13 @@ if (!$post) {
 }
 
 $settings = getSiteSettings($pdo);
-$translations = getTranslations($pdo, $lang);
+
+// Helper function for auto-translation
+function __($text, $lang)
+{
+    return Translator::translate($text, $lang);
+}
+
 
 // 3. Fallback Translations (Expanded for 6 Languages)
 $defaults = [
@@ -200,7 +220,8 @@ $seoHelper = new SEO_Helper($pdo, 'post', $lang);
                 <h4 class="text-xl font-black hero-title">MySeoFan</h4>
             </div>
             <p class="text-gray-400 font-medium text-sm">&copy; <?php echo date('Y'); ?>
-                <?php echo htmlspecialchars($settings['site_name'] ?? 'MySeoFan'); ?>.</p>
+                <?php echo htmlspecialchars($settings['site_name'] ?? 'MySeoFan'); ?>.
+            </p>
         </div>
     </footer>
     <?php echo $settings['footer_code'] ?? ''; ?>

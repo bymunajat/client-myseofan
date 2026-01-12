@@ -1,6 +1,7 @@
 <?php
 require_once 'includes/db.php';
 require_once 'includes/SEO_Helper.php';
+require_once 'includes/Translator.php';
 
 // 1. Initialize State
 $lang = $_GET['lang'] ?? 'en';
@@ -9,6 +10,12 @@ $pageIdentifier = 'home';
 // 2. Fetch Data
 $settings = getSiteSettings($pdo);
 $translations = getTranslations($pdo, $lang);
+
+// Helper function for auto-translation
+function __($text, $lang) {
+    return Translator::translate($text, $lang);
+}
+
 
 // 3. Fallback Translations (Expanded for 6 Languages)
 $defaults = [
@@ -527,9 +534,12 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                 <div>
                     <h4 class="text-white font-bold mb-6">Downloader</h4>
                     <ul class="space-y-4 text-gray-400">
-                        <li><a href="#" class="hover:text-emerald-400">Video Downloader</a></li>
-                        <li><a href="#" class="hover:text-emerald-400">Reels Downloader</a></li>
-                        <li><a href="#" class="hover:text-emerald-400">Story Downloader</a></li>
+                        <li><a href="video.php?lang=<?php echo $lang; ?>" class="hover:text-emerald-400">Video
+                                Downloader</a></li>
+                        <li><a href="reels.php?lang=<?php echo $lang; ?>" class="hover:text-emerald-400">Reels
+                                Downloader</a></li>
+                        <li><a href="story.php?lang=<?php echo $lang; ?>" class="hover:text-emerald-400">Story
+                                Downloader</a></li>
                         <li><a href="blog.php?lang=<?php echo $lang; ?>" class="hover:text-emerald-400">Blog & News</a>
                         </li>
                     </ul>

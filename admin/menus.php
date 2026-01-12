@@ -13,7 +13,7 @@ if (!isset($_SESSION['admin_id']) || !in_array(($_SESSION['role'] ?? ''), ['supe
 
 $message = '';
 $error = '';
-$_curr_lang = $_GET['lang'] ?? 'en';
+$_curr_lang = 'en';
 $location = $_GET['menu_location'] ?? 'header';
 
 // --- AJAX HANDLER: Save Menu Structure ---
@@ -94,14 +94,7 @@ $stmt->execute([$location, $_curr_lang]);
 $rawItems = $stmt->fetchAll();
 $menuTree = buildMenuTree($rawItems);
 
-$available_langs = [
-    'en' => '🇺🇸 English',
-    'id' => '🇮🇩 Indonesia',
-    'es' => '🇪🇸 Español',
-    'fr' => '🇫🇷 Français',
-    'de' => '🇩🇪 DE',
-    'ja' => '🇯🇵 日本語'
-];
+
 
 $page_title = ucfirst($location) . " Menu Manager";
 ?>
@@ -170,15 +163,7 @@ $page_title = ucfirst($location) . " Menu Manager";
         </header>
 
         <div class="p-8">
-            <!-- Language Tabs -->
-            <div class="flex flex-wrap gap-2 mb-8 bg-white p-2 rounded-2xl shadow-sm border border-gray-100">
-                <?php foreach ($available_langs as $code => $label): ?>
-                    <a href="?menu_location=<?php echo $location; ?>&lang=<?php echo $code; ?>"
-                        class="px-6 py-3 rounded-xl font-bold transition-all flex items-center gap-2 <?php echo $_curr_lang === $code ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-200' : 'text-gray-500 hover:bg-gray-50'; ?>">
-                        <?php echo $label; ?>
-                    </a>
-                <?php endforeach; ?>
-            </div>
+            <!-- Language tabs removed for simplification -->
 
             <div class="grid grid-cols-12 gap-8">
                 <!-- Left Panel: Add Items -->

@@ -72,13 +72,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <main class="flex-1 min-h-screen">
         <header class="bg-white border-b-4 border-emerald-300 px-8 h-20 flex items-center justify-between shadow-sm">
             <div>
-                <h3 class="text-xl font-bold text-gray-800">Site Settings</h3>
-                <p class="text-xs text-gray-500 mt-0.5">Configure logo, favicon, and site identity</p>
+                <h3 class="text-xl font-bold text-gray-800">Settings</h3>
             </div>
         </header>
 
         <div class="p-12">
-            <h1 class="text-3xl font-bold mb-8">Site Settings</h1>
+
 
             <?php if ($message): ?>
                 <div class="bg-emerald-50 text-emerald-600 p-4 rounded-xl mb-6 font-medium">

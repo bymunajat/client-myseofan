@@ -1,20 +1,27 @@
 <?php
 require_once 'includes/db.php';
 require_once 'includes/SEO_Helper.php';
+require_once 'includes/Translator.php';
 
 $slug = $_GET['slug'] ?? '';
 $lang = $_GET['lang'] ?? 'en';
 
-// Fetch page
+// Fetch page (Try requested language first)
 $stmt = $pdo->prepare("SELECT * FROM pages WHERE slug = ? AND lang_code = ?");
 $stmt->execute([$slug, $lang]);
 $page = $stmt->fetch();
 
-// Try without lang filter if not found
-if (!$page) {
-    $stmt = $pdo->prepare("SELECT * FROM pages WHERE slug = ?");
+// If not found, try English version to auto-translate
+if (!$page && $lang !== 'en') {
+    $stmt = $pdo->prepare("SELECT * FROM pages WHERE slug = ? AND lang_code = 'en'");
     $stmt->execute([$slug]);
     $page = $stmt->fetch();
+    
+    if ($page) {
+        $page['title'] = Translator::translate($page['title'], $lang);
+        $page['content'] = Translator::translate($page['content'], $lang);
+        $page['lang_code'] = $lang;
+    }
 }
 
 if (!$page) {
@@ -23,38 +30,19 @@ if (!$page) {
 }
 
 $settings = getSiteSettings($pdo);
-$translations = getTranslations($pdo, $lang);
 
-// 3. Fallback Translations (Expanded for 6 Languages)
-$defaults = [
-    'en' => [
-        'home' => 'Home',
-        'blog' => 'Blog'
-    ],
-    'id' => [
-        'home' => 'Beranda',
-        'blog' => 'Blog'
-    ],
-    'es' => [
-        'home' => 'Inicio',
-        'blog' => 'Blog'
-    ],
-    'fr' => [
-        'home' => 'Accueil',
-        'blog' => 'Blog'
-    ],
-    'de' => [
-        'home' => 'Startseite',
-        'blog' => 'Blog'
-    ],
-    'ja' => [
-        'home' => 'ホーム',
-        'blog' => 'ブログ'
-    ]
+// Helper function for auto-translation
+function __($text, $lang) {
+    return Translator::translate($text, $lang);
+}
+
+
+// 3. Translations Logic
+$t = [
+    'home' => __('Home', $lang),
+    'blog' => __('Blog', $lang)
 ];
 
-// Merge with defaults (EN as primary fallback)
-$t = array_merge($defaults['en'], $defaults[$lang] ?? [], $translations);
 
 // Fetch dynamic navigation links
 // Fetch dynamic navigation links using New Menu System

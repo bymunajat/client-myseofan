@@ -16,30 +16,8 @@ $error = '';
 $action = $_GET['action'] ?? 'list';
 $id = $_GET['id'] ?? null;
 
-// Persistent Language Logic
-$available_langs = [
-    'en' => '🇺🇸 English',
-    'id' => '🇮🇩 Indonesia',
-    'es' => '🇪🇸 Español',
-    'fr' => '🇫🇷 Français',
-    'de' => '🇩🇪 DE',
-    'ja' => '🇯🇵 日本語'
-];
-
-// Determine the current filtered language
-if (isset($_GET['filter_lang'])) {
-    $_curr_lang = $_GET['filter_lang'];
-} elseif (isset($_GET['lang_code'])) {
-    $_curr_lang = $_GET['lang_code'];
-} elseif (isset($_SESSION['last_blog_lang'])) {
-    $_curr_lang = $_SESSION['last_blog_lang'];
-} else {
-    $_curr_lang = 'en';
-}
-
-if (!array_key_exists($_curr_lang, $available_langs))
-    $_curr_lang = 'en';
-$_SESSION['last_blog_lang'] = $_curr_lang;
+$_curr_lang = 'en';
+$_SESSION['last_blog_lang'] = 'en';
 
 // Handle CRUD Logic
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -175,15 +153,7 @@ if ($action === 'list') {
             <?php endif; ?>
 
             <?php if ($action === 'list'): ?>
-                <!-- Language Navigation Tabs -->
-                <div class="flex flex-wrap gap-2 mb-8 bg-white p-2 rounded-2xl shadow-sm border border-gray-100">
-                    <?php foreach ($available_langs as $code => $label): ?>
-                        <a href="?filter_lang=<?php echo $code; ?>&action=list"
-                            class="px-6 py-3 rounded-xl font-bold transition-all flex items-center gap-2 <?php echo $_curr_lang === $code ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-200' : 'text-gray-500 hover:bg-gray-50'; ?>">
-                            <?php echo $label; ?>
-                        </a>
-                    <?php endforeach; ?>
-                </div>
+                <!-- Language tabs removed for simplification -->
 
                 <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
                     <table class="w-full text-left">
@@ -201,12 +171,9 @@ if ($action === 'list') {
                             <?php if (empty($posts)): ?>
                                 <tr>
                                     <td colspan="4" class="px-8 py-12 text-center">
-                                        <div class="text-gray-400 font-medium mb-4">No posts found in
-                                            <?php echo $available_langs[$_curr_lang] ?? $_curr_lang; ?>.
-                                        </div>
-                                        <a href="?action=add&lang_code=<?php echo $_curr_lang; ?>"
-                                            class="text-emerald-600 font-bold hover:underline">Create the first post for this
-                                            language →</a>
+                                        <div class="text-gray-400 font-medium mb-4">No posts found.</div>
+                                        <a href="?action=add" class="text-emerald-600 font-bold hover:underline">Create the
+                                            first post →</a>
                                     </td>
                                 </tr>
                             <?php endif; ?>
@@ -248,13 +215,8 @@ if ($action === 'list') {
                         class="space-y-6">
                         <div class="grid md:grid-cols-2 gap-6">
                             <div class="md:col-span-2">
-                                <label class="block text-sm font-semibold text-gray-700 mb-2">ID Penghubung Bahasa (Linked
-                                    ID)</label>
-                                <input type="text" name="translation_group"
-                                    value="<?php echo htmlspecialchars($current_post['translation_group'] ?? uniqid('group_', true)); ?>"
-                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 font-semibold text-black text-sm outline-none font-mono">
-                                <p class="text-[10px] text-gray-400 mt-1">ID ini menghubungkan artikel ini dengan versinya
-                                    di bahasa lain.</p>
+                                <input type="hidden" name="translation_group"
+                                    value="<?php echo htmlspecialchars($current_post['translation_group'] ?? uniqid('group_', true)); ?>">
                             </div>
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Post Title</label>
@@ -270,17 +232,7 @@ if ($action === 'list') {
                             </div>
                         </div>
                         <div class="grid md:grid-cols-2 gap-6">
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-2">Language</label>
-                                <select name="lang_code"
-                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white outline-none font-bold text-black">
-                                    <?php foreach ($available_langs as $code => $label): ?>
-                                        <option value="<?php echo $code; ?>" <?php echo (($current_post['lang_code'] ?? ($_GET['lang_code'] ?? $_curr_lang)) == $code) ? 'selected' : ''; ?>>
-                                            <?php echo $label; ?>
-                                        </option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
+                            <input type="hidden" name="lang_code" value="en">
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Category</label>
                                 <select name="category"
@@ -345,6 +297,19 @@ if ($action === 'list') {
             <?php endif; ?>
         </div>
     </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.2/tinymce.min.js"></script>
+    <script>
+        tinymce.init({
+            selector: 'textarea[name="content"]',
+            plugins: 'link lists code table autoresize',
+            toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | indent outdent | bullist numlist | link table code',
+            height: 500,
+            branding: false,
+            promotion: false,
+            skin: 'oxide',
+            content_css: 'default'
+        });
+    </script>
 </body>
 
 </html>

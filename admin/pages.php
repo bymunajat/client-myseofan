@@ -18,31 +18,11 @@ $id = $_GET['id'] ?? null;
 $action = $_GET['action'] ?? 'list';
 $id = $_GET['id'] ?? null;
 
-$available_langs = [
-    'en' => ['label' => 'English', 'flag' => '🇺🇸'],
-    'id' => ['label' => 'Indonesia', 'flag' => '🇮🇩'],
-    'es' => ['label' => 'Español', 'flag' => '🇪🇸'],
-    'fr' => ['label' => 'Français', 'flag' => '🇫🇷'],
-    'de' => ['label' => 'DE', 'flag' => '🇩🇪'],
-    'ja' => ['label' => '日本語', 'flag' => '🇯🇵']
-];
+$_curr_lang = 'en';
+$_SESSION['last_page_lang'] = 'en';
 
-// 1. Determine the Active Language Context
-// Priority: GET filter_lang > GET lang_code > Session > Default 'en'
-if (isset($_GET['filter_lang'])) {
-    $_curr_lang = $_GET['filter_lang'];
-} elseif (isset($_GET['lang_code'])) {
-    $_curr_lang = $_GET['lang_code'];
-} elseif (isset($_SESSION['last_page_lang'])) {
-    $_curr_lang = $_SESSION['last_page_lang'];
-} else {
-    $_curr_lang = 'en';
-}
-
-// Validation & Persistence
-if (!array_key_exists($_curr_lang, $available_langs))
-    $_curr_lang = 'en';
-$_SESSION['last_page_lang'] = $_curr_lang;
+$_curr_lang = 'en';
+$_SESSION['last_page_lang'] = 'en';
 
 // AJAX Reorder Handler
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'reorder') {
@@ -200,12 +180,7 @@ $page_title = "Page Content Manager";
             </div>
             <div class="flex items-center gap-4">
                 <?php if ($action === 'list'): ?>
-                    <div class="text-gray-500 font-medium text-sm hidden md:block">
-                        Active Language: <span
-                            class="text-gray-900 font-bold ml-1"><?php echo $available_langs[$_curr_lang]['flag']; ?>
-                            <?php echo $available_langs[$_curr_lang]['label']; ?></span>
-                    </div>
-                    <a href="?action=add&lang_code=<?php echo $_curr_lang; ?>"
+                    <a href="?action=add"
                         class="bg-emerald-600 text-white px-5 py-2.5 rounded-xl font-bold hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-200 text-sm flex items-center gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-width="3" d="M12 4v16m8-8H4" />
@@ -232,16 +207,7 @@ $page_title = "Page Content Manager";
             <?php endif; ?>
 
             <?php if ($action === 'list'): ?>
-                <!-- Language Navigation Tabs -->
-                <div class="flex flex-wrap gap-2 mb-8 bg-white p-2 rounded-2xl shadow-sm border border-gray-100">
-                    <?php foreach ($available_langs as $code => $info): ?>
-                        <a href="?action=list&filter_lang=<?php echo $code; ?>"
-                            class="px-5 py-2.5 rounded-xl font-bold transition-all flex items-center gap-2 <?php echo $_curr_lang === $code ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-200' : 'text-gray-500 hover:bg-gray-50'; ?> text-sm">
-                            <span class="text-base"><?php echo $info['flag']; ?></span>
-                            <span><?php echo $info['label']; ?></span>
-                        </a>
-                    <?php endforeach; ?>
-                </div>
+                <!-- Language tabs removed -->
 
                 <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
                     <table class="w-full text-left">
@@ -258,11 +224,9 @@ $page_title = "Page Content Manager";
                             <?php if (empty($pages)): ?>
                                 <tr>
                                     <td colspan="4" class="px-8 py-12 text-center">
-                                        <div class="text-gray-400 font-medium mb-4">No pages found in
-                                            <?php echo $available_langs[$_curr_lang] ?? $_curr_lang; ?>.
-                                        </div>
+                                        <div class="text-gray-400 font-medium mb-4">No pages found.</div>
                                         <div class="flex justify-center gap-4">
-                                            <a href="?action=add&lang_code=<?php echo $_curr_lang; ?>"
+                                            <a href="?action=add"
                                                 class="bg-emerald-50 text-emerald-600 px-4 py-2 rounded-lg font-bold hover:bg-emerald-100">Create
                                                 the first page →</a>
                                         </div>
@@ -310,26 +274,11 @@ $page_title = "Page Content Manager";
                                             class="text-emerald-600 underline">Menu Manager</a>.</p>
                                 </div>
                             </div>
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-2">ID Penghubung Bahasa (Linked
-                                    ID)</label>
-                                <input type="text" name="translation_group"
-                                    value="<?php echo htmlspecialchars($cu_p['translation_group'] ?? uniqid('group_', true)); ?>"
-                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 font-semibold text-black text-sm outline-none font-mono">
-                                <p class="text-[10px] text-gray-400 mt-1">ID ini menghubungkan halaman ini dengan versinya
-                                    di bahasa lain.</p>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-2">Language</label>
-                                <select name="lang_code"
-                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white outline-none font-bold text-black">
-                                    <?php foreach ($available_langs as $code => $info): ?>
-                                        <option value="<?php echo $code; ?>" <?php echo (($cu_p['lang_code'] ?? ($_GET['lang_code'] ?? $_curr_lang)) == $code) ? 'selected' : ''; ?>>
-                                            <?php echo $info['flag'] . ' ' . $info['label']; ?>
-                                        </option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
+                            <!-- Hidden Linked ID -->
+                            <input type="hidden" name="translation_group"
+                                value="<?php echo htmlspecialchars($cu_p['translation_group'] ?? uniqid('group_', true)); ?>">
+
+                            <input type="hidden" name="lang_code" value="en">
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Page Title</label>
                                 <input type="text" name="title"
@@ -346,7 +295,7 @@ $page_title = "Page Content Manager";
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Content (HTML allowed)</label>
                             <textarea name="content" rows="15"
-                                class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 outline-none font-semibold text-black"><?php echo htmlspecialchars($cu_p['content'] ?? ''); ?></textarea>
+                                class="tinymce-editor w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 outline-none font-semibold text-black"><?php echo htmlspecialchars($cu_p['content'] ?? ''); ?></textarea>
                         </div>
                         <div class="border-t pt-6">
                             <h4 class="font-black text-gray-400 uppercase tracking-widest text-xs mb-4">SEO Settings</h4>
@@ -396,6 +345,19 @@ $page_title = "Page Content Manager";
 
             });
         }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.2/tinymce.min.js"></script>
+    <script>
+        tinymce.init({
+            selector: 'textarea[name="content"]',
+            plugins: 'link lists code table autoresize',
+            toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | indent outdent | bullist numlist | link table code',
+            height: 500,
+            branding: false,
+            promotion: false,
+            skin: 'oxide',
+            content_css: 'default'
+        });
     </script>
 </body>
 

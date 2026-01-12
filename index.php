@@ -238,9 +238,15 @@ $headerLinks = $pdo->prepare("SELECT title, slug FROM pages WHERE lang_code = ? 
 $headerLinks->execute([$lang]);
 $headerLinks = $headerLinks->fetchAll();
 
-$footerLinks = $pdo->prepare("SELECT title, slug FROM pages WHERE lang_code = ? AND show_in_footer = 1 ORDER BY menu_order ASC");
-$footerLinks->execute([$lang]);
-$footerLinks = $footerLinks->fetchAll();
+$rawFooterLinks = $pdo->prepare("SELECT title, slug, footer_section FROM pages WHERE lang_code = ? AND show_in_footer = 1 ORDER BY menu_order ASC");
+$rawFooterLinks->execute([$lang]);
+$rawFooterLinks = $rawFooterLinks->fetchAll();
+
+$footerGroups = [];
+foreach ($rawFooterLinks as $fl) {
+    $section = $fl['footer_section'] ?: 'legal';
+    $footerGroups[$section][] = $fl;
+}
 
 // 4. Initialize SEO
 $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
@@ -392,8 +398,9 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                 <a href="#" class="nav-link hover:text-emerald-600 transition-colors py-1"
                     data-page="about"><?php echo $t['about']; ?></a>
 
-              <?php foreach ($headerLinks as $hl): ?>
-                    <a href="page.php?slug=<?php echo htmlspecialchars($hl['slug']); ?>&lang=<?php echo $lang; ?>" class="hover:text-emerald-600 transition-colors py-1"><?php echo htmlspecialchars($hl['title']); ?></a>
+                <?php foreach ($headerLinks as $hl): ?>
+                    <a href="page.php?slug=<?php echo htmlspecialchars($hl['slug']); ?>&lang=<?php echo $lang; ?>"
+                        class="hover:text-emerald-600 transition-colors py-1"><?php echo htmlspecialchars($hl['title']); ?></a>
                 <?php endforeach; ?>
 
                 <!-- Language Switcher -->
@@ -497,23 +504,28 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                     <p class="text-gray-400 text-lg leading-relaxed max-w-md"><?php echo $t['footer_desc']; ?></p>
                 </div>
                 <div>
-                    <h4 class="text-white font-bold mb-6">Navigation</h4>
+                    <h4 class="text-white font-bold mb-6">Downloader</h4>
                     <ul class="space-y-4 text-gray-400">
-                        <li><a href="index.php?lang=<?php echo $lang; ?>" class="hover:text-emerald-400">Downloader</a>
-                        </li>
+                        <li><a href="#" class="hover:text-emerald-400">Video Downloader</a></li>
+                        <li><a href="#" class="hover:text-emerald-400">Reels Downloader</a></li>
+                        <li><a href="#" class="hover:text-emerald-400">Story Downloader</a></li>
                         <li><a href="blog.php?lang=<?php echo $lang; ?>" class="hover:text-emerald-400">Blog & News</a>
                         </li>
                     </ul>
                 </div>
+
+                <?php foreach ($footerGroups as $section => $links): ?>
                 <div>
-                    <h4 class="text-white font-bold mb-6">Legal</h4>
+                    <h4 class="text-white font-bold mb-6">
+                        <?php echo $t['footer_section_' . $section] ?? ucfirst($section); ?>
+                    </h4>
                     <ul class="space-y-4 text-gray-400">
-                        <?php foreach ($footerLinks as $fl): ?>
-                            <li><a href="page.php?slug=<?php echo htmlspecialchars($fl['slug']); ?>&lang=<?php echo $lang; ?>"
-                                    class="hover:text-emerald-400"><?php echo htmlspecialchars($fl['title']); ?></a></li>
+                        <?php foreach($links as $fl): ?>
+                        <li><a href="page.php?slug=<?php echo htmlspecialchars($fl['slug']); ?>&lang=<?php echo $lang; ?>" class="hover:text-emerald-400"><?php echo htmlspecialchars($fl['title']); ?></a></li>
                         <?php endforeach; ?>
                     </ul>
                 </div>
+                <?php endforeach; ?>
             </div>
             <div class="border-t border-white/5 pt-12 text-center text-gray-400 font-medium text-xs">
                 &copy; 2026 MySeoFan Studio. All rights reserved.

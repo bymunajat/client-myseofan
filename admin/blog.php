@@ -193,7 +193,8 @@ if ($action === 'list') {
                                 <tr>
                                     <td colspan="4" class="px-8 py-12 text-center">
                                         <div class="text-gray-400 font-medium mb-4">No posts found in
-                                            <?php echo $available_langs[$_curr_lang] ?? $_curr_lang; ?>.</div>
+                                            <?php echo $available_langs[$_curr_lang] ?? $_curr_lang; ?>.
+                                        </div>
                                         <a href="?action=add&lang_code=<?php echo $_curr_lang; ?>"
                                             class="text-emerald-600 font-bold hover:underline">Create the first post for this
                                             language →</a>
@@ -231,13 +232,13 @@ if ($action === 'list') {
                         class="space-y-6">
                         <div class="grid md:grid-cols-2 gap-6">
                             <div class="md:col-span-2">
-                                <label class="block text-sm font-semibold text-gray-700 mb-2">Translation Group ID
-                                    (Advanced)</label>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">ID Penghubung Bahasa (Linked
+                                    ID)</label>
                                 <input type="text" name="translation_group"
                                     value="<?php echo htmlspecialchars($current_post['translation_group'] ?? uniqid('group_', true)); ?>"
                                     class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 text-gray-500 text-sm outline-none font-mono">
-                                <p class="text-[10px] text-gray-400 mt-1">Posts with the same ID are linked as translations
-                                    of each other.</p>
+                                <p class="text-[10px] text-gray-400 mt-1">ID ini menghubungkan artikel ini dengan versinya
+                                    di bahasa lain.</p>
                             </div>
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Post Title</label>
@@ -259,7 +260,8 @@ if ($action === 'list') {
                                     class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white outline-none font-bold">
                                     <?php foreach ($available_langs as $code => $label): ?>
                                         <option value="<?php echo $code; ?>" <?php echo (($current_post['lang_code'] ?? ($_GET['lang_code'] ?? $_curr_lang)) == $code) ? 'selected' : ''; ?>>
-                                            <?php echo $label; ?></option>
+                                            <?php echo $label; ?>
+                                        </option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>

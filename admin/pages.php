@@ -16,7 +16,6 @@ $error = '';
 $action = $_GET['action'] ?? 'list';
 $id = $_GET['id'] ?? null;
 
-// Persistent Language Logic
 $available_langs = [
     'en' => '🇺🇸 English',
     'id' => '🇮🇩 Indonesia',
@@ -26,20 +25,21 @@ $available_langs = [
     'ja' => '🇯🇵 日本語'
 ];
 
-// Determine the current filtered language
-$_curr_lang = 'en';
+// 1. Determine the Active Language Context
+// Priority: GET filter_lang > GET lang_code > Session > Default 'en'
 if (isset($_GET['filter_lang'])) {
     $_curr_lang = $_GET['filter_lang'];
 } elseif (isset($_GET['lang_code'])) {
     $_curr_lang = $_GET['lang_code'];
 } elseif (isset($_SESSION['last_page_lang'])) {
     $_curr_lang = $_SESSION['last_page_lang'];
+} else {
+    $_curr_lang = 'en';
 }
 
-// Preserve in session for smoother navigation
-if (array_key_exists($_curr_lang, $available_langs)) {
-    $_SESSION['last_page_lang'] = $_curr_lang;
-}
+// Validation & Persistence
+if (!array_key_exists($_curr_lang, $available_langs)) $_curr_lang = 'en';
+$_SESSION['last_page_lang'] = $_curr_lang;
 
 // Handle CRUD Logic
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -93,7 +93,7 @@ if ($action === 'delete' && $id) {
     $action = 'list';
 }
 
-// Fetch Data
+// Fetch Data for Display
 $pages = [];
 $cu_p = null;
 if ($action === 'list') {
@@ -143,7 +143,7 @@ if ($action === 'list') {
                 <?php if ($action === 'list'): ?>
                     <a href="?action=add&lang_code=<?php echo $_curr_lang; ?>" class="bg-emerald-600 text-white px-6 py-2 rounded-xl font-bold hover:bg-emerald-700 transition-all">+ New Page</a>
                 <?php else: ?>
-                    <a href="?action=list&filter_lang=<?php echo $cu_p['lang_code'] ?? $_curr_lang; ?>" class="text-gray-500 hover:text-gray-800 font-bold">← Back to List</a>
+                    <a href="?action=list&filter_lang=<?php echo $_curr_lang; ?>" class="text-gray-500 hover:text-gray-800 font-bold">← Back to List</a>
                 <?php endif; ?>
             </div>
         </header>
@@ -182,14 +182,16 @@ if ($action === 'list') {
                                 <tr>
                                     <td colspan="4" class="px-8 py-12 text-center">
                                         <div class="text-gray-400 font-medium mb-4">No pages found in <?php echo $available_langs[$_curr_lang] ?? $_curr_lang; ?>.</div>
-                                        <a href="?action=add&lang_code=<?php echo $_curr_lang; ?>" class="text-emerald-600 font-bold hover:underline">Create the first page for this language →</a>
+                                        <div class="flex justify-center gap-4">
+                                            <a href="?action=add&lang_code=<?php echo $_curr_lang; ?>" class="bg-emerald-50 text-emerald-600 px-4 py-2 rounded-lg font-bold hover:bg-emerald-100">Create the first page →</a>
+                                        </div>
                                     </td>
                                 </tr>
                             <?php endif; ?>
                             <?php foreach ($pages as $p): ?>
                                 <tr>
-                                    <td class="px-8 py-5 text-gray-400 font-bold text-center w-32">
-                                        <span class="bg-gray-100 px-3 py-1 rounded-lg text-gray-600"><?php echo $p['menu_order']; ?></span>
+                                    <td class="px-8 py-5 text-gray-400 font-bold text-center w-32 border-r border-gray-50">
+                                        <span class="bg-gray-50 px-3 py-1 rounded-lg text-gray-600 border border-gray-200"><?php echo $p['menu_order']; ?></span>
                                     </td>
                                     <td class="px-8 py-5">
                                         <div class="font-bold text-gray-800"><?php echo htmlspecialchars($p['title']); ?></div>
@@ -226,19 +228,19 @@ if ($action === 'list') {
                                 </label>
                                 <div class="flex items-center gap-3">
                                     <span class="text-sm font-bold text-gray-500">Footer Group:</span>
-                                    <input type="text" name="footer_section" value="<?php echo htmlspecialchars($cu_p['footer_section'] ?? 'legal'); ?>" placeholder="e.g. navigation, legal" class="w-32 px-3 py-1 rounded-lg border border-gray-200 text-sm font-bold outline-none focus:border-emerald-500">
+                                    <input type="text" name="footer_section" value="<?php echo htmlspecialchars($cu_p['footer_section'] ?? 'legal'); ?>" placeholder="e.g. navigation, legal" class="px-3 py-1 rounded-lg border border-gray-200 text-sm font-bold outline-none focus:border-emerald-500 w-32">
                                 </div>
                                 <div class="flex items-center gap-3 ml-auto relative group">
                                     <span class="text-sm font-bold text-gray-500">Display Order:</span>
                                     <input type="number" name="menu_order" value="<?php echo $cu_p['menu_order'] ?? 0; ?>" class="w-20 px-3 py-1 rounded-lg border border-gray-200 text-sm font-bold outline-none focus:border-emerald-500">
                                     <div class="hidden group-hover:block absolute top-full right-0 mt-2 p-3 bg-gray-800 text-white text-[10px] rounded-lg w-48 z-20 shadow-xl">
-                                        💡 <b>Tip:</b> Smaller numbers (e.g., 1) appear first.
+                                        💡 <b>Tip:</b> Smaller numbers appear first.
                                     </div>
                                 </div>
                             </div>
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Translation Group ID</label>
-                                <input type="text" name="translation_group" value="<?php echo htmlspecialchars($cu_p['translation_group'] ?? uniqid('group_', true)); ?>" class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 text-gray-500 text-sm outline-none">
+                                <input type="text" name="translation_group" value="<?php echo htmlspecialchars($cu_p['translation_group'] ?? uniqid('group_', true)); ?>" class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 text-gray-500 text-sm outline-none font-mono">
                             </div>
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Language</label>
@@ -274,7 +276,7 @@ if ($action === 'list') {
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" class="w-full bg-emerald-600 text-white py-4 rounded-xl font-bold hover:bg-emerald-700 shadow-xl shadow-emerald-100 transition-all">Save Page & Navigation</button>
+                        <button type="submit" class="w-full bg-emerald-600 text-white py-4 rounded-xl font-bold hover:bg-emerald-700 shadow-xl shadow-emerald-100 transition-all uppercase tracking-widest">Save Page & Navigation</button>
                     </form>
                 </div>
             <?php endif; ?>

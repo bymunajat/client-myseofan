@@ -1,6 +1,6 @@
 <?php
 $current_page = basename($_SERVER['PHP_SELF']);
-$action = $_GET['action'] ?? '';
+$_sb_action = $_GET['action'] ?? '';
 
 // Session Healing: If role is missing but logged in, fetch from DB
 if (isset($_SESSION['admin_id']) && (!isset($_SESSION['role']) || empty($_SESSION['role'])) && isset($pdo)) {
@@ -53,10 +53,10 @@ if (empty($user_role))
                 <div id="blog-submenu"
                     class="<?php echo $current_page == 'blog.php' ? 'block' : 'hidden'; ?> mt-1 ml-6 border-l border-gray-700 pl-2 space-y-1">
                     <a href="blog.php?action=list"
-                        class="block py-1 text-xs <?php echo ($current_page == 'blog.php' && $action != 'add') ? 'text-emerald-400 font-bold' : 'text-gray-500 hover:text-white'; ?>">Manage
+                        class="block py-1 text-xs <?php echo ($current_page == 'blog.php' && $_sb_action != 'add') ? 'text-emerald-400 font-bold' : 'text-gray-500 hover:text-white'; ?>">Manage
                         Posts</a>
                     <a href="blog.php?action=add"
-                        class="block py-1 text-xs <?php echo ($current_page == 'blog.php' && $action == 'add') ? 'text-emerald-400 font-bold' : 'text-gray-500 hover:text-white'; ?>">Create
+                        class="block py-1 text-xs <?php echo ($current_page == 'blog.php' && $_sb_action == 'add') ? 'text-emerald-400 font-bold' : 'text-gray-500 hover:text-white'; ?>">Create
                         New</a>
                 </div>
             </div>
@@ -82,10 +82,10 @@ if (empty($user_role))
                     <div id="page-submenu"
                         class="<?php echo $current_page == 'pages.php' ? 'block' : 'hidden'; ?> mt-1 ml-6 border-l border-gray-700 pl-2 space-y-1">
                         <a href="pages.php?action=list"
-                            class="block py-1 text-xs <?php echo ($current_page == 'pages.php' && $action != 'add') ? 'text-emerald-400 font-bold' : 'text-gray-500 hover:text-white'; ?>">Manage
+                            class="block py-1 text-xs <?php echo ($current_page == 'pages.php' && $_sb_action != 'add') ? 'text-emerald-400 font-bold' : 'text-gray-500 hover:text-white'; ?>">Manage
                             Pages</a>
                         <a href="pages.php?action=add"
-                            class="block py-1 text-xs <?php echo ($current_page == 'pages.php' && $action == 'add') ? 'text-emerald-400 font-bold' : 'text-gray-500 hover:text-white'; ?>">Create
+                            class="block py-1 text-xs <?php echo ($current_page == 'pages.php' && $_sb_action == 'add') ? 'text-emerald-400 font-bold' : 'text-gray-500 hover:text-white'; ?>">Create
                             New</a>
                     </div>
                 </div>

@@ -2,6 +2,10 @@
 session_start();
 require_once '../includes/db.php';
 
+// Enable error reporting for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 if (!isset($_SESSION['admin_id'])) {
     header('Location: login.php');
     exit;
@@ -11,6 +15,31 @@ $message = '';
 $error = '';
 $action = $_GET['action'] ?? 'list';
 $id = $_GET['id'] ?? null;
+
+// Persistent Language Logic
+$available_langs = [
+    'en' => '🇺🇸 English',
+    'id' => '🇮🇩 Indonesia',
+    'es' => '🇪🇸 Español',
+    'fr' => '🇫🇷 Français',
+    'de' => '🇩🇪 DE',
+    'ja' => '🇯🇵 日本語'
+];
+
+// Determine the current filtered language
+if (isset($_GET['filter_lang'])) {
+    $_curr_lang = $_GET['filter_lang'];
+} elseif (isset($_GET['lang_code'])) {
+    $_curr_lang = $_GET['lang_code'];
+} elseif (isset($_SESSION['last_blog_lang'])) {
+    $_curr_lang = $_SESSION['last_blog_lang'];
+} else {
+    $_curr_lang = 'en';
+}
+
+if (!array_key_exists($_curr_lang, $available_langs))
+    $_curr_lang = 'en';
+$_SESSION['last_blog_lang'] = $_curr_lang;
 
 // Handle CRUD Logic
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -33,6 +62,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute([$title, $slug, $content, $thumbnail, $lang, $m_title, $m_desc, $category, $t_group]);
             $message = "Post created successfully!";
             $action = 'list';
+            $_curr_lang = $lang;
+            $_SESSION['last_blog_lang'] = $lang;
         } catch (\Exception $e) {
             $error = "Error: " . $e->getMessage();
         }
@@ -42,6 +73,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute([$title, $slug, $content, $thumbnail, $lang, $m_title, $m_desc, $category, $t_group, $id]);
             $message = "Post updated successfully!";
             $action = 'list';
+            $_curr_lang = $lang;
+            $_SESSION['last_blog_lang'] = $lang;
         } catch (\Exception $e) {
             $error = "Error: " . $e->getMessage();
         }
@@ -49,8 +82,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 if ($action === 'delete' && $id) {
-    $pdo->prepare("DELETE FROM blog_posts WHERE id=?")->execute([$id]);
-    $message = "Post deleted.";
+    try {
+        $pdo->prepare("DELETE FROM blog_posts WHERE id=?")->execute([$id]);
+        $message = "Post deleted.";
+    } catch (\Exception $e) {
+        $error = "Delete failed: " . $e->getMessage();
+    }
     $action = 'list';
 }
 
@@ -58,7 +95,9 @@ if ($action === 'delete' && $id) {
 $posts = [];
 $current_post = null;
 if ($action === 'list') {
-    $posts = $pdo->query("SELECT * FROM blog_posts ORDER BY created_at DESC")->fetchAll();
+    $stmt = $pdo->prepare("SELECT * FROM blog_posts WHERE lang_code = ? ORDER BY created_at DESC");
+    $stmt->execute([$_curr_lang]);
+    $posts = $stmt->fetchAll();
 } elseif ($action === 'edit' && $id) {
     $stmt = $pdo->prepare("SELECT * FROM blog_posts WHERE id=?");
     $stmt->execute([$id]);
@@ -72,7 +111,7 @@ if ($action === 'list') {
     <meta charset="UTF-8">
     <title>Blog Manager - MySeoFan Admin</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
     <script>
         tinymce.init({
@@ -95,11 +134,6 @@ if ($action === 'list') {
             background: #111827;
             color: white;
         }
-
-        .nav-active {
-            background: #374151;
-            border-left: 4px solid #10b981;
-        }
     </style>
 </head>
 
@@ -110,27 +144,38 @@ if ($action === 'list') {
         <header class="bg-white border-b border-gray-200 px-8 h-20 flex items-center justify-between">
             <h3 class="text-xl font-bold text-gray-800">Blog Management</h3>
             <?php if ($action === 'list'): ?>
-                <a href="?action=add"
+                <a href="?action=add&lang_code=<?php echo $_curr_lang; ?>"
                     class="bg-emerald-600 text-white px-6 py-2 rounded-xl font-bold hover:bg-emerald-700 transition-all">+
                     New Post</a>
             <?php else: ?>
-                <a href="?action=list" class="text-gray-500 hover:text-gray-800 font-bold">← Back to List</a>
+                <a href="?action=list&filter_lang=<?php echo $_curr_lang; ?>"
+                    class="text-gray-500 hover:text-gray-800 font-bold">← Back to List</a>
             <?php endif; ?>
         </header>
 
         <div class="p-8">
             <?php if ($message): ?>
-                <div class="bg-emerald-50 text-emerald-600 p-4 rounded-xl mb-6 font-medium">
+                <div class="bg-emerald-50 text-emerald-600 p-4 rounded-xl mb-6 font-medium border border-emerald-100">
                     <?php echo $message; ?>
                 </div>
             <?php endif; ?>
             <?php if ($error): ?>
-                <div class="bg-red-50 text-red-600 p-4 rounded-xl mb-6 font-medium">
+                <div class="bg-red-50 text-red-600 p-4 rounded-xl mb-6 font-medium border border-red-100">
                     <?php echo $error; ?>
                 </div>
             <?php endif; ?>
 
             <?php if ($action === 'list'): ?>
+                <!-- Language Navigation Tabs -->
+                <div class="flex flex-wrap gap-2 mb-8 bg-white p-2 rounded-2xl shadow-sm border border-gray-100">
+                    <?php foreach ($available_langs as $code => $label): ?>
+                        <a href="?filter_lang=<?php echo $code; ?>&action=list"
+                            class="px-6 py-3 rounded-xl font-bold transition-all flex items-center gap-2 <?php echo $_curr_lang === $code ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-200' : 'text-gray-500 hover:bg-gray-50'; ?>">
+                            <?php echo $label; ?>
+                        </a>
+                    <?php endforeach; ?>
+                </div>
+
                 <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
                     <table class="w-full text-left">
                         <thead class="bg-gray-50 border-b">
@@ -138,40 +183,36 @@ if ($action === 'list') {
                                 <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest">Title</th>
                                 <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest">Category
                                 </th>
-                                <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest">Lang</th>
+                                <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest">Date</th>
                                 <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest text-right">
                                     Actions</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-50">
+                            <?php if (empty($posts)): ?>
+                                <tr>
+                                    <td colspan="4" class="px-8 py-12 text-center">
+                                        <div class="text-gray-400 font-medium mb-4">No posts found in
+                                            <?php echo $available_langs[$_curr_lang] ?? $_curr_lang; ?>.</div>
+                                        <a href="?action=add&lang_code=<?php echo $_curr_lang; ?>"
+                                            class="text-emerald-600 font-bold hover:underline">Create the first post for this
+                                            language →</a>
+                                    </td>
+                                </tr>
+                            <?php endif; ?>
                             <?php foreach ($posts as $p): ?>
                                 <tr>
-                                    <td class="px-8 py-5 font-bold text-gray-800">
-                                        <?php echo htmlspecialchars($p['title']); ?>
+                                    <td class="px-8 py-5">
+                                        <div class="font-bold text-gray-800"><?php echo htmlspecialchars($p['title']); ?></div>
+                                        <div class="text-[10px] text-gray-400 uppercase tracking-tighter">
+                                            /blog/<?php echo htmlspecialchars($p['slug'] ?? ''); ?></div>
                                     </td>
                                     <td class="px-8 py-5 text-gray-500 text-sm">
-                                        <?php echo htmlspecialchars($p['category'] ?? 'General'); ?>
-                                    </td>
-                                    <td class="px-8 py-5">
-                                        <?php
-                                        $badgeClass = 'bg-gray-100 text-gray-600';
-                                        if ($p['lang_code'] == 'en')
-                                            $badgeClass = 'bg-emerald-100 text-emerald-600';
-                                        elseif ($p['lang_code'] == 'id')
-                                            $badgeClass = 'bg-blue-100 text-blue-600';
-                                        elseif ($p['lang_code'] == 'es')
-                                            $badgeClass = 'bg-yellow-100 text-yellow-600';
-                                        elseif ($p['lang_code'] == 'fr')
-                                            $badgeClass = 'bg-indigo-100 text-indigo-600';
-                                        elseif ($p['lang_code'] == 'de')
-                                            $badgeClass = 'bg-orange-100 text-orange-600';
-                                        elseif ($p['lang_code'] == 'ja')
-                                            $badgeClass = 'bg-purple-100 text-purple-600';
-                                        ?>
                                         <span
-                                            class="px-2 py-1 text-[10px] font-black uppercase rounded <?php echo $badgeClass; ?>">
-                                            <?php echo $p['lang_code']; ?>
-                                        </span>
+                                            class="px-2 py-1 bg-gray-100 rounded-lg font-bold text-gray-600 text-[10px] uppercase"><?php echo htmlspecialchars($p['category'] ?? 'General'); ?></span>
+                                    </td>
+                                    <td class="px-8 py-5 text-gray-400 text-xs">
+                                        <?php echo date('M d, Y', strtotime($p['created_at'])); ?>
                                     </td>
                                     <td class="px-8 py-5 text-right space-x-2">
                                         <a href="?action=edit&id=<?php echo $p['id']; ?>"
@@ -194,7 +235,7 @@ if ($action === 'list') {
                                     (Advanced)</label>
                                 <input type="text" name="translation_group"
                                     value="<?php echo htmlspecialchars($current_post['translation_group'] ?? uniqid('group_', true)); ?>"
-                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 text-gray-500 text-xs focus:bg-white focus:border-emerald-500 outline-none transition-all">
+                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 text-gray-500 text-sm outline-none font-mono">
                                 <p class="text-[10px] text-gray-400 mt-1">Posts with the same ID are linked as translations
                                     of each other.</p>
                             </div>
@@ -202,97 +243,66 @@ if ($action === 'list') {
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Post Title</label>
                                 <input type="text" name="title"
                                     value="<?php echo htmlspecialchars($current_post['title'] ?? ''); ?>" required
-                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white focus:border-emerald-500 outline-none transition-all">
+                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white outline-none">
                             </div>
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Slug (Auto if empty)</label>
                                 <input type="text" name="slug"
                                     value="<?php echo htmlspecialchars($current_post['slug'] ?? ''); ?>"
-                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white focus:border-emerald-500 outline-none transition-all">
+                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white outline-none font-mono">
                             </div>
                         </div>
                         <div class="grid md:grid-cols-2 gap-6">
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Language</label>
                                 <select name="lang_code"
-                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white focus:border-emerald-500 outline-none transition-all">
-                                    <option value="en" <?php echo ($current_post['lang_code'] ?? '') == 'en' ? 'selected' : ''; ?>>English</option>
-                                    <option value="id" <?php echo ($current_post['lang_code'] ?? '') == 'id' ? 'selected' : ''; ?>>Indonesia</option>
-                                    <option value="es" <?php echo ($current_post['lang_code'] ?? '') == 'es' ? 'selected' : ''; ?>>Español</option>
-                                    <option value="fr" <?php echo ($current_post['lang_code'] ?? '') == 'fr' ? 'selected' : ''; ?>>Français</option>
-                                    <option value="de" <?php echo ($current_post['lang_code'] ?? '') == 'de' ? 'selected' : ''; ?>>Deutsch</option>
-                                    <option value="ja" <?php echo ($current_post['lang_code'] ?? '') == 'ja' ? 'selected' : ''; ?>>日本語</option>
+                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white outline-none font-bold">
+                                    <?php foreach ($available_langs as $code => $label): ?>
+                                        <option value="<?php echo $code; ?>" <?php echo (($current_post['lang_code'] ?? ($_GET['lang_code'] ?? $_curr_lang)) == $code) ? 'selected' : ''; ?>>
+                                            <?php echo $label; ?></option>
+                                    <?php endforeach; ?>
                                 </select>
                             </div>
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Category</label>
                                 <select name="category"
-                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white focus:border-emerald-500 outline-none transition-all">
+                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white outline-none font-bold">
                                     <option value="General" <?php echo ($current_post['category'] ?? '') == 'General' ? 'selected' : ''; ?>>General</option>
                                     <option value="Tutorial" <?php echo ($current_post['category'] ?? '') == 'Tutorial' ? 'selected' : ''; ?>>Tutorial</option>
                                     <option value="News" <?php echo ($current_post['category'] ?? '') == 'News' ? 'selected' : ''; ?>>News</option>
                                     <option value="Tips" <?php echo ($current_post['category'] ?? '') == 'Tips' ? 'selected' : ''; ?>>Tips</option>
                                 </select>
                             </div>
-                            <div>
+                            <div class="md:col-span-2">
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Thumbnail URL</label>
                                 <input type="text" name="thumbnail"
                                     value="<?php echo htmlspecialchars($current_post['thumbnail'] ?? ''); ?>"
-                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white focus:border-emerald-500 outline-none transition-all">
+                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white outline-none">
                             </div>
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Content (HTML allowed)</label>
-                            <textarea name="content" rows="10" required
-                                class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white focus:border-emerald-500 outline-none transition-all"><?php echo htmlspecialchars($current_post['content'] ?? ''); ?></textarea>
+                            <textarea name="content" rows="15" required
+                                class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 outline-none"><?php echo htmlspecialchars($current_post['content'] ?? ''); ?></textarea>
                         </div>
-                        <div class="border-t pt-6 mt-6">
+                        <div class="border-t pt-6">
                             <h4 class="font-black text-gray-400 uppercase tracking-widest text-xs mb-4">SEO Settings</h4>
                             <div class="grid md:grid-cols-2 gap-6">
                                 <div>
                                     <label class="block text-sm font-semibold text-gray-700 mb-2">Meta Title</label>
                                     <input type="text" name="meta_title"
                                         value="<?php echo htmlspecialchars($current_post['meta_title'] ?? ''); ?>"
-                                        class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white focus:border-emerald-500 outline-none transition-all">
+                                        class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 outline-none">
                                 </div>
                                 <div>
                                     <label class="block text-sm font-semibold text-gray-700 mb-2">Meta Description</label>
-                                    <textarea name="meta_description" rows="2" id="meta_desc"
-                                        class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white focus:border-emerald-500 outline-none transition-all"><?php echo htmlspecialchars($current_post['meta_description'] ?? ''); ?></textarea>
+                                    <textarea name="meta_description" rows="2"
+                                        class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 outline-none"><?php echo htmlspecialchars($current_post['meta_description'] ?? ''); ?></textarea>
                                 </div>
                             </div>
-                            <!-- Google Preview -->
-                            <div class="mt-6 p-6 bg-gray-50 rounded-2xl border border-gray-100">
-                                <p class="text-xs font-bold text-gray-400 uppercase mb-4">Google Search Preview</p>
-                                <div class="max-w-md">
-                                    <p class="text-[14px] text-[#202124] mb-1 truncate" id="preview_title">
-                                        <?php echo $current_post['meta_title'] ?? 'Post Title - MySeoFan'; ?>
-                                    </p>
-                                    <p class="text-[12px] text-[#006621] mb-1 truncate">
-                                        myseofan.com › blog › <?php echo $current_post['slug'] ?? 'post-slug'; ?>
-                                    </p>
-                                    <p class="text-[13px] text-[#545454] line-clamp-2" id="preview_desc">
-                                        <?php echo $current_post['meta_description'] ?? 'Your post description will appear here in Google search results...'; ?>
-                                    </p>
-                                </div>
-                            </div>
-                            <script>
-                                const titleInput = document.querySelector('input[name="meta_title"]');
-                                const descInput = document.querySelector('textarea[name="meta_description"]');
-                                const pTitle = document.getElementById('preview_title');
-                                const pDesc = document.getElementById('preview_desc');
-
-                                const updatePreview = () => {
-                                    pTitle.textContent = titleInput.value || 'Post Title - MySeoFan';
-                                    pDesc.textContent = descInput.value || 'Your post description will appear here in Google search results...';
-                                };
-
-                                titleInput.addEventListener('input', updatePreview);
-                                descInput.addEventListener('input', updatePreview);
-                            </script>
                         </div>
                         <button type="submit"
-                            class="w-full bg-emerald-600 text-white py-4 rounded-xl font-bold hover:bg-emerald-700 shadow-xl shadow-emerald-100 transition-all">Save
+                            class="w-full bg-emerald-600 text-white py-4 rounded-xl font-bold hover:bg-emerald-700 shadow-xl shadow-emerald-100 transition-all uppercase tracking-widest">Save
                             Post</button>
                     </form>
                 </div>

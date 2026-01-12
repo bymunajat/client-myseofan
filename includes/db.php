@@ -55,6 +55,18 @@ try {
         foreach ($langs as $l) {
             $pdo->exec("INSERT INTO seo_data (page_identifier, lang_code, meta_title, meta_description) VALUES ('home', '$l', 'Instagram Downloader', 'Free Instagram media downloader.')");
         }
+
+        // SEED SITE SETTINGS (id=1)
+        $pdo->exec("INSERT INTO site_settings (id, site_name) VALUES (1, 'MySeoFan')");
+    }
+
+    // Emergency Seed for site_settings (if table exists but row 1 is missing)
+    try {
+        $checkSettings = $pdo->query("SELECT COUNT(*) FROM site_settings WHERE id = 1")->fetchColumn();
+        if ($checkSettings == 0) {
+            $pdo->exec("INSERT INTO site_settings (id, site_name) VALUES (1, 'MySeoFan')");
+        }
+    } catch (\Exception $e) {
     }
 
     // Migration Check: Add lang_code to seo_data if it doesn't exist
@@ -174,9 +186,22 @@ function getSiteSettings($pdo)
     if (!$pdo)
         return [];
     try {
-        return $pdo->query("SELECT * FROM site_settings LIMIT 1")->fetch();
+        $data = $pdo->query("SELECT * FROM site_settings WHERE id = 1")->fetch();
+        return $data ?: [
+            'site_name' => 'MySeoFan',
+            'logo_path' => '',
+            'favicon_path' => '',
+            'header_code' => '',
+            'footer_code' => ''
+        ];
     } catch (\Exception $e) {
-        return [];
+        return [
+            'site_name' => 'MySeoFan',
+            'logo_path' => '',
+            'favicon_path' => '',
+            'header_code' => '',
+            'footer_code' => ''
+        ];
     }
 }
 

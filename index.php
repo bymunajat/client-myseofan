@@ -375,7 +375,8 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
             <a href="index.php?lang=<?php echo $lang; ?>" class="flex items-center gap-3 group">
                 <div class="flex items-center">
                     <?php if (!empty($settings['logo_path'])): ?>
-                        <img src="<?php echo htmlspecialchars($settings['logo_path']); ?>" class="h-10 w-auto">
+                        <img src="<?php echo htmlspecialchars($settings['logo_path']); ?>" class="h-10 w-auto"
+                            alt="<?php echo htmlspecialchars($settings['site_name']); ?>">
                     <?php else: ?>
                         <div
                             class="w-10 h-10 bg-emerald-600 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-200 group-hover:rotate-12 transition-transform">
@@ -384,9 +385,9 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                                     d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                             </svg>
                         </div>
-                        <span
-                            class="ml-3 text-xl font-black tracking-tighter text-gray-800"><?php echo htmlspecialchars($settings['site_name']); ?></span>
                     <?php endif; ?>
+                    <span
+                        class="ml-3 text-xl font-black tracking-tighter text-gray-800"><?php echo htmlspecialchars($settings['site_name'] ?: 'MySeoFan'); ?></span>
                 </div>
             </a>
 
@@ -494,12 +495,21 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
             <div class="grid md:grid-cols-4 gap-16 mb-24">
                 <div class="col-span-2">
                     <div class="flex items-center gap-3 mb-8">
-                        <div class="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-gray-900"><svg
-                                class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-width="2"
-                                    d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                            </svg></div>
-                        <h4 class="text-3xl font-black hero-title">MySeoFan</h4>
+                        <?php if (!empty($settings['logo_path'])): ?>
+                            <img src="<?php echo htmlspecialchars($settings['logo_path']); ?>" class="h-12 w-auto"
+                                alt="<?php echo htmlspecialchars($settings['site_name']); ?>">
+                        <?php else: ?>
+                            <div
+                                class="w-12 h-12 bg-emerald-600 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-500/20">
+                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-width="2.5"
+                                        d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                </svg>
+                            </div>
+                        <?php endif; ?>
+                        <h4 class="text-3xl font-black text-white tracking-tighter">
+                            <?php echo htmlspecialchars($settings['site_name'] ?: 'MySeoFan'); ?>
+                        </h4>
                     </div>
                     <p class="text-gray-400 text-lg leading-relaxed max-w-md"><?php echo $t['footer_desc']; ?></p>
                 </div>
@@ -515,20 +525,23 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                 </div>
 
                 <?php foreach ($footerGroups as $section => $links): ?>
-                <div>
-                    <h4 class="text-white font-bold mb-6">
-                        <?php echo $t['footer_section_' . $section] ?? ucfirst($section); ?>
-                    </h4>
-                    <ul class="space-y-4 text-gray-400">
-                        <?php foreach($links as $fl): ?>
-                        <li><a href="page.php?slug=<?php echo htmlspecialchars($fl['slug']); ?>&lang=<?php echo $lang; ?>" class="hover:text-emerald-400"><?php echo htmlspecialchars($fl['title']); ?></a></li>
-                        <?php endforeach; ?>
-                    </ul>
-                </div>
+                    <div>
+                        <h4 class="text-white font-bold mb-6">
+                            <?php echo $t['footer_section_' . $section] ?? ucfirst($section); ?>
+                        </h4>
+                        <ul class="space-y-4 text-gray-400">
+                            <?php foreach ($links as $fl): ?>
+                                <li><a href="page.php?slug=<?php echo htmlspecialchars($fl['slug']); ?>&lang=<?php echo $lang; ?>"
+                                        class="hover:text-emerald-400"><?php echo htmlspecialchars($fl['title']); ?></a></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
                 <?php endforeach; ?>
             </div>
             <div class="border-t border-white/5 pt-12 text-center text-gray-400 font-medium text-xs">
-                &copy; 2026 MySeoFan Studio. All rights reserved.
+                &copy;
+                <?php echo date('Y'); ?>
+                <?php echo htmlspecialchars($settings['site_name'] ?: 'MySeoFan'); ?>. All rights reserved.
             </div>
         </div>
     </footer>

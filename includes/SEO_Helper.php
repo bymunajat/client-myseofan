@@ -23,7 +23,15 @@ class SEO_Helper
 
     public function getTitle()
     {
-        return $this->seo['meta_title'] ?? ($this->settings['site_name'] ?? 'Instagram Downloader');
+        $siteName = $this->settings['site_name'] ?: 'MySeoFan';
+        $metaTitle = $this->seo['meta_title'] ?? '';
+
+        if (empty($metaTitle)) {
+            return "$siteName - Instagram Media Downloader";
+        }
+
+        // If meta_title contains old name, replace it
+        return str_ireplace('MySeoFan', $siteName, $metaTitle);
     }
 
     public function getDescription()

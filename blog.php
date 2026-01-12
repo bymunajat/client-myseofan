@@ -160,9 +160,9 @@ $posts = $stmt->fetchAll();
                                     d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                             </svg>
                         </div>
-                        <span
-                            class="ml-3 text-xl font-black tracking-tighter text-gray-800"><?php echo htmlspecialchars($settings['site_name']); ?></span>
                     <?php endif; ?>
+                    <span
+                        class="ml-3 text-xl font-black tracking-tighter text-gray-800"><?php echo htmlspecialchars($settings['site_name'] ?: 'MySeoFan'); ?></span>
                 </div>
             </a>
 
@@ -308,7 +308,8 @@ $posts = $stmt->fetchAll();
                 <?php endforeach; ?>
             </div>
             <div class="border-t border-white/5 pt-12 text-center text-gray-500 font-medium text-xs">
-                &copy; 2026 MySeoFan Studio. All rights reserved.
+                &copy; <?php echo date('Y'); ?> <?php echo htmlspecialchars($settings['site_name'] ?: 'MySeoFan'); ?>.
+                All rights reserved.
             </div>
         </div>
     </footer>

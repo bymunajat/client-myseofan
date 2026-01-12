@@ -5,7 +5,7 @@ require_once 'includes/SEO_Helper.php';
 $slug = $_GET['slug'] ?? '';
 $lang = $_GET['lang'] ?? 'en';
 
-// Fetch page (ensure it matches the language too if possible, but schema has slugs per language)
+// Fetch page
 $stmt = $pdo->prepare("SELECT * FROM pages WHERE slug = ? AND lang_code = ?");
 $stmt->execute([$slug, $lang]);
 $page = $stmt->fetch();
@@ -25,12 +25,36 @@ if (!$page) {
 $settings = getSiteSettings($pdo);
 $translations = getTranslations($pdo, $lang);
 
-// Fallback logic
+// 3. Fallback Translations (Expanded for 6 Languages)
 $defaults = [
-    'en' => ['home' => 'Home', 'blog' => 'Blog'],
-    'id' => ['home' => 'Beranda', 'blog' => 'Blog']
+    'en' => [
+        'home' => 'Home',
+        'blog' => 'Blog'
+    ],
+    'id' => [
+        'home' => 'Beranda',
+        'blog' => 'Blog'
+    ],
+    'es' => [
+        'home' => 'Inicio',
+        'blog' => 'Blog'
+    ],
+    'fr' => [
+        'home' => 'Accueil',
+        'blog' => 'Blog'
+    ],
+    'de' => [
+        'home' => 'Startseite',
+        'blog' => 'Blog'
+    ],
+    'ja' => [
+        'home' => 'ホーム',
+        'blog' => 'ブログ'
+    ]
 ];
-$t = array_merge($defaults[$lang] ?? $defaults['en'], $translations);
+
+// Merge with defaults (EN as primary fallback)
+$t = array_merge($defaults['en'], $defaults[$lang] ?? [], $translations);
 
 $seoHelper = new SEO_Helper($pdo, 'page', $lang);
 ?>
@@ -43,78 +67,172 @@ $seoHelper = new SEO_Helper($pdo, 'page', $lang);
     <title><?php echo $seoHelper->getTitle(); ?></title>
     <meta name="description" content="<?php echo $seoHelper->getDescription(); ?>">
     <?php echo $seoHelper->getOGTags(); ?>
+    <?php echo $seoHelper->getHreflangTags(); ?>
     <?php echo $seoHelper->getSchemaMarkup(); ?>
     <?php if (!empty($settings['favicon_path'])): ?>
-            <link rel="icon" type="image/x-icon" href="<?php echo htmlspecialchars($settings['favicon_path']); ?>">
+        <link rel="icon" type="image/x-icon" href="<?php echo htmlspecialchars($settings['favicon_path']); ?>">
     <?php endif; ?>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&display=swap" rel="stylesheet">
-    <?php echo $settings['header_code'] ?? ''; ?>
+
     <style>
+        :root {
+            --primary: #10b981;
+            --primary-dark: #059669;
+            --accent: #3b82f6;
+        }
+
         body {
             font-family: 'Outfit', sans-serif;
-            background: #fafafa;
-            color: #1a1a1a;
+            background: #f9fafb;
+            color: #1f2937;
             line-height: 1.8;
         }
 
         .glass-header {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
             border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         }
 
-        .content-card {
+        .page-card {
             background: white;
             border-radius: 3rem;
             border: 1px solid rgba(0, 0, 0, 0.03);
-            shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.03);
+        }
+
+        .prose h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-top: 3rem;
+            margin-bottom: 1.5rem;
+            color: #111827;
+        }
+
+        .prose p {
+            margin-bottom: 1.5rem;
+            font-size: 1.125rem;
+            color: #4b5563;
+        }
+
+        .hero-title {
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
     </style>
+    <?php echo $settings['header_code'] ?? ''; ?>
 </head>
 
-<body>
-    <header class="fixed top-0 left-0 right-0 z-50 glass-header">
-        <div class="max-w-4xl mx-auto px-6 h-20 flex items-center justify-between">
-            <a href="index.php?lang=<?php echo $lang; ?>" class="flex items-center gap-3">
+<body class="flex flex-col min-h-screen">
+    <!-- Header -->
+    <header class="sticky top-0 z-50 glass-header">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <a href="index.php?lang=<?php echo $lang; ?>" class="flex items-center gap-3 group">
                 <div class="flex items-center">
                     <?php if (!empty($settings['logo_path'])): ?>
-                            <img src="<?php echo htmlspecialchars($settings['logo_path']); ?>" class="h-8 w-auto">
+                        <img src="<?php echo htmlspecialchars($settings['logo_path']); ?>" class="h-10 w-auto"
+                            alt="<?php echo htmlspecialchars($settings['site_name']); ?>">
                     <?php else: ?>
-                            <div class="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center">
-                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-width="2.5"
-                                        d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                                </svg>
-                            </div>
-                            <span
-                                class="ml-2 text-lg font-black tracking-tighter"><?php echo htmlspecialchars($settings['site_name']); ?></span>
+                        <div
+                            class="w-10 h-10 bg-emerald-600 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-200">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-width="2.5"
+                                    d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                            </svg>
+                        </div>
+                        <span
+                            class="ml-3 text-xl font-black tracking-tighter text-gray-800"><?php echo htmlspecialchars($settings['site_name']); ?></span>
                     <?php endif; ?>
                 </div>
             </a>
-            <nav class="flex items-center gap-6">
+
+            <nav class="hidden md:flex items-center gap-8 font-semibold text-gray-500">
                 <a href="index.php?lang=<?php echo $lang; ?>"
-                    class="text-sm font-bold text-gray-500 hover:text-emerald-600 transition-colors"><?php echo $t['home']; ?></a>
+                    class="hover:text-emerald-600 transition-colors py-1"><?php echo $t['home']; ?></a>
                 <a href="blog.php?lang=<?php echo $lang; ?>"
-                    class="text-sm font-bold text-gray-500 hover:text-emerald-600 transition-colors"><?php echo $t['blog']; ?></a>
+                    class="hover:text-emerald-600 transition-colors py-1"><?php echo $t['blog']; ?></a>
+
+                <!-- Language Switcher -->
+                <div class="relative group">
+                    <select onchange="location.href = this.value"
+                        class="appearance-none bg-white border border-gray-200 text-gray-700 font-bold py-2 px-4 rounded-xl outline-none focus:border-emerald-500 transition-all cursor-pointer shadow-sm">
+                        <?php
+                        $langs = ['en' => '🇺🇸 EN', 'id' => '🇮🇩 ID', 'es' => '🇪🇸 ES', 'fr' => '🇫🇷 FR', 'de' => '🇩🇪 DE', 'ja' => '🇯🇵 JA'];
+                        foreach ($langs as $code => $label):
+                            $targetUrl = "page.php?slug=$slug&lang=$code";
+                            ?>
+                            <option value="<?php echo $targetUrl; ?>" <?php echo $lang === $code ? 'selected' : ''; ?>>
+                                <?php echo $label; ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
             </nav>
         </div>
     </header>
 
-    <main class="pt-32 pb-20 px-6">
-        <div class="max-w-3xl mx-auto content-card p-10 md:p-16">
-            <h1 class="text-3xl md:text-5xl font-black tracking-tight mb-10 border-b border-gray-100 pb-8">
-                <?php echo htmlspecialchars($page['title']); ?>
-            </h1>
+    <main class="flex-1 max-w-4xl mx-auto px-6 py-20">
+        <div class="page-card p-10 md:p-20">
+            <header class="mb-16 border-b border-gray-100 pb-12">
+                <h1 class="text-4xl md:text-6xl font-black tracking-tight leading-tight mb-4">
+                    <?php echo htmlspecialchars($page['title']); ?>
+                </h1>
+                <p class="text-gray-400 font-medium"><?php echo htmlspecialchars($settings['site_name']); ?> Legal &
+                    Info</p>
+            </header>
+
             <div class="prose max-w-none text-gray-600">
                 <?php echo $page['content']; ?>
             </div>
         </div>
     </main>
 
-    <footer class="py-12 text-center text-gray-400 text-sm">
-        &copy;
-        <?php echo date('Y'); ?> <?php echo htmlspecialchars($settings['site_name']); ?>.
+    <footer class="bg-gray-900 text-white mt-auto pt-24 pb-12">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid md:grid-cols-4 gap-16 mb-24">
+                <div class="col-span-2">
+                    <div class="flex items-center gap-3 mb-8">
+                        <div class="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-gray-900"><svg
+                                class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-width="2"
+                                    d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                            </svg></div>
+                        <h4 class="text-3xl font-black hero-title">MySeoFan</h4>
+                    </div>
+                    <p class="text-gray-400 text-lg leading-relaxed max-w-md">
+                        <?php echo htmlspecialchars($t['footer_desc'] ?? 'The ultimate tool for Instagram media preservation.'); ?>
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-6">Navigation</h4>
+                    <ul class="space-y-4 text-gray-400">
+                        <li><a href="index.php?lang=<?php echo $lang; ?>" class="hover:text-emerald-400">Downloader</a>
+                        </li>
+                        <li><a href="blog.php?lang=<?php echo $lang; ?>" class="hover:text-emerald-400">Blog & News</a>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-6">Legal</h4>
+                    <ul class="space-y-4 text-gray-400">
+                        <li><a href="page.php?slug=<?php echo ($lang == 'id' ? 'tentang-kami' : ($lang == 'ja' ? 'about-us-ja' : 'about-us')); ?>&lang=<?php echo $lang; ?>"
+                                class="hover:text-emerald-400">About Us</a></li>
+                        <li><a href="page.php?slug=<?php echo ($lang == 'id' ? 'kebijakan-privasi' : 'privacy-policy'); ?>&lang=<?php echo $lang; ?>"
+                                class="hover:text-emerald-400">Privacy Policy</a></li>
+                        <li><a href="page.php?slug=<?php echo ($lang == 'id' ? 'syarat-dan-ketentuan' : 'terms-of-service'); ?>&lang=<?php echo $lang; ?>"
+                                class="hover:text-emerald-400">Terms of Use</a></li>
+                        <li><a href="page.php?slug=<?php echo ($lang == 'id' ? 'hubungi-kami' : 'contact-us'); ?>&lang=<?php echo $lang; ?>"
+                                class="hover:text-emerald-400">Contact Us</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-white/5 pt-12 text-center text-gray-500 font-medium text-xs">
+                &copy; <?php echo date('Y'); ?> MySeoFan Studio. All rights reserved.
+            </div>
+        </div>
     </footer>
     <?php echo $settings['footer_code'] ?? ''; ?>
 </body>

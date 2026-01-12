@@ -393,7 +393,8 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                             $targetUrl = "index.php?lang=$code";
                             ?>
                             <option value="<?php echo $targetUrl; ?>" <?php echo $lang === $code ? 'selected' : ''; ?>>
-                                <?php echo $label; ?></option>
+                                <?php echo $label; ?>
+                            </option>
                         <?php endforeach; ?>
                     </select>
                 </div>
@@ -405,7 +406,8 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
         <!-- Hero Section -->
         <div class="max-w-4xl mx-auto text-center mb-16 fade-in">
             <h2 class="text-4xl md:text-7xl font-bold text-gray-900 mb-8 leading-[1.1] tracking-tight">
-                <?php echo $t['heading']; ?></h2>
+                <?php echo $t['heading']; ?>
+            </h2>
             <p class="text-lg md:text-xl text-gray-500 max-w-2xl mx-auto leading-relaxed"><?php echo $t['subtitle']; ?>
             </p>
         </div>
@@ -450,7 +452,8 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                     <div class="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm">
                         <div
                             class="w-16 h-16 bg-emerald-600 text-white rounded-2xl flex items-center justify-center mb-8 font-black text-2xl mx-auto">
-                            <?php echo $i; ?></div>
+                            <?php echo $i; ?>
+                        </div>
                         <h4 class="text-xl font-bold mb-4"><?php echo $t['guide' . $i . '_t']; ?></h4>
                         <p class="text-gray-500 leading-relaxed"><?php echo $t['guide' . $i . '_d']; ?></p>
                     </div>
@@ -483,10 +486,23 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                 <div>
                     <h4 class="text-white font-bold mb-6">Navigation</h4>
                     <ul class="space-y-4 text-gray-400">
-                        <li><a href="blog.php?lang=<?php echo $lang; ?>" class="hover:text-emerald-400">Blog & News</a>
-                        </li>
                         <li><a href="index.php?lang=<?php echo $lang; ?>" class="hover:text-emerald-400">Downloader</a>
                         </li>
+                        <li><a href="blog.php?lang=<?php echo $lang; ?>" class="hover:text-emerald-400">Blog & News</a>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-6">Legal</h4>
+                    <ul class="space-y-4 text-gray-400">
+                        <li><a href="page.php?slug=<?php echo ($lang == 'id' ? 'tentang-kami' : ($lang == 'ja' ? 'about-us-ja' : 'about-us')); ?>&lang=<?php echo $lang; ?>"
+                                class="hover:text-emerald-400">About Us</a></li>
+                        <li><a href="page.php?slug=<?php echo ($lang == 'id' ? 'kebijakan-privasi' : 'privacy-policy'); ?>&lang=<?php echo $lang; ?>"
+                                class="hover:text-emerald-400">Privacy Policy</a></li>
+                        <li><a href="page.php?slug=<?php echo ($lang == 'id' ? 'syarat-dan-ketentuan' : 'terms-of-service'); ?>&lang=<?php echo $lang; ?>"
+                                class="hover:text-emerald-400">Terms of Use</a></li>
+                        <li><a href="page.php?slug=<?php echo ($lang == 'id' ? 'hubungi-kami' : 'contact-us'); ?>&lang=<?php echo $lang; ?>"
+                                class="hover:text-emerald-400">Contact Us</a></li>
                     </ul>
                 </div>
             </div>

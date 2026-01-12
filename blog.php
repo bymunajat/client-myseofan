@@ -167,7 +167,8 @@ $posts = $stmt->fetchAll();
                             $targetUrl = "blog.php?lang=$code";
                             ?>
                             <option value="<?php echo $targetUrl; ?>" <?php echo $lang === $code ? 'selected' : ''; ?>>
-                                <?php echo $label; ?></option>
+                                <?php echo $label; ?>
+                            </option>
                         <?php endforeach; ?>
                     </select>
                 </div>
@@ -242,19 +243,48 @@ $posts = $stmt->fetchAll();
         <?php endif; ?>
     </main>
 
-    <footer class="bg-gray-900 text-white mt-auto py-12">
-        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-8">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-gray-900 shadow-xl">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                    </svg>
+    <footer class="bg-gray-900 text-white mt-auto pt-24 pb-12">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid md:grid-cols-4 gap-16 mb-24">
+                <div class="col-span-2">
+                    <div class="flex items-center gap-3 mb-8">
+                        <div class="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-gray-900"><svg
+                                class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-width="2"
+                                    d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                            </svg></div>
+                        <h4 class="text-3xl font-black hero-title">MySeoFan</h4>
+                    </div>
+                    <p class="text-gray-400 text-lg leading-relaxed max-w-md">
+                        <?php echo htmlspecialchars($t['footer_desc'] ?? 'The ultimate tool for Instagram media preservation.'); ?>
+                    </p>
                 </div>
-                <h4 class="text-2xl font-black hero-title">MySeoFan</h4>
+                <div>
+                    <h4 class="text-white font-bold mb-6">Navigation</h4>
+                    <ul class="space-y-4 text-gray-400">
+                        <li><a href="index.php?lang=<?php echo $lang; ?>" class="hover:text-emerald-400">Downloader</a>
+                        </li>
+                        <li><a href="blog.php?lang=<?php echo $lang; ?>" class="hover:text-emerald-400">Blog & News</a>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-6">Legal</h4>
+                    <ul class="space-y-4 text-gray-400">
+                        <li><a href="page.php?slug=<?php echo ($lang == 'id' ? 'tentang-kami' : ($lang == 'ja' ? 'about-us-ja' : 'about-us')); ?>&lang=<?php echo $lang; ?>"
+                                class="hover:text-emerald-400">About Us</a></li>
+                        <li><a href="page.php?slug=<?php echo ($lang == 'id' ? 'kebijakan-privasi' : 'privacy-policy'); ?>&lang=<?php echo $lang; ?>"
+                                class="hover:text-emerald-400">Privacy Policy</a></li>
+                        <li><a href="page.php?slug=<?php echo ($lang == 'id' ? 'syarat-dan-ketentuan' : 'terms-of-service'); ?>&lang=<?php echo $lang; ?>"
+                                class="hover:text-emerald-400">Terms of Use</a></li>
+                        <li><a href="page.php?slug=<?php echo ($lang == 'id' ? 'hubungi-kami' : 'contact-us'); ?>&lang=<?php echo $lang; ?>"
+                                class="hover:text-emerald-400">Contact Us</a></li>
+                    </ul>
+                </div>
             </div>
-            <p class="text-gray-500 font-medium text-sm">&copy; <?php echo date('Y'); ?>
-                <?php echo htmlspecialchars($settings['site_name'] ?? 'MySeoFan'); ?>. Built for creators.</p>
+            <div class="border-t border-white/5 pt-12 text-center text-gray-500 font-medium text-xs">
+                &copy; <?php echo date('Y'); ?> MySeoFan Studio. All rights reserved.
+            </div>
         </div>
     </footer>
     <?php echo $settings['footer_code'] ?? ''; ?>

@@ -54,13 +54,13 @@ if ($action === 'delete' && $id) {
 
 // Fetch Data
 $pages = [];
-$current_page = null;
+$current_page_data = null;
 if ($action === 'list') {
     $pages = $pdo->query("SELECT * FROM pages ORDER BY id ASC")->fetchAll();
 } elseif ($action === 'edit' && $id) {
     $stmt = $pdo->prepare("SELECT * FROM pages WHERE id=?");
     $stmt->execute([$id]);
-    $current_page = $stmt->fetch();
+    $current_page_data = $stmt->fetch();
 }
 ?>
 <!DOCTYPE html>
@@ -77,7 +77,7 @@ if ($action === 'list') {
             selector: 'textarea[name="content"]',
             plugins: 'advlist autolink lists link image charmap preview anchor pagebreak',
             toolbar_mode: 'floating',
-            height: 600,
+            height: 500,
             skin: 'oxide',
             content_css: 'default'
         });
@@ -118,14 +118,10 @@ if ($action === 'list') {
 
         <div class="p-8">
             <?php if ($message): ?>
-                <div class="bg-emerald-50 text-emerald-600 p-4 rounded-xl mb-6 font-medium">
-                    <?php echo $message; ?>
-                </div>
+                <div class="bg-emerald-50 text-emerald-600 p-4 rounded-xl mb-6 font-medium"><?php echo $message; ?></div>
             <?php endif; ?>
             <?php if ($error): ?>
-                <div class="bg-red-50 text-red-600 p-4 rounded-xl mb-6 font-medium">
-                    <?php echo $error; ?>
-                </div>
+                <div class="bg-red-50 text-red-600 p-4 rounded-xl mb-6 font-medium"><?php echo $error; ?></div>
             <?php endif; ?>
 
             <?php if ($action === 'list'): ?>
@@ -136,6 +132,7 @@ if ($action === 'list') {
                                 <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest">Page Title
                                 </th>
                                 <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest">Slug</th>
+                                <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest">Lang</th>
                                 <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest text-right">
                                     Actions</th>
                             </tr>
@@ -143,11 +140,30 @@ if ($action === 'list') {
                         <tbody class="divide-y divide-gray-50">
                             <?php foreach ($pages as $p): ?>
                                 <tr>
-                                    <td class="px-8 py-5 font-bold text-gray-800">
-                                        <?php echo htmlspecialchars($p['title']); ?>
+                                    <td class="px-8 py-5 font-bold text-gray-800"><?php echo htmlspecialchars($p['title']); ?>
                                     </td>
-                                    <td class="px-8 py-5 text-gray-500 text-sm">/page.php?slug=
-                                        <?php echo htmlspecialchars($p['slug']); ?>
+                                    <td class="px-8 py-5 text-gray-500 text-sm">
+                                        /page.php?slug=<?php echo htmlspecialchars($p['slug']); ?></td>
+                                    <td class="px-8 py-5">
+                                        <?php
+                                        $badgeClass = 'bg-gray-100 text-gray-600';
+                                        if ($p['lang_code'] == 'en')
+                                            $badgeClass = 'bg-emerald-100 text-emerald-600';
+                                        elseif ($p['lang_code'] == 'id')
+                                            $badgeClass = 'bg-blue-100 text-blue-600';
+                                        elseif ($p['lang_code'] == 'es')
+                                            $badgeClass = 'bg-yellow-100 text-yellow-600';
+                                        elseif ($p['lang_code'] == 'fr')
+                                            $badgeClass = 'bg-indigo-100 text-indigo-600';
+                                        elseif ($p['lang_code'] == 'de')
+                                            $badgeClass = 'bg-orange-100 text-orange-600';
+                                        elseif ($p['lang_code'] == 'ja')
+                                            $badgeClass = 'bg-purple-100 text-purple-600';
+                                        ?>
+                                        <span
+                                            class="px-2 py-1 text-[10px] font-black uppercase rounded <?php echo $badgeClass; ?>">
+                                            <?php echo $p['lang_code']; ?>
+                                        </span>
                                     </td>
                                     <td class="px-8 py-5 text-right space-x-2">
                                         <a href="?action=edit&id=<?php echo $p['id']; ?>"
@@ -166,54 +182,54 @@ if ($action === 'list') {
                         class="space-y-6">
                         <div class="grid md:grid-cols-2 gap-6">
                             <div class="md:col-span-2">
-                                <label class="block text-sm font-semibold text-gray-700 mb-2">Translation Group ID (Advanced)</label>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Translation Group ID</label>
                                 <input type="text" name="translation_group"
-                                    value="<?php echo htmlspecialchars($current_page['translation_group'] ?? uniqid('group_', true)); ?>"
-                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 text-gray-500 text-xs focus:bg-white focus:border-emerald-500 outline-none transition-all">
-                                <p class="text-[10px] text-gray-400 mt-1">Pages with the same ID are linked as translations of each other.</p>
+                                    value="<?php echo htmlspecialchars($current_page_data['translation_group'] ?? uniqid('group_', true)); ?>"
+                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 text-gray-500 text-xs outline-none">
                             </div>
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Page Title</label>
                                 <input type="text" name="title"
-                                    value="<?php echo htmlspecialchars($current_page['title'] ?? ''); ?>" required
-                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white focus:border-emerald-500 outline-none transition-all">
+                                    value="<?php echo htmlspecialchars($current_page_data['title'] ?? ''); ?>" required
+                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white outline-none">
                             </div>
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Slug</label>
-                                <input type="text" name="slug" placeholder="e.g. privacy-policy"
-                                    value="<?php echo htmlspecialchars($current_page['slug'] ?? ''); ?>" required
-                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white focus:border-emerald-500 outline-none transition-all">
+                                <input type="text" name="slug"
+                                    value="<?php echo htmlspecialchars($current_page_data['slug'] ?? ''); ?>" required
+                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white outline-none">
                             </div>
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Language</label>
                             <select name="lang_code"
-                                class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white focus:border-emerald-500 outline-none transition-all">
-                                <option value="en" <?php echo ($current_page['lang_code'] ?? '') == 'en' ? 'selected' : ''; ?>
-                                    >English</option>
-                                <option value="id" <?php echo ($current_page['lang_code'] ?? '') == 'id' ? 'selected' : ''; ?>
-                                    >Indonesia</option>
+                                class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white outline-none">
+                                <option value="en" <?php echo ($current_page_data['lang_code'] ?? '') == 'en' ? 'selected' : ''; ?>>English</option>
+                                <option value="id" <?php echo ($current_page_data['lang_code'] ?? '') == 'id' ? 'selected' : ''; ?>>Indonesia</option>
+                                <option value="es" <?php echo ($current_page_data['lang_code'] ?? '') == 'es' ? 'selected' : ''; ?>>Español</option>
+                                <option value="fr" <?php echo ($current_page_data['lang_code'] ?? '') == 'fr' ? 'selected' : ''; ?>>Français</option>
+                                <option value="de" <?php echo ($current_page_data['lang_code'] ?? '') == 'de' ? 'selected' : ''; ?>>Deutsch</option>
+                                <option value="ja" <?php echo ($current_page_data['lang_code'] ?? '') == 'ja' ? 'selected' : ''; ?>>日本語</option>
                             </select>
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Page Content (HTML
-                                allowed)</label>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Content (HTML allowed)</label>
                             <textarea name="content" rows="15" required
-                                class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white focus:border-emerald-500 outline-none transition-all"><?php echo htmlspecialchars($current_page['content'] ?? ''); ?></textarea>
+                                class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 outline-none"><?php echo htmlspecialchars($current_page_data['content'] ?? ''); ?></textarea>
                         </div>
-                        <div class="border-t pt-6 mt-6">
+                        <div class="border-t pt-6">
                             <h4 class="font-black text-gray-400 uppercase tracking-widest text-xs mb-4">SEO Settings</h4>
                             <div class="grid md:grid-cols-2 gap-6">
                                 <div>
                                     <label class="block text-sm font-semibold text-gray-700 mb-2">Meta Title</label>
                                     <input type="text" name="meta_title"
-                                        value="<?php echo htmlspecialchars($current_page['meta_title'] ?? ''); ?>"
-                                        class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white focus:border-emerald-500 outline-none transition-all">
+                                        value="<?php echo htmlspecialchars($current_page_data['meta_title'] ?? ''); ?>"
+                                        class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 outline-none">
                                 </div>
                                 <div>
                                     <label class="block text-sm font-semibold text-gray-700 mb-2">Meta Description</label>
                                     <textarea name="meta_description" rows="2"
-                                        class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white focus:border-emerald-500 outline-none transition-all"><?php echo htmlspecialchars($current_page['meta_description'] ?? ''); ?></textarea>
+                                        class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 outline-none"><?php echo htmlspecialchars($current_page_data['meta_description'] ?? ''); ?></textarea>
                                 </div>
                             </div>
                         </div>

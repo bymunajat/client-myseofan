@@ -30,7 +30,7 @@ try {
     if (!$res->fetch()) {
         $pdo->exec("CREATE TABLE site_settings (id INTEGER PRIMARY KEY AUTOINCREMENT, site_name TEXT, logo_path TEXT, favicon_path TEXT, header_code TEXT, footer_code TEXT)");
         $pdo->exec("CREATE TABLE seo_data (id INTEGER PRIMARY KEY AUTOINCREMENT, page_identifier TEXT, lang_code TEXT DEFAULT 'en', meta_title TEXT, meta_description TEXT, og_image TEXT, schema_markup TEXT)");
-        $pdo->exec("CREATE TABLE admins (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT UNIQUE, password_hash TEXT)");
+        $pdo->exec("CREATE TABLE admins (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT UNIQUE, password_hash TEXT, role TEXT DEFAULT 'super_admin', created_at DATETIME DEFAULT CURRENT_TIMESTAMP)");
         $pdo->exec("CREATE TABLE translations (id INTEGER PRIMARY KEY AUTOINCREMENT, lang_code TEXT, t_key TEXT, t_value TEXT, UNIQUE(lang_code, t_key))");
         $pdo->exec("CREATE TABLE blog_posts (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, slug TEXT UNIQUE, content TEXT, thumbnail TEXT, lang_code TEXT DEFAULT 'en', meta_title TEXT, meta_description TEXT, created_at DATETIME DEFAULT CURRENT_TIMESTAMP)");
         $pdo->exec("CREATE TABLE pages (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, slug TEXT UNIQUE, content TEXT, lang_code TEXT DEFAULT 'en', meta_title TEXT, meta_description TEXT)");
@@ -115,17 +115,44 @@ try {
     }
     if (!$hasRole) {
         $pdo->exec("ALTER TABLE admins ADD COLUMN role TEXT DEFAULT 'super_admin'");
+        // Refresh metadata for next check
+        $colsAdmin = $pdo->query("PRAGMA table_info(admins)")->fetchAll();
+    }
+
+    // Migration Check: Add created_at to admins
+    $hasCreatedAt = false;
+    foreach ($colsAdmin as $col) {
+        if ($col['name'] == 'created_at')
+            $hasCreatedAt = true;
+    }
+    if (!$hasCreatedAt) {
+        $pdo->exec("ALTER TABLE admins ADD COLUMN created_at DATETIME DEFAULT CURRENT_TIMESTAMP");
+    }
+
+    // Emergency Seed: Ensure at least one admin exists if table is empty
+    try {
+        $adminCount = $pdo->query("SELECT COUNT(*) FROM admins")->fetchColumn();
+        if ($adminCount == 0 || $adminCount === false) {
+            $pdo->exec("INSERT INTO admins (username, password_hash, role) VALUES ('admin', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'super_admin')");
+        }
+    } catch (\Exception $e) {
     }
 
     // Auto-heal session Role for legacy login sessions
-    if (isset($_SESSION['admin_id']) && !isset($_SESSION['role'])) {
-        $stmt = $pdo->prepare("SELECT role FROM admins WHERE id = ?");
-        $stmt->execute([$_SESSION['admin_id']]);
-        $_SESSION['role'] = $stmt->fetchColumn() ?: 'super_admin';
+    if (isset($_SESSION['admin_id']) && (!isset($_SESSION['role']) || empty($_SESSION['role']))) {
+        try {
+            $stmt = $pdo->prepare("SELECT role FROM admins WHERE id = ?");
+            $stmt->execute([$_SESSION['admin_id']]);
+            $fetchedRole = $stmt->fetchColumn();
+            $_SESSION['role'] = $fetchedRole ?: 'super_admin';
+            if (!$fetchedRole && $_SESSION['admin_id'] == 1)
+                $_SESSION['role'] = 'super_admin';
+        } catch (\Exception $e) {
+        }
     }
-
-} catch (\Exception $e) {
-    // Log error if needed
+} catch (\PDOException $e) {
+    // If it's a migration error, we might want to know
+    error_log("DB Migration Error: " . $e->getMessage());
 }
 
 /**

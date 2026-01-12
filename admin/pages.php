@@ -2,6 +2,10 @@
 session_start();
 require_once '../includes/db.php';
 
+// Enable error reporting for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 if (!isset($_SESSION['admin_id']) || !in_array(($_SESSION['role'] ?? ''), ['super_admin', 'editor'])) {
     header('Location: dashboard.php');
     exit;
@@ -11,7 +15,31 @@ $message = '';
 $error = '';
 $action = $_GET['action'] ?? 'list';
 $id = $_GET['id'] ?? null;
-$_curr_lang = $_GET['filter_lang'] ?? 'en';
+
+// Persistent Language Logic
+$available_langs = [
+    'en' => '🇺🇸 English',
+    'id' => '🇮🇩 Indonesia',
+    'es' => '🇪🇸 Español',
+    'fr' => '🇫🇷 Français',
+    'de' => '🇩🇪 DE',
+    'ja' => '🇯🇵 日本語'
+];
+
+// Determine the current filtered language
+$_curr_lang = 'en';
+if (isset($_GET['filter_lang'])) {
+    $_curr_lang = $_GET['filter_lang'];
+} elseif (isset($_GET['lang_code'])) {
+    $_curr_lang = $_GET['lang_code'];
+} elseif (isset($_SESSION['last_page_lang'])) {
+    $_curr_lang = $_SESSION['last_page_lang'];
+}
+
+// Preserve in session for smoother navigation
+if (array_key_exists($_curr_lang, $available_langs)) {
+    $_SESSION['last_page_lang'] = $_curr_lang;
+}
 
 // Handle CRUD Logic
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -27,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $t_group = $_POST['translation_group'] ?? uniqid('group_', true);
     $in_header = isset($_POST['show_in_header']) ? 1 : 0;
     $in_footer = isset($_POST['show_in_footer']) ? 1 : 0;
-    $order = (int) ($_POST['menu_order'] ?? 0);
+    $order = (int)($_POST['menu_order'] ?? 0);
     $f_section = $_POST['footer_section'] ?? 'legal';
 
     if ($action === 'add') {
@@ -37,8 +65,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $message = "Page created successfully!";
             $action = 'list';
             $_curr_lang = $lang;
+            $_SESSION['last_page_lang'] = $lang;
         } catch (\Exception $e) {
-            $error = "Error: " . $e->getMessage();
+            $error = "DB Error: " . $e->getMessage();
         }
     } elseif ($action === 'edit' && $id) {
         try {
@@ -47,15 +76,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $message = "Page updated successfully!";
             $action = 'list';
             $_curr_lang = $lang;
+            $_SESSION['last_page_lang'] = $lang;
         } catch (\Exception $e) {
-            $error = "Error: " . $e->getMessage();
+            $error = "DB Error: " . $e->getMessage();
         }
     }
 }
 
 if ($action === 'delete' && $id) {
-    $pdo->prepare("DELETE FROM pages WHERE id=?")->execute([$id]);
-    $message = "Page deleted.";
+    try {
+        $pdo->prepare("DELETE FROM pages WHERE id=?")->execute([$id]);
+        $message = "Page deleted.";
+    } catch (\Exception $e) {
+        $error = "Delete failed: " . $e->getMessage();
+    }
     $action = 'list';
 }
 
@@ -63,27 +97,21 @@ if ($action === 'delete' && $id) {
 $pages = [];
 $cu_p = null;
 if ($action === 'list') {
-    $stmt = $pdo->prepare("SELECT * FROM pages WHERE lang_code = ? ORDER BY menu_order ASC, id ASC");
-    $stmt->execute([$_curr_lang]);
-    $pages = $stmt->fetchAll();
-} elseif ($action === 'edit' && $id) {
+    try {
+        $stmt = $pdo->prepare("SELECT * FROM pages WHERE lang_code = ? ORDER BY menu_order ASC, id ASC");
+        $stmt->execute([$_curr_lang]);
+        $pages = $stmt->fetchAll();
+    } catch (\Exception $e) {
+        $error = "Query Error: " . $e->getMessage();
+    }
+} elseif (($action === 'edit' || $action === 'add') && $id) {
     $stmt = $pdo->prepare("SELECT * FROM pages WHERE id=?");
     $stmt->execute([$id]);
     $cu_p = $stmt->fetch();
 }
-
-$available_langs = [
-    'en' => '🇺🇸 English',
-    'id' => '🇮🇩 Indonesia',
-    'es' => '🇪🇸 Español',
-    'fr' => '🇫🇷 Français',
-    'de' => '🇩🇪 Deutsch',
-    'ja' => '🇯🇵 日本語'
-];
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <title>Page Manager - MySeoFan Admin</title>
@@ -101,49 +129,39 @@ $available_langs = [
         });
     </script>
     <style>
-        body {
-            font-family: 'Outfit', sans-serif;
-            background: #f3f4f6;
-        }
-
-        .sidebar {
-            height: 100vh;
-            background: #111827;
-            color: white;
-        }
+        body { font-family: 'Outfit', sans-serif; background: #f3f4f6; }
+        .sidebar { height: 100vh; background: #111827; color: white; }
     </style>
 </head>
-
 <body class="flex">
     <?php include 'includes/sidebar.php'; ?>
 
     <main class="flex-1 min-h-screen">
         <header class="bg-white border-b border-gray-200 px-8 h-20 flex items-center justify-between">
             <h3 class="text-xl font-bold text-gray-800">Static Page Manager</h3>
-            <?php if ($action === 'list'): ?>
-                <a href="?action=add&lang_code=<?php echo $_curr_lang; ?>"
-                    class="bg-emerald-600 text-white px-6 py-2 rounded-xl font-bold hover:bg-emerald-700 transition-all">+
-                    New Page</a>
-            <?php else: ?>
-                <a href="?action=list&filter_lang=<?php echo $cu_p['lang_code'] ?? $_curr_lang; ?>"
-                    class="text-gray-500 hover:text-gray-800 font-bold">← Back to List</a>
-            <?php endif; ?>
+            <div class="flex items-center gap-4">
+                <?php if ($action === 'list'): ?>
+                    <a href="?action=add&lang_code=<?php echo $_curr_lang; ?>" class="bg-emerald-600 text-white px-6 py-2 rounded-xl font-bold hover:bg-emerald-700 transition-all">+ New Page</a>
+                <?php else: ?>
+                    <a href="?action=list&filter_lang=<?php echo $cu_p['lang_code'] ?? $_curr_lang; ?>" class="text-gray-500 hover:text-gray-800 font-bold">← Back to List</a>
+                <?php endif; ?>
+            </div>
         </header>
 
         <div class="p-8">
             <?php if ($message): ?>
-                <div class="bg-emerald-50 text-emerald-600 p-4 rounded-xl mb-6 font-medium"><?php echo $message; ?></div>
+                <div class="bg-emerald-50 text-emerald-600 p-4 rounded-xl mb-6 font-medium border border-emerald-100"><?php echo $message; ?></div>
             <?php endif; ?>
             <?php if ($error): ?>
-                <div class="bg-red-50 text-red-600 p-4 rounded-xl mb-6 font-medium"><?php echo $error; ?></div>
+                <div class="bg-red-50 text-red-600 p-4 rounded-xl mb-6 font-medium border border-red-100"><?php echo $error; ?></div>
             <?php endif; ?>
 
             <?php if ($action === 'list'): ?>
                 <!-- Language Navigation Tabs -->
                 <div class="flex flex-wrap gap-2 mb-8 bg-white p-2 rounded-2xl shadow-sm border border-gray-100">
                     <?php foreach ($available_langs as $code => $label): ?>
-                        <a href="?filter_lang=<?php echo $code; ?>"
-                            class="px-6 py-3 rounded-xl font-bold transition-all flex items-center gap-2 <?php echo $_curr_lang === $code ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-100' : 'text-gray-500 hover:bg-gray-50'; ?>">
+                        <a href="?filter_lang=<?php echo $code; ?>" 
+                           class="px-6 py-3 rounded-xl font-bold transition-all flex items-center gap-2 <?php echo $_curr_lang === $code ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-200' : 'text-gray-500 hover:bg-gray-50'; ?>">
                             <?php echo $label; ?>
                         </a>
                     <?php endforeach; ?>
@@ -153,49 +171,40 @@ $available_langs = [
                     <table class="w-full text-left">
                         <thead class="bg-gray-50 border-b">
                             <tr>
-                                <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest">Display
-                                    Order</th>
-                                <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest">Page Title
-                                </th>
-                                <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest">Visibility
-                                </th>
-                                <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest text-right">
-                                    Actions</th>
+                                <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest">Order</th>
+                                <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest">Page Title</th>
+                                <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest">Visibility</th>
+                                <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-50">
                             <?php if (empty($pages)): ?>
                                 <tr>
-                                    <td colspan="4" class="px-8 py-12 text-center text-gray-400 font-medium">No pages found for
-                                        this language.</td>
+                                    <td colspan="4" class="px-8 py-12 text-center">
+                                        <div class="text-gray-400 font-medium mb-4">No pages found in <?php echo $available_langs[$_curr_lang] ?? $_curr_lang; ?>.</div>
+                                        <a href="?action=add&lang_code=<?php echo $_curr_lang; ?>" class="text-emerald-600 font-bold hover:underline">Create the first page for this language →</a>
+                                    </td>
                                 </tr>
                             <?php endif; ?>
                             <?php foreach ($pages as $p): ?>
                                 <tr>
                                     <td class="px-8 py-5 text-gray-400 font-bold text-center w-32">
-                                        <span
-                                            class="bg-gray-100 px-3 py-1 rounded-lg text-gray-600"><?php echo $p['menu_order']; ?></span>
+                                        <span class="bg-gray-100 px-3 py-1 rounded-lg text-gray-600"><?php echo $p['menu_order']; ?></span>
                                     </td>
                                     <td class="px-8 py-5">
                                         <div class="font-bold text-gray-800"><?php echo htmlspecialchars($p['title']); ?></div>
-                                        <div class="text-[10px] text-gray-400 uppercase tracking-tighter">
-                                            /page.php?slug=<?php echo htmlspecialchars($p['slug'] ?? ''); ?></div>
+                                        <div class="text-[10px] text-gray-400 uppercase tracking-tighter">/page.php?slug=<?php echo htmlspecialchars($p['slug'] ?? ''); ?></div>
                                     </td>
                                     <td class="px-8 py-5 flex flex-wrap gap-2">
-                                        <span
-                                            class="px-2 py-1 text-[10px] font-black uppercase rounded <?php echo $p['show_in_header'] ? 'bg-emerald-100 text-emerald-600' : 'bg-gray-100 text-gray-400'; ?>">Header</span>
-                                        <span
-                                            class="px-2 py-1 text-[10px] font-black uppercase rounded <?php echo $p['show_in_footer'] ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-400'; ?>">Footer</span>
+                                        <span class="px-2 py-1 text-[10px] font-black uppercase rounded <?php echo $p['show_in_header'] ? 'bg-emerald-100 text-emerald-600' : 'bg-gray-100 text-gray-400'; ?>">Header</span>
+                                        <span class="px-2 py-1 text-[10px] font-black uppercase rounded <?php echo $p['show_in_footer'] ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-400'; ?>">Footer</span>
                                         <?php if ($p['show_in_footer']): ?>
-                                            <span
-                                                class="px-2 py-1 text-[10px] font-black uppercase rounded bg-orange-100 text-orange-600"><?php echo htmlspecialchars($p['footer_section'] ?: 'legal'); ?></span>
+                                            <span class="px-2 py-1 text-[10px] font-black uppercase rounded bg-orange-100 text-orange-600"><?php echo htmlspecialchars($p['footer_section'] ?: 'legal'); ?></span>
                                         <?php endif; ?>
                                     </td>
-                                    <td class="px-8 py-5 text-right space-x-2">
-                                        <a href="?action=edit&id=<?php echo $p['id']; ?>"
-                                            class="text-emerald-600 hover:text-emerald-800 font-bold">Edit</a>
-                                        <a href="?action=delete&id=<?php echo $p['id']; ?>" onclick="return confirm('Sure?')"
-                                            class="text-red-400 hover:text-red-600 font-bold">Delete</a>
+                                    <td class="px-8 py-5 text-right space-x-2 text-sm">
+                                        <a href="?action=edit&id=<?php echo $p['id']; ?>" class="text-emerald-600 hover:text-emerald-800 font-bold">Edit</a>
+                                        <a href="?action=delete&id=<?php echo $p['id']; ?>" onclick="return confirm('Delete this page permanently?')" class="text-red-400 hover:text-red-600 font-bold">Delete</a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
@@ -204,101 +213,72 @@ $available_langs = [
                 </div>
             <?php else: ?>
                 <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 max-w-4xl mx-auto">
-                    <form action="?action=<?php echo $action; ?><?php echo $id ? '&id=' . $id : ''; ?>" method="POST"
-                        class="space-y-6">
+                    <form action="?action=<?php echo $action; ?><?php echo $id ? '&id=' . $id : ''; ?>" method="POST" class="space-y-6">
                         <div class="grid md:grid-cols-2 gap-6">
-                            <div
-                                class="md:col-span-2 p-6 bg-gray-50 rounded-2xl border border-gray-100 flex flex-wrap items-center gap-8">
+                            <div class="md:col-span-2 p-6 bg-gray-50 rounded-2xl border border-gray-100 flex flex-wrap items-center gap-8">
                                 <label class="flex items-center gap-3 cursor-pointer group">
-                                    <input type="checkbox" name="show_in_header" value="1" <?php echo ($cu_p['show_in_header'] ?? 0) ? 'checked' : ''; ?>
-                                        class="w-5 h-5 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500">
-                                    <span
-                                        class="text-sm font-bold text-gray-700 group-hover:text-emerald-600 transition-colors">Header
-                                        Visibility</span>
+                                    <input type="checkbox" name="show_in_header" value="1" <?php echo ($cu_p['show_in_header'] ?? 0) ? 'checked' : ''; ?> class="w-5 h-5 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500">
+                                    <span class="text-sm font-bold text-gray-700 group-hover:text-emerald-600 transition-colors">Show in Header</span>
                                 </label>
                                 <label class="flex items-center gap-3 cursor-pointer group">
-                                    <input type="checkbox" name="show_in_footer" value="1" <?php echo ($cu_p['show_in_footer'] ?? 0) ? 'checked' : ''; ?>
-                                        class="w-5 h-5 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500">
-                                    <span
-                                        class="text-sm font-bold text-gray-700 group-hover:text-emerald-600 transition-colors">Footer
-                                        Visibility</span>
+                                    <input type="checkbox" name="show_in_footer" value="1" <?php echo ($cu_p['show_in_footer'] ?? 0) ? 'checked' : ''; ?> class="w-5 h-5 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500">
+                                    <span class="text-sm font-bold text-gray-700 group-hover:text-emerald-600 transition-colors">Show in Footer</span>
                                 </label>
                                 <div class="flex items-center gap-3">
                                     <span class="text-sm font-bold text-gray-500">Footer Group:</span>
-                                    <input type="text" name="footer_section"
-                                        value="<?php echo htmlspecialchars($cu_p['footer_section'] ?? 'legal'); ?>"
-                                        placeholder="e.g. navigation, legal"
-                                        class="w-32 px-3 py-1 rounded-lg border border-gray-200 text-sm font-bold outline-none focus:border-emerald-500">
+                                    <input type="text" name="footer_section" value="<?php echo htmlspecialchars($cu_p['footer_section'] ?? 'legal'); ?>" placeholder="e.g. navigation, legal" class="w-32 px-3 py-1 rounded-lg border border-gray-200 text-sm font-bold outline-none focus:border-emerald-500">
                                 </div>
                                 <div class="flex items-center gap-3 ml-auto relative group">
                                     <span class="text-sm font-bold text-gray-500">Display Order:</span>
-                                    <input type="number" name="menu_order" value="<?php echo $cu_p['menu_order'] ?? 0; ?>"
-                                        class="w-20 px-3 py-1 rounded-lg border border-gray-200 text-sm font-bold outline-none focus:border-emerald-500">
-                                    <div
-                                        class="hidden group-hover:block absolute top-full right-0 mt-2 p-3 bg-gray-800 text-white text-[10px] rounded-lg w-48 z-10 shadow-xl">
-                                        💡 <b>Tip:</b> Smaller numbers (e.g., 1) appear first. Larger numbers appear at the
-                                        end.
+                                    <input type="number" name="menu_order" value="<?php echo $cu_p['menu_order'] ?? 0; ?>" class="w-20 px-3 py-1 rounded-lg border border-gray-200 text-sm font-bold outline-none focus:border-emerald-500">
+                                    <div class="hidden group-hover:block absolute top-full right-0 mt-2 p-3 bg-gray-800 text-white text-[10px] rounded-lg w-48 z-20 shadow-xl">
+                                        💡 <b>Tip:</b> Smaller numbers (e.g., 1) appear first.
                                     </div>
                                 </div>
                             </div>
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Translation Group ID</label>
-                                <input type="text" name="translation_group"
-                                    value="<?php echo htmlspecialchars($cu_p['translation_group'] ?? uniqid('group_', true)); ?>"
-                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 text-gray-500 text-sm outline-none">
+                                <input type="text" name="translation_group" value="<?php echo htmlspecialchars($cu_p['translation_group'] ?? uniqid('group_', true)); ?>" class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 text-gray-500 text-sm outline-none">
                             </div>
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Language</label>
-                                <select name="lang_code"
-                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white outline-none font-bold">
-                                    <?php foreach ($available_langs as $code => $label): ?>
-                                        <option value="<?php echo $code; ?>" <?php echo (($cu_p['lang_code'] ?? ($_GET['lang_code'] ?? $_curr_lang)) == $code) ? 'selected' : ''; ?>>
-                                            <?php echo $label; ?></option>
+                                <select name="lang_code" class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white outline-none font-bold">
+                                    <?php foreach($available_langs as $code => $label): ?>
+                                    <option value="<?php echo $code; ?>" <?php echo (($cu_p['lang_code'] ?? ($_GET['lang_code'] ?? $_curr_lang)) == $code) ? 'selected' : ''; ?>><?php echo $label; ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Page Title</label>
-                                <input type="text" name="title"
-                                    value="<?php echo htmlspecialchars($cu_p['title'] ?? ''); ?>" required
-                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white outline-none">
+                                <input type="text" name="title" value="<?php echo htmlspecialchars($cu_p['title'] ?? ''); ?>" required class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white outline-none">
                             </div>
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Slug</label>
-                                <input type="text" name="slug" value="<?php echo htmlspecialchars($cu_p['slug'] ?? ''); ?>"
-                                    required
-                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white outline-none">
+                                <input type="text" name="slug" value="<?php echo htmlspecialchars($cu_p['slug'] ?? ''); ?>" required class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white outline-none">
                             </div>
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Content (HTML allowed)</label>
-                            <textarea name="content" rows="15"
-                                class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 outline-none"><?php echo htmlspecialchars($cu_p['content'] ?? ''); ?></textarea>
+                            <textarea name="content" rows="15" class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 outline-none"><?php echo htmlspecialchars($cu_p['content'] ?? ''); ?></textarea>
                         </div>
                         <div class="border-t pt-6">
                             <h4 class="font-black text-gray-400 uppercase tracking-widest text-xs mb-4">SEO Settings</h4>
                             <div class="grid md:grid-cols-2 gap-6">
                                 <div>
                                     <label class="block text-sm font-semibold text-gray-700 mb-2">Meta Title</label>
-                                    <input type="text" name="meta_title"
-                                        value="<?php echo htmlspecialchars($cu_p['meta_title'] ?? ''); ?>"
-                                        class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 outline-none">
+                                    <input type="text" name="meta_title" value="<?php echo htmlspecialchars($cu_p['meta_title'] ?? ''); ?>" class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 outline-none">
                                 </div>
                                 <div>
                                     <label class="block text-sm font-semibold text-gray-700 mb-2">Meta Description</label>
-                                    <textarea name="meta_description" rows="2"
-                                        class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 outline-none"><?php echo htmlspecialchars($cu_p['meta_description'] ?? ''); ?></textarea>
+                                    <textarea name="meta_description" rows="2" class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 outline-none"><?php echo htmlspecialchars($cu_p['meta_description'] ?? ''); ?></textarea>
                                 </div>
                             </div>
                         </div>
-                        <button type="submit"
-                            class="w-full bg-emerald-600 text-white py-4 rounded-xl font-bold hover:bg-emerald-700 shadow-xl shadow-emerald-100 transition-all">Save
-                            Page & Navigation</button>
+                        <button type="submit" class="w-full bg-emerald-600 text-white py-4 rounded-xl font-bold hover:bg-emerald-700 shadow-xl shadow-emerald-100 transition-all">Save Page & Navigation</button>
                     </form>
                 </div>
             <?php endif; ?>
         </div>
     </main>
 </body>
-
 </html>

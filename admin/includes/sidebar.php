@@ -61,74 +61,46 @@ if (empty($user_role))
                 </div>
             </div>
 
-            <!-- Header Menu Sub-menu -->
+            <!-- Static Pages Group -->
             <?php if (in_array($user_role, ['super_admin', 'editor'])): ?>
                 <div class="mb-1">
-                    <button onclick="toggleSection('header-menu-submenu')"
-                        class="w-full flex items-center justify-between px-4 py-2 text-gray-400 hover:text-white transition-all rounded-xl hover:bg-gray-800 text-left <?php echo ($current_page == 'pages.php' && ($_GET['menu_type'] ?? '') == 'header') ? 'bg-gray-800/50' : ''; ?>">
+                    <button onclick="toggleSection('static-pages-submenu')"
+                        class="w-full flex items-center justify-between px-4 py-2 text-gray-400 hover:text-white transition-all rounded-xl hover:bg-gray-800 text-left <?php echo $current_page == 'pages.php' ? 'bg-gray-800/50' : ''; ?>">
                         <div class="flex items-center gap-3">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                                <path stroke-width="2"
+                                    d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                             </svg>
-                            <span class="text-sm font-medium">Header Menu</span>
+                            <span class="text-sm font-medium">Static Pages</span>
                         </div>
-                        <svg id="header-menu-submenu-chevron"
-                            class="w-3 h-3 transition-transform <?php echo ($current_page == 'pages.php' && ($_GET['menu_type'] ?? '') == 'header') ? 'rotate-180' : ''; ?>"
+                        <svg id="static-pages-submenu-chevron"
+                            class="w-3 h-3 transition-transform <?php echo $current_page == 'pages.php' ? 'rotate-180' : ''; ?>"
                             fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
-                    <div id="header-menu-submenu"
-                        class="<?php echo ($current_page == 'pages.php' && ($_GET['menu_type'] ?? '') == 'header') ? 'block' : 'hidden'; ?> mt-1 ml-6 border-l border-gray-700 pl-2 space-y-1">
+                    <div id="static-pages-submenu"
+                        class="<?php echo $current_page == 'pages.php' ? 'block' : 'hidden'; ?> mt-1 ml-6 border-l border-gray-700 pl-2 space-y-1">
+
+                        <!-- All Pages -->
+                        <a href="pages.php?action=list"
+                            class="block py-1 text-xs <?php echo ($current_page == 'pages.php' && !isset($_GET['menu_type'])) ? 'text-emerald-400 font-bold' : 'text-gray-500 hover:text-white'; ?>">
+                            All Pages
+                        </a>
+
+                        <!-- Header Menu -->
                         <a href="pages.php?action=list&menu_type=header"
-                            class="block py-1 text-xs <?php echo ($current_page == 'pages.php' && ($_GET['menu_type'] ?? '') == 'header' && $_sb_action != 'add') ? 'text-emerald-400 font-bold' : 'text-gray-500 hover:text-white'; ?>">Manage
-                            Menu</a>
-                        <a href="pages.php?action=add&menu_type=header"
-                            class="block py-1 text-xs <?php echo ($current_page == 'pages.php' && ($_GET['menu_type'] ?? '') == 'header' && $_sb_action == 'add') ? 'text-emerald-400 font-bold' : 'text-gray-500 hover:text-white'; ?>">Add
-                            Link</a>
-                    </div>
-                </div>
-            <?php endif; ?>
+                            class="block py-1 text-xs <?php echo ($current_page == 'pages.php' && ($_GET['menu_type'] ?? '') == 'header') ? 'text-emerald-400 font-bold' : 'text-gray-500 hover:text-white'; ?>">
+                            Header Menu
+                        </a>
 
-            <!-- Footer Menu Sub-menu -->
-            <?php if (in_array($user_role, ['super_admin', 'editor'])): ?>
-                <div class="mb-1">
-                    <button onclick="toggleSection('footer-menu-submenu')"
-                        class="w-full flex items-center justify-between px-4 py-2 text-gray-400 hover:text-white transition-all rounded-xl hover:bg-gray-800 text-left <?php echo ($current_page == 'pages.php' && ($_GET['menu_type'] ?? '') == 'footer') ? 'bg-gray-800/50' : ''; ?>">
-                        <div class="flex items-center gap-3">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" />
-                            </svg>
-                            <span class="text-sm font-medium">Footer Menu</span>
-                        </div>
-                        <svg id="footer-menu-submenu-chevron"
-                            class="w-3 h-3 transition-transform <?php echo ($current_page == 'pages.php' && ($_GET['menu_type'] ?? '') == 'footer') ? 'rotate-180' : ''; ?>"
-                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path d="M19 9l-7 7-7-7" />
-                        </svg>
-                    </button>
-                    <div id="footer-menu-submenu"
-                        class="<?php echo ($current_page == 'pages.php' && ($_GET['menu_type'] ?? '') == 'footer') ? 'block' : 'hidden'; ?> mt-1 ml-6 border-l border-gray-700 pl-2 space-y-1">
+                        <!-- Footer Menu -->
                         <a href="pages.php?action=list&menu_type=footer"
-                            class="block py-1 text-xs <?php echo ($current_page == 'pages.php' && ($_GET['menu_type'] ?? '') == 'footer' && $_sb_action != 'add') ? 'text-emerald-400 font-bold' : 'text-gray-500 hover:text-white'; ?>">Manage
-                            Footer</a>
-                        <a href="pages.php?action=add&menu_type=footer"
-                            class="block py-1 text-xs <?php echo ($current_page == 'pages.php' && ($_GET['menu_type'] ?? '') == 'footer' && $_sb_action == 'add') ? 'text-emerald-400 font-bold' : 'text-gray-500 hover:text-white'; ?>">Add
-                            Link</a>
+                            class="block py-1 text-xs <?php echo ($current_page == 'pages.php' && ($_GET['menu_type'] ?? '') == 'footer') ? 'text-emerald-400 font-bold' : 'text-gray-500 hover:text-white'; ?>">
+                            Footer Menu
+                        </a>
                     </div>
                 </div>
-            <?php endif; ?>
-
-            <!-- All Pages (Optional: for internal use/management) -->
-            <?php if (in_array($user_role, ['super_admin', 'editor'])): ?>
-                <a href="pages.php?action=list"
-                    class="flex items-center gap-3 px-4 py-2 rounded-xl text-sm transition-all <?php echo ($current_page == 'pages.php' && !isset($_GET['menu_type'])) ? 'text-white bg-gray-800' : 'text-gray-400 hover:text-white hover:bg-gray-800'; ?>">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-width="2"
-                            d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                    </svg>
-                    <span>All Pages</span>
-                </a>
             <?php endif; ?>
         </div>
 

@@ -13,11 +13,12 @@ if (empty($user_role))
     $user_role = 'super_admin';
 ?>
 <!-- Sidebar -->
-<aside class="sidebar w-64 bg-[#111827] flex-shrink-0 min-h-screen">
+<aside
+    class="sidebar w-64 bg-[#111827] flex flex-col flex-shrink-0 h-screen sticky top-0 overflow-y-auto custom-scrollbar">
     <div class="p-8">
         <h2 class="text-xl font-bold text-emerald-500">MySeoFan Admin</h2>
     </div>
-    <nav class="mt-4 px-4 space-y-1">
+    <nav class="mt-4 px-4 space-y-1 flex-1">
         <!-- Dashboard -->
         <a href="dashboard.php"
             class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all <?php echo $current_page == 'dashboard.php' ? 'nav-active text-white' : 'text-gray-400 hover:bg-gray-800 hover:text-white'; ?>">
@@ -159,7 +160,7 @@ if (empty($user_role))
         <?php endif; ?>
 
         <!-- Group: Account -->
-        <div class="pt-4 pb-2">
+        <div class="pt-8 pb-8 mt-auto border-t border-gray-800">
             <p class="px-4 text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">Account</p>
             <a href="profile.php"
                 class="flex items-center gap-3 px-4 py-2 rounded-xl text-sm transition-all <?php echo $current_page == 'profile.php' ? 'text-white bg-gray-800' : 'text-gray-400 hover:text-white hover:bg-gray-800'; ?>">

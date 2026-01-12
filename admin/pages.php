@@ -19,12 +19,12 @@ $action = $_GET['action'] ?? 'list';
 $id = $_GET['id'] ?? null;
 
 $available_langs = [
-    'en' => '🇺🇸 English',
-    'id' => '🇮🇩 Indonesia',
-    'es' => '🇪🇸 Español',
-    'fr' => '🇫🇷 Français',
-    'de' => '🇩🇪 DE',
-    'ja' => '🇯🇵 日本語'
+    'en' => ['label' => 'English', 'flag' => '🇺🇸'],
+    'id' => ['label' => 'Indonesia', 'flag' => '🇮🇩'],
+    'es' => ['label' => 'Español', 'flag' => '🇪🇸'],
+    'fr' => ['label' => 'Français', 'flag' => '🇫🇷'],
+    'de' => ['label' => 'DE', 'flag' => '🇩🇪'],
+    'ja' => ['label' => '日本語', 'flag' => '🇯🇵']
 ];
 
 // 1. Determine the Active Language Context
@@ -191,9 +191,18 @@ $page_title = "Page Content Manager";
             <h3 class="text-xl font-bold text-gray-800"><?php echo $page_title; ?></h3>
             <div class="flex items-center gap-4">
                 <?php if ($action === 'list'): ?>
+                    <div class="text-gray-500 font-medium text-sm hidden md:block">
+                        Active Language: <span
+                            class="text-gray-900 font-bold ml-1"><?php echo $available_langs[$_curr_lang]['flag']; ?>
+                            <?php echo $available_langs[$_curr_lang]['label']; ?></span>
+                    </div>
                     <a href="?action=add&lang_code=<?php echo $_curr_lang; ?>"
-                        class="bg-emerald-600 text-white px-6 py-2 rounded-xl font-bold hover:bg-emerald-700 transition-all">+
-                        New Page</a>
+                        class="bg-emerald-600 text-white px-5 py-2.5 rounded-xl font-bold hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-200 text-sm flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-width="3" d="M12 4v16m8-8H4" />
+                        </svg>
+                        New Page
+                    </a>
                 <?php else: ?>
                     <a href="?action=list&filter_lang=<?php echo $_curr_lang; ?>"
                         class="text-gray-500 hover:text-gray-800 font-bold">← Back to List</a>
@@ -216,10 +225,11 @@ $page_title = "Page Content Manager";
             <?php if ($action === 'list'): ?>
                 <!-- Language Navigation Tabs -->
                 <div class="flex flex-wrap gap-2 mb-8 bg-white p-2 rounded-2xl shadow-sm border border-gray-100">
-                    <?php foreach ($available_langs as $code => $label): ?>
+                    <?php foreach ($available_langs as $code => $info): ?>
                         <a href="?action=list&filter_lang=<?php echo $code; ?>"
-                            class="px-6 py-3 rounded-xl font-bold transition-all flex items-center gap-2 <?php echo $_curr_lang === $code ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-200' : 'text-gray-500 hover:bg-gray-50'; ?>">
-                            <?php echo $label; ?>
+                            class="px-5 py-2.5 rounded-xl font-bold transition-all flex items-center gap-2 <?php echo $_curr_lang === $code ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-200' : 'text-gray-500 hover:bg-gray-50'; ?> text-sm">
+                            <span class="text-base"><?php echo $info['flag']; ?></span>
+                            <span><?php echo $info['label']; ?></span>
                         </a>
                     <?php endforeach; ?>
                 </div>
@@ -304,9 +314,9 @@ $page_title = "Page Content Manager";
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Language</label>
                                 <select name="lang_code"
                                     class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white outline-none font-bold">
-                                    <?php foreach ($available_langs as $code => $label): ?>
+                                    <?php foreach ($available_langs as $code => $info): ?>
                                         <option value="<?php echo $code; ?>" <?php echo (($cu_p['lang_code'] ?? ($_GET['lang_code'] ?? $_curr_lang)) == $code) ? 'selected' : ''; ?>>
-                                            <?php echo $label; ?>
+                                            <?php echo $info['flag'] . ' ' . $info['label']; ?>
                                         </option>
                                     <?php endforeach; ?>
                                 </select>

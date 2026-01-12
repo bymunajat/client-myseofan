@@ -74,8 +74,8 @@ $footerItems = getMenuTree($pdo, 'footer', $lang);
 
 $seoHelper = new SEO_Helper($pdo, 'blog', $lang);
 
-// Fetch posts for current language
-$stmt = $pdo->prepare("SELECT * FROM blog_posts WHERE lang_code = ? ORDER BY created_at DESC");
+// Fetch posts for current language (Published only)
+$stmt = $pdo->prepare("SELECT * FROM blog_posts WHERE lang_code = ? AND status = 'published' ORDER BY created_at DESC");
 $stmt->execute([$lang]);
 $posts = $stmt->fetchAll();
 

@@ -58,8 +58,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($action === 'add') {
         try {
-            $stmt = $pdo->prepare("INSERT INTO blog_posts (title, slug, content, thumbnail, lang_code, meta_title, meta_description, category, translation_group) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            $stmt->execute([$title, $slug, $content, $thumbnail, $lang, $m_title, $m_desc, $category, $t_group]);
+            $stmt = $pdo->prepare("INSERT INTO blog_posts (title, slug, content, thumbnail, lang_code, meta_title, meta_description, category, translation_group, status, tags) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt->execute([$title, $slug, $content, $thumbnail, $lang, $m_title, $m_desc, $category, $t_group, $_POST['status'] ?? 'published', $_POST['tags'] ?? '']);
             $message = "Post created successfully!";
             $action = 'list';
             $_curr_lang = $lang;
@@ -69,8 +69,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     } elseif ($action === 'edit' && $id) {
         try {
-            $stmt = $pdo->prepare("UPDATE blog_posts SET title=?, slug=?, content=?, thumbnail=?, lang_code=?, meta_title=?, meta_description=?, category=?, translation_group=? WHERE id=?");
-            $stmt->execute([$title, $slug, $content, $thumbnail, $lang, $m_title, $m_desc, $category, $t_group, $id]);
+            $stmt = $pdo->prepare("UPDATE blog_posts SET title=?, slug=?, content=?, thumbnail=?, lang_code=?, meta_title=?, meta_description=?, category=?, translation_group=?, status=?, tags=? WHERE id=?");
+            $stmt->execute([$title, $slug, $content, $thumbnail, $lang, $m_title, $m_desc, $category, $t_group, $_POST['status'] ?? 'published', $_POST['tags'] ?? '', $id]);
             $message = "Post updated successfully!";
             $action = 'list';
             $_curr_lang = $lang;
@@ -213,6 +213,13 @@ if ($action === 'list') {
                                             class="px-2 py-1 bg-gray-100 rounded-lg font-bold text-gray-600 text-[10px] uppercase"><?php echo htmlspecialchars($p['category'] ?? 'General'); ?></span>
                                     </td>
                                     <td class="px-8 py-5 text-gray-400 text-xs">
+                                        <?php if (($p['status'] ?? 'published') === 'draft'): ?>
+                                            <span
+                                                class="bg-gray-200 text-gray-700 px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider mr-2">Draft</span>
+                                        <?php else: ?>
+                                            <span
+                                                class="bg-emerald-100 text-emerald-700 px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider mr-2">Published</span>
+                                        <?php endif; ?>
                                         <?php echo date('M d, Y', strtotime($p['created_at'])); ?>
                                     </td>
                                     <td class="px-8 py-5 text-right space-x-2">
@@ -287,6 +294,24 @@ if ($action === 'list') {
                             <textarea name="content" rows="15" required
                                 class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 outline-none"><?php echo htmlspecialchars($current_post['content'] ?? ''); ?></textarea>
                         </div>
+                        <div class="grid md:grid-cols-2 gap-6 pt-6 border-t border-gray-100">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Status</label>
+                                <select name="status"
+                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white outline-none font-bold">
+                                    <option value="published" <?php echo ($current_post['status'] ?? 'published') === 'published' ? 'selected' : ''; ?>>Published (Live)</option>
+                                    <option value="draft" <?php echo ($current_post['status'] ?? '') === 'draft' ? 'selected' : ''; ?>>Draft (Hidden)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Tags (comma separated)</label>
+                                <input type="text" name="tags"
+                                    value="<?php echo htmlspecialchars($current_post['tags'] ?? ''); ?>"
+                                    placeholder="e.g. instagram, tips, tutorial"
+                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white outline-none">
+                            </div>
+                        </div>
+
                         <div class="border-t pt-6">
                             <h4 class="font-black text-gray-400 uppercase tracking-widest text-xs mb-4">SEO Settings</h4>
                             <div class="grid md:grid-cols-2 gap-6">

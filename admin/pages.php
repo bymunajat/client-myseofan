@@ -15,7 +15,8 @@ $message = '';
 $error = '';
 $action = $_GET['action'] ?? 'list';
 $id = $_GET['id'] ?? null;
-$menu_type = $_GET['menu_type'] ?? null; // 'header' or 'footer'
+$action = $_GET['action'] ?? 'list';
+$id = $_GET['id'] ?? null;
 
 $available_langs = [
     'en' => '🇺🇸 English',
@@ -121,13 +122,7 @@ $pages = [];
 $cu_p = null;
 if ($action === 'list') {
     try {
-        if ($menu_type === 'header') {
-            $stmt = $pdo->prepare("SELECT * FROM pages WHERE lang_code = ? AND show_in_header = 1 ORDER BY menu_order ASC, id ASC");
-        } elseif ($menu_type === 'footer') {
-            $stmt = $pdo->prepare("SELECT * FROM pages WHERE lang_code = ? AND show_in_footer = 1 ORDER BY menu_order ASC, id ASC");
-        } else {
-            $stmt = $pdo->prepare("SELECT * FROM pages WHERE lang_code = ? ORDER BY menu_order ASC, id ASC");
-        }
+        $stmt = $pdo->prepare("SELECT * FROM pages WHERE lang_code = ? ORDER BY title ASC");
         $stmt->execute([$_curr_lang]);
         $pages = $stmt->fetchAll();
     } catch (\Exception $e) {
@@ -139,11 +134,7 @@ if ($action === 'list') {
     $cu_p = $stmt->fetch();
 }
 
-$page_title = "Static Page Manager";
-if ($menu_type === 'header')
-    $page_title = "Header Menu Manager";
-if ($menu_type === 'footer')
-    $page_title = "Footer Menu Manager";
+$page_title = "Page Content Manager";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -200,11 +191,11 @@ if ($menu_type === 'footer')
             <h3 class="text-xl font-bold text-gray-800"><?php echo $page_title; ?></h3>
             <div class="flex items-center gap-4">
                 <?php if ($action === 'list'): ?>
-                    <a href="?action=add&lang_code=<?php echo $_curr_lang; ?><?php echo $menu_type ? '&menu_type='.$menu_type : ''; ?>"
+                    <a href="?action=add&lang_code=<?php echo $_curr_lang; ?>"
                         class="bg-emerald-600 text-white px-6 py-2 rounded-xl font-bold hover:bg-emerald-700 transition-all">+
                         New Page</a>
                 <?php else: ?>
-                    <a href="?action=list&filter_lang=<?php echo $_curr_lang; ?><?php echo $menu_type ? '&menu_type='.$menu_type : ''; ?>"
+                    <a href="?action=list&filter_lang=<?php echo $_curr_lang; ?>"
                         class="text-gray-500 hover:text-gray-800 font-bold">← Back to List</a>
                 <?php endif; ?>
             </div>
@@ -226,7 +217,7 @@ if ($menu_type === 'footer')
                 <!-- Language Navigation Tabs -->
                 <div class="flex flex-wrap gap-2 mb-8 bg-white p-2 rounded-2xl shadow-sm border border-gray-100">
                     <?php foreach ($available_langs as $code => $label): ?>
-                        <a href="?action=list&filter_lang=<?php echo $code; ?><?php echo $menu_type ? '&menu_type='.$menu_type : ''; ?>"
+                        <a href="?action=list&filter_lang=<?php echo $code; ?>"
                             class="px-6 py-3 rounded-xl font-bold transition-all flex items-center gap-2 <?php echo $_curr_lang === $code ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-200' : 'text-gray-500 hover:bg-gray-50'; ?>">
                             <?php echo $label; ?>
                         </a>
@@ -240,8 +231,6 @@ if ($menu_type === 'footer')
                                 <th class="w-16 py-4"></th>
                                 <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest text-left">
                                     Page Title</th>
-                                <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest text-left">
-                                    Visibility</th>
                                 <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest text-right">
                                     Actions</th>
                             </tr>
@@ -277,18 +266,10 @@ if ($menu_type === 'footer')
                                         <div class="text-[10px] text-gray-400 uppercase tracking-tighter">
                                             /page.php?slug=<?php echo htmlspecialchars($p['slug'] ?? ''); ?></div>
                                     </td>
-                                    <td class="px-8 py-5">
-                                        <div class="flex flex-wrap gap-2">
-                                            <span
-                                                class="px-2 py-1 text-[10px] font-black uppercase rounded <?php echo $p['show_in_header'] ? 'bg-emerald-100 text-emerald-600' : 'bg-gray-100 text-gray-400'; ?>">Header</span>
-                                            <span
-                                                class="px-2 py-1 text-[10px] font-black uppercase rounded <?php echo $p['show_in_footer'] ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-400'; ?>">Footer</span>
-                                        </div>
-                                    </td>
                                     <td class="px-8 py-5 text-right space-x-2 text-sm">
-                                        <a href="?action=edit&id=<?php echo $p['id']; ?><?php echo $menu_type ? '&menu_type=' . $menu_type : ''; ?>"
+                                        <a href="?action=edit&id=<?php echo $p['id']; ?>"
                                             class="text-emerald-600 hover:text-emerald-800 font-bold">Edit</a>
-                                        <a href="?action=delete&id=<?php echo $p['id']; ?><?php echo $menu_type ? '&menu_type=' . $menu_type : ''; ?>"
+                                        <a href="?action=delete&id=<?php echo $p['id']; ?>"
                                             onclick="return confirm('Delete this page permanently?')"
                                             class="text-red-400 hover:text-red-600 font-bold">Delete</a>
                                     </td>
@@ -299,41 +280,15 @@ if ($menu_type === 'footer')
                 </div>
             <?php else: ?>
                 <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 max-w-4xl mx-auto">
-                    <form
-                        action="?action=<?php echo $action; ?><?php echo $id ? '&id=' . $id : ''; ?><?php echo $menu_type ? '&menu_type=' . $menu_type : ''; ?>"
-                        method="POST" class="space-y-6">
+                    <form action="?action=<?php echo $action; ?><?php echo $id ? '&id=' . $id : ''; ?>" method="POST"
+                        class="space-y-6">
                         <div class="grid md:grid-cols-2 gap-6">
                             <div
                                 class="md:col-span-2 p-6 bg-gray-50 rounded-2xl border border-gray-100 flex flex-wrap items-center gap-8">
-                                <label class="flex items-center gap-3 cursor-pointer group">
-                                    <input type="checkbox" name="show_in_header" value="1" <?php echo ($cu_p['show_in_header'] ?? 0) ? 'checked' : ''; ?>
-                                        class="w-5 h-5 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500">
-                                    <span
-                                        class="text-sm font-bold text-gray-700 group-hover:text-emerald-600 transition-colors">Show
-                                        in Header</span>
-                                </label>
-                                <label class="flex items-center gap-3 cursor-pointer group">
-                                    <input type="checkbox" name="show_in_footer" value="1" <?php echo ($cu_p['show_in_footer'] ?? 0) ? 'checked' : ''; ?>
-                                        class="w-5 h-5 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500">
-                                    <span
-                                        class="text-sm font-bold text-gray-700 group-hover:text-emerald-600 transition-colors">Show
-                                        in Footer</span>
-                                </label>
-                                <div class="flex items-center gap-3">
-                                    <span class="text-sm font-bold text-gray-500">Footer Group:</span>
-                                    <input type="text" name="footer_section"
-                                        value="<?php echo htmlspecialchars($cu_p['footer_section'] ?? 'legal'); ?>"
-                                        placeholder="e.g. navigation, legal"
-                                        class="px-3 py-1 rounded-lg border border-gray-200 text-sm font-bold outline-none focus:border-emerald-500 w-32">
-                                </div>
-                                <div class="flex items-center gap-3 ml-auto relative group">
-                                    <span class="text-sm font-bold text-gray-500">Display Order:</span>
-                                    <input type="number" name="menu_order" value="<?php echo $cu_p['menu_order'] ?? 0; ?>"
-                                        class="w-20 px-3 py-1 rounded-lg border border-gray-200 text-sm font-bold outline-none focus:border-emerald-500">
-                                    <div
-                                        class="hidden group-hover:block absolute top-full right-0 mt-2 p-3 bg-gray-800 text-white text-[10px] rounded-lg w-48 z-20 shadow-xl">
-                                        💡 <b>Tip:</b> Smaller numbers appear first.
-                                    </div>
+                                <div class="text-sm text-gray-600">
+                                    <p class="font-bold text-gray-800">Page Content Only</p>
+                                    <p class="text-xs">To manage where this page appears, use the <a href="menus.php"
+                                            class="text-emerald-600 underline">Menu Manager</a>.</p>
                                 </div>
                             </div>
                             <div>
@@ -420,34 +375,6 @@ if ($menu_type === 'footer')
             }, 3000);
         }
 
-        const el = document.querySelector('tbody');
-        if (el) {
-            Sortable.create(el, {
-                handle: '.drag-handle',
-                animation: 150,
-                ghostClass: 'sortable-ghost',
-                onEnd: function () {
-                    const rows = el.querySelectorAll('tr[data-id]');
-                    const order = Array.from(rows).map(row => row.getAttribute('data-id'));
-
-                    const formData = new FormData();
-                    formData.append('action', 'reorder');
-                    order.forEach(id => formData.append('order[]', id));
-
-                    fetch(window.location.href, {
-                        method: 'POST',
-                        body: formData
-                    })
-                        .then(res => res.json())
-                        .then(data => {
-                            if (data.success) {
-                                showToast('Order saved successfully!');
-                            } else {
-                                showToast('Error saving order', 'error');
-                            }
-                        })
-                        .catch(() => showToast('Network error', 'error'));
-                }
             });
         }
     </script>

@@ -80,23 +80,23 @@ if (empty($user_role))
                         </svg>
                     </button>
                     <div id="static-pages-submenu"
-                        class="<?php echo $current_page == 'pages.php' ? 'block' : 'hidden'; ?> mt-1 ml-6 border-l border-gray-700 pl-2 space-y-1">
+                        class="<?php echo in_array($current_page, ['pages.php', 'menus.php']) ? 'block' : 'hidden'; ?> mt-1 ml-6 border-l border-gray-700 pl-2 space-y-1">
 
-                        <!-- All Pages -->
+                        <!-- Page Content (was All Pages) -->
                         <a href="pages.php?action=list"
-                            class="block py-1 text-xs <?php echo ($current_page == 'pages.php' && !isset($_GET['menu_type'])) ? 'text-emerald-400 font-bold' : 'text-gray-500 hover:text-white'; ?>">
-                            All Pages
+                            class="block py-1 text-xs <?php echo ($current_page == 'pages.php') ? 'text-emerald-400 font-bold' : 'text-gray-500 hover:text-white'; ?>">
+                            Page Content
                         </a>
 
                         <!-- Header Menu -->
-                        <a href="pages.php?action=list&menu_type=header"
-                            class="block py-1 text-xs <?php echo ($current_page == 'pages.php' && ($_GET['menu_type'] ?? '') == 'header') ? 'text-emerald-400 font-bold' : 'text-gray-500 hover:text-white'; ?>">
+                        <a href="menus.php?menu_location=header"
+                            class="block py-1 text-xs <?php echo ($current_page == 'menus.php' && ($_GET['menu_location'] ?? '') == 'header') ? 'text-emerald-400 font-bold' : 'text-gray-500 hover:text-white'; ?>">
                             Header Menu
                         </a>
 
                         <!-- Footer Menu -->
-                        <a href="pages.php?action=list&menu_type=footer"
-                            class="block py-1 text-xs <?php echo ($current_page == 'pages.php' && ($_GET['menu_type'] ?? '') == 'footer') ? 'text-emerald-400 font-bold' : 'text-gray-500 hover:text-white'; ?>">
+                        <a href="menus.php?menu_location=footer"
+                            class="block py-1 text-xs <?php echo ($current_page == 'menus.php' && ($_GET['menu_location'] ?? '') == 'footer') ? 'text-emerald-400 font-bold' : 'text-gray-500 hover:text-white'; ?>">
                             Footer Menu
                         </a>
                     </div>

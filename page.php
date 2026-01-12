@@ -57,19 +57,9 @@ $defaults = [
 $t = array_merge($defaults['en'], $defaults[$lang] ?? [], $translations);
 
 // Fetch dynamic navigation links
-$headerLinks = $pdo->prepare("SELECT title, slug FROM pages WHERE lang_code = ? AND show_in_header = 1 ORDER BY menu_order ASC");
-$headerLinks->execute([$lang]);
-$headerLinks = $headerLinks->fetchAll();
-
-$rawFooterLinks = $pdo->prepare("SELECT title, slug, footer_section FROM pages WHERE lang_code = ? AND show_in_footer = 1 ORDER BY menu_order ASC");
-$rawFooterLinks->execute([$lang]);
-$rawFooterLinks = $rawFooterLinks->fetchAll();
-
-$footerGroups = [];
-foreach ($rawFooterLinks as $fl) {
-    $section = $fl['footer_section'] ?: 'legal';
-    $footerGroups[$section][] = $fl;
-}
+// Fetch dynamic navigation links using New Menu System
+$headerItems = getMenuTree($pdo, 'header', $lang);
+$footerItems = getMenuTree($pdo, 'footer', $lang);
 
 $seoHelper = new SEO_Helper($pdo, 'page', $lang);
 $pageIdentifier = 'page';
@@ -166,24 +156,38 @@ $pageIdentifier = 'page';
             </a>
 
             <nav class="hidden md:flex items-center gap-8 font-semibold text-gray-500">
-                <?php foreach ($headerLinks as $hl):
-                    $hSlug = $hl['slug'];
-                    if (str_starts_with($hSlug, 'home')) {
-                        $href = "index.php?lang=$lang";
-                        $isActive = ($pageIdentifier === 'home');
-                    } elseif (str_starts_with($hSlug, 'blog')) {
-                        $href = "blog.php?lang=$lang";
-                        $isActive = ($pageIdentifier === 'blog');
-                    } else {
-                        $href = "page.php?slug=" . htmlspecialchars($hSlug) . "&lang=$lang";
-                        $isActive = (isset($slug) && $slug === $hSlug);
-                    }
-                    ?>
-                    <a href="<?php echo $href; ?>"
-                        class="<?php echo $isActive ? 'text-emerald-600 border-b-2 border-emerald-600' : 'hover:text-emerald-600 transition-colors'; ?> py-1">
-                        <?php echo htmlspecialchars($hl['title']); ?>
-                    </a>
-                <?php endforeach; ?>
+                <?php 
+                function renderHeaderMenu($items, $pageIdentifier, $currentSlug, $depth = 0) {
+                    foreach ($items as $item): 
+                        // Determine Active State
+                        $isActive = false;
+                        if(strpos($item['final_url'], 'index.php') !== false && $pageIdentifier === 'home') $isActive = true;
+                        if(strpos($item['final_url'], 'blog.php') !== false && $pageIdentifier === 'blog') $isActive = true;
+                        if(strpos($item['final_url'], $currentSlug ?? '---') !== false) $isActive = true;
+                        
+                        $hasChildren = !empty($item['children']);
+                ?>
+                    <div class="relative group <?php echo $depth > 0 ? 'ml-0' : ''; ?>">
+                        <a href="<?php echo htmlspecialchars($item['final_url']); ?>"
+                            class="<?php echo $isActive ? 'text-emerald-600 border-b-2 border-emerald-600' : 'hover:text-emerald-600 transition-colors'; ?> py-1 flex items-center gap-1">
+                            <?php echo htmlspecialchars($item['label']); ?>
+                            <?php if($hasChildren): ?>
+                                <svg class="w-3 h-3 pt-1 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="3" d="M19 9l-7 7-7-7"/></svg>
+                            <?php endif; ?>
+                        </a>
+                        
+                        <!-- Dropdown (Simple Hover) -->
+                        <?php if($hasChildren): ?>
+                            <div class="absolute top-full left-0 mt-2 w-48 bg-white shadow-xl rounded-xl p-2 hidden group-hover:block z-50 border border-gray-100 animate-fade-in-up">
+                                <?php renderHeaderMenu($item['children'], $pageIdentifier, $currentSlug, $depth + 1); ?>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                <?php endforeach; 
+                }
+                
+                renderHeaderMenu($headerItems, $pageIdentifier, $slug ?? '');
+                ?>
 
                 <!-- Language Switcher -->
                 <div class="relative group">
@@ -259,17 +263,25 @@ $pageIdentifier = 'page';
                     </ul>
                 </div>
 
-                <?php foreach ($footerGroups as $section => $links): ?>
+                <?php foreach ($footerItems as $item): ?>
                     <div>
+                        <!-- Parent Item is Header if it has children, else just a link -->
                         <h4 class="text-white font-bold mb-6">
-                            <?php echo $t['footer_section_' . $section] ?? ucfirst($section); ?>
+                            <?php if(!empty($item['children'])): ?>
+                                <?php echo htmlspecialchars($item['label']); ?>
+                            <?php else: ?>
+                                <a href="<?php echo htmlspecialchars($item['final_url']); ?>" class="hover:text-emerald-400"><?php echo htmlspecialchars($item['label']); ?></a>
+                            <?php endif; ?>
                         </h4>
+                        
+                        <?php if(!empty($item['children'])): ?>
                         <ul class="space-y-4 text-gray-400">
-                            <?php foreach ($links as $fl): ?>
-                                <li><a href="page.php?slug=<?php echo htmlspecialchars($fl['slug']); ?>&lang=<?php echo $lang; ?>"
-                                        class="hover:text-emerald-400"><?php echo htmlspecialchars($fl['title']); ?></a></li>
+                            <?php foreach ($item['children'] as $child): ?>
+                                <li><a href="<?php echo htmlspecialchars($child['final_url']); ?>"
+                                        class="hover:text-emerald-400"><?php echo htmlspecialchars($child['label']); ?></a></li>
                             <?php endforeach; ?>
                         </ul>
+                        <?php endif; ?>
                     </div>
                 <?php endforeach; ?>
             </div>

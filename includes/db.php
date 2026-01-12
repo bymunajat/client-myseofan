@@ -181,6 +181,64 @@ try {
     error_log("DB Migration Error: " . $e->getMessage());
 }
 
+
+// --- HELPER FUNCTION: Get Site Menu ---
+function getMenuTree($pdo, $location, $lang)
+{
+    if (!$pdo)
+        return [];
+
+    // 1. Fetch raw items
+    $stmt = $pdo->prepare("
+        SELECT mi.*, p.slug as page_slug 
+        FROM menu_items mi 
+        LEFT JOIN pages p ON mi.related_id = p.id 
+        WHERE mi.menu_location = ? AND mi.lang_code = ? 
+        ORDER BY mi.sort_order ASC
+    ");
+    $stmt->execute([$location, $lang]);
+    $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // 2. Build Tree
+    $tree = [];
+    $refs = [];
+
+    foreach ($items as &$item) {
+        // Resolve Final URL
+        if ($item['type'] === 'page') {
+            $item['final_url'] = 'page.php?slug=' . ($item['page_slug'] ?? '');
+
+            // Special cases for Home/Blog slugs which should just link to the main PHP files
+            $slug = $item['page_slug'] ?? '';
+            if (str_starts_with($slug, 'home-') || $slug === 'home') {
+                $item['final_url'] = 'index.php?lang=' . $lang;
+            } elseif (str_starts_with($slug, 'blog-') || $slug === 'blog') {
+                $item['final_url'] = 'blog.php?lang=' . $lang;
+            }
+        } elseif ($item['type'] === 'custom_link') {
+            $item['final_url'] = $item['url'];
+        } else {
+            $item['final_url'] = '#'; // Label
+        }
+
+        $item['children'] = [];
+        $refs[$item['id']] = &$item;
+    }
+    unset($item);
+
+    foreach ($items as &$item) {
+        if ($item['parent_id'] == 0) {
+            $tree[] = &$item;
+        } else {
+            if (isset($refs[$item['parent_id']])) {
+                $refs[$item['parent_id']]['children'][] = &$item;
+            }
+        }
+    }
+
+    return $tree;
+}
+
 function getSiteSettings($pdo)
 {
     if (!$pdo)

@@ -183,12 +183,19 @@ $current_translations = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
     <style>
         body {
             font-family: 'Outfit', sans-serif;
-            background: #f3f4f6;
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 25%, #6ee7b7 50%, #86efac 100%);
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            height: 100vh;
+            background: #065f46;
+            color: white;
         }
 
         .nav-active {
-            background: #374151;
-            border-left: 4px solid #10b981;
+            background: #047857;
+            border-left: 4px solid #34d399;
         }
 
         .tab-active {
@@ -211,11 +218,13 @@ $current_translations = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
     <?php include 'includes/sidebar.php'; ?>
 
     <main class="flex-1 min-h-screen">
-        <header class="bg-white border-b border-gray-200 px-8 h-20 flex items-center justify-between sticky top-0 z-50">
+        <header
+            class="bg-white border-b-4 border-emerald-300 px-8 h-20 flex items-center justify-between shadow-sm sticky top-0 z-50">
             <div>
                 <h1 class="text-xl font-bold text-gray-800">Site UI Translations</h1>
-                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">Multi-Language Management
-                    | Page <?php echo $_curr_p; ?> of <?php echo $_total_p; ?></p>
+                <p class="text-xs text-gray-500 mt-0.5">Manage multi-language content | Page <?php echo $_curr_p; ?> of
+                    <?php echo $_total_p; ?>
+                </p>
             </div>
             <a href="?seed=1"
                 class="text-sm bg-emerald-600 text-white px-6 py-2.5 rounded-xl font-bold hover:bg-emerald-700 shadow-lg shadow-emerald-100 transition-all">Reset
@@ -234,10 +243,10 @@ $current_translations = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
             <?php endif; ?>
 
             <!-- Language Tabs -->
-            <div class="flex gap-2 mb-8 bg-gray-200/50 p-1.5 rounded-2xl overflow-x-auto">
+            <div class="flex flex-wrap gap-2 mb-8 bg-white p-2 rounded-2xl shadow-sm border border-gray-100">
                 <?php foreach ($supported_langs as $code => $name): ?>
                     <a href="?lang=<?php echo $code; ?>"
-                        class="px-6 py-3 rounded-xl text-sm transition-all <?php echo $active_lang === $code ? 'tab-active' : 'text-gray-500 hover:text-gray-800'; ?>">
+                        class="px-6 py-3 rounded-xl font-bold transition-all flex items-center gap-2 <?php echo $active_lang === $code ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-200' : 'text-gray-500 hover:bg-gray-50'; ?>">
                         <?php echo $name; ?>
                     </a>
                 <?php endforeach; ?>
@@ -285,7 +294,7 @@ $current_translations = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
                                         <input type="hidden" name="p_redirect" value="<?php echo $_curr_p; ?>">
                                         <div class="flex-1 relative">
                                             <textarea name="t_value" rows="1"
-                                                class="w-full px-5 py-4 rounded-2xl border border-gray-100 bg-gray-50/50 focus:bg-white focus:border-emerald-500 outline-none text-sm transition-all resize-none shadow-sm"
+                                                class="w-full px-5 py-4 rounded-2xl border border-gray-100 bg-gray-50/50 focus:bg-white focus:border-emerald-500 outline-none text-sm transition-all resize-none shadow-sm font-semibold text-black"
                                                 oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'><?php echo htmlspecialchars($current_translations[$key] ?? ''); ?></textarea>
                                         </div>
                                         <button type="submit"
@@ -301,7 +310,8 @@ $current_translations = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
                 <?php if ($_total_p > 1): ?>
                     <div class="p-8 bg-gray-50/50 border-t border-gray-100 flex items-center justify-between">
                         <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Page
-                            <?php echo $_curr_p; ?> of <?php echo $_total_p; ?></p>
+                            <?php echo $_curr_p; ?> of <?php echo $_total_p; ?>
+                        </p>
                         <div class="flex gap-2">
                             <?php for ($i = 1; $i <= $_total_p; $i++): ?>
                                 <a href="?lang=<?php echo $active_lang; ?>&p=<?php echo $i; ?>"

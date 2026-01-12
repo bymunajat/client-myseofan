@@ -159,13 +159,19 @@ $page_title = "Page Content Manager";
     <style>
         body {
             font-family: 'Outfit', sans-serif;
-            background: #f3f4f6;
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 25%, #6ee7b7 50%, #86efac 100%);
+            min-height: 100vh;
         }
 
         .sidebar {
             height: 100vh;
-            background: #111827;
+            background: #065f46;
             color: white;
+        }
+
+        .nav-active {
+            background: #047857;
+            border-left: 4px solid #34d399;
         }
 
         .sortable-ghost {
@@ -187,8 +193,11 @@ $page_title = "Page Content Manager";
     <?php include 'includes/sidebar.php'; ?>
 
     <main class="flex-1 min-h-screen">
-        <header class="bg-white border-b border-gray-200 px-8 h-20 flex items-center justify-between">
-            <h3 class="text-xl font-bold text-gray-800"><?php echo $page_title; ?></h3>
+        <header class="bg-white border-b-4 border-emerald-300 px-8 h-20 flex items-center justify-between shadow-sm">
+            <div>
+                <h3 class="text-xl font-bold text-gray-800"><?php echo $page_title; ?></h3>
+                <p class="text-xs text-gray-500 mt-0.5">Manage static pages and content</p>
+            </div>
             <div class="flex items-center gap-4">
                 <?php if ($action === 'list'): ?>
                     <div class="text-gray-500 font-medium text-sm hidden md:block">
@@ -306,14 +315,14 @@ $page_title = "Page Content Manager";
                                     ID)</label>
                                 <input type="text" name="translation_group"
                                     value="<?php echo htmlspecialchars($cu_p['translation_group'] ?? uniqid('group_', true)); ?>"
-                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 text-gray-500 text-sm outline-none font-mono">
+                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 font-semibold text-black text-sm outline-none font-mono">
                                 <p class="text-[10px] text-gray-400 mt-1">ID ini menghubungkan halaman ini dengan versinya
                                     di bahasa lain.</p>
                             </div>
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Language</label>
                                 <select name="lang_code"
-                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white outline-none font-bold">
+                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white outline-none font-bold text-black">
                                     <?php foreach ($available_langs as $code => $info): ?>
                                         <option value="<?php echo $code; ?>" <?php echo (($cu_p['lang_code'] ?? ($_GET['lang_code'] ?? $_curr_lang)) == $code) ? 'selected' : ''; ?>>
                                             <?php echo $info['flag'] . ' ' . $info['label']; ?>
@@ -325,19 +334,19 @@ $page_title = "Page Content Manager";
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Page Title</label>
                                 <input type="text" name="title"
                                     value="<?php echo htmlspecialchars($cu_p['title'] ?? ''); ?>" required
-                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white outline-none">
+                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white outline-none font-bold text-black">
                             </div>
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Slug</label>
                                 <input type="text" name="slug" value="<?php echo htmlspecialchars($cu_p['slug'] ?? ''); ?>"
                                     required
-                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white outline-none">
+                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white outline-none font-mono font-semibold text-black">
                             </div>
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Content (HTML allowed)</label>
                             <textarea name="content" rows="15"
-                                class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 outline-none"><?php echo htmlspecialchars($cu_p['content'] ?? ''); ?></textarea>
+                                class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 outline-none font-semibold text-black"><?php echo htmlspecialchars($cu_p['content'] ?? ''); ?></textarea>
                         </div>
                         <div class="border-t pt-6">
                             <h4 class="font-black text-gray-400 uppercase tracking-widest text-xs mb-4">SEO Settings</h4>
@@ -346,12 +355,12 @@ $page_title = "Page Content Manager";
                                     <label class="block text-sm font-semibold text-gray-700 mb-2">Meta Title</label>
                                     <input type="text" name="meta_title"
                                         value="<?php echo htmlspecialchars($cu_p['meta_title'] ?? ''); ?>"
-                                        class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 outline-none">
+                                        class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 outline-none font-semibold text-black">
                                 </div>
                                 <div>
                                     <label class="block text-sm font-semibold text-gray-700 mb-2">Meta Description</label>
                                     <textarea name="meta_description" rows="2"
-                                        class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 outline-none"><?php echo htmlspecialchars($cu_p['meta_description'] ?? ''); ?></textarea>
+                                        class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 outline-none font-semibold text-black"><?php echo htmlspecialchars($cu_p['meta_description'] ?? ''); ?></textarea>
                                 </div>
                             </div>
                         </div>

@@ -126,13 +126,19 @@ if ($action === 'list') {
     <style>
         body {
             font-family: 'Outfit', sans-serif;
-            background: #f3f4f6;
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 25%, #6ee7b7 50%, #86efac 100%);
+            min-height: 100vh;
         }
 
         .sidebar {
             height: 100vh;
-            background: #111827;
+            background: #065f46;
             color: white;
+        }
+
+        .nav-active {
+            background: #047857;
+            border-left: 4px solid #34d399;
         }
     </style>
 </head>
@@ -141,8 +147,11 @@ if ($action === 'list') {
     <?php include 'includes/sidebar.php'; ?>
 
     <main class="flex-1 min-h-screen">
-        <header class="bg-white border-b border-gray-200 px-8 h-20 flex items-center justify-between">
-            <h3 class="text-xl font-bold text-gray-800">Blog Management</h3>
+        <header class="bg-white border-b-4 border-emerald-300 px-8 h-20 flex items-center justify-between shadow-sm">
+            <div>
+                <h3 class="text-xl font-bold text-gray-800">Blog Management</h3>
+                <p class="text-xs text-gray-500 mt-0.5">Create and manage blog posts</p>
+            </div>
             <?php if ($action === 'list'): ?>
                 <a href="?action=add&lang_code=<?php echo $_curr_lang; ?>"
                     class="bg-emerald-600 text-white px-6 py-2 rounded-xl font-bold hover:bg-emerald-700 transition-all">+
@@ -243,7 +252,7 @@ if ($action === 'list') {
                                     ID)</label>
                                 <input type="text" name="translation_group"
                                     value="<?php echo htmlspecialchars($current_post['translation_group'] ?? uniqid('group_', true)); ?>"
-                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 text-gray-500 text-sm outline-none font-mono">
+                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 font-semibold text-black text-sm outline-none font-mono">
                                 <p class="text-[10px] text-gray-400 mt-1">ID ini menghubungkan artikel ini dengan versinya
                                     di bahasa lain.</p>
                             </div>
@@ -251,20 +260,20 @@ if ($action === 'list') {
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Post Title</label>
                                 <input type="text" name="title"
                                     value="<?php echo htmlspecialchars($current_post['title'] ?? ''); ?>" required
-                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white outline-none">
+                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white outline-none font-bold text-black">
                             </div>
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Slug (Auto if empty)</label>
                                 <input type="text" name="slug"
                                     value="<?php echo htmlspecialchars($current_post['slug'] ?? ''); ?>"
-                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white outline-none font-mono">
+                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white outline-none font-mono font-semibold text-black">
                             </div>
                         </div>
                         <div class="grid md:grid-cols-2 gap-6">
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Language</label>
                                 <select name="lang_code"
-                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white outline-none font-bold">
+                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white outline-none font-bold text-black">
                                     <?php foreach ($available_langs as $code => $label): ?>
                                         <option value="<?php echo $code; ?>" <?php echo (($current_post['lang_code'] ?? ($_GET['lang_code'] ?? $_curr_lang)) == $code) ? 'selected' : ''; ?>>
                                             <?php echo $label; ?>
@@ -275,7 +284,7 @@ if ($action === 'list') {
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Category</label>
                                 <select name="category"
-                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white outline-none font-bold">
+                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white outline-none font-bold text-black">
                                     <option value="General" <?php echo ($current_post['category'] ?? '') == 'General' ? 'selected' : ''; ?>>General</option>
                                     <option value="Tutorial" <?php echo ($current_post['category'] ?? '') == 'Tutorial' ? 'selected' : ''; ?>>Tutorial</option>
                                     <option value="News" <?php echo ($current_post['category'] ?? '') == 'News' ? 'selected' : ''; ?>>News</option>
@@ -286,19 +295,19 @@ if ($action === 'list') {
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Thumbnail URL</label>
                                 <input type="text" name="thumbnail"
                                     value="<?php echo htmlspecialchars($current_post['thumbnail'] ?? ''); ?>"
-                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white outline-none">
+                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white outline-none font-semibold text-black">
                             </div>
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Content (HTML allowed)</label>
                             <textarea name="content" rows="15" required
-                                class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 outline-none"><?php echo htmlspecialchars($current_post['content'] ?? ''); ?></textarea>
+                                class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 outline-none font-semibold text-black"><?php echo htmlspecialchars($current_post['content'] ?? ''); ?></textarea>
                         </div>
                         <div class="grid md:grid-cols-2 gap-6 pt-6 border-t border-gray-100">
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Status</label>
                                 <select name="status"
-                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white outline-none font-bold">
+                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white outline-none font-bold text-black">
                                     <option value="published" <?php echo ($current_post['status'] ?? 'published') === 'published' ? 'selected' : ''; ?>>Published (Live)</option>
                                     <option value="draft" <?php echo ($current_post['status'] ?? '') === 'draft' ? 'selected' : ''; ?>>Draft (Hidden)</option>
                                 </select>
@@ -308,7 +317,7 @@ if ($action === 'list') {
                                 <input type="text" name="tags"
                                     value="<?php echo htmlspecialchars($current_post['tags'] ?? ''); ?>"
                                     placeholder="e.g. instagram, tips, tutorial"
-                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white outline-none">
+                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white outline-none font-semibold text-black">
                             </div>
                         </div>
 
@@ -319,12 +328,12 @@ if ($action === 'list') {
                                     <label class="block text-sm font-semibold text-gray-700 mb-2">Meta Title</label>
                                     <input type="text" name="meta_title"
                                         value="<?php echo htmlspecialchars($current_post['meta_title'] ?? ''); ?>"
-                                        class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 outline-none">
+                                        class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 outline-none font-semibold text-black">
                                 </div>
                                 <div>
                                     <label class="block text-sm font-semibold text-gray-700 mb-2">Meta Description</label>
                                     <textarea name="meta_description" rows="2"
-                                        class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 outline-none"><?php echo htmlspecialchars($current_post['meta_description'] ?? ''); ?></textarea>
+                                        class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 outline-none font-semibold text-black"><?php echo htmlspecialchars($current_post['meta_description'] ?? ''); ?></textarea>
                                 </div>
                             </div>
                         </div>

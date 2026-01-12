@@ -45,18 +45,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <style>
         body {
             font-family: 'Outfit', sans-serif;
-            background: #f3f4f6;
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 25%, #6ee7b7 50%, #86efac 100%);
+            min-height: 100vh;
         }
 
         .sidebar {
             height: 100vh;
-            background: #111827;
+            background: #065f46;
             color: white;
         }
 
         .nav-active {
-            background: #374151;
-            border-left: 4px solid #10b981;
+            background: #047857;
+            border-left: 4px solid #34d399;
         }
     </style>
 </head>
@@ -65,8 +66,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <?php include 'includes/sidebar.php'; ?>
 
     <main class="flex-1 min-h-screen">
-        <header class="bg-white border-b border-gray-200 px-8 h-20 flex items-center justify-between">
-            <h3 class="text-xl font-bold text-gray-800">Admin Profile</h3>
+        <header class="bg-white border-b-4 border-emerald-300 px-8 h-20 flex items-center justify-between shadow-sm">
+            <div>
+                <h3 class="text-xl font-bold text-gray-800">Admin Profile</h3>
+                <p class="text-xs text-gray-500 mt-0.5">Update your account information</p>
+            </div>
         </header>
 
         <div class="p-8">
@@ -88,13 +92,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Username</label>
                             <input type="text" name="username"
                                 value="<?php echo htmlspecialchars($_SESSION['username']); ?>" required
-                                class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white focus:border-emerald-500 outline-none transition-all">
+                                class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white focus:border-emerald-500 outline-none transition-all font-bold text-black">
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">New Password (leave blank to
                                 keep current)</label>
                             <input type="password" name="password"
-                                class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white focus:border-emerald-500 outline-none transition-all">
+                                class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white focus:border-emerald-500 outline-none transition-all font-semibold text-black">
                         </div>
                         <button type="submit"
                             class="w-full py-4 bg-emerald-600 text-white rounded-xl font-bold hover:bg-emerald-700 shadow-xl shadow-emerald-100 transition-all">

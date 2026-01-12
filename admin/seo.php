@@ -83,19 +83,27 @@ if ($pdo) {
     <style>
         body {
             font-family: 'Outfit', sans-serif;
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #064e3b 100%);
-            /* Green-Gray Gradient Background */
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 25%, #6ee7b7 50%, #86efac 100%);
+            /* Soft Green Gradient Background */
+            min-height: 100vh;
         }
 
         .sidebar {
             height: 100vh;
-            background: #111827;
+            background: #065f46;
+            /* Dark green sidebar */
             color: white;
         }
 
         .nav-active {
-            background: #374151;
-            border-left: 4px solid #10b981;
+            background: #047857;
+            border-left: 4px solid #34d399;
+        }
+
+        /* Improve card visibility */
+        .seo-card {
+            background: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
     </style>
 </head>
@@ -105,8 +113,11 @@ if ($pdo) {
     <?php include 'includes/sidebar.php'; ?>
 
     <main class="flex-1 min-h-screen">
-        <header class="bg-white border-b border-gray-200 px-8 h-20 flex items-center justify-between">
-            <h3 class="text-xl font-bold text-gray-800">SEO Management</h3>
+        <header class="bg-white border-b-4 border-emerald-300 px-8 h-20 flex items-center justify-between shadow-sm">
+            <div>
+                <h3 class="text-xl font-bold text-gray-800">SEO Management</h3>
+                <p class="text-xs text-gray-500 mt-0.5">Optimize meta tags and search visibility</p>
+            </div>
             <div class="text-gray-500 font-medium text-sm hidden md:block">
                 Active Language: <span
                     class="text-gray-900 font-bold ml-1"><?php echo $available_langs[$_curr_lang]['flag']; ?>
@@ -137,7 +148,7 @@ if ($pdo) {
                 <?php endforeach; ?>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 auto-rows-fr">
                 <?php foreach ($pages as $page):
                     // Icons and Colors based on page
                     $icon = '';
@@ -173,7 +184,7 @@ if ($pdo) {
                     }
                     ?>
                     <div
-                        class="bg-white rounded-3xl shadow-xl border border-white/10 overflow-hidden transition-all duration-300 group <?php echo $accentColor; ?>">
+                        class="seo-card bg-white rounded-3xl shadow-2xl border-2 border-gray-100 overflow-hidden transition-all duration-300 hover:shadow-emerald-200/50 hover:scale-[1.02] group flex flex-col h-full <?php echo $accentColor; ?>">
                         <!-- Card Header -->
                         <div
                             class="px-8 py-6 border-b border-gray-100 flex items-center justify-between <?php echo $headerBg; ?>">
@@ -186,7 +197,8 @@ if ($pdo) {
                                 </span>
                                 <div>
                                     <h2 class="text-xl font-bold text-gray-800 capitalize tracking-tight">
-                                        <?php echo $page; ?> Page</h2>
+                                        <?php echo $page; ?> Page
+                                    </h2>
                                     <p class="text-xs text-gray-400 font-medium">SEO Configuration</p>
                                 </div>
                             </div>
@@ -196,67 +208,68 @@ if ($pdo) {
                             </div>
                         </div>
 
-                        <div class="p-8">
+                        <div class="p-8 flex-1 flex flex-col">
                             <?php
                             $code = $_curr_lang;
                             $info = $available_langs[$code];
                             $data = $seo_data[$page][$code] ?? [];
                             ?>
-                            <form action="" method="POST" class="space-y-4">
+                            <form action="" method="POST" class="space-y-4 flex flex-col flex-1">
                                 <input type="hidden" name="page_identifier" value="<?php echo $page; ?>">
                                 <input type="hidden" name="lang_code" value="<?php echo $code; ?>">
-                                <div class="flex items-center gap-2 mb-4">
-                                    <span
-                                        class="text-xs font-black uppercase tracking-widest bg-white border border-gray-200 text-gray-700 px-3 py-1 rounded-lg shadow-sm">
-                                        <?php echo $info['flag']; ?>     <?php echo $info['label']; ?>
-                                    </span>
-                                </div>
-                                <div class="grid md:grid-cols-2 gap-6">
-                                    <div>
-                                        <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Meta
-                                            Title</label>
-                                        <input type="text" name="meta_title"
-                                            value="<?php echo htmlspecialchars($data['meta_title'] ?? ''); ?>"
-                                            class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 outline-none focus:bg-white focus:border-emerald-500 transition-all font-bold text-gray-700">
+
+                                <div class="flex-1 space-y-4">
+                                    <div class="flex items-center gap-2">
+                                        <span
+                                            class="text-xs font-black uppercase tracking-widest bg-white border border-gray-200 text-gray-700 px-3 py-1 rounded-lg shadow-sm">
+                                            <?php echo $info['flag']; ?>     <?php echo $info['label']; ?>
+                                        </span>
+                                    </div>
+                                    <div class="grid md:grid-cols-2 gap-6">
+                                        <div>
+                                            <label class="block text-xs font-black text-gray-700 uppercase mb-2">Meta
+                                                Title</label>
+                                            <input type="text" name="meta_title"
+                                                value="<?php echo htmlspecialchars($data['meta_title'] ?? ''); ?>"
+                                                class="w-full px-4 py-3 rounded-xl border-2 border-emerald-400 bg-white outline-none focus:border-emerald-600 transition-all font-bold text-black">
+                                        </div>
+                                        <div>
+                                            <label class="block text-xs font-black text-gray-700 uppercase mb-2">OG Image
+                                                URL</label>
+                                            <input type="text" name="og_image"
+                                                value="<?php echo htmlspecialchars($data['og_image'] ?? ''); ?>"
+                                                class="w-full px-4 py-3 rounded-xl border-2 border-emerald-400 bg-white outline-none focus:border-emerald-600 transition-all font-semibold text-black">
+                                        </div>
                                     </div>
                                     <div>
-                                        <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">OG Image
-                                            URL</label>
-                                        <input type="text" name="og_image"
-                                            value="<?php echo htmlspecialchars($data['og_image'] ?? ''); ?>"
-                                            class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 outline-none focus:bg-white focus:border-emerald-500 transition-all text-blue-500">
+                                        <label class="block text-xs font-black text-gray-700 uppercase mb-2">Meta
+                                            Description</label>
+                                        <textarea name="meta_description" rows="3"
+                                            class="w-full px-4 py-3 rounded-xl border-2 border-emerald-400 bg-white outline-none focus:border-emerald-600 transition-all font-semibold text-black leading-relaxed"><?php echo htmlspecialchars($data['meta_description'] ?? ''); ?></textarea>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-black text-gray-700 uppercase mb-2">Schema
+                                            (JSON-LD)</label>
+                                        <textarea name="schema_markup" rows="2"
+                                            class="w-full px-4 py-3 rounded-xl border-2 border-emerald-400 bg-white outline-none focus:border-emerald-600 transition-all font-mono text-xs font-semibold text-black"><?php echo htmlspecialchars($data['schema_markup'] ?? ''); ?></textarea>
                                     </div>
                                 </div>
-                                <div>
-                                    <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Meta
-                                        Description</label>
-                                    <textarea name="meta_description" rows="3"
-                                        class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 outline-none focus:bg-white focus:border-emerald-500 transition-all text-gray-600 leading-relaxed"><?php echo htmlspecialchars($data['meta_description'] ?? ''); ?></textarea>
+
+                                <div class="pt-4">
+                                    <button type="submit"
+                                        class="w-full bg-gray-900 text-white py-4 rounded-xl font-bold text-sm hover:bg-emerald-600 transition-all shadow-lg hover:shadow-emerald-200/50 flex items-center justify-center gap-2">
+                                        <span>Save Changes</span>
+                                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M5 13l4 4L19 7" />
+                                        </svg>
+                                    </button>
                                 </div>
-                                <div>
-                                    <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Schema
-                                        (JSON-LD)</label>
-                                    <textarea name="schema_markup" rows="2"
-                                        class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 outline-none focus:bg-white focus:border-emerald-500 transition-all font-mono text-xs text-gray-500"><?php echo htmlspecialchars($data['schema_markup'] ?? ''); ?></textarea>
-                                </div>
-                        </div>
-                        <div class="pl-1 pt-2">
-                            <button type="submit"
-                                class="w-full bg-gray-900 text-white py-4 rounded-xl font-bold text-sm hover:bg-emerald-600 transition-all shadow-lg hover:shadow-emerald-200/50 flex items-center justify-center gap-2 group-hover:translate-y-[-2px]">
-                                <span>Save Changes</span>
-                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M5 13l4 4L19 7" />
-                                </svg>
-                            </button>
+                            </form>
                         </div>
                     </div>
-                    </form>
-                </div>
+                <?php endforeach; ?>
             </div>
-            </div>
-        <?php endforeach; ?>
-        </div>
         </div>
     </main>
 </body>

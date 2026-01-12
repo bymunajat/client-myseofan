@@ -119,7 +119,19 @@ $page_title = ucfirst($location) . " Menu Manager";
     <style>
         body {
             font-family: 'Outfit', sans-serif;
-            background: #f3f4f6;
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 25%, #6ee7b7 50%, #86efac 100%);
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            height: 100vh;
+            background: #065f46;
+            color: white;
+        }
+
+        .nav-active {
+            background: #047857;
+            border-left: 4px solid #34d399;
         }
 
         .nested-sortable {
@@ -142,10 +154,13 @@ $page_title = ucfirst($location) . " Menu Manager";
     <?php include 'includes/sidebar.php'; ?>
 
     <main class="flex-1 min-h-screen">
-        <header class="bg-white border-b border-gray-200 px-8 h-20 flex items-center justify-between">
-            <h3 class="text-xl font-bold text-gray-800">
-                <?php echo $page_title; ?>
-            </h3>
+        <header class="bg-white border-b-4 border-emerald-300 px-8 h-20 flex items-center justify-between shadow-sm">
+            <div>
+                <h3 class="text-xl font-bold text-gray-800">
+                    <?php echo $page_title; ?>
+                </h3>
+                <p class="text-xs text-gray-500 mt-0.5">Configure header and footer navigation</p>
+            </div>
             <div class="flex items-center gap-4">
                 <button onclick="saveMenu()" id="saveBtn"
                     class="bg-emerald-600 text-white px-6 py-2 rounded-xl font-bold hover:bg-emerald-700 transition-all">

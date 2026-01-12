@@ -230,7 +230,7 @@ $seoHelper = new SEO_Helper($pdo, 'page', $lang);
                 </div>
             </div>
             <div class="border-t border-white/5 pt-12 text-center text-gray-500 font-medium text-xs">
-                &copy; <?php echo date('Y'); ?> MySeoFan Studio. All rights reserved.
+                &copy; 2026 MySeoFan Studio. All rights reserved.
             </div>
         </div>
     </footer>

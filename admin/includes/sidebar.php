@@ -17,7 +17,7 @@ if (empty($user_role))
     <div class="p-8">
         <h2 class="text-xl font-bold text-emerald-500">MySeoFan Admin</h2>
     </div>
-    <nav class="mt-4 px-4 space-y-1 overflow-y-auto" style="max-height: calc(100vh - 120px);">
+    <nav class="mt-4 px-4 space-y-1">
         <!-- Dashboard -->
         <a href="dashboard.php"
             class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all <?php echo $current_page == 'dashboard.php' ? 'nav-active text-white' : 'text-gray-400 hover:bg-gray-800 hover:text-white'; ?>">

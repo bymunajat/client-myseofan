@@ -268,12 +268,21 @@ $posts = $stmt->fetchAll();
             <div class="grid md:grid-cols-4 gap-16 mb-24">
                 <div class="col-span-2">
                     <div class="flex items-center gap-3 mb-8">
-                        <div class="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-gray-900"><svg
-                                class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-width="2"
-                                    d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                            </svg></div>
-                        <h4 class="text-3xl font-black hero-title">MySeoFan</h4>
+                        <?php if (!empty($settings['logo_path'])): ?>
+                            <img src="<?php echo htmlspecialchars($settings['logo_path']); ?>" class="h-12 w-auto"
+                                alt="<?php echo htmlspecialchars($settings['site_name']); ?>">
+                        <?php else: ?>
+                            <div
+                                class="w-12 h-12 bg-emerald-600 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-500/20">
+                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-width="2.5"
+                                        d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                </svg>
+                            </div>
+                        <?php endif; ?>
+                        <h4 class="text-3xl font-black text-white tracking-tighter">
+                            <?php echo htmlspecialchars($settings['site_name'] ?: 'MySeoFan'); ?>
+                        </h4>
                     </div>
                     <p class="text-gray-400 text-lg leading-relaxed max-w-md">
                         <?php echo htmlspecialchars($t['footer_desc'] ?? 'The ultimate tool for Instagram media preservation.'); ?>

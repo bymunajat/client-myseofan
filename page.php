@@ -72,6 +72,7 @@ foreach ($rawFooterLinks as $fl) {
 }
 
 $seoHelper = new SEO_Helper($pdo, 'page', $lang);
+$pageIdentifier = 'page';
 ?>
 <!DOCTYPE html>
 <html lang="<?php echo $page['lang_code']; ?>">
@@ -165,14 +166,23 @@ $seoHelper = new SEO_Helper($pdo, 'page', $lang);
             </a>
 
             <nav class="hidden md:flex items-center gap-8 font-semibold text-gray-500">
-                <a href="index.php?lang=<?php echo $lang; ?>"
-                    class="hover:text-emerald-600 transition-colors py-1"><?php echo $t['home']; ?></a>
-                <a href="blog.php?lang=<?php echo $lang; ?>"
-                    class="hover:text-emerald-600 transition-colors py-1"><?php echo $t['blog']; ?></a>
-
-                <?php foreach ($headerLinks as $hl): ?>
-                    <a href="page.php?slug=<?php echo htmlspecialchars($hl['slug']); ?>&lang=<?php echo $lang; ?>"
-                        class="hover:text-emerald-600 transition-colors py-1"><?php echo htmlspecialchars($hl['title']); ?></a>
+                <?php foreach ($headerLinks as $hl):
+                    $hSlug = $hl['slug'];
+                    if (str_starts_with($hSlug, 'home')) {
+                        $href = "index.php?lang=$lang";
+                        $isActive = ($pageIdentifier === 'home');
+                    } elseif (str_starts_with($hSlug, 'blog')) {
+                        $href = "blog.php?lang=$lang";
+                        $isActive = ($pageIdentifier === 'blog');
+                    } else {
+                        $href = "page.php?slug=" . htmlspecialchars($hSlug) . "&lang=$lang";
+                        $isActive = (isset($slug) && $slug === $hSlug);
+                    }
+                    ?>
+                    <a href="<?php echo $href; ?>"
+                        class="<?php echo $isActive ? 'text-emerald-600 border-b-2 border-emerald-600' : 'hover:text-emerald-600 transition-colors'; ?> py-1">
+                        <?php echo htmlspecialchars($hl['title']); ?>
+                    </a>
                 <?php endforeach; ?>
 
                 <!-- Language Switcher -->

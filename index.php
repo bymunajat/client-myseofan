@@ -392,16 +392,23 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
             </a>
 
             <nav class="hidden md:flex items-center gap-8 font-semibold text-gray-500">
-                <a href="#" class="nav-link text-emerald-600 border-b-2 border-emerald-600 py-1"
-                    data-page="home"><?php echo $t['home']; ?></a>
-                <a href="#" class="nav-link hover:text-emerald-600 transition-colors py-1"
-                    data-page="how"><?php echo $t['how']; ?></a>
-                <a href="#" class="nav-link hover:text-emerald-600 transition-colors py-1"
-                    data-page="about"><?php echo $t['about']; ?></a>
-
-                <?php foreach ($headerLinks as $hl): ?>
-                    <a href="page.php?slug=<?php echo htmlspecialchars($hl['slug']); ?>&lang=<?php echo $lang; ?>"
-                        class="hover:text-emerald-600 transition-colors py-1"><?php echo htmlspecialchars($hl['title']); ?></a>
+                <?php foreach ($headerLinks as $hl):
+                    $slug = $hl['slug'];
+                    if (str_starts_with($slug, 'home')) {
+                        $href = "index.php?lang=$lang";
+                        $isActive = ($pageIdentifier === 'home');
+                    } elseif (str_starts_with($slug, 'blog')) {
+                        $href = "blog.php?lang=$lang";
+                        $isActive = ($pageIdentifier === 'blog');
+                    } else {
+                        $href = "page.php?slug=" . htmlspecialchars($slug) . "&lang=$lang";
+                        $isActive = (isset($currentSlug) && $currentSlug === $slug);
+                    }
+                    ?>
+                    <a href="<?php echo $href; ?>"
+                        class="<?php echo $isActive ? 'text-emerald-600 border-b-2 border-emerald-600' : 'hover:text-emerald-600 transition-colors'; ?> py-1">
+                        <?php echo htmlspecialchars($hl['title']); ?>
+                    </a>
                 <?php endforeach; ?>
 
                 <!-- Language Switcher -->

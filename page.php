@@ -56,6 +56,15 @@ $defaults = [
 // Merge with defaults (EN as primary fallback)
 $t = array_merge($defaults['en'], $defaults[$lang] ?? [], $translations);
 
+// Fetch dynamic navigation links
+$headerLinks = $pdo->prepare("SELECT title, slug FROM pages WHERE lang_code = ? AND show_in_header = 1 ORDER BY menu_order ASC");
+$headerLinks->execute([$lang]);
+$headerLinks = $headerLinks->fetchAll();
+
+$footerLinks = $pdo->prepare("SELECT title, slug FROM pages WHERE lang_code = ? AND show_in_footer = 1 ORDER BY menu_order ASC");
+$footerLinks->execute([$lang]);
+$footerLinks = $footerLinks->fetchAll();
+
 $seoHelper = new SEO_Helper($pdo, 'page', $lang);
 ?>
 <!DOCTYPE html>
@@ -155,6 +164,11 @@ $seoHelper = new SEO_Helper($pdo, 'page', $lang);
                 <a href="blog.php?lang=<?php echo $lang; ?>"
                     class="hover:text-emerald-600 transition-colors py-1"><?php echo $t['blog']; ?></a>
 
+                <?php foreach ($headerLinks as $hl): ?>
+                    <a href="page.php?slug=<?php echo htmlspecialchars($hl['slug']); ?>&lang=<?php echo $lang; ?>"
+                        class="hover:text-emerald-600 transition-colors py-1"><?php echo htmlspecialchars($hl['title']); ?></a>
+                <?php endforeach; ?>
+
                 <!-- Language Switcher -->
                 <div class="relative group">
                     <select onchange="location.href = this.value"
@@ -218,14 +232,10 @@ $seoHelper = new SEO_Helper($pdo, 'page', $lang);
                 <div>
                     <h4 class="text-white font-bold mb-6">Legal</h4>
                     <ul class="space-y-4 text-gray-400">
-                        <li><a href="page.php?slug=<?php echo ($lang == 'id' ? 'tentang-kami' : ($lang == 'ja' ? 'about-us-ja' : 'about-us')); ?>&lang=<?php echo $lang; ?>"
-                                class="hover:text-emerald-400">About Us</a></li>
-                        <li><a href="page.php?slug=<?php echo ($lang == 'id' ? 'kebijakan-privasi' : 'privacy-policy'); ?>&lang=<?php echo $lang; ?>"
-                                class="hover:text-emerald-400">Privacy Policy</a></li>
-                        <li><a href="page.php?slug=<?php echo ($lang == 'id' ? 'syarat-dan-ketentuan' : 'terms-of-service'); ?>&lang=<?php echo $lang; ?>"
-                                class="hover:text-emerald-400">Terms of Use</a></li>
-                        <li><a href="page.php?slug=<?php echo ($lang == 'id' ? 'hubungi-kami' : 'contact-us'); ?>&lang=<?php echo $lang; ?>"
-                                class="hover:text-emerald-400">Contact Us</a></li>
+                        <?php foreach ($footerLinks as $fl): ?>
+                            <li><a href="page.php?slug=<?php echo htmlspecialchars($fl['slug']); ?>&lang=<?php echo $lang; ?>"
+                                    class="hover:text-emerald-400"><?php echo htmlspecialchars($fl['title']); ?></a></li>
+                        <?php endforeach; ?>
                     </ul>
                 </div>
             </div>

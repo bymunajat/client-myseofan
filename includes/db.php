@@ -50,8 +50,7 @@ try {
         $pdo->exec("INSERT INTO pages (title, slug, content, lang_code) VALUES ('Story Downloader', 'story-downloader', '<h1>Instagram Story Downloader</h1><p>Watch and download stories anonymously.</p>', 'en')");
         $pdo->exec("INSERT INTO pages (title, slug, content, lang_code) VALUES ('Image Downloader', 'image-downloader', '<h1>Instagram Image Downloader</h1><p>Safe and fast Instagram photo saving tool.</p>', 'en')");
 
-        // Seed additional languages (Keys will be filled via Admin or Translation seeder)
-        // Just ensuring SEO data for home exists for them
+        // Seed additional languages
         $langs = ['es', 'fr', 'de', 'ja'];
         foreach ($langs as $l) {
             $pdo->exec("INSERT INTO seo_data (page_identifier, lang_code, meta_title, meta_description) VALUES ('home', '$l', 'Instagram Downloader', 'Free Instagram media downloader.')");
@@ -65,9 +64,8 @@ try {
         if ($col['name'] == 'lang_code')
             $hasLang = true;
     }
-    if (!$hasLang) {
+    if (!$hasLang)
         $pdo->exec("ALTER TABLE seo_data ADD COLUMN lang_code TEXT DEFAULT 'en'");
-    }
 
     // Migration Check: Create translations table if it doesn't exist
     $pdo->exec("CREATE TABLE IF NOT EXISTS translations (id INTEGER PRIMARY KEY AUTOINCREMENT, lang_code TEXT, t_key TEXT, t_value TEXT, UNIQUE(lang_code, t_key))");
@@ -83,11 +81,10 @@ try {
         if ($col['name'] == 'category')
             $hasCat = true;
     }
-    if (!$hasCat) {
+    if (!$hasCat)
         $pdo->exec("ALTER TABLE blog_posts ADD COLUMN category TEXT DEFAULT 'General'");
-    }
 
-    // Migration Check: Add translation_group to blog_posts and pages
+    // Migration Check: Add translation_group to blog_posts
     $colsPost = $pdo->query("PRAGMA table_info(blog_posts)")->fetchAll();
     $hasGroupPost = false;
     foreach ($colsPost as $col) {
@@ -97,14 +94,35 @@ try {
     if (!$hasGroupPost)
         $pdo->exec("ALTER TABLE blog_posts ADD COLUMN translation_group TEXT");
 
+    // Migration Check: Pages table migrations
     $colsPage = $pdo->query("PRAGMA table_info(pages)")->fetchAll();
     $hasGroupPage = false;
+    $hasHeader = false;
+    $hasFooter = false;
+    $hasOrder = false;
+    $hasSection = false;
     foreach ($colsPage as $col) {
         if ($col['name'] == 'translation_group')
             $hasGroupPage = true;
+        if ($col['name'] == 'show_in_header')
+            $hasHeader = true;
+        if ($col['name'] == 'show_in_footer')
+            $hasFooter = true;
+        if ($col['name'] == 'menu_order')
+            $hasOrder = true;
+        if ($col['name'] == 'footer_section')
+            $hasSection = true;
     }
     if (!$hasGroupPage)
         $pdo->exec("ALTER TABLE pages ADD COLUMN translation_group TEXT");
+    if (!$hasHeader)
+        $pdo->exec("ALTER TABLE pages ADD COLUMN show_in_header INTEGER DEFAULT 0");
+    if (!$hasFooter)
+        $pdo->exec("ALTER TABLE pages ADD COLUMN show_in_footer INTEGER DEFAULT 0");
+    if (!$hasOrder)
+        $pdo->exec("ALTER TABLE pages ADD COLUMN menu_order INTEGER DEFAULT 0");
+    if (!$hasSection)
+        $pdo->exec("ALTER TABLE pages ADD COLUMN footer_section TEXT DEFAULT 'legal'");
 
     // Migration Check: Add role to admins
     $colsAdmin = $pdo->query("PRAGMA table_info(admins)")->fetchAll();
@@ -113,23 +131,20 @@ try {
         if ($col['name'] == 'role')
             $hasRole = true;
     }
-    if (!$hasRole) {
+    if (!$hasRole)
         $pdo->exec("ALTER TABLE admins ADD COLUMN role TEXT DEFAULT 'super_admin'");
-        // Refresh metadata for next check
-        $colsAdmin = $pdo->query("PRAGMA table_info(admins)")->fetchAll();
-    }
 
     // Migration Check: Add created_at to admins
+    $colsAdmin = $pdo->query("PRAGMA table_info(admins)")->fetchAll();
     $hasCreatedAt = false;
     foreach ($colsAdmin as $col) {
         if ($col['name'] == 'created_at')
             $hasCreatedAt = true;
     }
-    if (!$hasCreatedAt) {
+    if (!$hasCreatedAt)
         $pdo->exec("ALTER TABLE admins ADD COLUMN created_at DATETIME DEFAULT CURRENT_TIMESTAMP");
-    }
 
-    // Emergency Seed: Ensure at least one admin exists if table is empty
+    // Emergency Seed
     try {
         $adminCount = $pdo->query("SELECT COUNT(*) FROM admins")->fetchColumn();
         if ($adminCount == 0 || $adminCount === false) {
@@ -138,7 +153,7 @@ try {
     } catch (\Exception $e) {
     }
 
-    // Auto-heal session Role for legacy login sessions
+    // Auto-heal session Role
     if (isset($_SESSION['admin_id']) && (!isset($_SESSION['role']) || empty($_SESSION['role']))) {
         try {
             $stmt = $pdo->prepare("SELECT role FROM admins WHERE id = ?");
@@ -151,13 +166,9 @@ try {
         }
     }
 } catch (\PDOException $e) {
-    // If it's a migration error, we might want to know
     error_log("DB Migration Error: " . $e->getMessage());
 }
 
-/**
- * Helper to get site settings
- */
 function getSiteSettings($pdo)
 {
     if (!$pdo)
@@ -169,9 +180,6 @@ function getSiteSettings($pdo)
     }
 }
 
-/**
- * Helper to get SEO data
- */
 function getSEOData($pdo, $page, $lang = 'en')
 {
     if (!$pdo)
@@ -185,9 +193,6 @@ function getSEOData($pdo, $page, $lang = 'en')
     }
 }
 
-/**
- * Helper to get all translations for a language
- */
 function getTranslations($pdo, $lang = 'en')
 {
     if (!$pdo)

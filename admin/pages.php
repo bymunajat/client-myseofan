@@ -24,11 +24,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $m_title = $_POST['meta_title'] ?? '';
     $m_desc = $_POST['meta_description'] ?? '';
     $t_group = $_POST['translation_group'] ?? uniqid('group_', true);
+    $in_header = isset($_POST['show_in_header']) ? 1 : 0;
+    $in_footer = isset($_POST['show_in_footer']) ? 1 : 0;
+    $order = (int) ($_POST['menu_order'] ?? 0);
 
     if ($action === 'add') {
         try {
-            $stmt = $pdo->prepare("INSERT INTO pages (title, slug, content, lang_code, meta_title, meta_description, translation_group) VALUES (?, ?, ?, ?, ?, ?, ?)");
-            $stmt->execute([$title, $slug, $content, $lang, $m_title, $m_desc, $t_group]);
+            $stmt = $pdo->prepare("INSERT INTO pages (title, slug, content, lang_code, meta_title, meta_description, translation_group, show_in_header, show_in_footer, menu_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt->execute([$title, $slug, $content, $lang, $m_title, $m_desc, $t_group, $in_header, $in_footer, $order]);
             $message = "Page created successfully!";
             $action = 'list';
         } catch (\Exception $e) {
@@ -36,8 +39,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     } elseif ($action === 'edit' && $id) {
         try {
-            $stmt = $pdo->prepare("UPDATE pages SET title=?, slug=?, content=?, lang_code=?, meta_title=?, meta_description=?, translation_group=? WHERE id=?");
-            $stmt->execute([$title, $slug, $content, $lang, $m_title, $m_desc, $t_group, $id]);
+            $stmt = $pdo->prepare("UPDATE pages SET title=?, slug=?, content=?, lang_code=?, meta_title=?, meta_description=?, translation_group=?, show_in_header=?, show_in_footer=?, menu_order=? WHERE id=?");
+            $stmt->execute([$title, $slug, $content, $lang, $m_title, $m_desc, $t_group, $in_header, $in_footer, $order, $id]);
             $message = "Page updated successfully!";
             $action = 'list';
         } catch (\Exception $e) {
@@ -54,13 +57,13 @@ if ($action === 'delete' && $id) {
 
 // Fetch Data
 $pages = [];
-$current_page_data = null;
+$cu_p = null;
 if ($action === 'list') {
-    $pages = $pdo->query("SELECT * FROM pages ORDER BY id ASC")->fetchAll();
+    $pages = $pdo->query("SELECT * FROM pages ORDER BY menu_order ASC, id ASC")->fetchAll();
 } elseif ($action === 'edit' && $id) {
     $stmt = $pdo->prepare("SELECT * FROM pages WHERE id=?");
     $stmt->execute([$id]);
-    $current_page_data = $stmt->fetch();
+    $cu_p = $stmt->fetch();
 }
 ?>
 <!DOCTYPE html>
@@ -93,11 +96,6 @@ if ($action === 'list') {
             background: #111827;
             color: white;
         }
-
-        .nav-active {
-            background: #374151;
-            border-left: 4px solid #10b981;
-        }
     </style>
 </head>
 
@@ -129,10 +127,11 @@ if ($action === 'list') {
                     <table class="w-full text-left">
                         <thead class="bg-gray-50 border-b">
                             <tr>
+                                <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest">Order</th>
                                 <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest">Page Title
                                 </th>
-                                <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest">Slug</th>
-                                <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest">Lang</th>
+                                <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest">Visibility
+                                </th>
                                 <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest text-right">
                                     Actions</th>
                             </tr>
@@ -140,30 +139,19 @@ if ($action === 'list') {
                         <tbody class="divide-y divide-gray-50">
                             <?php foreach ($pages as $p): ?>
                                 <tr>
-                                    <td class="px-8 py-5 font-bold text-gray-800"><?php echo htmlspecialchars($p['title']); ?>
-                                    </td>
-                                    <td class="px-8 py-5 text-gray-500 text-sm">
-                                        /page.php?slug=<?php echo htmlspecialchars($p['slug']); ?></td>
+                                    <td class="px-8 py-5 text-gray-400 font-bold"><?php echo $p['menu_order']; ?></td>
                                     <td class="px-8 py-5">
-                                        <?php
-                                        $badgeClass = 'bg-gray-100 text-gray-600';
-                                        if ($p['lang_code'] == 'en')
-                                            $badgeClass = 'bg-emerald-100 text-emerald-600';
-                                        elseif ($p['lang_code'] == 'id')
-                                            $badgeClass = 'bg-blue-100 text-blue-600';
-                                        elseif ($p['lang_code'] == 'es')
-                                            $badgeClass = 'bg-yellow-100 text-yellow-600';
-                                        elseif ($p['lang_code'] == 'fr')
-                                            $badgeClass = 'bg-indigo-100 text-indigo-600';
-                                        elseif ($p['lang_code'] == 'de')
-                                            $badgeClass = 'bg-orange-100 text-orange-600';
-                                        elseif ($p['lang_code'] == 'ja')
-                                            $badgeClass = 'bg-purple-100 text-purple-600';
-                                        ?>
+                                        <div class="font-bold text-gray-800"><?php echo htmlspecialchars($p['title']); ?></div>
+                                        <div class="text-[10px] text-gray-400 uppercase tracking-tighter">
+                                            /page.php?slug=<?php echo htmlspecialchars($p['slug'] ?? ''); ?></div>
+                                    </td>
+                                    <td class="px-8 py-5 space-x-2">
                                         <span
-                                            class="px-2 py-1 text-[10px] font-black uppercase rounded <?php echo $badgeClass; ?>">
-                                            <?php echo $p['lang_code']; ?>
-                                        </span>
+                                            class="px-2 py-1 text-[10px] font-black uppercase rounded <?php echo $p['show_in_header'] ? 'bg-emerald-100 text-emerald-600' : 'bg-gray-100 text-gray-400'; ?>">Header</span>
+                                        <span
+                                            class="px-2 py-1 text-[10px] font-black uppercase rounded <?php echo $p['show_in_footer'] ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-400'; ?>">Footer</span>
+                                        <span
+                                            class="px-2 py-1 text-[10px] font-black uppercase rounded bg-purple-100 text-purple-600"><?php echo $p['lang_code']; ?></span>
                                     </td>
                                     <td class="px-8 py-5 text-right space-x-2">
                                         <a href="?action=edit&id=<?php echo $p['id']; ?>"
@@ -181,41 +169,69 @@ if ($action === 'list') {
                     <form action="?action=<?php echo $action; ?><?php echo $id ? '&id=' . $id : ''; ?>" method="POST"
                         class="space-y-6">
                         <div class="grid md:grid-cols-2 gap-6">
-                            <div class="md:col-span-2">
+                            <div
+                                class="md:col-span-2 p-6 bg-gray-50 rounded-2xl border border-gray-100 flex flex-wrap gap-8">
+                                <label class="flex items-center gap-3 cursor-pointer group">
+                                    <input type="checkbox" name="show_in_header" value="1" <?php echo ($cu_p['show_in_header'] ?? 0) ? 'checked' : ''; ?>
+                                        class="w-5 h-5 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500">
+                                    <span
+                                        class="text-sm font-bold text-gray-700 group-hover:text-emerald-600 transition-colors">Show
+                                        in Header</span>
+                                </label>
+                                <label class="flex items-center gap-3 cursor-pointer group">
+                                    <input type="checkbox" name="show_in_footer" value="1" <?php echo ($cu_p['show_in_footer'] ?? 0) ? 'checked' : ''; ?>
+                                        class="w-5 h-5 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500">
+                                    <span
+                                        class="text-sm font-bold text-gray-700 group-hover:text-emerald-600 transition-colors">Show
+                                        in Footer</span>
+                                </label>
+                                <div class="flex items-center gap-3 ml-auto">
+                                    <span class="text-sm font-bold text-gray-500">Menu Order:</span>
+                                    <input type="number" name="menu_order" value="<?php echo $cu_p['menu_order'] ?? 0; ?>"
+                                        class="w-20 px-3 py-1 rounded-lg border border-gray-200 text-sm font-bold outline-none focus:border-emerald-500">
+                                </div>
+                            </div>
+                            <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Translation Group ID</label>
                                 <input type="text" name="translation_group"
-                                    value="<?php echo htmlspecialchars($current_page_data['translation_group'] ?? uniqid('group_', true)); ?>"
+                                    value="<?php echo htmlspecialchars($cu_p['translation_group'] ?? uniqid('group_', true)); ?>"
                                     class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 text-gray-500 text-xs outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Language</label>
+                                <select name="lang_code"
+                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white outline-none">
+                                    <option value="en" <?php echo ($cu_p['lang_code'] ?? '') == 'en' ? 'selected' : ''; ?>>
+                                        English</option>
+                                    <option value="id" <?php echo ($cu_p['lang_code'] ?? '') == 'id' ? 'selected' : ''; ?>>
+                                        Indonesia</option>
+                                    <option value="es" <?php echo ($cu_p['lang_code'] ?? '') == 'es' ? 'selected' : ''; ?>>
+                                        Español</option>
+                                    <option value="fr" <?php echo ($cu_p['lang_code'] ?? '') == 'fr' ? 'selected' : ''; ?>>
+                                        Français</option>
+                                    <option value="de" <?php echo ($cu_p['lang_code'] ?? '') == 'de' ? 'selected' : ''; ?>>
+                                        Deutsch</option>
+                                    <option value="ja" <?php echo ($cu_p['lang_code'] ?? '') == 'ja' ? 'selected' : ''; ?>>日本語
+                                    </option>
+                                </select>
                             </div>
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Page Title</label>
                                 <input type="text" name="title"
-                                    value="<?php echo htmlspecialchars($current_page_data['title'] ?? ''); ?>" required
+                                    value="<?php echo htmlspecialchars($cu_p['title'] ?? ''); ?>" required
                                     class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white outline-none">
                             </div>
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Slug</label>
-                                <input type="text" name="slug"
-                                    value="<?php echo htmlspecialchars($current_page_data['slug'] ?? ''); ?>" required
+                                <input type="text" name="slug" value="<?php echo htmlspecialchars($cu_p['slug'] ?? ''); ?>"
+                                    required
                                     class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white outline-none">
                             </div>
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Language</label>
-                            <select name="lang_code"
-                                class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white outline-none">
-                                <option value="en" <?php echo ($current_page_data['lang_code'] ?? '') == 'en' ? 'selected' : ''; ?>>English</option>
-                                <option value="id" <?php echo ($current_page_data['lang_code'] ?? '') == 'id' ? 'selected' : ''; ?>>Indonesia</option>
-                                <option value="es" <?php echo ($current_page_data['lang_code'] ?? '') == 'es' ? 'selected' : ''; ?>>Español</option>
-                                <option value="fr" <?php echo ($current_page_data['lang_code'] ?? '') == 'fr' ? 'selected' : ''; ?>>Français</option>
-                                <option value="de" <?php echo ($current_page_data['lang_code'] ?? '') == 'de' ? 'selected' : ''; ?>>Deutsch</option>
-                                <option value="ja" <?php echo ($current_page_data['lang_code'] ?? '') == 'ja' ? 'selected' : ''; ?>>日本語</option>
-                            </select>
-                        </div>
-                        <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Content (HTML allowed)</label>
-                            <textarea name="content" rows="15" required
-                                class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 outline-none"><?php echo htmlspecialchars($current_page_data['content'] ?? ''); ?></textarea>
+                            <textarea name="content" rows="15"
+                                class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 outline-none"><?php echo htmlspecialchars($cu_p['content'] ?? ''); ?></textarea>
                         </div>
                         <div class="border-t pt-6">
                             <h4 class="font-black text-gray-400 uppercase tracking-widest text-xs mb-4">SEO Settings</h4>
@@ -223,19 +239,19 @@ if ($action === 'list') {
                                 <div>
                                     <label class="block text-sm font-semibold text-gray-700 mb-2">Meta Title</label>
                                     <input type="text" name="meta_title"
-                                        value="<?php echo htmlspecialchars($current_page_data['meta_title'] ?? ''); ?>"
+                                        value="<?php echo htmlspecialchars($cu_p['meta_title'] ?? ''); ?>"
                                         class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 outline-none">
                                 </div>
                                 <div>
                                     <label class="block text-sm font-semibold text-gray-700 mb-2">Meta Description</label>
                                     <textarea name="meta_description" rows="2"
-                                        class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 outline-none"><?php echo htmlspecialchars($current_page_data['meta_description'] ?? ''); ?></textarea>
+                                        class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 outline-none"><?php echo htmlspecialchars($cu_p['meta_description'] ?? ''); ?></textarea>
                                 </div>
                             </div>
                         </div>
                         <button type="submit"
                             class="w-full bg-emerald-600 text-white py-4 rounded-xl font-bold hover:bg-emerald-700 shadow-xl shadow-emerald-100 transition-all">Save
-                            Page</button>
+                            Page & Navigation</button>
                     </form>
                 </div>
             <?php endif; ?>

@@ -22,12 +22,49 @@ if (!function_exists('__')) {
 
 $t = [
     'title' => $dbPage ? Translator::translate($dbPage['title'], $lang) : __('Instagram Highlights Downloader', $lang),
-    'heading' => __('Instagram Downloader', $lang),
-    'subtitle' => __('Download Instagram Videos, Photos, Reels, IGTV & carousel', $lang),
-    'placeholder' => __('Paste Instagram Highlight URL here...', $lang),
+    'heading' => __('Instagram Highlights Downloader', $lang),
+    'subtitle' => __('Download Highlights from Instagram', $lang),
+    'placeholder' => __('Paste Instagram URL here...', $lang),
     'btn_download' => __('Download', $lang),
     'btn_paste' => __('Paste', $lang),
-    'status_fetching' => __('Processing Highlights...', $lang),
+    'status_fetching' => __('Processing...', $lang),
+
+    // Intro Card
+    'intro_title' => __('Instagram Highlights Downloader', $lang),
+    'intro_desc' => __('Highlights are the best collections of moments curated by users. MySeoFan allows you to download these curated stories easily. Keep the best of any profile saved on your device, organized and ready for offline viewing at the highest resolution.', $lang),
+
+    // How to
+    'how_to_title' => __('How to download Highlights from Instagram?', $lang),
+    'how_to_subtitle' => __('Save curated highlight collections in seconds with our simple 3-step process.', $lang),
+    'step1_title' => __('Go to Highlights', $lang),
+    'step1_desc' => __('Open the Highlight you want to save and copy the URL from your browser.', $lang),
+    'step2_title' => __('Paste the Link', $lang),
+    'step2_desc' => __('Paste the copied Highlights URL into the search box above.', $lang),
+    'step3_title' => __('Save Content', $lang),
+    'step3_desc' => __('Click Download and save the high-quality files to your device.', $lang),
+
+    // Features
+    'features_title' => __('Professional Highlights Saving', $lang),
+    'features_subtitle' => __('Get the most out of Instagram highlights with our premium downloader.', $lang),
+    'feat1_t' => __('Full Collection', $lang),
+    'feat1_d' => __('Download all stories within a highlight in one go.', $lang),
+    'feat2_t' => __('HD Resolution', $lang),
+    'feat2_d' => __('We fetch the original source files for crystal clear quality.', $lang),
+    'feat3_t' => __('Easy Navigation', $lang),
+    'feat3_d' => __('Simple interface designed for quick and efficient use.', $lang),
+    'feat4_t' => __('Safe Protocol', $lang),
+    'feat4_d' => __('Secure downloads without any tracking or data storage.', $lang),
+
+    // FAQ
+    'faq_title' => __('Frequently asked questions (FAQ)', $lang),
+    'faq_q1' => __('Can I download any profile\'s highlights?', $lang),
+    'faq_a1' => __('Yes, as long as the profile is public, you can download their highlights.', $lang),
+    'faq_q2' => __('Is there a limit to how many I can save?', $lang),
+    'faq_a2' => __('No, MySeoFan allows unlimited highlight downloads for all users.', $lang),
+    'faq_q3' => __('Do I need to install anything?', $lang),
+    'faq_a3' => __('No, our tool is 100% web-based and works in any modern browser.', $lang),
+    'faq_q4' => __('Are the downloads anonymous?', $lang),
+    'faq_a4' => __('Yes, your downloads are private and the uploader will not be notified.', $lang),
 ];
 
 $headerItems = getMenuTree($pdo, 'header', $lang);
@@ -206,6 +243,177 @@ $seoHelper = new SEO_Helper($pdo, $pageIdentifier, $lang);
             margin-bottom: 3rem;
         }
 
+        /* Content Section Styles - Mirrored from index.php */
+        .section-header-blue {
+            font-size: 2.25rem;
+            font-weight: 900;
+            color: #1a1a1a;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .intro-card {
+            background: #ffffff;
+            border-radius: 2rem;
+            padding: 3rem;
+            display: flex;
+            align-items: center;
+            gap: 2.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            margin-bottom: 6rem;
+        }
+
+        .intro-visual {
+            position: relative;
+        }
+
+        .intro-visual::after {
+            content: '';
+            position: absolute;
+            inset: -15px;
+            background: linear-gradient(135deg, #7c3aed 0%, #db2777 100%);
+            border-radius: 2rem;
+            z-index: 0;
+            opacity: 0.1;
+            transform: rotate(-3deg);
+        }
+
+        .step-card {
+            background: #ffffff;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .step-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .step-top {
+            background: #f8fafc;
+            padding: 2.5rem 1.5rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .step-visual-mockup {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            padding: 0.75rem 1rem;
+            font-size: 0.75rem;
+            color: #94a3b8;
+            width: 100%;
+            position: relative;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .step-visual-cursor {
+            position: absolute;
+            bottom: -15px;
+            right: 20%;
+            width: 24px;
+            z-index: 10;
+        }
+
+        .step-body {
+            padding: 2rem;
+        }
+
+        .step-title {
+            font-size: 1.125rem;
+            font-weight: 800;
+            color: #1e293b;
+            margin-bottom: 0.75rem;
+        }
+
+        .step-desc {
+            font-size: 0.875rem;
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        .feature-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            color: #3b82f6;
+            margin-bottom: 1.25rem;
+        }
+
+        .feature-title {
+            font-size: 1.125rem;
+            font-weight: 800;
+            color: #1e293b;
+            margin-bottom: 0.75rem;
+        }
+
+        .feature-desc {
+            font-size: 0.875rem;
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        .feature-detail-card {
+            background: #ffffff;
+            border-radius: 2rem;
+            padding: 3rem;
+            display: grid;
+            gap: 3rem;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        @media (min-width: 768px) {
+            .feature-detail-card {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .intro-card {
+                flex-direction: row;
+            }
+        }
+
+        .feature-detail-content h3 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: #1e293b;
+            margin-bottom: 1.25rem;
+        }
+
+        .feature-detail-text {
+            color: #64748b;
+            line-height: 1.7;
+        }
+
+        .feature-detail-visual img {
+            width: 100%;
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        /* FAQ Accordion Styles */
+        .faq-item {
+            border-bottom: 1px solid #f1f5f9;
+            padding: 1.5rem 0;
+        }
+
+        .faq-question {
+            font-weight: 700;
+            color: #1e293b;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .faq-answer {
+            color: #64748b;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
         @keyframes fade-up {
             from {
                 opacity: 0;
@@ -220,34 +428,6 @@ $seoHelper = new SEO_Helper($pdo, $pageIdentifier, $lang);
 
         .animate-fade-up {
             animation: fade-up 0.6s ease forwards;
-        }
-
-        /* Article Content Styles */
-        .article-container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        .article-content {
-            background: #ffffff;
-            padding: 3rem;
-            border-radius: 2rem;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-            line-height: 1.8;
-            color: #334155;
-        }
-
-        .article-content h2 {
-            font-size: 2rem;
-            font-weight: 800;
-            color: #1e293b;
-            margin-top: 2rem;
-            margin-bottom: 1rem;
-        }
-
-        .article-content p {
-            margin-bottom: 1.5rem;
         }
 
         /* Result Area */
@@ -326,11 +506,16 @@ $seoHelper = new SEO_Helper($pdo, $pageIdentifier, $lang);
                 <a href="reels.php?lang=<?php echo $lang; ?>"
                     class="tool-item <?php echo $pageIdentifier == 'reels' ? 'active' : ''; ?>"><i
                         data-lucide="clapperboard" class="w-4 h-4"></i> Reels</a>
+                <a href="story.php?lang=<?php echo $lang; ?>"
+                    class="tool-item <?php echo $pageIdentifier == 'story' ? 'active' : ''; ?>"><i data-lucide="history"
+                        class="w-4 h-4"></i> Story</a>
                 <a href="highlights.php?lang=<?php echo $lang; ?>"
                     class="tool-item <?php echo $pageIdentifier == 'highlights' ? 'active' : ''; ?>"><i data-lucide="tv"
-                        class="w-4 h-4"></i> IGTV</a>
+                        class="w-4 h-4"></i> Igtv</a>
                 <a href="index.php?lang=<?php echo $lang; ?>" class="tool-item"><i data-lucide="layout"
                         class="w-4 h-4"></i> Carousel</a>
+                <a href="index.php?lang=<?php echo $lang; ?>" class="tool-item"><i data-lucide="eye"
+                        class="w-4 h-4"></i> Viewer</a>
             </div>
 
             <!-- Title -->
@@ -357,16 +542,155 @@ $seoHelper = new SEO_Helper($pdo, $pageIdentifier, $lang);
         </div>
     </section>
 
+    <!-- Content Sections Wrapper - Mirrored from index.php -->
     <main class="py-20 bg-slate-50">
-        <!-- Rich Content Section -->
-        <?php if ($dbPage && !empty($dbPage['content'])): ?>
-            <div class="article-container animate-fade-up">
-                <div class="article-content prose prose-slate max-w-none">
-                    <?php echo Translator::translate($dbPage['content'], $lang); ?>
+        <div class="max-w-5xl mx-auto px-6">
+
+            <!-- Intro Card -->
+            <div class="intro-card animate-fade-up">
+                <div class="intro-visual">
+                    <div
+                        class="bg-white p-4 rounded-xl shadow-lg relative z-10 w-32 h-32 flex items-center justify-center">
+                        <i data-lucide="tv" class="w-16 h-16 text-purple-600"></i>
+                    </div>
+                </div>
+                <div class="intro-content">
+                    <h2 class="text-2xl font-bold text-blue-600 mb-4"><?php echo $t['intro_title']; ?></h2>
+                    <p class="text-slate-500 text-sm leading-relaxed">
+                        <?php echo $t['intro_desc']; ?>
+                    </p>
                 </div>
             </div>
-        <?php endif; ?>
+
+            <!-- How to Section -->
+            <section id="how-to" class="mb-32 animate-fade-up" style="animation-delay: 0.1s">
+                <h2 class="section-header-blue"><?php echo $t['how_to_title']; ?></h2>
+                <p class="text-center text-slate-500 text-sm mb-12 max-w-2xl mx-auto">
+                    <?php echo $t['how_to_subtitle']; ?>
+                </p>
+
+                <div class="grid md:grid-cols-3 gap-8">
+                    <!-- Step 1 -->
+                    <div class="step-card">
+                        <div class="step-top">
+                            <div class="step-visual-mockup">
+                                instagram.com/highlights/179...
+                                <img src="https://api.iconify.design/lucide:pointer.svg" class="step-visual-cursor"
+                                    alt="pointer">
+                            </div>
+                        </div>
+                        <div class="step-body">
+                            <h3 class="step-title"><?php echo $t['step1_title']; ?></h3>
+                            <p class="step-desc"><?php echo $t['step1_desc']; ?></p>
+                        </div>
+                    </div>
+                    <!-- Step 2 -->
+                    <div class="step-card">
+                        <div class="step-top">
+                            <div class="step-visual-mockup flex justify-between items-center">
+                                <span>instagram.com/highlights/...</span>
+                                <span class="bg-slate-100 px-2 py-1 rounded text-[10px] flex items-center gap-1">
+                                    <i data-lucide="clipboard" class="w-2 h-2 text-slate-400"></i> Paste
+                                </span>
+                                <img src="https://api.iconify.design/lucide:pointer.svg" class="step-visual-cursor"
+                                    alt="pointer">
+                            </div>
+                        </div>
+                        <div class="step-body">
+                            <h3 class="step-title"><?php echo $t['step2_title']; ?></h3>
+                            <p class="step-desc"><?php echo $t['step2_desc']; ?></p>
+                        </div>
+                    </div>
+                    <!-- Step 3 -->
+                    <div class="step-card">
+                        <div class="step-top">
+                            <div
+                                class="step-visual-mockup bg-blue-600 text-white border-none text-center py-2 h-auto flex items-center justify-center font-bold">
+                                Download
+                                <img src="https://api.iconify.design/lucide:pointer.svg" class="step-visual-cursor"
+                                    alt="pointer">
+                            </div>
+                        </div>
+                        <div class="step-body">
+                            <h3 class="step-title"><?php echo $t['step3_title']; ?></h3>
+                            <p class="step-desc"><?php echo $t['step3_desc']; ?></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Features Section -->
+            <section id="features" class="animate-fade-up" style="animation-delay: 0.2s">
+                <h2 class="section-header-blue"><?php echo $t['features_title']; ?></h2>
+                <p class="text-center text-slate-500 text-sm mb-12 max-w-2xl mx-auto">
+                    <?php echo $t['features_subtitle']; ?>
+                </p>
+
+                <div class="grid md:grid-cols-2 gap-y-12 gap-x-16">
+                    <div class="feature-item">
+                        <i data-lucide="layers" class="feature-icon"></i>
+                        <h4 class="feature-title"><?php echo $t['feat1_t']; ?></h4>
+                        <p class="feature-desc"><?php echo $t['feat1_d']; ?></p>
+                    </div>
+                    <div class="feature-item">
+                        <i data-lucide="monitor" class="feature-icon"></i>
+                        <h4 class="feature-title"><?php echo $t['feat2_t']; ?></h4>
+                        <p class="feature-desc"><?php echo $t['feat2_d']; ?></p>
+                    </div>
+                    <div class="feature-item">
+                        <i data-lucide="mouse-pointer-2" class="feature-icon"></i>
+                        <h4 class="feature-title"><?php echo $t['feat3_t']; ?></h4>
+                        <p class="feature-desc"><?php echo $t['feat3_d']; ?></p>
+                    </div>
+                    <div class="feature-item">
+                        <i data-lucide="check-circle" class="feature-icon"></i>
+                        <h4 class="feature-title"><?php echo $t['feat4_t']; ?></h4>
+                        <p class="feature-desc"><?php echo $t['feat4_d']; ?></p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Detailed Feature Card (Tool Specific) -->
+            <section id="detailed-features" class="mt-32 animate-fade-up">
+                <div class="feature-detail-card">
+                    <div class="feature-detail-content">
+                        <h3 class="feature-detail-title"><?php echo __('The Best Highlight Collector', $lang); ?></h3>
+                        <p class="feature-detail-text">
+                            <?php echo __('Our engine treats highlights as curated collections, allowing you to fetch entire albums of saved stories in a single session. We maintain the highest possible visual fidelity for both photos and long-form videos inside highlights, ensuring your personal archive looks just as good as it did on Instagram.', $lang); ?>
+                        </p>
+                    </div>
+                    <div class="feature-detail-visual">
+                        <img src="images/igtv-feature.png" alt="Highlights Downloader Features">
+                    </div>
+                </div>
+            </section>
+        </div>
     </main>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="py-24 bg-white animate-fade-up">
+        <div class="max-w-4xl mx-auto px-6">
+            <h2 class="section-header-blue"><?php echo $t['faq_title']; ?></h2>
+            <div class="faq-list mt-12">
+                <div class="faq-item">
+                    <span class="faq-question"><?php echo $t['faq_q1']; ?></span>
+                    <div class="faq-answer"><?php echo $t['faq_a1']; ?></div>
+                </div>
+                <div class="faq-item">
+                    <span class="faq-question"><?php echo $t['faq_q2']; ?></span>
+                    <div class="faq-answer"><?php echo $t['faq_a2']; ?></div>
+                </div>
+                <div class="faq-item">
+                    <span class="faq-question"><?php echo $t['faq_q3']; ?></span>
+                    <div class="faq-answer"><?php echo $t['faq_a3']; ?></div>
+                </div>
+                <div class="faq-item">
+                    <span class="faq-question"><?php echo $t['faq_q4']; ?></span>
+                    <div class="faq-answer"><?php echo $t['faq_a4']; ?></div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- Footer -->
     <footer class="py-16 bg-white border-t border-slate-100">
@@ -382,43 +706,27 @@ $seoHelper = new SEO_Helper($pdo, $pageIdentifier, $lang);
                     class="footer-logo-text block"><?php echo htmlspecialchars($settings['site_name'] ?: 'MySeoFan'); ?></span>
             </div>
 
-            <?php foreach ($footerItems as $group): ?>
-                <div class="footer-links-group">
+            <div class="footer-links-group mt-8 text-center">
+                <?php foreach ($footerItems as $group): ?>
                     <?php if (isset($group['children']) && !empty($group['children'])): ?>
                         <?php foreach ($group['children'] as $index => $item): ?>
-                            <a href="<?php echo htmlspecialchars($item['final_url']); ?>" class="footer-link">
+                            <a href="<?php echo htmlspecialchars($item['final_url']); ?>"
+                                class="footer-link inline-block hover:text-blue-600 transition-colors">
                                 <?php echo htmlspecialchars($item['label']); ?>
                             </a>
                             <?php if ($index < count($group['children']) - 1): ?>
-                                <span class="text-slate-200 px-1">|</span>
+                                <span class="text-slate-200 px-2">|</span>
                             <?php endif; ?>
                         <?php endforeach; ?>
                     <?php endif; ?>
-                </div>
-            <?php endforeach; ?>
-
-            <div class="footer-divider"></div>
-
-            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-                <div class="flex items-center gap-2">
-                    <span class="text-sm font-medium text-slate-400 uppercase tracking-widest">follow us:</span>
-                    <div class="flex gap-4">
-                        <a href="#" class="text-slate-400 hover:text-blue-600 transition-colors"><i
-                                data-lucide="instagram" class="w-5 h-5"></i></a>
-                        <a href="#" class="text-slate-400 hover:text-blue-600 transition-colors"><i
-                                data-lucide="facebook" class="w-5 h-5"></i></a>
-                        <a href="#" class="text-slate-400 hover:text-blue-600 transition-colors"><i
-                                data-lucide="youtube" class="w-5 h-5"></i></a>
-                        <a href="#" class="text-slate-400 hover:text-blue-600 transition-colors"><i
-                                data-lucide="twitter" class="w-5 h-5"></i></a>
-                        <a href="#" class="text-slate-400 hover:text-blue-600 transition-colors"><i
-                                data-lucide="music-2" class="w-5 h-5"></i></a>
-                    </div>
-                </div>
-                <p class="copyright-text">© 2020-2026
-                    <?php echo htmlspecialchars($settings['site_name'] ?: 'MySeoFan'); ?>. All rights reserved.
-                </p>
+                <?php endforeach; ?>
             </div>
+
+            <div class="footer-divider my-8 border-t border-slate-100"></div>
+
+            <p class="copyright-text text-center text-slate-400 text-xs mt-8">© <?php echo date('Y'); ?>
+                <?php echo htmlspecialchars($settings['site_name']); ?>. All rights reserved.
+            </p>
         </div>
     </footer>
 

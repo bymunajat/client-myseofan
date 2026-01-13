@@ -644,16 +644,25 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
         <div class="max-w-5xl mx-auto text-center px-6 w-full">
             <!-- Tool Bar -->
             <div class="tool-bar animate-fade-up">
-                <a href="video.php?lang=<?php echo $lang; ?>" class="tool-item active"><i data-lucide="video"
+                <a href="video.php?lang=<?php echo $lang; ?>"
+                    class="tool-item <?php echo $pageIdentifier == 'video' ? 'active' : ''; ?>"><i data-lucide="video"
                         class="w-4 h-4"></i> Video</a>
-                <a href="index.php?lang=<?php echo $lang; ?>" class="tool-item"><i data-lucide="image"
+                <a href="index.php?lang=<?php echo $lang; ?>"
+                    class="tool-item <?php echo $pageIdentifier == 'home' ? 'active' : ''; ?>"><i data-lucide="image"
                         class="w-4 h-4"></i> Photo</a>
-                <a href="reels.php?lang=<?php echo $lang; ?>" class="tool-item"><i data-lucide="clapperboard"
-                        class="w-4 h-4"></i> Reels</a>
-                <a href="highlights.php?lang=<?php echo $lang; ?>" class="tool-item"><i data-lucide="tv"
-                        class="w-4 h-4"></i> IGTV</a>
+                <a href="reels.php?lang=<?php echo $lang; ?>"
+                    class="tool-item <?php echo $pageIdentifier == 'reels' ? 'active' : ''; ?>"><i
+                        data-lucide="clapperboard" class="w-4 h-4"></i> Reels</a>
+                <a href="story.php?lang=<?php echo $lang; ?>"
+                    class="tool-item <?php echo $pageIdentifier == 'story' ? 'active' : ''; ?>"><i data-lucide="history"
+                        class="w-4 h-4"></i> Story</a>
+                <a href="highlights.php?lang=<?php echo $lang; ?>"
+                    class="tool-item <?php echo $pageIdentifier == 'highlights' ? 'active' : ''; ?>"><i data-lucide="tv"
+                        class="w-4 h-4"></i> Igtv</a>
                 <a href="index.php?lang=<?php echo $lang; ?>" class="tool-item"><i data-lucide="layout"
                         class="w-4 h-4"></i> Carousel</a>
+                <a href="index.php?lang=<?php echo $lang; ?>" class="tool-item"><i data-lucide="eye"
+                        class="w-4 h-4"></i> Viewer</a>
             </div>
 
             <!-- Title -->

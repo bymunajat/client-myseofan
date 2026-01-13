@@ -5,7 +5,7 @@ require_once 'includes/Translator.php';
 
 // 1. Initialize State
 $lang = $_GET['lang'] ?? 'en';
-$pageIdentifier = 'home';
+$pageIdentifier = 'igtv';
 
 // 2. Fetch Data
 $settings = getSiteSettings($pdo);
@@ -17,38 +17,47 @@ function __($text, $lang)
     return Translator::translate($text, $lang);
 }
 
-// 3. Fallback Translations (Updated to match demo1 design copy)
+// 3. Fallback Translations
 $defaults = [
     'en' => [
-        'title' => 'Instagram Downloader - Download Videos, Photos, Reels & IGTV',
-        'heading' => 'Instagram Downloader',
-        'subtitle' => 'Download Instagram Videos, Photos, Reels, IGTV & carousel',
-        'placeholder' => 'Insert instagram link here',
+        'title' => 'Instagram IGTV Downloader - Save Long Videos',
+        'heading' => 'Instagram IGTV Downloader',
+        'subtitle' => 'Download long-form IGTV videos from Instagram.',
+        'placeholder' => 'Paste Instagram IGTV URL here',
         'btn_download' => 'Download',
         'btn_paste' => 'Paste',
-        'intro_title' => 'Instagram Videos and Photos Download',
-        'intro_desc' => 'MySeoFan is an online web tool that helps you download Instagram Videos, Photos, Reels, and IGTV. MySeoFan.app is designed to be easy to use on any device, such as a mobile phone, tablet, or computer.',
-        'how_to_title' => 'How to download from Instagram?',
-        'how_to_subtitle' => 'You must follow these three easy steps to download video, reels, and photo from Instagram (IG, Insta). Follow the simple steps below.',
-        'step1_title' => 'Copy the URL',
-        'step1_desc' => 'Open the Instagram application or website, copy the URL of the photo, video, reels, carousel, IGTV.',
-        'step2_title' => 'Paste the link',
-        'step2_desc' => 'Return to the MySeoFan website, paste the link into the input field and click the "Download" button.',
-        'step3_title' => 'Download',
-        'step3_desc' => 'Quickly you will get the results with several quality options. Download what fits your needs.',
-        'features_title' => 'Choose MySeoFan.app for download from Instagram',
-        'features_subtitle' => 'Downloading videos from Instagram in just two clicks is possible without compromising on quality. Avoid using unreliable applications and appreciate the videos, even if they are of lower quality.',
-        'feat1_t' => 'Fast download',
-        'feat1_d' => 'Our servers are optimized to provide you with the fastest download speeds.',
-        'feat2_t' => 'Support for all devices',
-        'feat2_d' => 'Whether you\'re on a mobile, tablet, or desktop, MySeoFan has got you covered.',
-        'feat3_t' => 'High quality',
-        'feat3_d' => 'Download Instagram content in its original quality without any loss.',
-        'feat4_t' => 'Security',
-        'feat4_d' => 'We prioritize your privacy. No login required and all downloads are processed securely.',
-        'status_fetching' => 'Fetching media content...',
+        'intro_title' => 'Save IGTV Videos to Device',
+        'intro_desc' => 'IGTV allows for longer video content on Instagram. MySeoFan makes it easy to download these long videos to watch later without internet connection. High quality tailored for your screen.',
+        'how_to_title' => 'How to download IGTV videos?',
+        'how_to_subtitle' => 'Downloading IGTV is as simple as downloading regular videos. Follow these instructions.',
+        'step1_title' => 'Copy IGTV Link',
+        'step1_desc' => 'Navigate to the IGTV video and copy the link.',
+        'step2_title' => 'Paste Link',
+        'step2_desc' => 'Paste the link in the text box above and click Download.',
+        'step3_title' => 'Save File',
+        'step3_desc' => 'The file will be ready in seconds. Save it to your computer or phone.',
+        'features_title' => 'Top IGTV Downloader',
+        'features_subtitle' => 'Build your offline collection of long-form content.',
+        'feat1_t' => 'Long Duration',
+        'feat1_d' => 'Support for videos of any length (up to 1 hour+).',
+        'feat2_t' => 'High Definition',
+        'feat2_d' => 'Download in the highest quality available from the source.',
+        'feat3_t' => 'No Limits',
+        'feat3_d' => 'Download as many IGTV videos as you like.',
+        'feat4_t' => 'Privacy First',
+        'feat4_d' => 'We respect your privacy and do not track downloads.',
+        'status_fetching' => 'Fetching IGTV...',
+        // FAQ
+        'faq_title' => 'Frequently Asked Questions (FAQ)',
+        'faq_q1' => 'What is the max length?',
+        'faq_a1' => 'We support downloading IGTV videos of any length allowed by Instagram.',
+        'faq_q2' => 'Do I need an account?',
+        'faq_a2' => 'No, you do not need to log in to download.',
+        'faq_q3' => 'Is it free?',
+        'faq_a3' => 'Yes, MySeoFan IGTV downloader is free.',
+        'faq_q4' => 'Does it work on iPad?',
+        'faq_a4' => 'Yes, it works on all tablets including iPad and Android tablets.',
     ],
-    // Other languages can be added or auto-translated via Translator::translate
 ];
 
 // Merge with defaults (EN as primary fallback)
@@ -103,6 +112,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
     <?php echo $settings['header_code'] ?? ''; ?>
 
     <style>
+        /* Reusing exact CSS from index.php for consistency */
         :root {
             --hero-gradient: linear-gradient(135deg, #7c3aed 0%, #c026d3 50%, #db2777 100%);
         }
@@ -398,207 +408,112 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
             transform: translateX(-50%);
         }
 
-        .section-header-blue::after {
-            content: '';
-            position: absolute;
-            bottom: -8px;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, #3b82f6 0%, #db2777 100%);
-        }
-
         .step-card {
             background: #ffffff;
-            border-radius: 10px;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
-            height: 100%;
-            display: flex;
-            flex-direction: column;
+            border: 1px solid #f1f5f9;
+            transition: all 0.3s ease;
+        }
+
+        .step-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
         }
 
         .step-top {
-            height: 160px;
+            background: #f8fafc;
+            padding: 2.5rem 1.5rem;
+            border-bottom: 1px solid #f1f5f9;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
-            position: relative;
-        }
-
-        .step-1 .step-top {
-            background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
-        }
-
-        .step-2 .step-top {
-            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
-        }
-
-        .step-3 .step-top {
-            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
         }
 
         .step-visual-mockup {
             background: #ffffff;
-            border-radius: 6px;
-            padding: 8px 12px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            width: 80%;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 12px;
             font-size: 0.75rem;
             color: #94a3b8;
-            border: 1px solid #e2e8f0;
+            width: 100%;
             position: relative;
-        }
-
-        .step-visual-cursor {
-            position: absolute;
-            bottom: -20px;
-            right: 20px;
-            width: 24px;
-            height: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            text-align: center;
         }
 
         .step-body {
-            padding: 24px;
-            text-align: center;
-            flex: 1;
+            padding: 2rem;
         }
 
         .step-title {
-            color: #db2777;
-            font-weight: 700;
             font-size: 1.125rem;
-            margin-bottom: 1rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 0.75rem;
         }
 
         .step-desc {
-            color: #64748b;
             font-size: 0.875rem;
+            color: #64748b;
             line-height: 1.6;
-            border-top: 1px solid #f1f5f9;
-            padding-top: 1rem;
         }
 
         .feature-item {
-            text-align: center;
-            padding: 20px;
+            text-align: left;
         }
 
         .feature-icon {
-            color: #1a1a1a;
-            margin-bottom: 1rem;
-            width: 32px;
-            height: 32px;
-            margin-left: auto;
-            margin-right: auto;
+            width: 40px;
+            height: 40px;
+            color: #3b82f6;
+            margin-bottom: 1.25rem;
         }
 
         .feature-title {
-            color: #db2777;
+            font-size: 1.125rem;
             font-weight: 700;
+            color: #1e293b;
             margin-bottom: 0.75rem;
         }
 
         .feature-desc {
+            font-size: 0.875rem;
             color: #64748b;
-            font-size: 0.8125rem;
-            line-height: 1.5;
-            border-top: 1px solid #f1f5f9;
-            padding-top: 0.75rem;
-            max-width: 240px;
-            margin-left: auto;
-            margin-right: auto;
+            line-height: 1.6;
         }
 
         .feature-detail-card {
             background: #ffffff;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-            display: flex;
-            margin-bottom: 2rem;
-            min-height: 240px;
-        }
-
-        .feature-detail-card:nth-child(even) {
-            flex-direction: row-reverse;
-        }
-
-        .feature-detail-visual {
-            background: linear-gradient(135deg, #7c3aed 0%, #c026d3 50%, #db2777 100%);
-            width: 40%;
-            padding: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .feature-detail-visual img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            border-radius: 10px;
-        }
-
-        .feature-detail-content {
+            border-radius: 16px;
             padding: 40px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
+            display: grid;
+            gap: 40px;
+            border: 1px solid #f1f5f9;
         }
 
-        .feature-detail-title {
-            color: #3b82f6;
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
+        @media (min-width: 768px) {
+            .feature-detail-card {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .feature-detail-content h3 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: #1e293b;
+            margin-bottom: 1.25rem;
         }
 
         .feature-detail-text {
             color: #64748b;
-            font-size: 0.875rem;
-            line-height: 1.6;
-        }
-
-        @media (max-width: 768px) {
-
-            .intro-card,
-            .feature-detail-card,
-            .feature-detail-card:nth-child(even) {
-                flex-direction: column;
-            }
-
-            .intro-visual,
-            .feature-detail-visual {
-                width: 100%;
-                height: 250px;
-            }
-        }
-
-        #result .spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid #7c3aed;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
+            line-height: 1.7;
         }
     </style>
 </head>
 
-<body>
+<body class="flex flex-col">
     <!-- Navigation -->
     <nav class="fixed top-0 w-full z-50 py-4 glass-header">
         <div class="max-w-7xl mx-auto px-6 flex items-center justify-between">
@@ -681,7 +596,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
             </form>
 
             <!-- Result Area -->
-            <div id="result" class="mt-12 max-w-2xl mx-auto fade-in"></div>
+            <div id="result" class="mt-12 max-w-2xl mx-auto"></div>
         </div>
     </section>
 
@@ -690,11 +605,11 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
         <div class="max-w-5xl mx-auto px-6">
 
             <!-- Intro Card -->
-            <div class="intro-card">
+            <div class="intro-card animate-fade-up">
                 <div class="intro-visual">
                     <div
                         class="bg-white p-4 rounded-xl shadow-lg relative z-10 w-32 h-32 flex items-center justify-center">
-                        <i data-lucide="layers" class="w-16 h-16 text-purple-600"></i>
+                        <i data-lucide="tv" class="w-16 h-16 text-purple-600"></i>
                     </div>
                 </div>
                 <div class="intro-content">
@@ -706,7 +621,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
             </div>
 
             <!-- How to Section -->
-            <section id="how-to" class="mb-32">
+            <section id="how-to" class="mb-32 animate-fade-up" style="animation-delay: 0.1s">
                 <h2 class="section-header-blue"><?php echo $t['how_to_title']; ?></h2>
                 <p class="text-center text-slate-500 text-sm mb-12 max-w-2xl mx-auto">
                     <?php echo $t['how_to_subtitle']; ?>
@@ -714,12 +629,10 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
 
                 <div class="grid md:grid-cols-3 gap-8">
                     <!-- Step 1 -->
-                    <div class="step-card step-1">
+                    <div class="step-card">
                         <div class="step-top">
                             <div class="step-visual-mockup">
-                                instagram.com/p/CmcRCI...
-                                <img src="https://api.iconify.design/lucide:pointer.svg" class="step-visual-cursor"
-                                    alt="pointer">
+                                instagram.com/tv/...
                             </div>
                         </div>
                         <div class="step-body">
@@ -728,15 +641,10 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                         </div>
                     </div>
                     <!-- Step 2 -->
-                    <div class="step-card step-2">
+                    <div class="step-card">
                         <div class="step-top">
-                            <div class="step-visual-mockup flex justify-between items-center">
-                                <span>instagram.com/p/C...</span>
-                                <span class="bg-slate-100 px-2 py-1 rounded text-[10px] flex items-center gap-1">
-                                    <i data-lucide="clipboard" class="w-2 h-2 text-slate-400"></i> Paste
-                                </span>
-                                <img src="https://api.iconify.design/lucide:pointer.svg" class="step-visual-cursor"
-                                    alt="pointer">
+                            <div class="step-visual-mockup">
+                                <i data-lucide="clipboard" class="w-4 h-4 inline"></i> Paste
                             </div>
                         </div>
                         <div class="step-body">
@@ -745,13 +653,10 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                         </div>
                     </div>
                     <!-- Step 3 -->
-                    <div class="step-card step-3">
+                    <div class="step-card">
                         <div class="step-top">
-                            <div
-                                class="step-visual-mockup bg-blue-600 text-white border-none text-center py-2 h-auto flex items-center justify-center">
+                            <div class="step-visual-mockup font-bold text-blue-600">
                                 Download
-                                <img src="https://api.iconify.design/lucide:pointer.svg" class="step-visual-cursor"
-                                    alt="pointer">
                             </div>
                         </div>
                         <div class="step-body">
@@ -763,7 +668,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
             </section>
 
             <!-- Features Section -->
-            <section id="features">
+            <section id="features" class="animate-fade-up" style="animation-delay: 0.2s">
                 <h2 class="section-header-blue"><?php echo $t['features_title']; ?></h2>
                 <p class="text-center text-slate-500 text-sm mb-12 max-w-2xl mx-auto">
                     <?php echo $t['features_subtitle']; ?>
@@ -771,143 +676,67 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
 
                 <div class="grid md:grid-cols-2 gap-y-12 gap-x-16">
                     <div class="feature-item">
-                        <i data-lucide="download" class="feature-icon"></i>
+                        <i data-lucide="monitor" class="feature-icon"></i>
                         <h4 class="feature-title"><?php echo $t['feat1_t']; ?></h4>
                         <p class="feature-desc"><?php echo $t['feat1_d']; ?></p>
                     </div>
                     <div class="feature-item">
-                        <i data-lucide="monitor" class="feature-icon"></i>
+                        <i data-lucide="check-circle" class="feature-icon"></i>
                         <h4 class="feature-title"><?php echo $t['feat2_t']; ?></h4>
                         <p class="feature-desc"><?php echo $t['feat2_d']; ?></p>
                     </div>
                     <div class="feature-item">
-                        <i data-lucide="thumbs-up" class="feature-icon"></i>
+                        <i data-lucide="infinity" class="feature-icon"></i>
                         <h4 class="feature-title"><?php echo $t['feat3_t']; ?></h4>
                         <p class="feature-desc"><?php echo $t['feat3_d']; ?></p>
                     </div>
                     <div class="feature-item">
-                        <i data-lucide="shield-check" class="feature-icon"></i>
+                        <i data-lucide="shield" class="feature-icon"></i>
                         <h4 class="feature-title"><?php echo $t['feat4_t']; ?></h4>
                         <p class="feature-desc"><?php echo $t['feat4_d']; ?></p>
                     </div>
                 </div>
             </section>
-            <!-- Detailed Feature Cards -->
-            <section id="detailed-features" class="mt-32">
-                <h2 class="section-header-blue">MySeoFan.app features</h2>
-                <p class="text-center text-slate-500 text-sm mb-12 max-w-2xl mx-auto">
-                    With MySeoFan you can download any type of content from Instagram. Our service has an IG video
-                    downloader, Reels, IGTV, photo or carousel.
-                </p>
 
-                <div class="space-y-8">
-                    <!-- Video Downloader -->
-                    <div class="feature-detail-card">
-                        <div class="feature-detail-content">
-                            <h3 class="feature-detail-title">Video Downloader</h3>
-                            <p class="feature-detail-text">MySeoFan.app supports Instagram video download for singular
-                                videos and multiple videos from carousel. MySeoFan is created to enable you to download
-                                IG
-                                videos from your personal page.</p>
-                        </div>
-                        <div class="feature-detail-visual">
-                            <img src="images/video-feature.png" alt="Video Downloader">
-                        </div>
+            <!-- Detailed Features -->
+            <section id="detailed-features" class="mt-32 animate-fade-up">
+                <div class="feature-detail-card">
+                    <div class="feature-detail-content">
+                        <h3 class="feature-detail-title"><?php echo __('Long-form Content', $lang); ?></h3>
+                        <p class="feature-detail-text">
+                            <?php echo __('Don\'t let a poor internet connection interrupt your viewing. Download long IGTV videos to your device and watch them uninterrupted, anywhere, anytime.', $lang); ?>
+                        </p>
                     </div>
-
-                    <!-- Photos Downloader -->
-                    <div class="feature-detail-card">
-                        <div class="feature-detail-content">
-                            <h3 class="feature-detail-title">Photos Downloader</h3>
-                            <p class="feature-detail-text">Instagram photo download provided by MySeoFan.app is a great
-                                tool for saving images from Instagram posts. With MySeoFan, you can download a single
-                                post
-                                image and multiple Instagram photos (carousel).</p>
-                        </div>
-                        <div class="feature-detail-visual">
-                            <img src="images/photo-feature.png" alt="Photos Downloader">
-                        </div>
-                    </div>
-
-                    <!-- Reels Downloader -->
-                    <div class="feature-detail-card">
-                        <div class="feature-detail-content">
-                            <h3 class="feature-detail-title">Reels Downloader</h3>
-                            <p class="feature-detail-text">Reels is a new video format that clones the principle of
-                                TikTok. Instagram Reels download with the help of MySeoFan. Our Instagram Reels
-                                downloader
-                                can help you to save your favorite Reels videos.</p>
-                        </div>
-                        <div class="feature-detail-visual">
-                            <img src="images/reels-feature.png" alt="Reels Downloader">
-                        </div>
-                    </div>
-
-                    <!-- IGTV Downloader -->
-                    <div class="feature-detail-card">
-                        <div class="feature-detail-content">
-                            <h3 class="feature-detail-title">IGTV Downloader</h3>
-                            <p class="feature-detail-text">IGTV is a long video type. If you can't watch it now, you can
-                                download IGTV videos to your device to be sure that you can return to watching later,
-                                without the need to be online or in case the IGTV can be deleted.</p>
-                        </div>
-                        <div class="feature-detail-visual">
-                            <img src="images/igtv-feature.png" alt="IGTV Downloader">
-                        </div>
-                    </div>
-
-                    <!-- Carousel Downloader -->
-                    <div class="feature-detail-card">
-                        <div class="feature-detail-content">
-                            <h3 class="feature-detail-title">Carousel / Album Downloader</h3>
-                            <p class="feature-detail-text">Carousel, also known as Album or Gallery posts type with
-                                multiple photos, videos, or mixed content. If you need to download multiple photos from
-                                Instagram, the MySeoFan.app is the best to download gallery.</p>
-                        </div>
-                        <div class="feature-detail-visual">
-                            <img src="images/carousel-feature.png" alt="Carousel Downloader">
-                        </div>
+                    <div class="feature-detail-visual">
+                        <!-- Reusing video feature for IGTV or generate new if needed. Using video layout for now -->
+                        <img src="images/video-feature.png" alt="IGTV Downloader Features"
+                            class="w-full rounded-2xl shadow-xl">
                     </div>
                 </div>
             </section>
         </div>
     </main>
 
-    <!-- FAQ -->
-    <section id="faq" class="py-24 bg-white">
+    <!-- FAQ Section -->
+    <section id="faq" class="py-24 bg-white animate-fade-up">
         <div class="max-w-4xl mx-auto px-6">
-            <h2 class="section-header-blue">Frequently asked questions (FAQ)</h2>
+            <h2 class="section-header-blue"><?php echo $t['faq_title']; ?></h2>
             <div class="faq-list mt-12">
-                <!-- FAQ items remain static as they are part of the demo1 design -->
                 <div class="faq-item">
-                    <span class="faq-question">What exactly is MySeoFan.app?</span>
-                    <div class="faq-answer">
-                        MySeoFan.app is a browser-based helper that lets you save public Instagram content - videos,
-                        photos, Reels, Stories, IGTV and carousels - to your own device for offline viewing. It works
-                        straight from the website; no software install is required.
-                    </div>
+                    <span class="faq-question"><?php echo $t['faq_q1']; ?></span>
+                    <div class="faq-answer"><?php echo $t['faq_a1']; ?></div>
                 </div>
                 <div class="faq-item">
-                    <span class="faq-question">Is downloading from Instagram legal?</span>
-                    <div class="faq-answer">
-                        Saving public posts for personal use is generally allowed, but copyright always belongs to the
-                        creator. Please keep the files private unless you have the owner's permission to share or reuse
-                        them.
-                    </div>
+                    <span class="faq-question"><?php echo $t['faq_q2']; ?></span>
+                    <div class="faq-answer"><?php echo $t['faq_a2']; ?></div>
                 </div>
                 <div class="faq-item">
-                    <span class="faq-question">Do I need to log in or create an account?</span>
-                    <div class="faq-answer">
-                        No. Just paste the Instagram link - there's no registration, no Instagram credentials, and no
-                        cookies that track you across the web.
-                    </div>
+                    <span class="faq-question"><?php echo $t['faq_q3']; ?></span>
+                    <div class="faq-answer"><?php echo $t['faq_a3']; ?></div>
                 </div>
                 <div class="faq-item">
-                    <span class="faq-question">Can I grab content from private accounts?</span>
-                    <div class="faq-answer">
-                        Sorry, no. We respect user privacy, so only public posts are accessible. If you can't view the
-                        post in a logged-out browser tab, MySeoFan.app can't fetch it either.
-                    </div>
+                    <span class="faq-question"><?php echo $t['faq_q4']; ?></span>
+                    <div class="faq-answer"><?php echo $t['faq_a4']; ?></div>
                 </div>
             </div>
         </div>
@@ -916,61 +745,44 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
     <!-- Footer -->
     <footer class="py-16 bg-white border-t border-slate-100">
         <div class="max-w-4xl mx-auto px-6">
-            <div class="footer-brand">
+            <div class="footer-brand text-center">
                 <?php if (!empty($settings['logo_path'])): ?>
-                    <img src="<?php echo htmlspecialchars($settings['logo_path']); ?>" class="h-10 w-auto" alt="Logo">
+                    <img src="<?php echo htmlspecialchars($settings['logo_path']); ?>" class="h-10 w-auto mx-auto mb-4"
+                        alt="Logo">
                 <?php else: ?>
-                    <i data-lucide="layers" class="footer-logo-icon"></i>
+                    <i data-lucide="layers" class="footer-logo-icon mx-auto mb-4"></i>
                 <?php endif; ?>
                 <span
-                    class="footer-logo-text"><?php echo htmlspecialchars($settings['site_name'] ?: 'MySeoFan'); ?></span>
+                    class="footer-logo-text block"><?php echo htmlspecialchars($settings['site_name'] ?: 'MySeoFan'); ?></span>
             </div>
 
-            <?php foreach ($footerItems as $group): ?>
-                <div class="footer-links-group">
+            <div class="footer-links-group mt-8 text-center">
+                <?php foreach ($footerItems as $group): ?>
                     <?php if (isset($group['children']) && !empty($group['children'])): ?>
                         <?php foreach ($group['children'] as $index => $item): ?>
-                            <a href="<?php echo htmlspecialchars($item['final_url']); ?>" class="footer-link">
+                            <a href="<?php echo htmlspecialchars($item['final_url']); ?>"
+                                class="footer-link inline-block hover:text-blue-600 transition-colors">
                                 <?php echo htmlspecialchars($item['label']); ?>
                             </a>
                             <?php if ($index < count($group['children']) - 1): ?>
-                                <span class="text-slate-200 px-1">|</span>
+                                <span class="text-slate-200 px-2">|</span>
                             <?php endif; ?>
                         <?php endforeach; ?>
                     <?php endif; ?>
-                </div>
-            <?php endforeach; ?>
-
-            <div class="footer-divider"></div>
-
-            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-                <div class="flex items-center gap-2">
-                    <span class="text-sm font-medium text-slate-400 uppercase tracking-widest">follow us:</span>
-                    <div class="flex gap-4">
-                        <a href="#" class="text-slate-400 hover:text-blue-600 transition-colors"><i
-                                data-lucide="instagram" class="w-5 h-5"></i></a>
-                        <a href="#" class="text-slate-400 hover:text-blue-600 transition-colors"><i
-                                data-lucide="facebook" class="w-5 h-5"></i></a>
-                        <a href="#" class="text-slate-400 hover:text-blue-600 transition-colors"><i
-                                data-lucide="youtube" class="w-5 h-5"></i></a>
-                        <a href="#" class="text-slate-400 hover:text-blue-600 transition-colors"><i
-                                data-lucide="twitter" class="w-5 h-5"></i></a>
-                        <a href="#" class="text-slate-400 hover:text-blue-600 transition-colors"><i
-                                data-lucide="music-2" class="w-5 h-5"></i></a>
-                    </div>
-                </div>
-                <p class="copyright-text">© 2020-2026
-                    <?php echo htmlspecialchars($settings['site_name'] ?: 'MySeoFan'); ?>. All rights reserved.
-                </p>
+                <?php endforeach; ?>
             </div>
+
+            <div class="footer-divider my-8 border-t border-slate-100"></div>
+
+            <p class="copyright-text text-center text-slate-400 text-xs mt-8">© <?php echo date('Y'); ?>
+                <?php echo htmlspecialchars($settings['site_name']); ?>. All rights reserved.
+            </p>
         </div>
     </footer>
 
     <script>
-        // Initialize Lucide Icons
         lucide.createIcons();
 
-        // Paste functionality
         document.getElementById('btnPaste').addEventListener('click', async () => {
             try {
                 const text = await navigator.clipboard.readText();
@@ -980,7 +792,6 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
             }
         });
 
-        // Form Submission
         document.getElementById('downloadForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const input = document.getElementById('instaUrl');
@@ -988,11 +799,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
             const url = input.value.trim();
             if (!url) return;
 
-            resDiv.innerHTML = `
-                <div class='flex flex-col items-center gap-6 py-10 bg-white/20 backdrop-blur-md rounded-3xl p-8 border border-white/30 shadow-xl'>
-                    <div class='spinner'></div>
-                    <p class='font-bold text-white uppercase tracking-widest text-sm animate-pulse'><?php echo $t['status_fetching']; ?></p>
-                </div>`;
+            resDiv.innerHTML = `<div class='flex flex-col items-center gap-6 py-10'><div class='spinner'></div><p class='font-bold text-white uppercase tracking-widest text-sm animate-pulse'><?php echo $t['status_fetching']; ?></p></div>`;
 
             try {
                 const res = await fetch('download.php', {
@@ -1005,20 +812,17 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                 if (data.status === 'single') {
                     renderSingle(data);
                 } else {
-                    throw new Error(data.error || 'Content not found');
+                    throw new Error(data.error || 'Error');
                 }
             } catch (err) {
-                resDiv.innerHTML = `
-                    <div class='p-8 bg-red-500/90 backdrop-blur-md text-white rounded-3xl font-bold flex flex-col items-center gap-4 border border-red-400 shadow-xl fade-in'>
-                        <span class="text-lg text-center">${err.message}</span>
-                    </div>`;
+                resDiv.innerHTML = `<div class='p-8 bg-red-500/90 text-white rounded-3xl font-bold flex flex-col items-center gap-4 border border-red-400 shadow-xl'><span>${err.message}</span></div>`;
             }
         });
 
         function renderSingle(data) {
             const dl = `download.php?action=download&url=${encodeURIComponent(data.url)}`;
             document.getElementById('result').innerHTML = `
-                <div class="flex flex-col gap-8 items-center fade-in bg-white/10 backdrop-blur-lg p-8 rounded-[3rem] border border-white/20 shadow-2xl">
+                <div class="flex flex-col gap-8 items-center bg-white/10 backdrop-blur-lg p-8 rounded-[3rem] border border-white/20 shadow-2xl">
                     <div class="relative group max-w-sm rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white">
                         ${data.type === 'video' ? `<video controls class="w-full h-auto"><source src="${dl}"></video>` : `<img src="${dl}" class="w-full h-auto">`}
                     </div>

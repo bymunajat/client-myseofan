@@ -189,10 +189,24 @@ if (empty($user_role))
             </a>
         </div>
     </nav>
-    }
-    </script>
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        function toggleSection(id) {
+            const element = document.getElementById(id);
+            const chevron = document.getElementById(id + '-chevron');
+
+            if (element && element.classList.contains('hidden')) {
+                element.classList.remove('hidden');
+                element.classList.add('block');
+                if (chevron) chevron.classList.add('rotate-180');
+            } else if (element) {
+                element.classList.add('hidden');
+                element.classList.remove('block');
+                if (chevron) chevron.classList.remove('rotate-180');
+            }
+        }
+
         function confirmDelete(url, message = 'You won\'t be able to revert this!') {
             Swal.fire({
                 title: 'Are you sure?',

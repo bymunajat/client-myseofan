@@ -80,7 +80,7 @@ if ($action === 'clone' && $id && isset($_GET['target_lang'])) {
                 // Insert clone
                 $stmt = $pdo->prepare("INSERT INTO pages (title, slug, content, lang_code, meta_title, meta_description, translation_group, show_in_header, show_in_footer, menu_order, footer_section) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
                 // Append lang code to slug to avoid unique constraint if slug is unique (though schema might allow same slug diff lang, let's be safe)
-                $new_slug = $original['slug'];
+                $new_slug = $original['slug'] . '-' . $target_lang;
                 // Modify title slightly to indicate clone? No, usually keep same.
 
                 $stmt->execute([
@@ -295,7 +295,8 @@ $page_title = "Page Content Manager";
                                 <tr>
                                     <td colspan="3" class="px-8 py-12 text-center">
                                         <div class="text-gray-400 font-medium mb-4">No pages found in
-                                            <?php echo $available_langs[$_curr_lang]['label']; ?>.</div>
+                                            <?php echo $available_langs[$_curr_lang]['label']; ?>.
+                                        </div>
                                         <div class="flex justify-center gap-4">
                                             <a href="?action=add&filter_lang=<?php echo $_curr_lang; ?>"
                                                 class="bg-emerald-50 text-emerald-600 px-4 py-2 rounded-lg font-bold hover:bg-emerald-100">Create
@@ -313,35 +314,45 @@ $page_title = "Page Content Manager";
                                     </td>
                                     <td class="px-8 py-5">
                                         <div class="font-bold text-gray-800 text-lg">
-                                            <?php echo htmlspecialchars($p['title']); ?></div>
+                                            <?php echo htmlspecialchars($p['title']); ?>
+                                        </div>
                                         <div class="text-xs text-emerald-600 font-mono mt-0.5">
                                             /<?php echo htmlspecialchars($p['slug'] ?? ''); ?>
                                         </div>
                                     </td>
                                     <td class="px-8 py-5 text-right flex items-center justify-end gap-3">
+
                                         <!-- Clone Dropdown -->
                                         <div class="relative group/clone">
                                             <button
-                                                class="text-xs font-bold text-gray-400 hover:text-emerald-600 bg-gray-50 hover:bg-emerald-50 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1">
+                                                class="text-xs font-bold text-gray-400 hover:text-emerald-600 bg-gray-50 hover:bg-emerald-50 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1 cursor-pointer">
                                                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-width="2"
                                                         d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
                                                 </svg>
                                                 Clone
                                             </button>
-                                            <div
-                                                class="absolute right-0 top-full mt-2 w-40 bg-white rounded-xl shadow-xl border border-gray-100 hidden group-hover/clone:block z-20 overflow-hidden">
-                                                <div
-                                                    class="px-3 py-2 text-[10px] font-bold text-gray-400 uppercase tracking-wider bg-gray-50/50">
-                                                    Clone to...</div>
-                                                <?php foreach ($available_langs as $code => $info): ?>
-                                                    <?php if ($code !== $_curr_lang): ?>
-                                                        <a href="?action=clone&id=<?php echo $p['id']; ?>&target_lang=<?php echo $code; ?>"
-                                                            class="block px-4 py-2 text-xs font-bold text-gray-600 hover:bg-emerald-50 hover:text-emerald-700 transition-colors flex items-center gap-2">
-                                                            <span><?php echo $info['flag']; ?></span> <?php echo $info['label']; ?>
-                                                        </a>
-                                                    <?php endif; ?>
-                                                <?php endforeach; ?>
+
+                                            <!-- Dropdown with invisible bridge (pt-2) -->
+                                            <div class="absolute right-0 top-full hidden group-hover/clone:block z-20">
+                                                <div class="pt-2">
+                                                    <div
+                                                        class="w-40 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden">
+                                                        <div
+                                                            class="px-3 py-2 text-[10px] font-bold text-gray-400 uppercase tracking-wider bg-gray-50/50">
+                                                            Clone to...
+                                                        </div>
+                                                        <?php foreach ($available_langs as $code => $info): ?>
+                                                            <?php if ($code !== $_curr_lang): ?>
+                                                                <a href="?action=clone&id=<?php echo $p['id']; ?>&target_lang=<?php echo $code; ?>"
+                                                                    class="block px-4 py-2 text-xs font-bold text-gray-600 hover:bg-emerald-50 hover:text-emerald-700 transition-colors flex items-center gap-2">
+                                                                    <span><?php echo $info['flag']; ?></span>
+                                                                    <?php echo $info['label']; ?>
+                                                                </a>
+                                                            <?php endif; ?>
+                                                        <?php endforeach; ?>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -479,7 +490,7 @@ $page_title = "Page Content Manager";
             setTimeout(() => {
                 toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
             }, 3000);
-        }
+    }
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.2/tinymce.min.js"></script>
     <script>
@@ -494,7 +505,7 @@ $page_title = "Page Content Manager";
             skin: 'oxide',
             content_css: 'default',
             content_style: "@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600&display=swap'); body { font-family: 'Outfit', sans-serif; font-size: 16px; color: #333; line-height: 1.6; padding: 20px; } h1,h2,h3 { font-weight: 700; color: #111; } a { color: #10b981; text-decoration: none; }"
-        });
+    });
     </script>
 </body>
 

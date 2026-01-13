@@ -281,19 +281,41 @@ $seoHelper = new SEO_Helper($pdo, 'post', $lang);
                     class="footer-logo-text"><?php echo htmlspecialchars($settings['site_name'] ?: 'MySeoFan'); ?></span>
             </div>
 
-            <div class="footer-links-group">
-                <?php foreach ($footerItems as $item): ?>
-                    <a href="<?php echo htmlspecialchars($item['final_url']); ?>" class="footer-link">
-                        <?php echo htmlspecialchars($item['label']); ?>
-                    </a>
-                    <span class="text-slate-200">|</span>
-                <?php endforeach; ?>
+            <?php foreach ($footerItems as $group): ?>
+                <div class="footer-links-group">
+                    <?php if (isset($group['children']) && !empty($group['children'])): ?>
+                        <?php foreach ($group['children'] as $index => $item): ?>
+                            <a href="<?php echo htmlspecialchars($item['final_url']); ?>" class="footer-link">
+                                <?php echo htmlspecialchars($item['label']); ?>
+                            </a>
+                            <?php if ($index < count($group['children']) - 1): ?>
+                                <span class="text-slate-200 px-1">|</span>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </div>
+            <?php endforeach; ?>
+
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="flex items-center gap-2">
+                    <span class="text-sm font-medium text-slate-400 uppercase tracking-widest">follow us:</span>
+                    <div class="flex gap-4">
+                        <a href="#" class="text-slate-400 hover:text-blue-600 transition-colors"><i
+                                data-lucide="instagram" class="w-5 h-5"></i></a>
+                        <a href="#" class="text-slate-400 hover:text-blue-600 transition-colors"><i
+                                data-lucide="facebook" class="w-5 h-5"></i></a>
+                        <a href="#" class="text-slate-400 hover:text-blue-600 transition-colors"><i
+                                data-lucide="youtube" class="w-5 h-5"></i></a>
+                        <a href="#" class="text-slate-400 hover:text-blue-600 transition-colors"><i
+                                data-lucide="twitter" class="w-5 h-5"></i></a>
+                        <a href="#" class="text-slate-400 hover:text-blue-600 transition-colors"><i
+                                data-lucide="music-2" class="w-5 h-5"></i></a>
+                    </div>
+                </div>
+                <p class="copyright-text">© 2020-2026
+                    <?php echo htmlspecialchars($settings['site_name'] ?: 'MySeoFan'); ?>. All rights reserved.
+                </p>
             </div>
-
-            <div class="footer-divider"></div>
-
-            <p class="copyright-text">© <?php echo date('Y'); ?>
-                <?php echo htmlspecialchars($settings['site_name']); ?>. All rights reserved.</p>
         </div>
     </footer>
 

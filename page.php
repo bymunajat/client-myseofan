@@ -209,14 +209,15 @@ $pageIdentifier = 'page';
                     <div class="flex items-center gap-1 hover:text-purple-600 transition-colors uppercase">
                         <?php echo $lang; ?> <i data-lucide="chevron-down" class="w-4 h-4"></i>
                     </div>
-                    <div
-                        class="absolute right-0 mt-2 w-32 bg-white shadow-xl rounded-xl p-2 hidden group-hover:block border border-gray-100">
-                        <?php foreach (['en' => '🇺🇸 EN', 'id' => '🇮🇩 ID', 'es' => '🇪🇸 ES', 'fr' => '🇫🇷 FR', 'de' => '🇩🇪 DE', 'ja' => '🇯🇵 JA'] as $code => $label): ?>
-                            <a href="?lang=<?php echo $code; ?>"
-                                class="block px-4 py-2 text-xs hover:bg-purple-50 rounded-lg <?php echo $lang === $code ? 'text-purple-600 font-bold' : ''; ?>">
-                                <?php echo $label; ?>
-                            </a>
-                        <?php endforeach; ?>
+                    <div class="absolute right-0 top-full pt-2 hidden group-hover:block z-50">
+                        <div class="w-32 bg-white shadow-xl rounded-xl p-2 border border-gray-100">
+                            <?php foreach (['en' => '🇺🇸 EN', 'id' => '🇮🇩 ID', 'es' => '🇪🇸 ES', 'fr' => '🇫🇷 FR', 'de' => '🇩🇪 DE', 'ja' => '🇯🇵 JA'] as $code => $label): ?>
+                                <a href="?lang=<?php echo $code; ?>"
+                                    class="block px-4 py-2 text-xs hover:bg-purple-50 rounded-lg <?php echo $lang === $code ? 'text-purple-600 font-bold' : ''; ?>">
+                                    <?php echo $label; ?>
+                                </a>
+                            <?php endforeach; ?>
+                        </div>
                     </div>
                 </div>
             </div>

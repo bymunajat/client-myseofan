@@ -480,35 +480,51 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
             padding-top: 1rem;
         }
 
-        .feature-item {
+        .feature-card-modern {
+            border-radius: 24px;
+            padding: 40px 32px;
+            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.08);
+
+            /* Full Gradient Border Magic */
+            border: 2px solid transparent;
+            background-image: linear-gradient(white, white),
+                linear-gradient(135deg, #3b82f6 0%, #db2777 100%);
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             text-align: center;
-            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 1;
         }
 
-        .feature-icon {
-            color: #1a1a1a;
-            margin-bottom: 1rem;
-            width: 32px;
-            height: 32px;
-            margin-left: auto;
-            margin-right: auto;
+        .feature-card-modern:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px -10px rgba(59, 130, 246, 0.2);
         }
 
-        .feature-title {
-            color: #db2777;
-            font-weight: 700;
-            margin-bottom: 0.75rem;
+        .icon-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            color: #3b82f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px -5px rgba(59, 130, 246, 0.1);
         }
 
-        .feature-desc {
-            color: #64748b;
-            font-size: 0.8125rem;
-            line-height: 1.5;
-            border-top: 1px solid #f1f5f9;
-            padding-top: 0.75rem;
-            max-width: 240px;
-            margin-left: auto;
-            margin-right: auto;
+        .feature-card-modern:hover .icon-circle {
+            transform: scale(1.1) rotate(5deg);
+            background: linear-gradient(135deg, #3b82f6 0%, #db2777 100%);
+            color: #ffffff;
+            box-shadow: 0 15px 30px -5px rgba(219, 39, 119, 0.3);
         }
 
         .feature-detail-card {
@@ -769,26 +785,49 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                     <?php echo $t['features_subtitle']; ?>
                 </p>
 
-                <div class="grid md:grid-cols-2 gap-y-12 gap-x-16">
-                    <div class="feature-item">
-                        <i data-lucide="download" class="feature-icon"></i>
-                        <h4 class="feature-title"><?php echo $t['feat1_t']; ?></h4>
-                        <p class="feature-desc"><?php echo $t['feat1_d']; ?></p>
+                <div class="grid md:grid-cols-4 gap-6">
+                    <!-- Lightning Fast -->
+                    <div class="feature-card-modern group">
+                        <div class="icon-circle">
+                            <i data-lucide="zap" class="w-10 h-10"></i>
+                        </div>
+                        <h4 class="text-xl font-black text-slate-800 mb-3 group-hover:text-blue-600 transition-colors">
+                            Lightning Fast</h4>
+                        <p class="text-slate-500 text-sm leading-relaxed">Powered by top-tier server infrastructure to
+                            deliver your media in seconds.</p>
                     </div>
-                    <div class="feature-item">
-                        <i data-lucide="monitor" class="feature-icon"></i>
-                        <h4 class="feature-title"><?php echo $t['feat2_t']; ?></h4>
-                        <p class="feature-desc"><?php echo $t['feat2_d']; ?></p>
+
+                    <!-- Private & Secure -->
+                    <div class="feature-card-modern group">
+                        <div class="icon-circle">
+                            <i data-lucide="shield-check" class="w-10 h-10"></i>
+                        </div>
+                        <h4 class="text-xl font-black text-slate-800 mb-3 group-hover:text-blue-600 transition-colors">
+                            Private & Secure</h4>
+                        <p class="text-slate-500 text-sm leading-relaxed">We value your privacy. Your data is never
+                            stored, and you don't need an account.</p>
                     </div>
-                    <div class="feature-item">
-                        <i data-lucide="thumbs-up" class="feature-icon"></i>
-                        <h4 class="feature-title"><?php echo $t['feat3_t']; ?></h4>
-                        <p class="feature-desc"><?php echo $t['feat3_d']; ?></p>
+
+                    <!-- HD Quality -->
+                    <div class="feature-card-modern group">
+                        <div class="icon-circle">
+                            <i data-lucide="sparkles" class="w-10 h-10"></i>
+                        </div>
+                        <h4 class="text-xl font-black text-slate-800 mb-3 group-hover:text-blue-600 transition-colors">
+                            HD Quality</h4>
+                        <p class="text-slate-500 text-sm leading-relaxed">Always download the highest resolution
+                            available for Photos and Reels.</p>
                     </div>
-                    <div class="feature-item">
-                        <i data-lucide="shield-check" class="feature-icon"></i>
-                        <h4 class="feature-title"><?php echo $t['feat4_t']; ?></h4>
-                        <p class="feature-desc"><?php echo $t['feat4_d']; ?></p>
+
+                    <!-- Unlimited Downloads -->
+                    <div class="feature-card-modern group">
+                        <div class="icon-circle">
+                            <i data-lucide="infinity" class="w-10 h-10"></i>
+                        </div>
+                        <h4 class="text-xl font-black text-slate-800 mb-3 group-hover:text-blue-600 transition-colors">
+                            Unlimited</h4>
+                        <p class="text-slate-500 text-sm leading-relaxed">No limits on how many videos or photos you can
+                            download. Completely free.</p>
                     </div>
                 </div>
             </section>

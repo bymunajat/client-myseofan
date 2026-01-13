@@ -297,57 +297,123 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
             border-color: #e2e8f0;
         }
 
-        .step-number {
-            font-size: 4rem;
-            font-weight: 900;
-            color: #f1f5f9;
-            position: absolute;
-            top: -10px;
-            right: 0;
-            line-height: 1;
-            z-index: 0;
+        .step-card {
+            background: #ffffff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
         }
 
-        .step-content {
+        .step-top {
+            height: 160px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
             position: relative;
-            z-index: 10;
+        }
+
+        .step-1 .step-top {
+            background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+        }
+
+        .step-2 .step-top {
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+        }
+
+        .step-3 .step-top {
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+        }
+
+        .step-visual-mockup {
+            background: #ffffff;
+            border-radius: 6px;
+            padding: 8px 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            font-size: 0.75rem;
+            color: #94a3b8;
+            border: 1px solid #e2e8f0;
+            position: relative;
+        }
+
+        .step-visual-cursor {
+            position: absolute;
+            bottom: -20px;
+            right: 20px;
+            width: 24px;
+            height: 24px;
+        }
+
+        .step-body {
+            padding: 24px;
+            text-align: center;
+            flex: 1;
+        }
+
+        .step-title {
+            color: #db2777;
+            font-weight: 700;
+            font-size: 1.125rem;
+            margin-bottom: 1rem;
+        }
+
+        .step-desc {
+            color: #64748b;
+            font-size: 0.875rem;
+            line-height: 1.6;
+            border-top: 1px solid #f1f5f9;
+            padding-top: 1rem;
         }
 
         .feature-card-modern {
-            background: #ffffff;
-            border-radius: 16px;
-            padding: 32px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-            border: 1px solid #f1f5f9;
-            transition: all 0.3s ease;
+            border-radius: 24px;
+            padding: 40px 32px;
+            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.08);
+
+            /* Full Gradient Border Magic */
+            border: 2px solid transparent;
+            background-image: linear-gradient(white, white),
+                linear-gradient(135deg, #3b82f6 0%, #db2777 100%);
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             text-align: center;
             display: flex;
             flex-direction: column;
             align-items: center;
+            position: relative;
+            z-index: 1;
         }
 
         .feature-card-modern:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
-            border-color: #3b82f6;
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px -10px rgba(59, 130, 246, 0.2);
         }
 
         .icon-circle {
-            width: 64px;
-            height: 64px;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
-            background: #eff6ff;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
             color: #3b82f6;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
             transition: all 0.3s ease;
+            box-shadow: 0 10px 20px -5px rgba(59, 130, 246, 0.1);
         }
 
         .feature-card-modern:hover .icon-circle {
-            background: #3b82f6;
+            transform: scale(1.1) rotate(5deg);
+            background: linear-gradient(135deg, #3b82f6 0%, #db2777 100%);
             color: #ffffff;
+            box-shadow: 0 15px 30px -5px rgba(219, 39, 119, 0.3);
         }
 
         .footer-brand {
@@ -542,54 +608,47 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
 
                 <div class="grid md:grid-cols-3 gap-8">
                     <!-- Step 1 -->
-                    <div class="step-card-modern">
-                        <div class="step-number">01</div>
-                        <div class="step-content">
-                            <div class="mb-6 flex justify-center">
-                                <div class="bg-blue-50 p-4 rounded-xl text-blue-600">
-                                    <i data-lucide="link" class="w-8 h-8"></i>
-                                </div>
+                    <div class="step-card step-1">
+                        <div class="step-top">
+                            <div class="step-visual-mockup">
+                                instagram.com/reels/C...
+                                <img src="https://api.iconify.design/lucide:pointer.svg" class="step-visual-cursor" alt="pointer">
                             </div>
-                            <h3 class="text-xl font-bold text-slate-800 mb-3 text-center">
-                                <?php echo $t['step1_title']; ?>
-                            </h3>
-                            <p class="text-slate-500 text-sm text-center leading-relaxed">
-                                <?php echo $t['step1_desc']; ?>
-                            </p>
+                        </div>
+                        <div class="step-body">
+                            <h3 class="step-title"><?php echo $t['step1_title']; ?></h3>
+                            <p class="step-desc"><?php echo $t['step1_desc']; ?></p>
                         </div>
                     </div>
+
                     <!-- Step 2 -->
-                    <div class="step-card-modern">
-                        <div class="step-number">02</div>
-                        <div class="step-content">
-                            <div class="mb-6 flex justify-center">
-                                <div class="bg-purple-50 p-4 rounded-xl text-purple-600">
-                                    <i data-lucide="clipboard-copy" class="w-8 h-8"></i>
-                                </div>
+                    <div class="step-card step-2">
+                        <div class="step-top">
+                            <div class="step-visual-mockup flex justify-between items-center">
+                                <span>instagram.com/re...</span>
+                                <span class="bg-slate-100 px-2 py-1 rounded text-[10px] flex items-center gap-1">
+                                    <i data-lucide="clipboard" class="w-2 h-2 text-slate-400"></i> Paste
+                                </span>
+                                <img src="https://api.iconify.design/lucide:pointer.svg" class="step-visual-cursor" alt="pointer">
                             </div>
-                            <h3 class="text-xl font-bold text-slate-800 mb-3 text-center">
-                                <?php echo $t['step2_title']; ?>
-                            </h3>
-                            <p class="text-slate-500 text-sm text-center leading-relaxed">
-                                <?php echo $t['step2_desc']; ?>
-                            </p>
+                        </div>
+                        <div class="step-body">
+                            <h3 class="step-title"><?php echo $t['step2_title']; ?></h3>
+                            <p class="step-desc"><?php echo $t['step2_desc']; ?></p>
                         </div>
                     </div>
+
                     <!-- Step 3 -->
-                    <div class="step-card-modern">
-                        <div class="step-number">03</div>
-                        <div class="step-content">
-                            <div class="mb-6 flex justify-center">
-                                <div class="bg-pink-50 p-4 rounded-xl text-pink-600">
-                                    <i data-lucide="download-cloud" class="w-8 h-8"></i>
-                                </div>
+                    <div class="step-card step-3">
+                        <div class="step-top">
+                            <div class="step-visual-mockup bg-blue-600 text-white border-none text-center py-2 h-auto flex items-center justify-center">
+                                Download
+                                <img src="https://api.iconify.design/lucide:pointer.svg" class="step-visual-cursor" alt="pointer">
                             </div>
-                            <h3 class="text-xl font-bold text-slate-800 mb-3 text-center">
-                                <?php echo $t['step3_title']; ?>
-                            </h3>
-                            <p class="text-slate-500 text-sm text-center leading-relaxed">
-                                <?php echo $t['step3_desc']; ?>
-                            </p>
+                        </div>
+                        <div class="step-body">
+                            <h3 class="step-title"><?php echo $t['step3_title']; ?></h3>
+                            <p class="step-desc"><?php echo $t['step3_desc']; ?></p>
                         </div>
                     </div>
                 </div>
@@ -603,33 +662,48 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                 </p>
 
                 <div class="grid md:grid-cols-4 gap-6">
-                    <div class="feature-card-modern">
+                    <!-- Lightning Fast -->
+                    <div class="feature-card-modern group">
                         <div class="icon-circle">
-                            <i data-lucide="music" class="w-8 h-8"></i>
+                            <i data-lucide="zap" class="w-10 h-10"></i>
                         </div>
-                        <h4 class="text-lg font-bold text-slate-800 mb-2"><?php echo $t['feat1_t']; ?></h4>
-                        <p class="text-slate-500 text-xs leading-relaxed"><?php echo $t['feat1_d']; ?></p>
+                        <h4 class="text-xl font-black text-slate-800 mb-3 group-hover:text-blue-600 transition-colors">
+                            Lightning Fast</h4>
+                        <p class="text-slate-500 text-sm leading-relaxed">Powered by top-tier server infrastructure to
+                            deliver your media in seconds.</p>
                     </div>
-                    <div class="feature-card-modern">
+
+                    <!-- Private & Secure -->
+                    <div class="feature-card-modern group">
                         <div class="icon-circle">
-                            <i data-lucide="check-circle" class="w-8 h-8"></i>
+                            <i data-lucide="shield-check" class="w-10 h-10"></i>
                         </div>
-                        <h4 class="text-lg font-bold text-slate-800 mb-2"><?php echo $t['feat2_t']; ?></h4>
-                        <p class="text-slate-500 text-xs leading-relaxed"><?php echo $t['feat2_d']; ?></p>
+                        <h4 class="text-xl font-black text-slate-800 mb-3 group-hover:text-blue-600 transition-colors">
+                            Private & Secure</h4>
+                        <p class="text-slate-500 text-sm leading-relaxed">We value your privacy. Your data is never
+                            stored, and you don't need an account.</p>
                     </div>
-                    <div class="feature-card-modern">
+
+                    <!-- HD Quality -->
+                    <div class="feature-card-modern group">
                         <div class="icon-circle">
-                            <i data-lucide="zap" class="w-8 h-8"></i>
+                            <i data-lucide="sparkles" class="w-10 h-10"></i>
                         </div>
-                        <h4 class="text-lg font-bold text-slate-800 mb-2"><?php echo $t['feat3_t']; ?></h4>
-                        <p class="text-slate-500 text-xs leading-relaxed"><?php echo $t['feat3_d']; ?></p>
+                        <h4 class="text-xl font-black text-slate-800 mb-3 group-hover:text-blue-600 transition-colors">
+                            HD Quality</h4>
+                        <p class="text-slate-500 text-sm leading-relaxed">Always download the highest resolution
+                            available for Photos and Reels.</p>
                     </div>
-                    <div class="feature-card-modern">
+
+                    <!-- Unlimited Downloads -->
+                    <div class="feature-card-modern group">
                         <div class="icon-circle">
-                            <i data-lucide="lock" class="w-8 h-8"></i>
+                            <i data-lucide="infinity" class="w-10 h-10"></i>
                         </div>
-                        <h4 class="text-lg font-bold text-slate-800 mb-2"><?php echo $t['feat4_t']; ?></h4>
-                        <p class="text-slate-500 text-xs leading-relaxed"><?php echo $t['feat4_d']; ?></p>
+                        <h4 class="text-xl font-black text-slate-800 mb-3 group-hover:text-blue-600 transition-colors">
+                            Unlimited</h4>
+                        <p class="text-slate-500 text-sm leading-relaxed">No limits on how many videos or photos you can
+                            download. Completely free.</p>
                     </div>
                 </div>
             </section>

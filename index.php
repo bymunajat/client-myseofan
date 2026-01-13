@@ -5,7 +5,7 @@ require_once 'includes/Translator.php';
 
 // 1. Initialize State
 $lang = $_GET['lang'] ?? 'en';
-$pageIdentifier = 'home';
+$pageIdentifier = 'index';
 
 // 2. Fetch Data
 $settings = getSiteSettings($pdo);
@@ -492,12 +492,12 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
         }
 
         .step-desc {
-            color: #334155;
+            color: #1e293b;
             font-size: 0.875rem;
             line-height: 1.6;
             border-top: 1px solid #f1f5f9;
             padding-top: 1rem;
-            font-weight: 500;
+            font-weight: 600;
         }
 
         .feature-card-modern {
@@ -740,7 +740,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
     </section>
 
     <!-- Content Sections Wrapper -->
-    <main class="py-20 bg-slate-100 flex-grow">
+    <main class="py-20 bg-slate-200 flex-grow">
         <div class="max-w-6xl mx-auto px-6">
 
             <!-- Intro Card -->
@@ -786,7 +786,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                         <div class="step-top">
                             <div class="step-visual-mockup flex justify-between items-center">
                                 <span>instagram.com/p/C...</span>
-                                <span class="bg-slate-100 px-2 py-1 rounded text-[10px] flex items-center gap-1">
+                                <span class="bg-slate-200 px-2 py-1 rounded text-[10px] flex items-center gap-1">
                                     <i data-lucide="clipboard" class="w-2 h-2 text-slate-400"></i> Paste
                                 </span>
                                 <img src="https://api.iconify.design/lucide:pointer.svg" class="step-visual-cursor"
@@ -955,7 +955,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
     </main>
 
     <!-- FAQ -->
-    <section id="faq" class="py-24 bg-slate-50">
+    <section id="faq" class="py-24 bg-slate-100">
         <div class="max-w-4xl mx-auto px-6">
             <h2 class="section-header-blue">Frequently asked questions (FAQ)</h2>
             <div class="faq-list mt-12">

@@ -29,16 +29,41 @@ document.addEventListener('DOMContentLoaded', () => {
             const url = input.value.trim();
             if (!url) return;
 
-            // Loading State (Premium Glassmorphism)
+            // Enhanced Loading State with Progress Steps
             resDiv.innerHTML = `
                 <div class="animate-fade-up flex flex-col items-center justify-center p-12 bg-white/30 backdrop-blur-xl rounded-[2.5rem] border border-white/40 shadow-2xl max-w-lg mx-auto mt-10">
-                    <div class="relative w-16 h-16 mb-6">
+                    <div class="relative w-20 h-20 mb-6">
                         <div class="absolute inset-0 border-4 border-blue-500/30 rounded-full animate-ping"></div>
-                        <div class="absolute inset-0 border-4 border-t-blue-600 rounded-full animate-spin"></div>
+                        <div class="absolute inset-0 border-4 border-t-blue-600 border-r-purple-600 rounded-full animate-spin"></div>
+                        <div class="absolute inset-2 border-4 border-b-indigo-600 rounded-full animate-spin" style="animation-direction: reverse; animation-duration: 1.5s;"></div>
                     </div>
-                    <p class="text-xl font-bold text-white tracking-[0.2em] uppercase animate-pulse drop-shadow-md">Processing...</p>
-                    <p class="text-white/80 text-sm mt-2 font-medium">Please wait while we fetch your media</p>
+                    <p class="text-2xl font-black text-white tracking-wide uppercase animate-pulse drop-shadow-lg mb-2">Processing...</p>
+                    <div class="space-y-2 text-center">
+                        <p class="text-white/90 text-sm font-semibold animate-pulse" id="loadingStep">🔍 Connecting to Instagram...</p>
+                        <p class="text-white/70 text-xs font-medium">This may take 5-15 seconds depending on your internet speed</p>
+                    </div>
+                    <div class="mt-6 flex gap-2">
+                        <div class="w-2 h-2 bg-white/60 rounded-full animate-bounce" style="animation-delay: 0s;"></div>
+                        <div class="w-2 h-2 bg-white/60 rounded-full animate-bounce" style="animation-delay: 0.2s;"></div>
+                        <div class="w-2 h-2 bg-white/60 rounded-full animate-bounce" style="animation-delay: 0.4s;"></div>
+                    </div>
                 </div>`;
+
+            // Simulate progress steps for better UX
+            const steps = [
+                '🔍 Connecting to Instagram...',
+                '📡 Fetching media data...',
+                '🎨 Processing content...',
+                '✨ Almost ready...'
+            ];
+            let stepIndex = 0;
+            const stepInterval = setInterval(() => {
+                const stepEl = document.getElementById('loadingStep');
+                if (stepEl && stepIndex < steps.length) {
+                    stepEl.textContent = steps[stepIndex];
+                    stepIndex++;
+                }
+            }, 2000);
 
             try {
                 const res = await fetch('download.php', {
@@ -47,6 +72,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: JSON.stringify({ url })
                 });
                 const data = await res.json();
+
+                // Clear progress interval
+                clearInterval(stepInterval);
                 resDiv.innerHTML = '';
 
                 if (data.status === 'single') {
@@ -57,6 +85,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     throw new Error(data.error || 'Content not found or private');
                 }
             } catch (err) {
+                // Clear progress interval on error
+                clearInterval(stepInterval);
                 console.error(err);
                 resDiv.innerHTML = `
                     <div class="animate-fade-up p-8 bg-red-500/95 backdrop-blur-xl text-white rounded-[2rem] font-bold flex flex-col items-center gap-4 border border-red-400/50 shadow-[0_20px_50px_rgba(239,68,68,0.3)] max-w-md mx-auto mt-10">

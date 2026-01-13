@@ -290,7 +290,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
             border-radius: 16px;
             padding: 32px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-            border: 1px solid #f1f5f9;
+            border: 1px solid #e2e8f0;
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
@@ -368,12 +368,12 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
         }
 
         .step-desc {
-            color: #334155;
+            color: #1e293b;
             font-size: 0.875rem;
             line-height: 1.6;
             border-top: 1px solid #f1f5f9;
             padding-top: 1rem;
-            font-weight: 500;
+            font-weight: 600;
         }
 
         .feature-card-modern {
@@ -449,7 +449,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
             padding: 40px;
             display: grid;
             gap: 40px;
-            border: 1px solid #f1f5f9;
+            border: 1px solid #e2e8f0;
         }
 
         @media (min-width: 768px) {
@@ -465,7 +465,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
             display: flex;
             margin-bottom: 80px;
-            border: 1px solid #f1f5f9;
+            border: 1px solid #e2e8f0;
         }
 
         .intro-visual {
@@ -588,7 +588,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
     </section>
 
     <!-- Content Sections Wrapper -->
-    <main class="py-20 bg-slate-50 flex-grow">
+    <main class="py-20 bg-slate-200 flex-grow">
         <div class="max-w-6xl mx-auto px-6">
 
             <!-- Intro Card -->
@@ -634,7 +634,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                         <div class="step-top">
                             <div class="step-visual-mockup flex justify-between items-center">
                                 <span>instagram.com/p/...</span>
-                                <span class="bg-slate-100 px-2 py-1 rounded text-[10px] flex items-center gap-1">
+                                <span class="bg-slate-200 px-2 py-1 rounded text-[10px] flex items-center gap-1">
                                     <i data-lucide="clipboard" class="w-2 h-2 text-slate-400"></i> Paste
                                 </span>
                                 <img src="https://api.iconify.design/lucide:pointer.svg" class="step-visual-cursor"
@@ -734,7 +734,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                             <?php echo __('Why download one by one? With our Carousel Downloader, you can view and save every image and video from a multi-post album. It\'s the perfect tool for backing up memories or saving improved content from your favorite creators.', $lang); ?>
                         </p>
                     </div>
-                    <div class="flex items-center justify-center p-8 bg-slate-50 rounded-xl">
+                    <div class="flex items-center justify-center p-8 bg-slate-100 rounded-xl">
                         <img src="images/carousel-feature.png" alt="Carousel Features"
                             class="rounded-xl shadow-lg transform rotate-2 hover:rotate-0 transition-transform duration-500">
                     </div>
@@ -744,7 +744,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
     </main>
 
     <!-- FAQ Section -->
-    <section id="faq" class="py-24 bg-white animate-fade-up">
+    <section id="faq" class="py-24 bg-slate-100 animate-fade-up">
         <div class="max-w-4xl mx-auto px-6">
             <h2 class="section-header-blue"><?php echo $t['faq_title']; ?></h2>
             <div class="mt-12 space-y-4">
@@ -799,7 +799,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                 <?php endforeach; ?>
             </div>
 
-            <div class="w-full h-px bg-slate-100 my-8"></div>
+            <div class="w-full h-px bg-slate-200 my-8"></div>
 
             <p class="text-center text-slate-400 text-xs">© <?php echo date('Y'); ?>
                 <?php echo htmlspecialchars($settings['site_name']); ?>. All rights reserved.

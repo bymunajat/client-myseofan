@@ -12,14 +12,41 @@ if (
     $ext = pathinfo(parse_url($url, PHP_URL_PATH), PATHINFO_EXTENSION);
     $filename = 'instagram_media_' . time() . '.' . ($ext ?: 'file');
 
-    header('Content-Description: File Transfer');
-    header('Content-Type: application/octet-stream');
-    header('Content-Disposition: attachment; filename="' . $filename . '"');
-    header('Expires: 0');
-    header('Cache-Control: must-revalidate');
-    header('Pragma: public');
+    // Use cURL to fetch the file with proper headers
+    $ch = curl_init($url);
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_HTTPHEADER => [
+            'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Accept: image/webp,image/apng,image/*,*/*;q=0.8',
+            'Accept-Language: en-US,en;q=0.9',
+            'Referer: https://www.instagram.com/',
+            'Sec-Fetch-Dest: image',
+            'Sec-Fetch-Mode: no-cors',
+            'Sec-Fetch-Site: cross-site'
+        ]
+    ]);
 
-    readfile($url);
+    $fileContent = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    if ($httpCode === 200 && $fileContent !== false) {
+        header('Content-Description: File Transfer');
+        header('Content-Type: application/octet-stream');
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
+        header('Content-Length: ' . strlen($fileContent));
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+
+        echo $fileContent;
+    } else {
+        http_response_code(500);
+        echo 'Failed to download file. HTTP Code: ' . $httpCode;
+    }
     exit;
 }
 

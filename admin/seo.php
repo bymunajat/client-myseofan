@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Fetch all pages meta data
-$pages = ['home', 'video', 'reels', 'image'];
+$pages = ['index', 'photo', 'reels', 'video', 'igtv', 'carousel'];
 $seo_data = [];
 if ($pdo) {
     $stmt = $pdo->query("SELECT * FROM seo_data");
@@ -156,8 +156,9 @@ if ($pdo) {
                     $iconColor = 'text-emerald-500';
                     $headerBg = 'bg-slate-50'; // Reverted to light header
                 
+                
                     switch ($page) {
-                        case 'home':
+                        case 'index':
                             $icon = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />';
                             $accentColor = 'border-t-4 border-emerald-500';
                             $iconColor = 'text-emerald-500';
@@ -172,10 +173,20 @@ if ($pdo) {
                             $accentColor = 'border-t-4 border-rose-500';
                             $iconColor = 'text-rose-500';
                             break;
-                        case 'image':
+                        case 'photo':
                             $icon = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h14a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />';
                             $accentColor = 'border-t-4 border-amber-500';
                             $iconColor = 'text-amber-500';
+                            break;
+                        case 'igtv':
+                            $icon = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />';
+                            $accentColor = 'border-t-4 border-purple-500';
+                            $iconColor = 'text-purple-500';
+                            break;
+                        case 'carousel':
+                            $icon = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM14 5a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 16a1 1 0 011-1h4a1 1 0 011 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-3zM14 16a1 1 0 011-1h4a1 1 0 011 1v3a1 1 0 01-1 1h-4a1 1 0 01-1-1v-3z" />';
+                            $accentColor = 'border-t-4 border-indigo-500';
+                            $iconColor = 'text-indigo-500';
                             break;
                         default:
                             $icon = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />';

@@ -261,8 +261,8 @@ if ($action === 'list') {
                                 <div class="flex items-center gap-3 relative border-t border-gray-50 pt-6">
                                     <a href="?action=edit&id=<?php echo $u['id']; ?>"
                                         class="flex-1 text-center py-3.5 text-sm font-bold text-emerald-700 bg-emerald-50 rounded-2xl hover:bg-emerald-600 hover:text-white transition-all duration-300">Edit</a>
-                                    <a href="?action=delete&id=<?php echo $u['id']; ?>"
-                                        onclick="return confirm('Careful! Delete this user?')"
+                                    <a href="javascript:void(0);"
+                                        onclick="confirmDelete('?action=delete&id=<?php echo $u['id']; ?>', 'This administrator account will be permanently deactivated.')"
                                         class="px-4 py-3.5 text-red-100 hover:text-white hover:bg-red-500 rounded-2xl transition-all duration-300 border border-red-50 bg-red-50/50">
                                         <svg class="w-5 h-5 text-red-400 group-hover:text-white" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">

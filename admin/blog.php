@@ -201,7 +201,8 @@ if ($action === 'list') {
                                     <td class="px-8 py-5 text-right space-x-2">
                                         <a href="?action=edit&id=<?php echo $p['id']; ?>"
                                             class="text-emerald-600 hover:text-emerald-800 font-bold">Edit</a>
-                                        <a href="?action=delete&id=<?php echo $p['id']; ?>" onclick="return confirm('Sure?')"
+                                        <a href="javascript:void(0);"
+                                            onclick="confirmDelete('?action=delete&id=<?php echo $p['id']; ?>', 'This blog post will be permanently removed.')"
                                             class="text-red-400 hover:text-red-600 font-bold">Delete</a>
                                     </td>
                                 </tr>

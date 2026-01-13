@@ -189,17 +189,33 @@ if (empty($user_role))
             </a>
         </div>
     </nav>
+    }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        function toggleSection(id) {
-            const el = document.getElementById(id);
-            const chevron = document.getElementById(id + '-chevron');
-            if (el.classList.contains('hidden')) {
-                el.classList.remove('hidden');
-                chevron.classList.add('rotate-180');
-            } else {
-                el.classList.add('hidden');
-                chevron.classList.remove('rotate-180');
-            }
+        function confirmDelete(url, message = 'You won\'t be able to revert this!') {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: message,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#10b981',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel',
+                background: '#ffffff',
+                borderRadius: '1.5rem',
+                customClass: {
+                    popup: 'rounded-[1.5rem] border-none shadow-2xl',
+                    confirmButton: 'rounded-xl font-bold px-6 py-3',
+                    cancelButton: 'rounded-xl font-bold px-6 py-3'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = url;
+                }
+            });
+            return false;
         }
     </script>
 </aside>

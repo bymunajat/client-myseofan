@@ -168,8 +168,8 @@ if ($action === 'edit' && $id) {
                                         <div class="flex justify-end gap-3">
                                             <a href="?action=edit&id=<?php echo $r['id']; ?>"
                                                 class="p-2 hover:bg-emerald-50 text-emerald-600 rounded-lg transition-all">Edit</a>
-                                            <a href="?action=delete&id=<?php echo $r['id']; ?>"
-                                                onclick="return confirm('Silahkan konfirmasi penghapusan?')"
+                                            <a href="javascript:void(0);"
+                                                onclick="confirmDelete('?action=delete&id=<?php echo $r['id']; ?>', 'This redirect rule will be removed.')"
                                                 class="p-2 hover:bg-red-50 text-red-500 rounded-lg transition-all">Delete</a>
                                         </div>
                                     </td>

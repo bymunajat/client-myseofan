@@ -383,7 +383,15 @@ $page_title = ucfirst($location) . " Menu Manager";
         function addCustomLink() {
             const url = document.getElementById('custom-url').value;
             const label = document.getElementById('custom-label').value;
-            if (!label) return alert("Label required");
+            if (!label) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Validation Error',
+                    text: 'Label text is required for custom links.',
+                    confirmButtonColor: '#10b981'
+                });
+                return;
+            }
             appendToRoot(createItemHTML('custom_link', label, '', url));
 
             // reset
@@ -393,15 +401,36 @@ $page_title = ucfirst($location) . " Menu Manager";
 
         function addLabel() {
             const label = document.getElementById('section-label').value;
-            if (!label) return alert("Label required");
+            if (!label) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Validation Error',
+                    text: 'Please enter a text for the label section.',
+                    confirmButtonColor: '#10b981',
+                });
+                return;
+            }
             appendToRoot(createItemHTML('label', label));
             document.getElementById('section-label').value = '';
         }
 
         function removeCreate(btn) {
-            if (confirm('Remove this item?')) {
-                btn.closest('.menu-item').remove();
-            }
+            Swal.fire({
+                title: 'Remove item?',
+                text: "This will remove the item and its children from the menu.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, remove it!',
+                customClass: {
+                    popup: 'rounded-[1.5rem]'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    btn.closest('.menu-item').remove();
+                }
+            });
         }
 
         function toggleEdit(btn) {
@@ -462,12 +491,30 @@ $page_title = ucfirst($location) . " Menu Manager";
                 .then(r => r.json())
                 .then(data => {
                     if (data.success) {
-                        alert('Menu saved successfully!');
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Saved!',
+                            text: 'Menu structure has been updated successfully.',
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
                     } else {
-                        alert('Error: ' + data.error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Failed',
+                            text: 'Error: ' + data.error,
+                            confirmButtonColor: '#10b981'
+                        });
                     }
                 })
-                .catch(e => alert('Network Error'))
+                .catch(e => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Network Error',
+                        text: 'Unable to connect to the server. Please check your connection.',
+                        confirmButtonColor: '#10b981'
+                    });
+                })
                 .finally(() => {
                     btn.innerText = originalText;
                     btn.disabled = false;

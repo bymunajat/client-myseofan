@@ -103,7 +103,8 @@ if (is_dir($uploadsDir)) {
                             <div class="flex items-center justify-between">
                                 <a href="../uploads/<?php echo $f; ?>" download
                                     class="text-[10px] font-bold text-emerald-500 hover:text-emerald-700 uppercase">Download</a>
-                                <a href="?delete=<?php echo urlencode($f); ?>" onclick="return confirm('Delete this file?')"
+                                <a href="javascript:void(0);"
+                                    onclick="confirmDelete('?delete=<?php echo urlencode($f); ?>', 'This file will be permanently deleted from the server.')"
                                     class="text-[10px] font-bold text-red-400 hover:text-red-600 uppercase">Delete</a>
                             </div>
                         </div>

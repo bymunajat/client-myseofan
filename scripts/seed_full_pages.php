@@ -1,5 +1,5 @@
 <?php
-require_once 'includes/db.php';
+require_once '../includes/db.php';
 
 // Prepare full content for 5 pages x 6 languages
 $all_pages = [

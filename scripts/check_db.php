@@ -1,5 +1,5 @@
 <?php
-require_once 'includes/db.php';
+require_once '../includes/db.php';
 try {
     $cols = $pdo->query("PRAGMA table_info(admins)")->fetchAll(PDO::FETCH_ASSOC);
     echo "Columns in 'admins' table:\n";

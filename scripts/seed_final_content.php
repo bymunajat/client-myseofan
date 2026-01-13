@@ -1,5 +1,5 @@
 <?php
-require_once 'includes/db.php';
+require_once '../includes/db.php';
 
 $all_pages = [
     // --- TERMS OF USE (EN) ---

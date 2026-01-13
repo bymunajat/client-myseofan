@@ -1,5 +1,5 @@
 <?php
-require_once 'includes/db.php';
+require_once '../includes/db.php';
 
 // Set all current pages to show in footer by default
 $pdo->exec("UPDATE pages SET show_in_footer = 1");

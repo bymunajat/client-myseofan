@@ -1,5 +1,5 @@
 <?php
-require_once 'includes/db.php';
+require_once '../includes/db.php';
 
 $langs = ['en', 'id', 'es', 'fr', 'de', 'ja'];
 $menuItems = [

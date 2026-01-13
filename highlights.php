@@ -22,19 +22,13 @@ if (!function_exists('__')) {
 
 $t = [
     'title' => $dbPage ? Translator::translate($dbPage['title'], $lang) : __('Instagram Highlights Downloader', $lang),
-    'heading' => $dbPage ? Translator::translate($dbPage['title'], $lang) : __("Save <span class='text-emerald-600 border-b-4 border-emerald-400/30'>Instagram Highlights</span> Permanently", $lang),
-    'subtitle' => $dbPage ? Translator::translate(strip_tags($dbPage['content']), $lang) : __('The easiest way to archive curated highlights from any public Instagram profile.', $lang),
-    'paste' => __('Highlight link here...', $lang),
-    'status_fetching' => __('Loading Highlights...', $lang),
-    'footer_desc' => __('Premium tool for Instagram media preservation.', $lang)
+    'heading' => __('Instagram Downloader', $lang),
+    'subtitle' => __('Download Instagram Videos, Photos, Reels, IGTV & carousel', $lang),
+    'placeholder' => __('Paste Instagram Highlight URL here...', $lang),
+    'btn_download' => __('Download', $lang),
+    'btn_paste' => __('Paste', $lang),
+    'status_fetching' => __('Processing Highlights...', $lang),
 ];
-
-// Re-apply highlight style
-if (!$dbPage && $lang !== 'en') {
-    $t['heading'] = str_replace("Instagram Highlights", "<span class='text-emerald-600 border-b-4 border-emerald-400/30'>Instagram Highlights</span>", $t['heading']);
-} elseif ($dbPage) {
-    $t['heading'] = str_replace("Instagram", "<span class='text-emerald-600 border-b-4 border-emerald-400/30'>Instagram</span>", $t['heading']);
-}
 
 $headerItems = getMenuTree($pdo, 'header', $lang);
 $footerItems = getMenuTree($pdo, 'footer', $lang);
@@ -53,68 +47,169 @@ $seoHelper = new SEO_Helper($pdo, $pageIdentifier, $lang);
     <?php if (!empty($settings['favicon_path'])): ?>
         <link rel="icon" type="image/x-icon" href="<?php echo htmlspecialchars($settings['favicon_path']); ?>">
     <?php endif; ?>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+
+    <?php echo $settings['header_code'] ?? ''; ?>
+
     <style>
         :root {
-            --primary: #10b981;
-            --primary-dark: #059669;
-            --accent: #3b82f6;
+            --hero-gradient: linear-gradient(135deg, #7c3aed 0%, #c026d3 50%, #db2777 100%);
         }
 
         body {
             font-family: 'Outfit', sans-serif;
-            background: radial-gradient(circle at top left, #f3f4f6, #e5e7eb);
-            min-height: 100vh;
-            color: #1f2937;
+            background-color: #ffffff;
+            color: #1a1a1a;
+            scroll-behavior: smooth;
         }
 
-        .premium-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(59, 130, 246, 0.05) 100%);
-            overflow: hidden;
+        .hero-section {
+            background: var(--hero-gradient);
+            position: relative;
+            min-height: 550px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-top: 100px;
+            padding-bottom: 120px;
         }
 
-        .blob {
-            position: absolute;
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0) 70%);
-            border-radius: 50%;
-            filter: blur(60px);
-            animation: move 15s infinite alternate;
+        .glass-header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         }
 
-        @keyframes move {
-            from {
-                transform: translate(-5%, -5%);
-            }
-
-            to {
-                transform: translate(15%, 15%);
-            }
+        .logo-text {
+            color: #7c3aed;
+            font-weight: 800;
+            font-size: 1.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        .glass-card {
-            background: rgba(255, 255, 255, 0.7);
+        .tool-bar {
+            background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+            border-radius: 10px;
+            display: inline-flex;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            margin-bottom: 2.5rem;
         }
 
-        .fade-in {
-            animation: fadeIn 0.8s ease-out forwards;
+        .tool-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 24px;
+            color: #ffffff;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            text-decoration: none;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        @keyframes fadeIn {
+        .tool-item:last-child {
+            border-right: none;
+        }
+
+        .tool-item:hover,
+        .tool-item.active {
+            background: rgba(255, 255, 255, 0.1);
+            font-weight: 600;
+        }
+
+        .input-container {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            max-width: 720px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .input-field {
+            flex: 1;
+            padding: 14px 20px;
+            border: none;
+            outline: none;
+            font-size: 1.1rem;
+            color: #334155;
+            background: transparent;
+        }
+
+        .btn-paste {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: #f1f5f9;
+            color: #475569;
+            font-weight: 700;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-paste:hover {
+            background: #e2e8f0;
+        }
+
+        .btn-download {
+            padding: 12px 28px;
+            background: #3b82f6;
+            color: #ffffff;
+            font-weight: 700;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+
+        .btn-download:hover {
+            background: #2563eb;
+        }
+
+        .section-title {
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            font-weight: 900;
+            color: #ffffff;
+            margin-bottom: 1rem;
+            letter-spacing: -0.025em;
+        }
+
+        .section-subtitle {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+            margin-bottom: 3rem;
+        }
+
+        @keyframes fade-up {
             from {
                 opacity: 0;
-                transform: translateY(10px);
+                transform: translateY(20px);
             }
 
             to {
@@ -122,214 +217,240 @@ $seoHelper = new SEO_Helper($pdo, $pageIdentifier, $lang);
                 transform: translateY(0);
             }
         }
-    </style>
-    <?php echo $settings['header_code'] ?? ''; ?>
-</head>
 
-<body class="flex flex-col">
-    <div class="premium-bg">
-        <div class="blob"></div>
-    </div>
+        .animate-fade-up {
+            animation: fade-up 0.6s ease forwards;
+        }
 
-    <!-- Header -->
-    <header class="sticky top-0 z-50 backdrop-blur-md bg-white/50 border-b border-gray-200">
-        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-            <a href="index.php?lang=<?php echo $lang; ?>" class="flex items-center gap-3 group">
-                <div class="flex items-center">
-                    <?php if (!empty($settings['logo_path'])): ?>
-                        <img src="<?php echo htmlspecialchars($settings['logo_path']); ?>" class="h-10 w-auto"
-                            alt="<?php echo htmlspecialchars($settings['site_name']); ?>">
-                    <?php else: ?>
-                        <div
-                            class="w-10 h-10 bg-emerald-600 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-200 group-hover:rotate-12 transition-transform">
-                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-width="2.5"
-                                    d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                            </svg>
-                        </div>
-                    <?php endif; ?>
-                    <span
-                        class="ml-3 text-xl font-black tracking-tighter text-gray-800"><?php echo htmlspecialchars($settings['site_name'] ?: 'MySeoFan'); ?></span>
-                </div>
-            </a>
+        /* Article Content Styles */
+        .article-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
 
-            <nav class="hidden md:flex items-center gap-8 font-semibold text-gray-500">
-                <?php
-                function renderHeaderMenu_hl($items, $pageIdentifier, $currentSlug, $depth = 0)
-                {
-                    foreach ($items as $item):
-                        $isActive = (strpos($item['final_url'], 'highlights.php') !== false);
-                        $hasChildren = !empty($item['children']);
-                        ?>
-                        <div class="relative group">
-                            <a href="<?php echo htmlspecialchars($item['final_url']); ?>"
-                                class="<?php echo $isActive ? 'text-emerald-600 border-b-2 border-emerald-600' : 'hover:text-emerald-600 transition-colors'; ?> py-1 flex items-center gap-1">
-                                <?php echo htmlspecialchars($item['label']); ?>
-                                <?php if ($hasChildren): ?>
-                                    <svg class="w-3 h-3 pt-1 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-width="3" d="M19 9l-7 7-7-7" />
-                                    </svg>
-                                <?php endif; ?>
-                            </a>
-                            <?php if ($hasChildren): ?>
-                                <div
-                                    class="absolute top-full left-0 mt-2 w-48 bg-white shadow-xl rounded-xl p-2 hidden group-hover:block z-50 border border-gray-100">
-                                    <?php renderHeaderMenu_hl($item['children'], $pageIdentifier, $currentSlug, $depth + 1); ?>
-                                </div>
-                            <?php endif; ?>
-                        </div>
-                    <?php endforeach;
-                }
-                renderHeaderMenu_hl($headerItems, $pageIdentifier, '');
-                ?>
-                <select onchange="location.href = '?lang=' + this.value"
-                    class="appearance-none bg-white border border-gray-200 text-gray-700 font-bold py-2.5 px-6 rounded-2xl shadow-sm outline-none cursor-pointer">
-                    <?php foreach (['en' => '🇺🇸 EN', 'id' => '🇮🇩 ID', 'es' => '🇪🇸 ES', 'fr' => '🇫🇷 FR', 'de' => '🇩🇪 DE', 'ja' => '🇯🇵 JA'] as $c => $l): ?>
-                        <option value="<?php echo $c; ?>" <?php echo $lang == $c ? 'selected' : ''; ?>><?php echo $l; ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-            </nav>
-        </div>
-    </header>
+        .article-content {
+            background: #ffffff;
+            padding: 3rem;
+            border-radius: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            line-height: 1.8;
+            color: #334155;
+        }
 
-    <main class="container mx-auto px-4 py-20 flex-1 text-center font-bold">
-        <div class="max-w-4xl mx-auto mb-16 fade-in">
-            <h1 class="text-5xl md:text-7xl font-black text-gray-900 mb-8 leading-tight tracking-tight">
-                <?php echo $t['heading']; ?>
-            </h1>
-            <p class="text-xl text-gray-500 max-w-2xl mx-auto leading-relaxed"><?php echo $t['subtitle']; ?></p>
-        </div>
-
-        <div class="max-w-3xl mx-auto mb-20 fade-in">
-            <!-- Tool Tabs -->
-            <div class="flex flex-wrap justify-center gap-2 mb-8 p-2 bg-white/20 backdrop-blur-xl rounded-[2rem] border border-white/40 w-max mx-auto shadow-sm">
-                <a href="video.php?lang=<?php echo $lang; ?>" class="px-6 py-3 rounded-[1.5rem] hover:bg-white/50 text-gray-700 transition-all">Video</a>
-                <a href="reels.php?lang=<?php echo $lang; ?>" class="px-6 py-3 rounded-[1.5rem] hover:bg-white/50 text-gray-700 transition-all">Reels</a>
-                <a href="story.php?lang=<?php echo $lang; ?>" class="px-6 py-3 rounded-[1.5rem] hover:bg-white/50 text-gray-700 transition-all">Story</a>
-                <a href="highlights.php?lang=<?php echo $lang; ?>" class="px-6 py-3 rounded-[1.5rem] bg-emerald-600 text-white shadow-lg transition-all">Highlights</a>
-            </div>
-
-            <div class="glass-card rounded-[2.5rem] p-8 md:p-12 shadow-2xl shadow-emerald-900/5">
-                <form id="dlForm" class="relative group">
-                    <input type="text" id="url" placeholder="<?php echo $t['paste']; ?>"
-                        class="w-full bg-white/80 border-2 border-gray-100 rounded-3xl py-6 pl-8 pr-32 focus:outline-none focus:border-emerald-500 transition-all text-xl font-bold"
-                        required>
-                    <button type="submit"
-                        class="absolute right-3 top-3 bottom-3 px-10 bg-emerald-600 text-white rounded-2xl font-black shadow-lg hover:bg-emerald-700 transition-all">Go</button>
-                </form>
-                <div id="res" class="mt-12 transition-all duration-700"></div>
-            </div>
-        </div>
-
-        <!-- Rich Content Section (Article Style) -->
-        <?php if ($dbPage && !empty($dbPage['content'])): ?>
-        <div class="max-w-4xl mx-auto mt-24 text-left fade-in">
-            <div class="prose prose-emerald prose-xl max-w-none bg-white p-12 md:p-20 rounded-[3rem] shadow-xl border border-gray-100">
-                <div class="article-content text-gray-700 leading-relaxed">
-                    <?php echo Translator::translate($dbPage['content'], $lang); ?>
-                </div>
-            </div>
-        </div>
-        <?php endif; ?>
-    </main>
-
-    <footer class="bg-gray-900 text-white mt-auto pt-24 pb-12">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="grid md:grid-cols-4 gap-16 mb-24 text-left font-bold">
-                <div class="col-span-2">
-                    <div class="flex items-center gap-3 mb-8">
-                        <?php if (!empty($settings['logo_path'])): ?>
-                            <img src="<?php echo htmlspecialchars($settings['logo_path']); ?>" class="h-12 w-auto"
-                                alt="<?php echo htmlspecialchars($settings['site_name']); ?>">
-                        <?php else: ?>
-                            <div
-                                class="w-12 h-12 bg-emerald-600 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-500/20">
-                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-width="2.5"
-                                        d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                                </svg>
-                            </div>
-                        <?php endif; ?>
-                        <h4 class="text-3xl font-black tracking-tighter">
-                            <?php echo htmlspecialchars($settings['site_name'] ?: 'MySeoFan'); ?>
-                        </h4>
-                    </div>
-                    <p class="text-gray-400 text-lg leading-relaxed max-w-md"><?php echo $t['footer_desc']; ?></p>
-                </div>
-                <div>
-                    <h4 class="font-bold mb-6">Tools</h4>
-                    <ul class="space-y-4 text-gray-400">
-                        <li><a href="video.php?lang=<?php echo $lang; ?>" class="hover:text-emerald-400">Video
-                                Downloader</a></li>
-                        <li><a href="reels.php?lang=<?php echo $lang; ?>" class="hover:text-emerald-400">Reels
-                                Downloader</a></li>
-                        <li><a href="story.php?lang=<?php echo $lang; ?>" class="hover:text-emerald-400">Story
-                                Downloader</a></li>
-                        <li><a href="blog.php?lang=<?php echo $lang; ?>" class="hover:text-emerald-400">Blog</a></li>
-                    </ul>
-                </div>
-                <?php foreach ($footerItems as $item): ?>
-                    <div>
-                        <h4 class="font-bold mb-6"><?php echo htmlspecialchars($item['label']); ?></h4>
-                        <?php if (!empty($item['children'])): ?>
-                            <ul class="space-y-4 text-gray-400">
-                                <?php foreach ($item['children'] as $child): ?>
-                                    <li><a href="<?php echo htmlspecialchars($child['final_url']); ?>"
-                                            class="hover:text-emerald-400"><?php echo htmlspecialchars($child['label']); ?></a></li>
-                                <?php endforeach; ?>
-                            </ul>
-                        <?php endif; ?>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-            <div
-                class="border-t border-white/5 pt-12 text-center text-gray-400 text-xs uppercase tracking-widest font-bold">
-                &copy; <?php echo date('Y'); ?> <?php echo htmlspecialchars($settings['site_name']); ?>. All rights
-                reserved.
-            </div>
-        </div>
-    </footer>
-
-    <script>
-        document.getElementById('dlForm').addEventListener('submit', async e => {
-            e.preventDefault();
-            const res = document.getElementById('res');
-            res.innerHTML = `<div class='flex flex-col items-center gap-6 py-10'><div class='w-16 h-16 border-[6px] border-emerald-500 border-t-transparent rounded-full animate-spin'></div><p class='font-black text-gray-400 uppercase tracking-widest text-sm animate-pulse'><?php echo $t['status_fetching']; ?></p></div>`;
-            try {
-                const r = await fetch('download.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ url: document.getElementById('url').value }) });
-                const d = await r.json();
-                if (d.status === 'single') {
-                    const dl = `download.php?action=download&url=${encodeURIComponent(d.url)}`;
-                    res.innerHTML = `<div class="flex flex-col gap-8 items-center fade-in"><div class="relative max-w-sm rounded-[2rem] overflow-hidden shadow-2xl border-8 border-white">${d.type === 'video' ? `<video controls class="w-full"><source src="${dl}"></video>` : `<img src="${dl}" class="w-full">`}</div><a href="${dl}" class="w-full max-w-xs bg-emerald-600 text-white text-center py-5 rounded-2xl font-black text-xl shadow-2xl hover:bg-emerald-700 transition-all">Download</a></div>`;
-                } else throw new Error();
-            } catch (e) { res.innerHTML = `<div class='p-8 bg-red-50 text-red-600 rounded-3xl font-bold border-2 border-red-100 fade-in'>Error fetching content. Check link.</div>`; }
-        });
-    </script>
-    <style>
         .article-content h2 {
-            font-size: 2.25rem;
-            font-weight: 900;
-            color: #111827;
-            margin-top: 3rem;
-            margin-bottom: 1.5rem;
-            letter-spacing: -0.025em;
+            font-size: 2rem;
+            font-weight: 800;
+            color: #1e293b;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
         }
 
         .article-content p {
             margin-bottom: 1.5rem;
         }
 
-        .article-content ul {
-            list-style-type: disc;
-            padding-left: 1.5rem;
-            margin-bottom: 1.5rem;
+        /* Result Area */
+        #result .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #7c3aed;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
         }
 
-        .article-content li {
-            margin-bottom: 0.5rem;
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
     </style>
+</head>
+
+<body class="flex flex-col">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 py-4 glass-header">
+        <div class="max-w-7xl mx-auto px-6 flex items-center justify-between">
+            <a href="index.php?lang=<?php echo $lang; ?>" class="logo-text">
+                <?php if (!empty($settings['logo_path'])): ?>
+                    <img src="<?php echo htmlspecialchars($settings['logo_path']); ?>" class="h-8 w-auto" alt="Logo">
+                <?php else: ?>
+                    <i data-lucide="layers" class="w-8 h-8 text-purple-600"></i>
+                <?php endif; ?>
+                <?php echo htmlspecialchars($settings['site_name'] ?: 'MySeoFan'); ?>
+            </a>
+
+            <div class="flex items-center gap-6 text-slate-700 font-bold text-sm uppercase tracking-wider">
+                <nav class="hidden md:flex items-center gap-6">
+                    <?php foreach ($headerItems as $item): ?>
+                        <a href="<?php echo htmlspecialchars($item['final_url']); ?>"
+                            class="hover:text-purple-600 transition-colors">
+                            <?php echo htmlspecialchars($item['label']); ?>
+                        </a>
+                    <?php endforeach; ?>
+                </nav>
+                <div class="relative group cursor-pointer">
+                    <div class="flex items-center gap-1 hover:text-purple-600 transition-colors uppercase">
+                        <?php echo $lang; ?> <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                    </div>
+                    <div
+                        class="absolute right-0 mt-2 w-32 bg-white shadow-xl rounded-xl p-2 hidden group-hover:block border border-gray-100">
+                        <?php foreach (['en' => '🇺🇸 EN', 'id' => '🇮🇩 ID', 'es' => '🇪🇸 ES', 'fr' => '🇫🇷 FR', 'de' => '🇩🇪 DE', 'ja' => '🇯🇵 JA'] as $code => $label): ?>
+                            <a href="?lang=<?php echo $code; ?>"
+                                class="block px-4 py-2 text-xs hover:bg-purple-50 rounded-lg <?php echo $lang === $code ? 'text-purple-600 font-bold' : ''; ?>">
+                                <?php echo $label; ?>
+                            </a>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="downloader" class="hero-section">
+        <div class="max-w-5xl mx-auto text-center px-6 w-full">
+            <!-- Tool Bar -->
+            <div class="tool-bar animate-fade-up">
+                <a href="video.php?lang=<?php echo $lang; ?>"
+                    class="tool-item <?php echo $pageIdentifier == 'video' ? 'active' : ''; ?>"><i data-lucide="video"
+                        class="w-4 h-4"></i> Video</a>
+                <a href="index.php?lang=<?php echo $lang; ?>" class="tool-item"><i data-lucide="image"
+                        class="w-4 h-4"></i> Photo</a>
+                <a href="reels.php?lang=<?php echo $lang; ?>"
+                    class="tool-item <?php echo $pageIdentifier == 'reels' ? 'active' : ''; ?>"><i
+                        data-lucide="clapperboard" class="w-4 h-4"></i> Reels</a>
+                <a href="highlights.php?lang=<?php echo $lang; ?>"
+                    class="tool-item <?php echo $pageIdentifier == 'highlights' ? 'active' : ''; ?>"><i data-lucide="tv"
+                        class="w-4 h-4"></i> IGTV</a>
+                <a href="index.php?lang=<?php echo $lang; ?>" class="tool-item"><i data-lucide="layout"
+                        class="w-4 h-4"></i> Carousel</a>
+            </div>
+
+            <!-- Title -->
+            <h1 class="section-title animate-fade-up"><?php echo $t['heading']; ?></h1>
+            <p class="section-subtitle animate-fade-up" style="animation-delay: 0.1s">
+                <?php echo $t['subtitle']; ?>
+            </p>
+
+            <!-- Input Group -->
+            <form id="downloadForm" class="input-container animate-fade-up" style="animation-delay: 0.2s">
+                <input type="text" id="instaUrl" placeholder="<?php echo $t['placeholder']; ?>" class="input-field"
+                    required>
+                <button type="button" id="btnPaste" class="btn-paste">
+                    <i data-lucide="clipboard" class="w-4 h-4 text-slate-500"></i>
+                    <?php echo $t['btn_paste']; ?>
+                </button>
+                <button type="submit" class="btn-download">
+                    <?php echo $t['btn_download']; ?>
+                </button>
+            </form>
+
+            <!-- Result Area -->
+            <div id="result" class="mt-12 max-w-2xl mx-auto"></div>
+        </div>
+    </section>
+
+    <main class="py-20 bg-slate-50">
+        <!-- Rich Content Section -->
+        <?php if ($dbPage && !empty($dbPage['content'])): ?>
+            <div class="article-container animate-fade-up">
+                <div class="article-content prose prose-slate max-w-none">
+                    <?php echo Translator::translate($dbPage['content'], $lang); ?>
+                </div>
+            </div>
+        <?php endif; ?>
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-16 bg-white border-t border-slate-100">
+        <div class="max-w-4xl mx-auto px-6">
+            <div class="footer-brand text-center">
+                <?php if (!empty($settings['logo_path'])): ?>
+                    <img src="<?php echo htmlspecialchars($settings['logo_path']); ?>" class="h-10 w-auto mx-auto mb-4"
+                        alt="Logo">
+                <?php else: ?>
+                    <i data-lucide="layers" class="footer-logo-icon mx-auto mb-4"></i>
+                <?php endif; ?>
+                <span
+                    class="footer-logo-text block"><?php echo htmlspecialchars($settings['site_name'] ?: 'MySeoFan'); ?></span>
+            </div>
+
+            <div class="footer-links-group mt-8">
+                <?php foreach ($footerItems as $item): ?>
+                    <a href="<?php echo htmlspecialchars($item['final_url']); ?>" class="footer-link">
+                        <?php echo htmlspecialchars($item['label']); ?>
+                    </a>
+                    <span class="text-slate-200">|</span>
+                <?php endforeach; ?>
+            </div>
+
+            <div class="footer-divider"></div>
+
+            <p class="copyright-text">© <?php echo date('Y'); ?>
+                <?php echo htmlspecialchars($settings['site_name']); ?>. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        document.getElementById('btnPaste').addEventListener('click', async () => {
+            try {
+                const text = await navigator.clipboard.readText();
+                document.getElementById('instaUrl').value = text;
+            } catch (err) {
+                console.error('Failed to read clipboard', err);
+            }
+        });
+
+        document.getElementById('downloadForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const input = document.getElementById('instaUrl');
+            const resDiv = document.getElementById('result');
+            const url = input.value.trim();
+            if (!url) return;
+
+            resDiv.innerHTML = `<div class='flex flex-col items-center gap-6 py-10'><div class='spinner'></div><p class='font-bold text-white uppercase tracking-widest text-sm animate-pulse'><?php echo $t['status_fetching']; ?></p></div>`;
+
+            try {
+                const res = await fetch('download.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url })
+                });
+                const data = await res.json();
+                resDiv.innerHTML = '';
+                if (data.status === 'single') {
+                    renderSingle(data);
+                } else {
+                    throw new Error(data.error || 'Error');
+                }
+            } catch (err) {
+                resDiv.innerHTML = `<div class='p-8 bg-red-500/90 text-white rounded-3xl font-bold flex flex-col items-center gap-4 border border-red-400 shadow-xl'><span>${err.message}</span></div>`;
+            }
+        });
+
+        function renderSingle(data) {
+            const dl = `download.php?action=download&url=${encodeURIComponent(data.url)}`;
+            document.getElementById('result').innerHTML = `
+                <div class="flex flex-col gap-8 items-center bg-white/10 backdrop-blur-lg p-8 rounded-[3rem] border border-white/20 shadow-2xl">
+                    <div class="relative group max-w-sm rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white">
+                        ${data.type === 'video' ? `<video controls class="w-full h-auto"><source src="${dl}"></video>` : `<img src="${dl}" class="w-full h-auto">`}
+                    </div>
+                    <a href="${dl}" class="w-full max-w-xs bg-blue-600 text-white text-center py-5 rounded-2xl font-black text-xl shadow-2xl hover:bg-blue-700 transition-all flex items-center justify-center gap-3">
+                        <i data-lucide="download" class="w-6 h-6"></i> Download
+                    </a>
+                </div>`;
+            lucide.createIcons();
+        }
+    </script>
     <?php echo $settings['footer_code'] ?? ''; ?>
 </body>
 

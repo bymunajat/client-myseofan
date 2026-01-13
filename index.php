@@ -12,236 +12,58 @@ $settings = getSiteSettings($pdo);
 $translations = getTranslations($pdo, $lang);
 
 // Helper function for auto-translation
-function __($text, $lang) {
+function __($text, $lang)
+{
     return Translator::translate($text, $lang);
 }
 
-
-// 3. Fallback Translations (Expanded for 6 Languages)
+// 3. Fallback Translations (Updated to match demo1 design copy)
 $defaults = [
     'en' => [
-        'title' => 'Instagram Downloader',
-        'home' => 'Home',
-        'how' => 'Guides',
-        'about' => 'About',
-        'heading' => "Instantly Save <span class='text-emerald-600 border-b-4 border-emerald-400/30'>Any</span> Instagram Media",
-        'subtitle' => 'Experience the fastest, most reliable Instagram downloader. No accounts, no fees, just pure high-speed downloads for Reels, Photos, and Videos.',
-        'download' => 'Go',
-        'paste' => 'Paste',
-        'feat1_t' => 'Lightning Fast',
-        'feat1_d' => 'Powered by top-tier server infrastructure to deliver your media in seconds.',
-        'feat2_t' => 'Private & Secure',
-        'feat2_d' => 'We value your privacy. Your data is never stored, and you don\'t need an account.',
-        'feat3_t' => 'HD Quality',
-        'feat3_d' => 'Always download the highest resolution available for Photos and Reels.',
-        'guide_t' => 'Simple 3-Step Guide',
-        'guide1_t' => 'Copy Content URL',
-        'guide1_d' => 'Open Instagram and copy the URL from the browser bar or share menu.',
-        'guide2_t' => 'Paste & Process',
-        'guide2_d' => 'Paste the link above and our system immediately begins fetching the source.',
-        'guide3_t' => 'Enjoy Offline',
-        'guide3_d' => 'Hit download to instantly save the file to your smartphone or PC.',
-        'faq_t' => 'Common Questions',
-        'q1' => 'Is this tool free to use?',
-        'a1' => 'Yes, our service is 100% free and will always remain so. No subscriptions needed.',
-        'q2' => 'Can I download private account posts?',
-        'a2' => 'Currently, we only support public accounts to respect Instagram\'s security measures.',
-        'q3' => 'What devices are supported?',
-        'a3' => 'Our tool works on all modern devices including iPhone, Android, and PC.',
-        'about_t' => 'Our Mission',
-        'about_d' => 'We believe content archiving should be easy and accessible. Our platform is built by enthusiasts for the creative community.',
-        'footer_desc' => 'The ultimate tool for Instagram media preservation. We help creators and fans archive their favorite moments with ease and style.',
+        'title' => 'Instagram Downloader - Download Videos, Photos, Reels & IGTV',
+        'heading' => 'Instagram Downloader',
+        'subtitle' => 'Download Instagram Videos, Photos, Reels, IGTV & carousel',
+        'placeholder' => 'Insert instagram link here',
+        'btn_download' => 'Download',
+        'btn_paste' => 'Paste',
+        'intro_title' => 'Instagram Videos and Photos Download',
+        'intro_desc' => 'MySeoFan is an online web tool that helps you download Instagram Videos, Photos, Reels, and IGTV. MySeoFan.app is designed to be easy to use on any device, such as a mobile phone, tablet, or computer.',
+        'how_to_title' => 'How to download from Instagram?',
+        'how_to_subtitle' => 'You must follow these three easy steps to download video, reels, and photo from Instagram (IG, Insta). Follow the simple steps below.',
+        'step1_title' => 'Copy the URL',
+        'step1_desc' => 'Open the Instagram application or website, copy the URL of the photo, video, reels, carousel, IGTV.',
+        'step2_title' => 'Paste the link',
+        'step2_desc' => 'Return to the MySeoFan website, paste the link into the input field and click the "Download" button.',
+        'step3_title' => 'Download',
+        'step3_desc' => 'Quickly you will get the results with several quality options. Download what fits your needs.',
+        'features_title' => 'Choose MySeoFan.app for download from Instagram',
+        'features_subtitle' => 'Downloading videos from Instagram in just two clicks is possible without compromising on quality. Avoid using unreliable applications and appreciate the videos, even if they are of lower quality.',
+        'feat1_t' => 'Fast download',
+        'feat1_d' => 'Our servers are optimized to provide you with the fastest download speeds.',
+        'feat2_t' => 'Support for all devices',
+        'feat2_d' => 'Whether you\'re on a mobile, tablet, or desktop, MySeoFan has got you covered.',
+        'feat3_t' => 'High quality',
+        'feat3_d' => 'Download Instagram content in its original quality without any loss.',
+        'feat4_t' => 'Security',
+        'feat4_d' => 'We prioritize your privacy. No login required and all downloads are processed securely.',
         'status_fetching' => 'Fetching media content...',
-        'status_error' => 'Check account privacy or link.',
-        'status_clipboard' => 'Allow clipboard access or paste manually.'
     ],
-    'id' => [
-        'title' => 'Pengunduh Instagram',
-        'home' => 'Beranda',
-        'how' => 'Panduan',
-        'about' => 'Tentang',
-        'heading' => "Simpan <span class='text-emerald-600 border-b-4 border-emerald-400/30'>Semua</span> Media Instagram Instan",
-        'subtitle' => 'Pengalaman unduh Instagram tercepat dan terpercaya. Tanpa akun, tanpa biaya, unduhan Reels, Foto, dan Video berkecepatan tinggi.',
-        'download' => 'Buka',
-        'paste' => 'Tempel',
-        'feat1_t' => 'Sangat Cepat',
-        'feat1_d' => 'Didukung infrastruktur server kelas atas untuk mengirim media Anda dalam hitungan detik.',
-        'feat2_t' => 'Privasi Aman',
-        'feat2_d' => 'Kami menghargai privasi Anda. Data Anda tidak disimpan dan tanpa pendaftaran.',
-        'feat3_t' => 'Kualitas HD',
-        'feat3_d' => 'Selalu unduh resolusi tertinggi yang tersedia untuk Foto dan Reels.',
-        'guide_t' => 'Panduan Mudah 3 Langkah',
-        'guide1_t' => 'Salin Tautan',
-        'guide1_d' => 'Buka Instagram dan salin URL konten dari browser atau menu bagikan.',
-        'guide2_t' => 'Tempel & Proses',
-        'guide2_d' => 'Tempel tautan di atas dan sistem kami akan segera mengirimkan sumbernya.',
-        'guide3_t' => 'Unduh Media',
-        'guide3_d' => 'Pilih unduh untuk menyimpan file langsung ke smartphone atau PC Anda.',
-        'faq_t' => 'Pertanyaan Umum',
-        'q1' => 'Apakah alat ini gratis?',
-        'a1' => 'Ya, layanan kami 100% gratis selamanya tanpa perlu berlangganan apapun.',
-        'q2' => 'Bisa unduh akun privasi?',
-        'a2' => 'Saat ini hanya mendukung akun publik untuk menghargai keamanan Instagram.',
-        'q3' => 'Perangkat apa saja yang didukung?',
-        'a3' => 'Alat kami berbasis web, bekerja di iPhone, Android, dan PC Desktop.',
-        'about_t' => 'Misi Kami',
-        'about_d' => 'Kami percaya pengarsipan konten harus mudah diakses semua orang. Platform ini dibangun untuk komunitas kreatif.',
-        'footer_desc' => 'Alat terbaik untuk pelestarian media Instagram. Kami membantu kreator dan penggemar mengarsipkan momen favorit dengan mudah dan bergaya.',
-        'status_fetching' => 'Mengambil konten media...',
-        'status_error' => 'Periksa privasi akun atau tautan.',
-        'status_clipboard' => 'Izinkan akses papan klip atau tempel secara manual.'
-    ],
-    'es' => [
-        'title' => 'Descargador de Instagram',
-        'home' => 'Inicio',
-        'how' => 'Guías',
-        'about' => 'Acerca de',
-        'heading' => "Guarda <span class='text-emerald-600 border-b-4 border-emerald-400/30'>Cualquier</span> Contenido de Instagram",
-        'subtitle' => 'La forma más rápida y confiable de bajar Reels, Fotos y Videos de Instagram sin costo.',
-        'download' => 'Ir',
-        'paste' => 'Pegar',
-        'feat1_t' => 'Súper Rápido',
-        'feat1_d' => 'Servidores de alto nivel que entregan tu contenido en segundos.',
-        'feat2_t' => 'Privacidad Segura',
-        'feat2_d' => 'Respetamos tu privacidad. Sin cuentas, sin registros.',
-        'feat3_t' => 'Calidad HD',
-        'feat3_d' => 'Siempre baja la mejor resolución disponible.',
-        'guide_t' => 'Guía Sencilla de 3 Pasos',
-        'guide1_t' => 'Copiar URL',
-        'guide1_d' => 'Copia el enlace del post de Instagram.',
-        'guide2_t' => 'Pegar y Procesar',
-        'guide2_d' => 'Pega el enlace arriba y procesaremos la fuente.',
-        'guide3_t' => 'Disfruta Offline',
-        'guide3_d' => 'Guarda el archivo en tu dispositivo al instante.',
-        'faq_t' => 'Preguntas Comunes',
-        'q1' => '¿Es gratis?',
-        'a1' => 'Sí, 100% gratuito siempre.',
-        'q2' => '¿Cuentas privadas?',
-        'a2' => 'Solo perfiles públicos permitidos.',
-        'q3' => '¿Dispositivos?',
-        'a3' => 'Funciona en iPhone, Android y PC.',
-        'about_t' => 'Misión',
-        'about_d' => 'Hacemos que el archivo de contenido sea fácil para todos.',
-        'footer_desc' => 'La mejor herramienta para preservar media de Instagram.',
-        'status_fetching' => 'Obteniendo contenido...',
-        'status_error' => 'Error de enlace.',
-        'status_clipboard' => 'Pega manualmente.'
-    ],
-    'fr' => [
-        'title' => 'Téléchargeur Instagram',
-        'home' => 'Accueil',
-        'how' => 'Guides',
-        'about' => 'À propos',
-        'heading' => "Enregistrez <span class='text-emerald-600 border-b-4 border-emerald-400/30'>Tout</span> Media Instagram",
-        'subtitle' => 'Téléchargez des Reels, Photos et Vidéos Instagram rapidement et gratuitement.',
-        'download' => 'Go',
-        'paste' => 'Coller',
-        'feat1_t' => 'Ultra Rapide',
-        'feat1_d' => 'Serveurs haute performance pour un téléchargement immédiat.',
-        'feat2_t' => 'Confidentialité',
-        'feat2_d' => 'Aucun compte requis, aucune donnée stockée.',
-        'feat3_t' => 'Qualité HD',
-        'feat3_d' => 'Toujours la meilleure résolution possible.',
-        'guide_t' => 'Guide en 3 Étapes',
-        'guide1_t' => 'Copier l\'URL',
-        'guide1_d' => 'Copiez le lien depuis Instagram.',
-        'guide2_t' => 'Coller et Traiter',
-        'guide2_d' => 'Collez le lien ci-dessus pour analyse.',
-        'guide3_t' => 'Enregistrer',
-        'guide3_d' => 'Téléchargez directement sur votre appareil.',
-        'faq_t' => 'Questions Fréquentes',
-        'q1' => 'Est-ce gratuit?',
-        'a1' => 'Oui, totalement gratuit.',
-        'q2' => 'Comptes privés?',
-        'a2' => 'Uniquement les comptes publics.',
-        'q3' => 'Support?',
-        'a3' => 'Marche sur tous les navigateurs.',
-        'about_t' => 'Mission',
-        'about_d' => 'Simplifier l\'accès au partage de contenu.',
-        'footer_desc' => 'L\'outil ultime pour préserver vos médias Instagram.',
-        'status_fetching' => 'Chargement...',
-        'status_error' => 'Erreur de lien.',
-        'status_clipboard' => 'Coller manuellement.'
-    ],
-    'de' => [
-        'title' => 'Instagram Downloader',
-        'home' => 'Startseite',
-        'how' => 'Anleitungen',
-        'about' => 'Über uns',
-        'heading' => "Speichere <span class='text-emerald-600 border-b-4 border-emerald-400/30'>Jedes</span> Instagram-Medium",
-        'subtitle' => 'Der schnellste Weg, um Instagram Reels, Fotos und Videos kostenlos herunterzuladen.',
-        'download' => 'Los',
-        'paste' => 'Einfügen',
-        'feat1_t' => 'Blitzschnell',
-        'feat1_d' => 'Optimierte Server für schnellste Downloads.',
-        'feat2_t' => 'Sicher & Privat',
-        'feat2_d' => 'Keine Registrierung, keine Datenspeicherung.',
-        'feat3_t' => 'HD Qualität',
-        'feat3_d' => 'Immer in bestmöglicher Auflösung.',
-        'guide_t' => '3-Schritte Anleitung',
-        'guide1_t' => 'URL kopieren',
-        'guide1_d' => 'Kopieren Sie den Instagram-Link.',
-        'guide2_t' => 'Einfügen',
-        'guide2_d' => 'Fügen Sie den Link oben ein.',
-        'guide3_t' => 'Speichern',
-        'guide3_d' => 'Direkt auf Ihr Gerät herunterladen.',
-        'faq_t' => 'Häufige Fragen',
-        'q1' => 'Kostenlos?',
-        'a1' => 'Ja, komplett kostenlos.',
-        'q2' => 'Private Konten?',
-        'a2' => 'Nur öffentliche Profile.',
-        'q3' => 'Geräte?',
-        'a3' => 'Mobil und Desktop.',
-        'about_t' => 'Mission',
-        'about_d' => 'Einfacher Zugriff auf Online-Medien.',
-        'footer_desc' => 'Das beste Tool zum Speichern von Instagram-Inhalten.',
-        'status_fetching' => 'Laden...',
-        'status_error' => 'Fehler beim Link.',
-        'status_clipboard' => 'Manuell einfügen.'
-    ],
-    'ja' => [
-        'title' => 'Instagram ダウンローダー',
-        'home' => 'ホーム',
-        'how' => 'ガイド',
-        'about' => 'サイトについて',
-        'heading' => "Instagram メディアを <span class='text-emerald-600 border-b-4 border-emerald-400/30'>即座に</span> 保存",
-        'subtitle' => 'Instagramのリール、写真、動画を素早く無料でダウンロードできる最も信頼性の高いツールです。',
-        'download' => '実行',
-        'paste' => '貼り付け',
-        'feat1_t' => '超高速',
-        'feat1_d' => '最新のサーバーで瞬時にダウンロード。',
-        'feat2_t' => '安全・匿名',
-        'feat2_d' => '登録不要、プライバシーを重視。',
-        'feat3_t' => '高画質',
-        'feat3_d' => '可能な限り最高の解像度で。',
-        'guide_t' => '簡単な3ステップ',
-        'guide1_t' => 'リンクをコピー',
-        'guide1_d' => 'InstagramからURLをコピー。',
-        'guide2_t' => '貼り付け',
-        'guide2_d' => '上の欄にリンクを貼り付け。',
-        'guide3_t' => '保存',
-        'guide3_d' => 'デバイスに直接保存。',
-        'faq_t' => 'よくある質問',
-        'q1' => '無料ですか？',
-        'a1' => 'はい、永久に無料です。',
-        'q2' => '個人アカウント？',
-        'a2' => '公開プロフィールのみ対応。',
-        'q3' => '対応機種？',
-        'a3' => 'スマホでもPCでも動作。',
-        'about_t' => '私たちの使命',
-        'about_d' => 'コンテンツ保存を誰でも簡単に。',
-        'footer_desc' => 'Instagramメディア保存の究極のツール。',
-        'status_fetching' => '読み込み中...',
-        'status_error' => 'リンクエラー。',
-        'status_clipboard' => '手動で貼り付け。'
-    ]
+    // Other languages can be added or auto-translated via Translator::translate
 ];
 
-// Merge with defaults (EN as primary fallback for missing keys in other langs)
-$t = array_merge($defaults['en'], $defaults[$lang] ?? [], $translations);
+// Merge with defaults (EN as primary fallback)
+$t = array_merge($defaults['en'], $translations);
+
+// Auto-translate missing keys for other languages
+if ($lang !== 'en') {
+    foreach ($t as $key => $value) {
+        if (!isset($translations[$key]) || empty($translations[$key])) {
+            $t[$key] = Translator::translate($value, $lang);
+        }
+    }
+}
 
 // Fetch dynamic navigation links
-// Fetch dynamic navigation links using New Menu System
 $headerItems = getMenuTree($pdo, 'header', $lang);
 $footerItems = getMenuTree($pdo, 'footer', $lang);
 
@@ -249,7 +71,7 @@ $footerItems = getMenuTree($pdo, 'footer', $lang);
 $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?php echo $lang; ?>">
 
 <head>
     <meta charset="UTF-8">
@@ -268,9 +90,13 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
 
-    <!-- UI Framework -->
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- Custom Header Code -->
@@ -278,79 +104,152 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
 
     <style>
         :root {
-            --primary: #10b981;
-            --primary-dark: #059669;
-            --accent: #3b82f6;
+            --hero-gradient: linear-gradient(135deg, #7c3aed 0%, #c026d3 50%, #db2777 100%);
         }
 
         body {
             font-family: 'Outfit', sans-serif;
-            background: radial-gradient(circle at top left, #f3f4f6, #e5e7eb);
-            min-height: 100vh;
-            color: #1f2937;
+            background-color: #ffffff;
+            color: #1a1a1a;
+            scroll-behavior: smooth;
         }
 
-        .premium-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(59, 130, 246, 0.05) 100%);
-            overflow: hidden;
+        .hero-section {
+            background: var(--hero-gradient);
+            position: relative;
+            min-height: 550px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-top: 100px;
+            padding-bottom: 120px;
         }
 
-        .blob {
-            position: absolute;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0) 70%);
-            border-radius: 50%;
-            filter: blur(80px);
-            animation: move 20s infinite alternate;
+        .glass-header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         }
 
-        @keyframes move {
-            from {
-                transform: translate(-10%, -10%);
-            }
-
-            to {
-                transform: translate(20%, 20%);
-            }
+        .logo-text {
+            color: #7c3aed;
+            font-weight: 800;
+            font-size: 1.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        .glass-card {
-            background: rgba(255, 255, 255, 0.7);
+        .tool-bar {
+            background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+            border-radius: 10px;
+            display: inline-flex;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            margin-bottom: 2.5rem;
         }
 
-        .hero-title {
-            background: linear-gradient(to right, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .tool-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 24px;
+            color: #ffffff;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            text-decoration: none;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .btn-premium {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        .tool-item:last-child {
+            border-right: none;
         }
 
-        .btn-premium:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.3);
+        .tool-item:hover,
+        .tool-item.active {
+            background: rgba(255, 255, 255, 0.1);
+            font-weight: 600;
         }
 
-        .fade-in {
-            animation: fadeIn 0.8s ease-out forwards;
+        .input-container {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            max-width: 720px;
+            width: 100%;
+            margin: 0 auto;
         }
 
-        @keyframes fadeIn {
+        .input-field {
+            flex: 1;
+            padding: 14px 20px;
+            border: none;
+            outline: none;
+            font-size: 1.1rem;
+            color: #334155;
+            background: transparent;
+        }
+
+        .btn-paste {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: #f1f5f9;
+            color: #475569;
+            font-weight: 700;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-paste:hover {
+            background: #e2e8f0;
+        }
+
+        .btn-download {
+            padding: 12px 28px;
+            background: #3b82f6;
+            color: #ffffff;
+            font-weight: 700;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+
+        .btn-download:hover {
+            background: #2563eb;
+        }
+
+        .section-title {
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            font-weight: 900;
+            color: #ffffff;
+            margin-bottom: 1rem;
+            letter-spacing: -0.025em;
+        }
+
+        .section-subtitle {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+            margin-bottom: 3rem;
+        }
+
+        @keyframes fade-up {
             from {
                 opacity: 0;
-                transform: translateY(10px);
+                transform: translateY(20px);
             }
 
             to {
@@ -358,264 +257,747 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                 transform: translateY(0);
             }
         }
+
+        .animate-fade-up {
+            animation: fade-up 0.6s ease forwards;
+        }
+
+        .faq-item {
+            margin-bottom: 40px;
+        }
+
+        .faq-question {
+            color: #3b82f6;
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .faq-answer {
+            color: #64748b;
+            font-size: 0.875rem;
+            line-height: 1.7;
+            font-weight: 500;
+        }
+
+        .footer-brand {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 40px;
+        }
+
+        .footer-logo-text {
+            font-size: 2.25rem;
+            font-weight: 800;
+            color: #3b82f6;
+        }
+
+        .footer-logo-icon {
+            color: #a855f7;
+            width: 36px;
+            height: 36px;
+        }
+
+        .footer-links-group {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 12px;
+        }
+
+        .footer-link {
+            color: #475569;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            transition: color 0.2s;
+            text-decoration: none;
+        }
+
+        .footer-link:hover {
+            color: #3b82f6;
+        }
+
+        .footer-divider {
+            width: 100%;
+            height: 1px;
+            background: #e2e8f0;
+            margin: 40px 0;
+        }
+
+        .social-label {
+            text-align: center;
+            color: #64748b;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: lowercase;
+            margin-bottom: 20px;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .social-icon {
+            width: 24px;
+            height: 24px;
+            transition: transform 0.2s;
+        }
+
+        .social-icon:hover {
+            transform: scale(1.1);
+        }
+
+        .copyright-text {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 0.6875rem;
+            font-weight: 600;
+        }
+
+        .intro-card {
+            background: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            display: flex;
+            margin-bottom: 80px;
+        }
+
+        .intro-visual {
+            background: linear-gradient(135deg, #7c3aed 0%, #c026d3 50%, #db2777 100%);
+            width: 35%;
+            padding: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .intro-content {
+            padding: 40px;
+            flex: 1;
+        }
+
+        .section-header-blue {
+            color: #3b82f6;
+            font-size: 1.875rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .section-header-blue::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, #3b82f6 0%, #db2777 100%);
+        }
+
+        .step-card {
+            background: #ffffff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .step-top {
+            height: 160px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        .step-1 .step-top {
+            background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+        }
+
+        .step-2 .step-top {
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+        }
+
+        .step-3 .step-top {
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+        }
+
+        .step-visual-mockup {
+            background: #ffffff;
+            border-radius: 6px;
+            padding: 8px 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            font-size: 0.75rem;
+            color: #94a3b8;
+            border: 1px solid #e2e8f0;
+            position: relative;
+        }
+
+        .step-visual-cursor {
+            position: absolute;
+            bottom: -20px;
+            right: 20px;
+            width: 24px;
+            height: 24px;
+        }
+
+        .step-body {
+            padding: 24px;
+            text-align: center;
+            flex: 1;
+        }
+
+        .step-title {
+            color: #db2777;
+            font-weight: 700;
+            font-size: 1.125rem;
+            margin-bottom: 1rem;
+        }
+
+        .step-desc {
+            color: #64748b;
+            font-size: 0.875rem;
+            line-height: 1.6;
+            border-top: 1px solid #f1f5f9;
+            padding-top: 1rem;
+        }
+
+        .feature-item {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .feature-icon {
+            color: #1a1a1a;
+            margin-bottom: 1rem;
+            width: 32px;
+            height: 32px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .feature-title {
+            color: #db2777;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .feature-desc {
+            color: #64748b;
+            font-size: 0.8125rem;
+            line-height: 1.5;
+            border-top: 1px solid #f1f5f9;
+            padding-top: 0.75rem;
+            max-width: 240px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .feature-detail-card {
+            background: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            display: flex;
+            margin-bottom: 2rem;
+            min-height: 240px;
+        }
+
+        .feature-detail-card:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .feature-detail-visual {
+            background: linear-gradient(135deg, #7c3aed 0%, #c026d3 50%, #db2777 100%);
+            width: 40%;
+            padding: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .feature-detail-visual img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+
+        .feature-detail-content {
+            padding: 40px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .feature-detail-title {
+            color: #3b82f6;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .feature-detail-text {
+            color: #64748b;
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+
+            .intro-card,
+            .feature-detail-card,
+            .feature-detail-card:nth-child(even) {
+                flex-direction: column;
+            }
+
+            .intro-visual,
+            .feature-detail-visual {
+                width: 100%;
+                height: 250px;
+            }
+        }
+
+        #result .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #7c3aed;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
     </style>
 </head>
 
-<body class="flex flex-col">
-    <div class="premium-bg">
-        <div class="blob"></div>
-    </div>
-
-    <!-- Header -->
-    <header class="sticky top-0 z-50 backdrop-blur-md bg-white/50 border-b border-gray-200">
-        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-            <a href="index.php?lang=<?php echo $lang; ?>" class="flex items-center gap-3 group">
-                <div class="flex items-center">
-                    <?php if (!empty($settings['logo_path'])): ?>
-                        <img src="<?php echo htmlspecialchars($settings['logo_path']); ?>" class="h-10 w-auto"
-                            alt="<?php echo htmlspecialchars($settings['site_name']); ?>">
-                    <?php else: ?>
-                        <div
-                            class="w-10 h-10 bg-emerald-600 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-200 group-hover:rotate-12 transition-transform">
-                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-width="2.5"
-                                    d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                            </svg>
-                        </div>
-                    <?php endif; ?>
-                    <span
-                        class="ml-3 text-xl font-black tracking-tighter text-gray-800"><?php echo htmlspecialchars($settings['site_name'] ?: 'MySeoFan'); ?></span>
-                </div>
+<body>
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 py-4 glass-header">
+        <div class="max-w-7xl mx-auto px-6 flex items-center justify-between">
+            <a href="index.php?lang=<?php echo $lang; ?>" class="logo-text">
+                <?php if (!empty($settings['logo_path'])): ?>
+                    <img src="<?php echo htmlspecialchars($settings['logo_path']); ?>" class="h-8 w-auto" alt="Logo">
+                <?php else: ?>
+                    <i data-lucide="layers" class="w-8 h-8 text-purple-600"></i>
+                <?php endif; ?>
+                <?php echo htmlspecialchars($settings['site_name'] ?: 'MySeoFan'); ?>
             </a>
 
-            <nav class="hidden md:flex items-center gap-8 font-semibold text-gray-500">
-                <?php 
-                function renderHeaderMenu($items, $pageIdentifier, $currentSlug, $depth = 0) {
-                    foreach ($items as $item): 
-                        // Determine Active State
-                        $isActive = false;
-                        if(strpos($item['final_url'], 'index.php') !== false && $pageIdentifier === 'home') $isActive = true;
-                        if(strpos($item['final_url'], 'blog.php') !== false && $pageIdentifier === 'blog') $isActive = true;
-                        if(strpos($item['final_url'], $currentSlug ?? '---') !== false) $isActive = true;
-                        
-                        $hasChildren = !empty($item['children']);
-                ?>
-                    <div class="relative group <?php echo $depth > 0 ? 'ml-0' : ''; ?>">
+            <div class="flex items-center gap-6 text-slate-700 font-bold text-sm uppercase tracking-wider">
+                <nav class="hidden md:flex items-center gap-6">
+                    <?php foreach ($headerItems as $item): ?>
                         <a href="<?php echo htmlspecialchars($item['final_url']); ?>"
-                            class="<?php echo $isActive ? 'text-emerald-600 border-b-2 border-emerald-600' : 'hover:text-emerald-600 transition-colors'; ?> py-1 flex items-center gap-1">
+                            class="hover:text-purple-600 transition-colors">
                             <?php echo htmlspecialchars($item['label']); ?>
-                            <?php if($hasChildren): ?>
-                                <svg class="w-3 h-3 pt-1 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="3" d="M19 9l-7 7-7-7"/></svg>
-                            <?php endif; ?>
                         </a>
-                        
-                        <!-- Dropdown (Simple Hover) -->
-                        <?php if($hasChildren): ?>
-                            <div class="absolute top-full left-0 mt-2 w-48 bg-white shadow-xl rounded-xl p-2 hidden group-hover:block z-50 border border-gray-100 animate-fade-in-up">
-                                <?php renderHeaderMenu($item['children'], $pageIdentifier, $currentSlug, $depth + 1); ?>
-                            </div>
-                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </nav>
+                <div class="relative group cursor-pointer">
+                    <div class="flex items-center gap-1 hover:text-purple-600 transition-colors uppercase">
+                        <?php echo $lang; ?> <i data-lucide="chevron-down" class="w-4 h-4"></i>
                     </div>
-                <?php endforeach; 
-                }
-                
-                renderHeaderMenu($headerItems, $pageIdentifier, $slug ?? '');
-                ?>
-
-                <!-- Language Switcher -->
-                <div class="relative group">
-                    <select onchange="location.href = this.value"
-                        class="appearance-none bg-white border border-gray-200 text-gray-700 font-bold py-2.5 pl-5 pr-12 rounded-2xl outline-none focus:border-emerald-500 transition-all cursor-pointer shadow-sm">
-                        <?php
-                        $langs = ['en' => '🇺🇸 EN', 'id' => '🇮🇩 ID', 'es' => '🇪🇸 ES', 'fr' => '🇫🇷 FR', 'de' => '🇩🇪 DE', 'ja' => '🇯🇵 JA'];
-                        foreach ($langs as $code => $label):
-                            $targetUrl = "index.php?lang=$code";
-                            ?>
-                            <option value="<?php echo $targetUrl; ?>" <?php echo $lang === $code ? 'selected' : ''; ?>>
-                                <?php echo $label; ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-            </nav>
-        </div>
-    </header>
-
-    <main class="container mx-auto px-4 py-12 md:py-20 flex-1">
-        <!-- Hero Section -->
-        <div class="max-w-4xl mx-auto text-center mb-16 fade-in">
-            <h2 class="text-4xl md:text-7xl font-bold text-gray-900 mb-8 leading-[1.1] tracking-tight">
-                <?php echo $t['heading']; ?>
-            </h2>
-            <p class="text-lg md:text-xl text-gray-500 max-w-2xl mx-auto leading-relaxed"><?php echo $t['subtitle']; ?>
-            </p>
-        </div>
-
-        <!-- Download Box -->
-        <div class="max-w-3xl mx-auto mb-24">
-            <div class="glass-card rounded-[2.5rem] p-6 md:p-12 shadow-2xl shadow-emerald-900/5 fade-in">
-                <form id="downloadForm" class="relative group">
-                    <input type="text" id="instaUrl" placeholder="Paste Instagram link here..."
-                        class="w-full bg-white/80 border-2 border-gray-100/50 rounded-3xl py-6 pl-8 pr-36 focus:outline-none focus:border-emerald-500 transition-all text-xl"
-                        required>
-                    <div class="absolute right-3 top-3 bottom-3 flex gap-2">
-                        <button type="submit"
-                            class="px-8 bg-emerald-600 text-white rounded-2xl font-black shadow-lg shadow-emerald-200 hover:bg-emerald-700 transition-all">Go</button>
-                    </div>
-                </form>
-                <div id="result" class="mt-12 transition-all duration-700 overflow-hidden"></div>
-            </div>
-        </div>
-
-        <!-- Features Grid -->
-        <div class="grid md:grid-cols-3 gap-8 mb-32">
-            <?php for ($i = 1; $i <= 3; $i++): ?>
-                <div class="glass-card p-8 rounded-[2rem] hover:translate-y-[-8px] transition-all">
                     <div
-                        class="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center mb-6">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                        </svg>
+                        class="absolute right-0 mt-2 w-32 bg-white shadow-xl rounded-xl p-2 hidden group-hover:block border border-gray-100">
+                        <?php foreach (['en' => '🇺🇸 EN', 'id' => '🇮🇩 ID', 'es' => '🇪🇸 ES', 'fr' => '🇫🇷 FR', 'de' => '🇩🇪 DE', 'ja' => '🇯🇵 JA'] as $code => $label): ?>
+                            <a href="?lang=<?php echo $code; ?>"
+                                class="block px-4 py-2 text-xs hover:bg-purple-50 rounded-lg <?php echo $lang === $code ? 'text-purple-600 font-bold' : ''; ?>">
+                                <?php echo $label; ?>
+                            </a>
+                        <?php endforeach; ?>
                     </div>
-                    <h4 class="text-xl font-bold mb-3"><?php echo $t['feat' . $i . '_t']; ?></h4>
-                    <p class="text-gray-500 leading-relaxed text-sm"><?php echo $t['feat' . $i . '_d']; ?></p>
                 </div>
-            <?php endfor; ?>
+            </div>
         </div>
+    </nav>
 
-        <!-- How & About (JS Toggled) -->
-        <div id="page-how" class="page hidden max-w-5xl mx-auto mb-32 fade-in">
-            <h3 class="text-3xl font-bold text-center mb-16"><?php echo $t['guide_t']; ?></h3>
-            <div class="grid md:grid-cols-3 gap-12 text-center">
-                <?php for ($i = 1; $i <= 3; $i++): ?>
-                    <div class="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm">
-                        <div
-                            class="w-16 h-16 bg-emerald-600 text-white rounded-2xl flex items-center justify-center mb-8 font-black text-2xl mx-auto">
-                            <?php echo $i; ?>
-                        </div>
-                        <h4 class="text-xl font-bold mb-4"><?php echo $t['guide' . $i . '_t']; ?></h4>
-                        <p class="text-gray-500 leading-relaxed"><?php echo $t['guide' . $i . '_d']; ?></p>
+    <!-- Hero Section -->
+    <section id="downloader" class="hero-section">
+        <div class="max-w-5xl mx-auto text-center px-6 w-full">
+            <!-- Tool Bar -->
+            <div class="tool-bar animate-fade-up">
+                <a href="video.php?lang=<?php echo $lang; ?>" class="tool-item active"><i data-lucide="video"
+                        class="w-4 h-4"></i> Video</a>
+                <a href="index.php?lang=<?php echo $lang; ?>" class="tool-item"><i data-lucide="image"
+                        class="w-4 h-4"></i> Photo</a>
+                <a href="reels.php?lang=<?php echo $lang; ?>" class="tool-item"><i data-lucide="clapperboard"
+                        class="w-4 h-4"></i> Reels</a>
+                <a href="highlights.php?lang=<?php echo $lang; ?>" class="tool-item"><i data-lucide="tv"
+                        class="w-4 h-4"></i> IGTV</a>
+                <a href="index.php?lang=<?php echo $lang; ?>" class="tool-item"><i data-lucide="layout"
+                        class="w-4 h-4"></i> Carousel</a>
+            </div>
+
+            <!-- Title -->
+            <h1 class="section-title animate-fade-up"><?php echo $t['heading']; ?></h1>
+            <p class="section-subtitle animate-fade-up" style="animation-delay: 0.1s">
+                <?php echo $t['subtitle']; ?>
+            </p>
+
+            <!-- Input Group -->
+            <form id="downloadForm" class="input-container animate-fade-up" style="animation-delay: 0.2s">
+                <input type="text" id="instaUrl" placeholder="<?php echo $t['placeholder']; ?>" class="input-field"
+                    required>
+                <button type="button" id="btnPaste" class="btn-paste">
+                    <i data-lucide="clipboard" class="w-4 h-4 text-slate-500"></i>
+                    <?php echo $t['btn_paste']; ?>
+                </button>
+                <button type="submit" class="btn-download">
+                    <?php echo $t['btn_download']; ?>
+                </button>
+            </form>
+
+            <!-- Result Area -->
+            <div id="result" class="mt-12 max-w-2xl mx-auto fade-in"></div>
+        </div>
+    </section>
+
+    <!-- Content Sections Wrapper -->
+    <main class="py-20 bg-slate-50">
+        <div class="max-w-5xl mx-auto px-6">
+
+            <!-- Intro Card -->
+            <div class="intro-card">
+                <div class="intro-visual">
+                    <div
+                        class="bg-white p-4 rounded-xl shadow-lg relative z-10 w-32 h-32 flex items-center justify-center">
+                        <i data-lucide="layers" class="w-16 h-16 text-purple-600"></i>
                     </div>
-                <?php endfor; ?>
+                </div>
+                <div class="intro-content">
+                    <h2 class="text-2xl font-bold text-blue-600 mb-4"><?php echo $t['intro_title']; ?></h2>
+                    <p class="text-slate-500 text-sm leading-relaxed">
+                        <?php echo $t['intro_desc']; ?>
+                    </p>
+                </div>
             </div>
-        </div>
 
-        <div id="page-about" class="page hidden max-w-4xl mx-auto mt-20 fade-in">
-            <div class="glass-card p-12 rounded-[3rem] text-center">
-                <h3 class="text-4xl font-black mb-8"><?php echo $t['about_t']; ?></h3>
-                <p class="text-xl text-gray-600 leading-relaxed"><?php echo $t['about_d']; ?></p>
-            </div>
+            <!-- How to Section -->
+            <section id="how-to" class="mb-32">
+                <h2 class="section-header-blue"><?php echo $t['how_to_title']; ?></h2>
+                <p class="text-center text-slate-500 text-sm mb-12 max-w-2xl mx-auto">
+                    <?php echo $t['how_to_subtitle']; ?>
+                </p>
+
+                <div class="grid md:grid-cols-3 gap-8">
+                    <!-- Step 1 -->
+                    <div class="step-card step-1">
+                        <div class="step-top">
+                            <div class="step-visual-mockup">
+                                instagram.com/p/CmcRCI...
+                                <img src="https://api.iconify.design/lucide:pointer.svg" class="step-visual-cursor"
+                                    alt="pointer">
+                            </div>
+                        </div>
+                        <div class="step-body">
+                            <h3 class="step-title"><?php echo $t['step1_title']; ?></h3>
+                            <p class="step-desc"><?php echo $t['step1_desc']; ?></p>
+                        </div>
+                    </div>
+                    <!-- Step 2 -->
+                    <div class="step-card step-2">
+                        <div class="step-top">
+                            <div class="step-visual-mockup flex justify-between items-center">
+                                <span>instagram.com/p/C...</span>
+                                <span class="bg-slate-100 px-2 py-1 rounded text-[10px] flex items-center gap-1">
+                                    <i data-lucide="clipboard" class="w-2 h-2 text-slate-400"></i> Paste
+                                </span>
+                                <img src="https://api.iconify.design/lucide:pointer.svg" class="step-visual-cursor"
+                                    alt="pointer">
+                            </div>
+                        </div>
+                        <div class="step-body">
+                            <h3 class="step-title"><?php echo $t['step2_title']; ?></h3>
+                            <p class="step-desc"><?php echo $t['step2_desc']; ?></p>
+                        </div>
+                    </div>
+                    <!-- Step 3 -->
+                    <div class="step-card step-3">
+                        <div class="step-top">
+                            <div
+                                class="step-visual-mockup bg-blue-600 text-white border-none text-center py-2 h-auto flex items-center justify-center">
+                                Download
+                                <img src="https://api.iconify.design/lucide:pointer.svg" class="step-visual-cursor"
+                                    alt="pointer">
+                            </div>
+                        </div>
+                        <div class="step-body">
+                            <h3 class="step-title"><?php echo $t['step3_title']; ?></h3>
+                            <p class="step-desc"><?php echo $t['step3_desc']; ?></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Features Section -->
+            <section id="features">
+                <h2 class="section-header-blue"><?php echo $t['features_title']; ?></h2>
+                <p class="text-center text-slate-500 text-sm mb-12 max-w-2xl mx-auto">
+                    <?php echo $t['features_subtitle']; ?>
+                </p>
+
+                <div class="grid md:grid-cols-2 gap-y-12 gap-x-16">
+                    <div class="feature-item">
+                        <i data-lucide="download" class="feature-icon"></i>
+                        <h4 class="feature-title"><?php echo $t['feat1_t']; ?></h4>
+                        <p class="feature-desc"><?php echo $t['feat1_d']; ?></p>
+                    </div>
+                    <div class="feature-item">
+                        <i data-lucide="monitor" class="feature-icon"></i>
+                        <h4 class="feature-title"><?php echo $t['feat2_t']; ?></h4>
+                        <p class="feature-desc"><?php echo $t['feat2_d']; ?></p>
+                    </div>
+                    <div class="feature-item">
+                        <i data-lucide="thumbs-up" class="feature-icon"></i>
+                        <h4 class="feature-title"><?php echo $t['feat3_t']; ?></h4>
+                        <p class="feature-desc"><?php echo $t['feat3_d']; ?></p>
+                    </div>
+                    <div class="feature-item">
+                        <i data-lucide="shield-check" class="feature-icon"></i>
+                        <h4 class="feature-title"><?php echo $t['feat4_t']; ?></h4>
+                        <p class="feature-desc"><?php echo $t['feat4_d']; ?></p>
+                    </div>
+                </div>
+            </section>
+            <!-- Detailed Feature Cards -->
+            <section id="detailed-features" class="mt-32">
+                <h2 class="section-header-blue">MySeoFan.app features</h2>
+                <p class="text-center text-slate-500 text-sm mb-12 max-w-2xl mx-auto">
+                    With MySeoFan you can download any type of content from Instagram. Our service has an IG video
+                    downloader, Reels, IGTV, photo or carousel.
+                </p>
+
+                <div class="space-y-8">
+                    <!-- Video Downloader -->
+                    <div class="feature-detail-card">
+                        <div class="feature-detail-content">
+                            <h3 class="feature-detail-title">Video Downloader</h3>
+                            <p class="feature-detail-text">MySeoFan.app supports Instagram video download for singular
+                                videos and multiple videos from carousel. MySeoFan is created to enable you to download
+                                IG
+                                videos from your personal page.</p>
+                        </div>
+                        <div class="feature-detail-visual">
+                            <img src="images/video-feature.png" alt="Video Downloader">
+                        </div>
+                    </div>
+
+                    <!-- Photos Downloader -->
+                    <div class="feature-detail-card">
+                        <div class="feature-detail-content">
+                            <h3 class="feature-detail-title">Photos Downloader</h3>
+                            <p class="feature-detail-text">Instagram photo download provided by MySeoFan.app is a great
+                                tool for saving images from Instagram posts. With MySeoFan, you can download a single
+                                post
+                                image and multiple Instagram photos (carousel).</p>
+                        </div>
+                        <div class="feature-detail-visual">
+                            <img src="images/photo-feature.png" alt="Photos Downloader">
+                        </div>
+                    </div>
+
+                    <!-- Reels Downloader -->
+                    <div class="feature-detail-card">
+                        <div class="feature-detail-content">
+                            <h3 class="feature-detail-title">Reels Downloader</h3>
+                            <p class="feature-detail-text">Reels is a new video format that clones the principle of
+                                TikTok. Instagram Reels download with the help of MySeoFan. Our Instagram Reels
+                                downloader
+                                can help you to save your favorite Reels videos.</p>
+                        </div>
+                        <div class="feature-detail-visual">
+                            <img src="images/reels-feature.png" alt="Reels Downloader">
+                        </div>
+                    </div>
+
+                    <!-- IGTV Downloader -->
+                    <div class="feature-detail-card">
+                        <div class="feature-detail-content">
+                            <h3 class="feature-detail-title">IGTV Downloader</h3>
+                            <p class="feature-detail-text">IGTV is a long video type. If you can't watch it now, you can
+                                download IGTV videos to your device to be sure that you can return to watching later,
+                                without the need to be online or in case the IGTV can be deleted.</p>
+                        </div>
+                        <div class="feature-detail-visual">
+                            <img src="images/igtv-feature.png" alt="IGTV Downloader">
+                        </div>
+                    </div>
+
+                    <!-- Carousel Downloader -->
+                    <div class="feature-detail-card">
+                        <div class="feature-detail-content">
+                            <h3 class="feature-detail-title">Carousel / Album Downloader</h3>
+                            <p class="feature-detail-text">Carousel, also known as Album or Gallery posts type with
+                                multiple photos, videos, or mixed content. If you need to download multiple photos from
+                                Instagram, the MySeoFan.app is the best to download gallery.</p>
+                        </div>
+                        <div class="feature-detail-visual">
+                            <img src="images/carousel-feature.png" alt="Carousel Downloader">
+                        </div>
+                    </div>
+                </div>
+            </section>
         </div>
     </main>
 
-    <footer class="bg-gray-900 text-white mt-auto pt-24 pb-12">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="grid md:grid-cols-4 gap-16 mb-24">
-                <div class="col-span-2">
-                    <div class="flex items-center gap-3 mb-8">
-                        <?php if (!empty($settings['logo_path'])): ?>
-                            <img src="<?php echo htmlspecialchars($settings['logo_path']); ?>" class="h-12 w-auto"
-                                alt="<?php echo htmlspecialchars($settings['site_name']); ?>">
-                        <?php else: ?>
-                            <div
-                                class="w-12 h-12 bg-emerald-600 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-500/20">
-                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-width="2.5"
-                                        d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                                </svg>
-                            </div>
-                        <?php endif; ?>
-                        <h4 class="text-3xl font-black text-white tracking-tighter">
-                            <?php echo htmlspecialchars($settings['site_name'] ?: 'MySeoFan'); ?>
-                        </h4>
+    <!-- FAQ -->
+    <section id="faq" class="py-24 bg-white">
+        <div class="max-w-4xl mx-auto px-6">
+            <h2 class="section-header-blue">Frequently asked questions (FAQ)</h2>
+            <div class="faq-list mt-12">
+                <!-- FAQ items remain static as they are part of the demo1 design -->
+                <div class="faq-item">
+                    <span class="faq-question">What exactly is MySeoFan.app?</span>
+                    <div class="faq-answer">
+                        MySeoFan.app is a browser-based helper that lets you save public Instagram content - videos,
+                        photos, Reels, Stories, IGTV and carousels - to your own device for offline viewing. It works
+                        straight from the website; no software install is required.
                     </div>
-                    <p class="text-gray-400 text-lg leading-relaxed max-w-md"><?php echo $t['footer_desc']; ?></p>
                 </div>
-                <div>
-                    <h4 class="text-white font-bold mb-6">Downloader</h4>
-                    <ul class="space-y-4 text-gray-400">
-                        <li><a href="video.php?lang=<?php echo $lang; ?>" class="hover:text-emerald-400">Video
-                                Downloader</a></li>
-                        <li><a href="reels.php?lang=<?php echo $lang; ?>" class="hover:text-emerald-400">Reels
-                                Downloader</a></li>
-                        <li><a href="story.php?lang=<?php echo $lang; ?>" class="hover:text-emerald-400">Story
-                                Downloader</a></li>
-                        <li><a href="blog.php?lang=<?php echo $lang; ?>" class="hover:text-emerald-400">Blog & News</a>
-                        </li>
-                    </ul>
+                <div class="faq-item">
+                    <span class="faq-question">Is downloading from Instagram legal?</span>
+                    <div class="faq-answer">
+                        Saving public posts for personal use is generally allowed, but copyright always belongs to the
+                        creator. Please keep the files private unless you have the owner's permission to share or reuse
+                        them.
+                    </div>
                 </div>
+                <div class="faq-item">
+                    <span class="faq-question">Do I need to log in or create an account?</span>
+                    <div class="faq-answer">
+                        No. Just paste the Instagram link - there's no registration, no Instagram credentials, and no
+                        cookies that track you across the web.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <span class="faq-question">Can I grab content from private accounts?</span>
+                    <div class="faq-answer">
+                        Sorry, no. We respect user privacy, so only public posts are accessible. If you can't view the
+                        post in a logged-out browser tab, MySeoFan.app can't fetch it either.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
+    <!-- Footer -->
+    <footer class="py-16 bg-white border-t border-slate-100">
+        <div class="max-w-4xl mx-auto px-6">
+            <div class="footer-brand">
+                <?php if (!empty($settings['logo_path'])): ?>
+                    <img src="<?php echo htmlspecialchars($settings['logo_path']); ?>" class="h-10 w-auto" alt="Logo">
+                <?php else: ?>
+                    <i data-lucide="layers" class="footer-logo-icon"></i>
+                <?php endif; ?>
+                <span
+                    class="footer-logo-text"><?php echo htmlspecialchars($settings['site_name'] ?: 'MySeoFan'); ?></span>
+            </div>
+
+            <div class="footer-links-group">
                 <?php foreach ($footerItems as $item): ?>
-                    <div>
-                        <!-- Parent Item is Header if it has children, else just a link -->
-                        <h4 class="text-white font-bold mb-6">
-                            <?php if(!empty($item['children'])): ?>
-                                <?php echo htmlspecialchars($item['label']); ?>
-                            <?php else: ?>
-                                <a href="<?php echo htmlspecialchars($item['final_url']); ?>" class="hover:text-emerald-400"><?php echo htmlspecialchars($item['label']); ?></a>
-                            <?php endif; ?>
-                        </h4>
-                        
-                        <?php if(!empty($item['children'])): ?>
-                        <ul class="space-y-4 text-gray-400">
-                            <?php foreach ($item['children'] as $child): ?>
-                                <li><a href="<?php echo htmlspecialchars($child['final_url']); ?>"
-                                        class="hover:text-emerald-400"><?php echo htmlspecialchars($child['label']); ?></a></li>
-                            <?php endforeach; ?>
-                        </ul>
-                        <?php endif; ?>
-                    </div>
+                    <a href="<?php echo htmlspecialchars($item['final_url']); ?>" class="footer-link">
+                        <?php echo htmlspecialchars($item['label']); ?>
+                    </a>
+                    <span class="text-slate-200">|</span>
                 <?php endforeach; ?>
             </div>
-            <div class="border-t border-white/5 pt-12 text-center text-gray-400 font-medium text-xs">
-                &copy;
-                <?php echo date('Y'); ?>
-                <?php echo htmlspecialchars($settings['site_name'] ?: 'MySeoFan'); ?>. All rights reserved.
-            </div>
+
+            <div class="footer-divider"></div>
+
+            <p class="copyright-text">© <?php echo date('Y'); ?>
+                <?php echo htmlspecialchars($settings['site_name']); ?>. All rights reserved.
+            </p>
         </div>
     </footer>
 
     <script>
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', e => {
-                e.preventDefault();
-                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('text-emerald-600', 'border-b-2', 'border-emerald-600'));
-                link.classList.add('text-emerald-600', 'border-b-2', 'border-emerald-600');
-                document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
-                const targetId = 'page-' + link.dataset.page;
-                const homeSections = [document.getElementById('downloadForm').closest('.max-w-3xl'), document.querySelector('.grid.md\\:grid-cols-3.gap-8'), document.querySelector('.max-w-4xl.text-center')].filter(el => el);
-                if (link.dataset.page === 'home') homeSections.forEach(el => el.classList.remove('hidden'));
-                else { homeSections.forEach(el => el.classList.add('hidden')); const target = document.getElementById(targetId); if (target) target.classList.remove('hidden'); }
-            });
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Paste functionality
+        document.getElementById('btnPaste').addEventListener('click', async () => {
+            try {
+                const text = await navigator.clipboard.readText();
+                document.getElementById('instaUrl').value = text;
+            } catch (err) {
+                console.error('Failed to read clipboard', err);
+            }
         });
 
-        document.getElementById('downloadForm').addEventListener('submit', async e => {
+        // Form Submission
+        document.getElementById('downloadForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const input = document.getElementById('instaUrl');
             const resDiv = document.getElementById('result');
             const url = input.value.trim();
             if (!url) return;
-            resDiv.innerHTML = `<div class='flex flex-col items-center gap-6 py-10'><div class='w-16 h-16 border-[6px] border-emerald-500 border-t-transparent rounded-full animate-spin'></div><p class='font-black text-gray-400 uppercase tracking-widest text-sm animate-pulse'><?php echo $t['status_fetching']; ?></p></div>`;
+
+            resDiv.innerHTML = `
+                <div class='flex flex-col items-center gap-6 py-10 bg-white/20 backdrop-blur-md rounded-3xl p-8 border border-white/30 shadow-xl'>
+                    <div class='spinner'></div>
+                    <p class='font-bold text-white uppercase tracking-widest text-sm animate-pulse'><?php echo $t['status_fetching']; ?></p>
+                </div>`;
+
             try {
-                const res = await fetch('download.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ url }) });
+                const res = await fetch('download.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url })
+                });
                 const data = await res.json();
                 resDiv.innerHTML = '';
-                if (data.status === 'single') renderSingle(data);
-                else throw new Error(data.error || 'Error');
-            } catch (e) {
-                resDiv.innerHTML = `<div class='p-8 bg-red-50 text-red-600 rounded-3xl font-bold flex flex-col items-center gap-4 border-2 border-red-100 fade-in'><span class="text-lg text-center">${e.message}</span></div>`;
+                if (data.status === 'single') {
+                    renderSingle(data);
+                } else {
+                    throw new Error(data.error || 'Content not found');
+                }
+            } catch (err) {
+                resDiv.innerHTML = `
+                    <div class='p-8 bg-red-500/90 backdrop-blur-md text-white rounded-3xl font-bold flex flex-col items-center gap-4 border border-red-400 shadow-xl fade-in'>
+                        <span class="text-lg text-center">${err.message}</span>
+                    </div>`;
             }
         });
 
         function renderSingle(data) {
             const dl = `download.php?action=download&url=${encodeURIComponent(data.url)}`;
             document.getElementById('result').innerHTML = `
-                <div class="flex flex-col gap-8 items-center fade-in">
-                    <div class="relative group max-w-sm rounded-[2rem] overflow-hidden shadow-2xl border-8 border-white">
+                <div class="flex flex-col gap-8 items-center fade-in bg-white/10 backdrop-blur-lg p-8 rounded-[3rem] border border-white/20 shadow-2xl">
+                    <div class="relative group max-w-sm rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white">
                         ${data.type === 'video' ? `<video controls class="w-full h-auto"><source src="${dl}"></video>` : `<img src="${dl}" class="w-full h-auto">`}
                     </div>
-                    <a href="${dl}" class="w-full max-w-xs bg-emerald-600 text-white text-center py-5 rounded-2xl font-black text-xl shadow-2xl hover:bg-emerald-700 transition-all">Download</a>
+                    <a href="${dl}" class="w-full max-w-xs bg-blue-600 text-white text-center py-5 rounded-2xl font-black text-xl shadow-2xl hover:bg-blue-700 transition-all flex items-center justify-center gap-3">
+                        <i data-lucide="download" class="w-6 h-6"></i> Download
+                    </a>
                 </div>`;
+            lucide.createIcons();
         }
     </script>
     <?php echo $settings['footer_code'] ?? ''; ?>

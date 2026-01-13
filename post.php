@@ -32,48 +32,19 @@ if (!$post) {
 $settings = getSiteSettings($pdo);
 
 // Helper function for auto-translation
-function __($text, $lang)
-{
-    return Translator::translate($text, $lang);
+if (!function_exists('__')) {
+    function __($text, $lang)
+    {
+        return Translator::translate($text, $lang);
+    }
 }
 
-
-// 3. Fallback Translations (Expanded for 6 Languages)
-$defaults = [
-    'en' => [
-        'back' => 'Back to Insights',
-        'home' => 'Home',
-        'blog' => 'Blog'
-    ],
-    'id' => [
-        'back' => 'Kembali ke Wawasan',
-        'home' => 'Beranda',
-        'blog' => 'Blog'
-    ],
-    'es' => [
-        'back' => 'Volver al Blog',
-        'home' => 'Inicio',
-        'blog' => 'Blog'
-    ],
-    'fr' => [
-        'back' => 'Retour au Blog',
-        'home' => 'Accueil',
-        'blog' => 'Blog'
-    ],
-    'de' => [
-        'back' => 'Zurück zum Blog',
-        'home' => 'Startseite',
-        'blog' => 'Blog'
-    ],
-    'ja' => [
-        'back' => 'ブログに戻る',
-        'home' => 'ホーム',
-        'blog' => 'ブログ'
-    ]
+$t = [
+    'back' => __('Back to Insights', $lang),
 ];
 
-// Merge with defaults (EN as primary fallback)
-$t = array_merge($defaults['en'], $defaults[$lang] ?? [], $translations);
+$headerItems = getMenuTree($pdo, 'header', $lang);
+$footerItems = getMenuTree($pdo, 'footer', $lang);
 
 $seoHelper = new SEO_Helper($pdo, 'post', $lang);
 ?>
@@ -91,139 +62,244 @@ $seoHelper = new SEO_Helper($pdo, 'post', $lang);
         <link rel="icon" type="image/x-icon" href="<?php echo htmlspecialchars($settings['favicon_path']); ?>">
     <?php endif; ?>
 
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&display=swap" rel="stylesheet">
 
     <style>
-        :root {
-            --primary: #10b981;
-            --primary-dark: #059669;
-            --accent: #3b82f6;
-        }
-
         body {
             font-family: 'Outfit', sans-serif;
-            background: #fff;
-            color: #1f2937;
+            background-color: #ffffff;
+            color: #1a1a1a;
             line-height: 1.8;
         }
 
         .glass-header {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(12px);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         }
 
-        .hero-title {
-            background: linear-gradient(to right, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .logo-text {
+            color: #7c3aed;
+            font-weight: 800;
+            font-size: 1.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        /* Premium Article Typography */
+        .article-hero {
+            padding: 140px 0 80px;
+            background: #f8fafc;
+        }
+
         .article-content h2 {
             font-size: 2.25rem;
             font-weight: 900;
             margin-top: 4rem;
             margin-bottom: 1.5rem;
             letter-spacing: -0.025em;
-            color: #111827;
+            color: #1e293b;
         }
 
         .article-content p {
-            margin-bottom: 1.75rem;
-            font-size: 1.25rem;
-            color: #374151;
-            font-weight: 400;
-        }
-
-        .article-content ul {
             margin-bottom: 2rem;
-            list-style-type: disc;
-            padding-left: 1.5rem;
+            font-size: 1.125rem;
+            color: #475569;
         }
 
-        .article-content li {
-            margin-bottom: 0.75rem;
-            font-size: 1.125rem;
+        .article-content img {
+            border-radius: 2rem;
+            margin: 3rem 0;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+        }
+
+        .footer-brand {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 40px;
+        }
+
+        .footer-logo-text {
+            font-size: 2.25rem;
+            font-weight: 800;
+            color: #3b82f6;
+        }
+
+        .footer-logo-icon {
+            color: #a855f7;
+            width: 36px;
+            height: 36px;
+        }
+
+        .footer-links-group {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 12px;
+        }
+
+        .footer-link {
+            color: #475569;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            transition: color 0.2s;
+            text-decoration: none;
+        }
+
+        .footer-link:hover {
+            color: #3b82f6;
+        }
+
+        .footer-divider {
+            width: 100%;
+            height: 1px;
+            background: #e2e8f0;
+            margin: 40px 0;
+        }
+
+        .copyright-text {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 0.6875rem;
+            font-weight: 600;
+        }
+
+        .back-link {
+            color: #64748b;
+            font-weight: 700;
+            font-size: 0.875rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: #7c3aed;
         }
     </style>
     <?php echo $settings['header_code'] ?? ''; ?>
 </head>
 
 <body class="flex flex-col min-h-screen">
-    <!-- Header -->
-    <header class="sticky top-0 z-50 glass-header">
-        <div class="max-w-4xl mx-auto px-6 h-20 flex items-center justify-between">
-            <a href="index.php?lang=<?php echo $lang; ?>" class="flex items-center gap-3 group">
-                <div class="flex items-center">
-                    <?php if (!empty($settings['logo_path'])): ?>
-                        <img src="<?php echo htmlspecialchars($settings['logo_path']); ?>" class="h-8 w-auto"
-                            alt="<?php echo htmlspecialchars($settings['site_name']); ?>">
-                    <?php else: ?>
-                        <div
-                            class="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center shadow-lg shadow-emerald-200">
-                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-width="2.5"
-                                    d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                            </svg>
-                        </div>
-                        <span
-                            class="ml-2 text-lg font-black tracking-tighter text-gray-800"><?php echo htmlspecialchars($settings['site_name']); ?></span>
-                    <?php endif; ?>
-                </div>
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 py-4 glass-header">
+        <div class="max-w-7xl mx-auto px-6 flex items-center justify-between">
+            <a href="index.php?lang=<?php echo $lang; ?>" class="logo-text">
+                <?php if (!empty($settings['logo_path'])): ?>
+                    <img src="<?php echo htmlspecialchars($settings['logo_path']); ?>" class="h-8 w-auto" alt="Logo">
+                <?php else: ?>
+                    <i data-lucide="layers" class="w-8 h-8 text-purple-600"></i>
+                <?php endif; ?>
+                <?php echo htmlspecialchars($settings['site_name'] ?: 'MySeoFan'); ?>
             </a>
-            <a href="blog.php?lang=<?php echo $lang; ?>"
-                class="text-sm font-bold text-gray-500 hover:text-emerald-600 transition-colors flex items-center gap-2">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-width="3" d="M15 19l-7-7 7-7" />
-                </svg>
-                <?php echo $t['back']; ?>
-            </a>
-        </div>
-    </header>
 
-    <main class="flex-1 max-w-3xl mx-auto px-6 py-20">
-        <article>
-            <header class="mb-16">
+            <div class="flex items-center gap-6 text-slate-700 font-bold text-sm uppercase tracking-wider">
+                <nav class="hidden md:flex items-center gap-6">
+                    <?php foreach ($headerItems as $item): ?>
+                        <a href="<?php echo htmlspecialchars($item['final_url']); ?>"
+                            class="hover:text-purple-600 transition-colors">
+                            <?php echo htmlspecialchars($item['label']); ?>
+                        </a>
+                    <?php endforeach; ?>
+                </nav>
+                <div class="relative group cursor-pointer">
+                    <div class="flex items-center gap-1 hover:text-purple-600 transition-colors uppercase">
+                        <?php echo $lang; ?> <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                    </div>
+                    <div
+                        class="absolute right-0 mt-2 w-32 bg-white shadow-xl rounded-xl p-2 hidden group-hover:block border border-gray-100">
+                        <?php foreach (['en' => '🇺🇸 EN', 'id' => '🇮🇩 ID', 'es' => '🇪🇸 ES', 'fr' => '🇫🇷 FR', 'de' => '🇩🇪 DE', 'ja' => '🇯🇵 JA'] as $code => $label): ?>
+                            <a href="?lang=<?php echo $code; ?>"
+                                class="block px-4 py-2 text-xs hover:bg-purple-50 rounded-lg <?php echo $lang === $code ? 'text-purple-600 font-bold' : ''; ?>">
+                                <?php echo $label; ?>
+                            </a>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <article class="flex-1">
+        <header class="article-hero">
+            <div class="max-w-4xl mx-auto px-6">
+                <a href="blog.php?lang=<?php echo $lang; ?>" class="back-link">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                    <?php echo $t['back']; ?>
+                </a>
+
                 <div
-                    class="flex items-center gap-4 mb-6 text-xs font-black uppercase tracking-widest text-emerald-600 bg-emerald-50 px-4 py-2 rounded-xl w-fit">
+                    class="flex items-center gap-4 mb-6 text-xs font-black uppercase tracking-widest text-purple-600 bg-purple-50 px-4 py-2 rounded-xl w-fit">
+                    <i data-lucide="calendar" class="w-4 h-4"></i>
                     <?php echo date('F d, Y', strtotime($post['created_at'])); ?>
                 </div>
+
                 <h1 class="text-4xl md:text-6xl font-black tracking-tight leading-[1.1] mb-12">
                     <?php echo htmlspecialchars($post['title']); ?>
                 </h1>
+
                 <?php if ($post['thumbnail']): ?>
-                    <div
-                        class="relative group rounded-[3rem] overflow-hidden shadow-2xl shadow-emerald-900/10 mb-16 border-8 border-white">
-                        <img src="<?php echo htmlspecialchars($post['thumbnail']); ?>" class="w-full h-auto"
-                            alt="<?php echo htmlspecialchars($post['title']); ?>">
-                    </div>
+                    <img src="<?php echo htmlspecialchars($post['thumbnail']); ?>"
+                        class="w-full h-auto rounded-[3rem] shadow-2xl"
+                        alt="<?php echo htmlspecialchars($post['title']); ?>">
                 <?php endif; ?>
-            </header>
-
-            <div class="article-content">
-                <?php echo $post['content']; // HTML allowed from Admin ?>
             </div>
-        </article>
-    </main>
+        </header>
 
-    <footer class="bg-gray-50 border-t border-gray-100 py-12 mt-20">
-        <div class="max-w-4xl mx-auto px-6 flex flex-col items-center gap-6">
-            <div class="flex items-center gap-3">
-                <div class="w-8 h-8 bg-white rounded-lg flex items-center justify-center text-gray-900 shadow-xl">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                    </svg>
-                </div>
-                <h4 class="text-xl font-black hero-title">MySeoFan</h4>
+        <div class="max-w-4xl mx-auto px-6 py-20">
+            <div class="article-content prose max-w-none">
+                <?php echo $post['content']; ?>
             </div>
-            <p class="text-gray-400 font-medium text-sm">&copy; <?php echo date('Y'); ?>
-                <?php echo htmlspecialchars($settings['site_name'] ?? 'MySeoFan'); ?>.
-            </p>
+        </div>
+    </article>
+
+    <!-- Footer -->
+    <footer class="py-16 bg-white border-t border-slate-100 mt-auto">
+        <div class="max-w-4xl mx-auto px-6">
+            <div class="footer-brand">
+                <?php if (!empty($settings['logo_path'])): ?>
+                    <img src="<?php echo htmlspecialchars($settings['logo_path']); ?>" class="h-10 w-auto" alt="Logo">
+                <?php else: ?>
+                    <i data-lucide="layers" class="footer-logo-icon"></i>
+                <?php endif; ?>
+                <span
+                    class="footer-logo-text"><?php echo htmlspecialchars($settings['site_name'] ?: 'MySeoFan'); ?></span>
+            </div>
+
+            <div class="footer-links-group">
+                <?php foreach ($footerItems as $item): ?>
+                    <a href="<?php echo htmlspecialchars($item['final_url']); ?>" class="footer-link">
+                        <?php echo htmlspecialchars($item['label']); ?>
+                    </a>
+                    <span class="text-slate-200">|</span>
+                <?php endforeach; ?>
+            </div>
+
+            <div class="footer-divider"></div>
+
+            <p class="copyright-text">© <?php echo date('Y'); ?>
+                <?php echo htmlspecialchars($settings['site_name']); ?>. All rights reserved.</p>
         </div>
     </footer>
+
+    <script>
+        lucide.createIcons();
+    </script>
     <?php echo $settings['footer_code'] ?? ''; ?>
 </body>
 

@@ -966,69 +966,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
         </div>
     </footer>
 
-    <script>
-        // Initialize Lucide Icons
-        lucide.createIcons();
-
-        // Paste functionality
-        document.getElementById('btnPaste').addEventListener('click', async () => {
-            try {
-                const text = await navigator.clipboard.readText();
-                document.getElementById('instaUrl').value = text;
-            } catch (err) {
-                console.error('Failed to read clipboard', err);
-            }
-        });
-
-        // Form Submission
-        document.getElementById('downloadForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const input = document.getElementById('instaUrl');
-            const resDiv = document.getElementById('result');
-            const url = input.value.trim();
-            if (!url) return;
-
-            resDiv.innerHTML = `
-                <div class='flex flex-col items-center gap-6 py-10 bg-white/20 backdrop-blur-md rounded-3xl p-8 border border-white/30 shadow-xl'>
-                    <div class='spinner'></div>
-                    <p class='font-bold text-white uppercase tracking-widest text-sm animate-pulse'><?php echo $t['status_fetching']; ?></p>
-                </div>`;
-
-            try {
-                const res = await fetch('download.php', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ url })
-                });
-                const data = await res.json();
-                resDiv.innerHTML = '';
-                if (data.status === 'single') {
-                    renderSingle(data);
-                } else {
-                    throw new Error(data.error || 'Content not found');
-                }
-            } catch (err) {
-                resDiv.innerHTML = `
-                    <div class='p-8 bg-red-500/90 backdrop-blur-md text-white rounded-3xl font-bold flex flex-col items-center gap-4 border border-red-400 shadow-xl fade-in'>
-                        <span class="text-lg text-center">${err.message}</span>
-                    </div>`;
-            }
-        });
-
-        function renderSingle(data) {
-            const dl = `download.php?action=download&url=${encodeURIComponent(data.url)}`;
-            document.getElementById('result').innerHTML = `
-                <div class="flex flex-col gap-8 items-center fade-in bg-white/10 backdrop-blur-lg p-8 rounded-[3rem] border border-white/20 shadow-2xl">
-                    <div class="relative group max-w-sm rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white">
-                        ${data.type === 'video' ? `<video controls class="w-full h-auto"><source src="${dl}"></video>` : `<img src="${dl}" class="w-full h-auto">`}
-                    </div>
-                    <a href="${dl}" class="w-full max-w-xs bg-blue-600 text-white text-center py-5 rounded-2xl font-black text-xl shadow-2xl hover:bg-blue-700 transition-all flex items-center justify-center gap-3">
-                        <i data-lucide="download" class="w-6 h-6"></i> Download
-                    </a>
-                </div>`;
-            lucide.createIcons();
-        }
-    </script>
+    <script src="js/app.js"></script>
     <?php echo $settings['footer_code'] ?? ''; ?>
 </body>
 

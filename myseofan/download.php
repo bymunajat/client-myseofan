@@ -33,7 +33,7 @@ $input = json_decode(file_get_contents('php://input'), true);
 if (empty($input['url'])) {
     echo json_encode([
         'status' => 'error',
-        'error' => 'missing_url'
+        'error'  => 'missing_url'
     ]);
     exit;
 }
@@ -43,12 +43,12 @@ $apiUrl = 'http://localhost:9000';
 $ch = curl_init($apiUrl);
 curl_setopt_array($ch, [
     CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_POST => true,
-    CURLOPT_HTTPHEADER => [
+    CURLOPT_POST           => true,
+    CURLOPT_HTTPHEADER     => [
         'Content-Type: application/json',
         'Accept: application/json'
     ],
-    CURLOPT_POSTFIELDS => json_encode([
+    CURLOPT_POSTFIELDS     => json_encode([
         'url' => $input['url']
     ])
 ]);
@@ -74,8 +74,8 @@ if (isset($data['url'])) {
 
     echo json_encode([
         'status' => 'single',
-        'type' => $type,
-        'url' => $url
+        'type'   => $type,
+        'url'    => $url
     ]);
     exit;
 }
@@ -98,13 +98,13 @@ if (isset($data['files']) && is_array($data['files'])) {
 
         $media[] = [
             'type' => $type,
-            'url' => $url
+            'url'  => $url
         ];
     }
 
     echo json_encode([
         'status' => 'multiple',
-        'media' => $media
+        'media'  => $media
     ]);
     exit;
 }
@@ -118,8 +118,7 @@ if (isset($data['status']) && $data['status'] === 'picker' && isset($data['picke
 
     foreach ($data['picker'] as $item) {
 
-        if (empty($item['url']))
-            continue;
+        if (empty($item['url'])) continue;
 
         $type = 'file';
 
@@ -132,23 +131,15 @@ if (isset($data['status']) && $data['status'] === 'picker' && isset($data['picke
 
         $media[] = [
             'type' => $type,
-            'url' => $item['url']
+            'url'  => $item['url']
         ];
     }
 
     if (!empty($media)) {
-        if (count($media) === 1) {
-            echo json_encode([
-                'status' => 'single',
-                'type' => $media[0]['type'],
-                'url' => $media[0]['url']
-            ]);
-        } else {
-            echo json_encode([
-                'status' => 'multiple',
-                'media' => $media
-            ]);
-        }
+        echo json_encode([
+            'status' => count($media) === 1 ? 'single' : 'multiple',
+            'media'  => $media
+        ]);
         exit;
     }
 }
@@ -158,5 +149,5 @@ if (isset($data['status']) && $data['status'] === 'picker' && isset($data['picke
 ===================================================== */
 echo json_encode([
     'status' => 'error',
-    'error' => 'unsupported_instagram_url'
+    'error'  => 'unsupported_instagram_url'
 ]);

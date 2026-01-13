@@ -197,6 +197,12 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
             background: transparent;
         }
 
+        .input-field::placeholder {
+            color: #475569;
+            font-weight: 500;
+            opacity: 1;
+        }
+
         .btn-paste {
             display: flex;
             align-items: center;
@@ -275,7 +281,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
         }
 
         .faq-answer {
-            color: #64748b;
+            color: #334155;
             font-size: 0.875rem;
             line-height: 1.7;
             font-weight: 500;
@@ -292,7 +298,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
         .footer-logo-text {
             font-size: 2.25rem;
             font-weight: 800;
-            color: #3b82f6;
+            color: #7c3aed;
         }
 
         .footer-logo-icon {
@@ -368,6 +374,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
             display: flex;
             margin-bottom: 80px;
+            border: 1px solid #e2e8f0;
         }
 
         .intro-visual {
@@ -439,6 +446,18 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
             background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
         }
 
+        .step-card-modern {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            height: 100%;
+        }
+
         .step-visual-mockup {
             background: #ffffff;
             border-radius: 6px;
@@ -473,11 +492,12 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
         }
 
         .step-desc {
-            color: #64748b;
+            color: #334155;
             font-size: 0.875rem;
             line-height: 1.6;
             border-top: 1px solid #f1f5f9;
             padding-top: 1rem;
+            font-weight: 500;
         }
 
         .feature-card-modern {
@@ -535,6 +555,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
             display: flex;
             margin-bottom: 2rem;
             min-height: 240px;
+            border: 1px solid #e2e8f0;
         }
 
         .feature-detail-card:nth-child(even) {
@@ -572,10 +593,27 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
             margin-bottom: 1rem;
         }
 
-        .feature-detail-text {
-            color: #64748b;
+        .step-desc {
+            color: #334155;
             font-size: 0.875rem;
             line-height: 1.6;
+            border-top: 1px solid #f1f5f9;
+            padding-top: 1rem;
+            font-weight: 500;
+        }
+
+        .feature-detail-text {
+            color: #334155;
+            font-size: 0.875rem;
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        .faq-answer {
+            color: #334155;
+            font-size: 0.875rem;
+            line-height: 1.7;
+            font-weight: 500;
         }
 
         @media (max-width: 768px) {
@@ -702,8 +740,8 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
     </section>
 
     <!-- Content Sections Wrapper -->
-    <main class="py-20 bg-slate-50">
-        <div class="max-w-5xl mx-auto px-6">
+    <main class="py-20 bg-slate-100 flex-grow">
+        <div class="max-w-6xl mx-auto px-6">
 
             <!-- Intro Card -->
             <div class="intro-card">
@@ -715,7 +753,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                 </div>
                 <div class="intro-content">
                     <h2 class="text-2xl font-bold text-blue-600 mb-4"><?php echo $t['intro_title']; ?></h2>
-                    <p class="text-slate-500 text-sm leading-relaxed">
+                    <p class="text-slate-700 font-medium text-lg leading-relaxed">
                         <?php echo $t['intro_desc']; ?>
                     </p>
                 </div>
@@ -781,7 +819,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
             <!-- Features Section -->
             <section id="features">
                 <h2 class="section-header-blue"><?php echo $t['features_title']; ?></h2>
-                <p class="text-center text-slate-500 text-sm mb-12 max-w-2xl mx-auto">
+                <p class="text-center text-slate-700 font-medium text-sm mb-12 max-w-2xl mx-auto">
                     <?php echo $t['features_subtitle']; ?>
                 </p>
 
@@ -793,7 +831,8 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                         </div>
                         <h4 class="text-xl font-black text-slate-800 mb-3 group-hover:text-blue-600 transition-colors">
                             Lightning Fast</h4>
-                        <p class="text-slate-500 text-sm leading-relaxed">Powered by top-tier server infrastructure to
+                        <p class="text-slate-700 font-medium text-sm leading-relaxed">Powered by top-tier server
+                            infrastructure to
                             deliver your media in seconds.</p>
                     </div>
 
@@ -804,7 +843,8 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                         </div>
                         <h4 class="text-xl font-black text-slate-800 mb-3 group-hover:text-blue-600 transition-colors">
                             Private & Secure</h4>
-                        <p class="text-slate-500 text-sm leading-relaxed">We value your privacy. Your data is never
+                        <p class="text-slate-700 font-medium text-sm leading-relaxed">We value your privacy. Your data
+                            is never
                             stored, and you don't need an account.</p>
                     </div>
 
@@ -815,7 +855,8 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                         </div>
                         <h4 class="text-xl font-black text-slate-800 mb-3 group-hover:text-blue-600 transition-colors">
                             HD Quality</h4>
-                        <p class="text-slate-500 text-sm leading-relaxed">Always download the highest resolution
+                        <p class="text-slate-700 font-medium text-sm leading-relaxed">Always download the highest
+                            resolution
                             available for Photos and Reels.</p>
                     </div>
 
@@ -826,7 +867,8 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                         </div>
                         <h4 class="text-xl font-black text-slate-800 mb-3 group-hover:text-blue-600 transition-colors">
                             Unlimited</h4>
-                        <p class="text-slate-500 text-sm leading-relaxed">No limits on how many videos or photos you can
+                        <p class="text-slate-700 font-medium text-sm leading-relaxed">No limits on how many videos or
+                            photos you can
                             download. Completely free.</p>
                     </div>
                 </div>
@@ -834,7 +876,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
             <!-- Detailed Feature Cards -->
             <section id="detailed-features" class="mt-32">
                 <h2 class="section-header-blue">MySeoFan.app features</h2>
-                <p class="text-center text-slate-500 text-sm mb-12 max-w-2xl mx-auto">
+                <p class="text-center text-slate-700 font-medium text-sm mb-12 max-w-2xl mx-auto">
                     With MySeoFan you can download any type of content from Instagram. Our service has an IG video
                     downloader, Reels, IGTV, photo or carousel.
                 </p>
@@ -913,7 +955,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
     </main>
 
     <!-- FAQ -->
-    <section id="faq" class="py-24 bg-white">
+    <section id="faq" class="py-24 bg-slate-50">
         <div class="max-w-4xl mx-auto px-6">
             <h2 class="section-header-blue">Frequently asked questions (FAQ)</h2>
             <div class="faq-list mt-12">

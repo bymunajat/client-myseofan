@@ -207,6 +207,12 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
             background: transparent;
         }
 
+        .input-field::placeholder {
+            color: #475569;
+            font-weight: 500;
+            opacity: 1;
+        }
+
         .btn-paste {
             display: flex;
             align-items: center;
@@ -362,11 +368,12 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
         }
 
         .step-desc {
-            color: #64748b;
+            color: #334155;
             font-size: 0.875rem;
             line-height: 1.6;
             border-top: 1px solid #f1f5f9;
             padding-top: 1rem;
+            font-weight: 500;
         }
 
         .feature-card-modern {
@@ -427,7 +434,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
         .footer-logo-text {
             font-size: 2.25rem;
             font-weight: 800;
-            color: #3b82f6;
+            color: #7c3aed;
         }
 
         .footer-logo-icon {
@@ -593,7 +600,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                 </div>
                 <div class="intro-content">
                     <h2 class="text-2xl font-bold text-blue-600 mb-4"><?php echo $t['intro_title']; ?></h2>
-                    <p class="text-slate-500 text-lg leading-relaxed">
+                    <p class="text-slate-700 font-medium text-lg leading-relaxed">
                         <?php echo $t['intro_desc']; ?>
                     </p>
                 </div>
@@ -602,7 +609,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
             <!-- How to Section (Redesigned) -->
             <section id="how-to" class="mb-32 animate-fade-up" style="animation-delay: 0.1s">
                 <h2 class="section-header-blue"><?php echo $t['how_to_title']; ?></h2>
-                <p class="text-center text-slate-500 text-sm mb-12 max-w-2xl mx-auto">
+                <p class="text-center text-slate-700 font-medium text-sm mb-12 max-w-2xl mx-auto">
                     <?php echo $t['how_to_subtitle']; ?>
                 </p>
 
@@ -661,7 +668,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
             <!-- Features Section (Redesigned) -->
             <section id="features" class="animate-fade-up" style="animation-delay: 0.2s">
                 <h2 class="section-header-blue"><?php echo $t['features_title']; ?></h2>
-                <p class="text-center text-slate-500 text-sm mb-12 max-w-2xl mx-auto">
+                <p class="text-center text-slate-700 font-medium text-sm mb-12 max-w-2xl mx-auto">
                     <?php echo $t['features_subtitle']; ?>
                 </p>
 
@@ -673,7 +680,8 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                         </div>
                         <h4 class="text-xl font-black text-slate-800 mb-3 group-hover:text-blue-600 transition-colors">
                             Lightning Fast</h4>
-                        <p class="text-slate-500 text-sm leading-relaxed">Powered by top-tier server infrastructure to
+                        <p class="text-slate-700 font-medium text-sm leading-relaxed">Powered by top-tier server
+                            infrastructure to
                             deliver your media in seconds.</p>
                     </div>
 
@@ -684,7 +692,8 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                         </div>
                         <h4 class="text-xl font-black text-slate-800 mb-3 group-hover:text-blue-600 transition-colors">
                             Private & Secure</h4>
-                        <p class="text-slate-500 text-sm leading-relaxed">We value your privacy. Your data is never
+                        <p class="text-slate-700 font-medium text-sm leading-relaxed">We value your privacy. Your data
+                            is never
                             stored, and you don't need an account.</p>
                     </div>
 
@@ -695,7 +704,8 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                         </div>
                         <h4 class="text-xl font-black text-slate-800 mb-3 group-hover:text-blue-600 transition-colors">
                             HD Quality</h4>
-                        <p class="text-slate-500 text-sm leading-relaxed">Always download the highest resolution
+                        <p class="text-slate-700 font-medium text-sm leading-relaxed">Always download the highest
+                            resolution
                             available for Photos and Reels.</p>
                     </div>
 
@@ -706,7 +716,8 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                         </div>
                         <h4 class="text-xl font-black text-slate-800 mb-3 group-hover:text-blue-600 transition-colors">
                             Unlimited</h4>
-                        <p class="text-slate-500 text-sm leading-relaxed">No limits on how many videos or photos you can
+                        <p class="text-slate-700 font-medium text-sm leading-relaxed">No limits on how many videos or
+                            photos you can
                             download. Completely free.</p>
                     </div>
                 </div>
@@ -719,7 +730,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                         <h3 class="text-2xl font-extrabold text-slate-800 mb-4">
                             <?php echo __('Why Download IGTV?', $lang); ?>
                         </h3>
-                        <p class="text-slate-500 leading-relaxed">
+                        <p class="text-slate-700 font-medium leading-relaxed">
                             <?php echo __('IGTV content is often educational, inspirational, or deeply entertaining. However, streaming specific hour-long videos can use a lot of data. Downloading them over Wi-Fi allows you to watch without buffering or data concerns, anytime and anywhere.', $lang); ?>
                         </p>
                     </div>
@@ -739,19 +750,19 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
             <div class="mt-12 space-y-4">
                 <div class="border border-slate-100 rounded-xl p-6 hover:shadow-lg transition-shadow bg-white">
                     <span class="text-blue-600 font-bold block mb-2 text-lg"><?php echo $t['faq_q1']; ?></span>
-                    <div class="text-slate-500 leading-relaxed"><?php echo $t['faq_a1']; ?></div>
+                    <div class="text-slate-700 font-medium leading-relaxed"><?php echo $t['faq_a1']; ?></div>
                 </div>
                 <div class="border border-slate-100 rounded-xl p-6 hover:shadow-lg transition-shadow bg-white">
                     <span class="text-blue-600 font-bold block mb-2 text-lg"><?php echo $t['faq_q2']; ?></span>
-                    <div class="text-slate-500 leading-relaxed"><?php echo $t['faq_a2']; ?></div>
+                    <div class="text-slate-700 font-medium leading-relaxed"><?php echo $t['faq_a2']; ?></div>
                 </div>
                 <div class="border border-slate-100 rounded-xl p-6 hover:shadow-lg transition-shadow bg-white">
                     <span class="text-blue-600 font-bold block mb-2 text-lg"><?php echo $t['faq_q3']; ?></span>
-                    <div class="text-slate-500 leading-relaxed"><?php echo $t['faq_a3']; ?></div>
+                    <div class="text-slate-700 font-medium leading-relaxed"><?php echo $t['faq_a3']; ?></div>
                 </div>
                 <div class="border border-slate-100 rounded-xl p-6 hover:shadow-lg transition-shadow bg-white">
                     <span class="text-blue-600 font-bold block mb-2 text-lg"><?php echo $t['faq_q4']; ?></span>
-                    <div class="text-slate-500 leading-relaxed"><?php echo $t['faq_a4']; ?></div>
+                    <div class="text-slate-700 font-medium leading-relaxed"><?php echo $t['faq_a4']; ?></div>
                 </div>
             </div>
         </div>
@@ -776,7 +787,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                         <?php if (isset($group['children']) && !empty($group['children'])): ?>
                             <?php foreach ($group['children'] as $index => $item): ?>
                                 <a href="<?php echo htmlspecialchars($item['final_url']); ?>"
-                                    class="text-sm font-semibold text-slate-500 hover:text-blue-600 transition-colors">
+                                    class="text-sm font-semibold text-slate-700 font-medium hover:text-blue-600 transition-colors">
                                     <?php echo htmlspecialchars($item['label']); ?>
                                 </a>
                                 <?php if ($index < count($group['children']) - 1): ?>

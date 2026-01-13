@@ -20,43 +20,43 @@ function __($text, $lang)
 // 3. Fallback Translations
 $defaults = [
     'en' => [
-        'title' => 'Instagram Photo Downloader - Download High Quality Photos',
-        'heading' => 'Instagram Photo Downloader',
-        'subtitle' => 'Download high-quality Instagram photos securely and easily.',
+        'title' => 'Instagram Photo Downloader - Save High Quality Photos',
+        'hero_title' => 'Instagram Photo Downloader',
+        'subtitle' => 'Save full resolution photos from Instagram posts.',
         'placeholder' => 'Paste Instagram photo URL here',
         'btn_download' => 'Download',
         'btn_paste' => 'Paste',
-        'intro_title' => 'Download Instagram Photos in Original Quality',
-        'intro_desc' => 'MySeoFan allows you to save Instagram photos to your device in original resolution. No screenshots needed—get the clean, full-quality image file directly.',
+        'intro_title' => 'Download Instagram Photos Instantly',
+        'intro_desc' => 'Save your favorite Instagram photos in original quality. MySeoFan allows you to grab single photos or multiple images from posts easily.',
         'how_to_title' => 'How to download Photos from Instagram?',
-        'how_to_subtitle' => 'Saving your favorite Instagram photos is simple. Just follow these steps.',
-        'step1_title' => 'Copy Photo URL',
-        'step1_desc' => 'Open the Instagram post and copy the link from the menu.',
-        'step2_title' => 'Paste the Link',
-        'step2_desc' => 'Paste the link into the input box above and hit Download.',
-        'step3_title' => 'Save Image',
-        'step3_desc' => 'The image will be processed. innovative click Download to save it.',
-        'features_title' => 'Why use our Photo Downloader?',
-        'features_subtitle' => 'We offer the best tool for saving Instagram memories.',
-        'feat1_t' => 'Original Resolution',
-        'feat1_d' => 'Get the exact image file uploaded to Instagram.',
-        'feat2_t' => 'No Watermarks',
-        'feat2_d' => 'Clean images without any added branding.',
-        'feat3_t' => 'Fast & Free',
-        'feat3_d' => 'Unlimited downloads at high speed.',
+        'how_to_subtitle' => 'Follow these simple steps to save photos to your gallery.',
+        'step1_title' => 'Copy Photo Link',
+        'step1_desc' => 'Open the Instagram post and copy the link from the top right menu.',
+        'step2_title' => 'Paste Link',
+        'step2_desc' => 'Paste the link into the input box above and tap Download.',
+        'step3_title' => 'Save Photo',
+        'step3_desc' => 'The photo will appear below. Click Download to save it.',
+        'features_title' => 'Top Photo Downloader',
+        'features_subtitle' => 'The easiest way to keep a collection of your favorite shots.',
+        'feat1_t' => 'Original Quality',
+        'feat1_d' => 'We fetch the photo in its maximal uploaded resolution.',
+        'feat2_t' => 'No Crop',
+        'feat2_d' => 'Get the full photo, not a screen capture.',
+        'feat3_t' => 'Instant Save',
+        'feat3_d' => 'One click to download to your device.',
         'feat4_t' => 'Secure',
-        'feat4_d' => 'We do not store your download history.',
+        'feat4_d' => 'Your activity is private and safe.',
         'status_fetching' => 'Fetching photo...',
         // FAQ
         'faq_title' => 'Frequently Asked Questions (FAQ)',
         'faq_q1' => 'Can I download private photos?',
-        'faq_a1' => 'No, you can only download photos from public accounts.',
-        'faq_q2' => 'Is it free?',
-        'faq_a2' => 'Yes, our photo downloader is completely free.',
-        'faq_q3' => 'What format are the photos?',
-        'faq_a3' => 'Photos are saved in high-quality JPG format.',
-        'faq_q4' => 'Does it work on PC?',
-        'faq_a4' => 'Yes, it works on PC, Mac, iPhone, and Android.',
+        'faq_a1' => 'No, we only support public accounts.',
+        'faq_q2' => 'Does it work on Android?',
+        'faq_a2' => 'Yes, it works on all Android devices via Chrome or any browser.',
+        'faq_q3' => 'Is it free?',
+        'faq_a3' => 'Yes, completely free forever.',
+        'faq_q4' => 'How many photos can I save?',
+        'faq_a4' => 'Unlimited. Save as many as you like.',
     ],
 ];
 
@@ -85,9 +85,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>
-        <?php echo $seoHelper->getTitle(); ?>
-    </title>
+    <title><?php echo $seoHelper->getTitle(); ?></title>
     <meta name="description" content="<?php echo $seoHelper->getDescription(); ?>">
     <?php echo $seoHelper->getOGTags(); ?>
     <?php echo $seoHelper->getHreflangTags(); ?>
@@ -258,39 +256,98 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
             margin-bottom: 3rem;
         }
 
-        @keyframes fade-up {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .animate-fade-up {
-            animation: fade-up 0.6s ease forwards;
-        }
-
-        .faq-item {
-            margin-bottom: 40px;
-        }
-
-        .faq-question {
+        .section-header-blue {
             color: #3b82f6;
-            font-size: 1.125rem;
+            font-size: 1.875rem;
             font-weight: 700;
-            margin-bottom: 12px;
-            display: block;
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
         }
 
-        .faq-answer {
-            color: #64748b;
-            font-size: 0.875rem;
-            line-height: 1.7;
-            font-weight: 500;
+        .section-header-blue::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, #3b82f6 0%, #db2777 100%);
+        }
+
+        /* New Styled Components for Premium Look */
+        .step-card-modern {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            border: 1px solid #f1f5f9;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            height: 100%;
+        }
+
+        .step-card-modern:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+            border-color: #e2e8f0;
+        }
+
+        .step-number {
+            font-size: 4rem;
+            font-weight: 900;
+            color: #f1f5f9;
+            position: absolute;
+            top: -10px;
+            right: 0;
+            line-height: 1;
+            z-index: 0;
+        }
+
+        .step-content {
+            position: relative;
+            z-index: 10;
+        }
+
+        .feature-card-modern {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            border: 1px solid #f1f5f9;
+            transition: all 0.3s ease;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .feature-card-modern:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+            border-color: #3b82f6;
+        }
+
+        .icon-circle {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: #eff6ff;
+            color: #3b82f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card-modern:hover .icon-circle {
+            background: #3b82f6;
+            color: #ffffff;
         }
 
         .footer-brand {
@@ -313,179 +370,6 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
             height: 36px;
         }
 
-        .footer-links-group {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 12px;
-        }
-
-        .footer-link {
-            color: #475569;
-            font-size: 0.8125rem;
-            font-weight: 600;
-            transition: color 0.2s;
-            text-decoration: none;
-        }
-
-        .footer-link:hover {
-            color: #3b82f6;
-        }
-
-        .footer-divider {
-            width: 100%;
-            height: 1px;
-            background: #e2e8f0;
-            margin: 40px 0;
-        }
-
-        .social-label {
-            text-align: center;
-            color: #64748b;
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: lowercase;
-            margin-bottom: 20px;
-        }
-
-        .social-icons {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 40px;
-        }
-
-        .social-icon {
-            width: 24px;
-            height: 24px;
-            transition: transform 0.2s;
-        }
-
-        .social-icon:hover {
-            transform: scale(1.1);
-        }
-
-        .copyright-text {
-            text-align: center;
-            color: #94a3b8;
-            font-size: 0.6875rem;
-            font-weight: 600;
-        }
-
-        .intro-card {
-            background: #ffffff;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-            display: flex;
-            margin-bottom: 80px;
-        }
-
-        .intro-visual {
-            background: linear-gradient(135deg, #7c3aed 0%, #c026d3 50%, #db2777 100%);
-            width: 35%;
-            padding: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .intro-content {
-            padding: 40px;
-            flex: 1;
-        }
-
-        .section-header-blue {
-            color: #3b82f6;
-            font-size: 1.875rem;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 2rem;
-            position: relative;
-            display: inline-block;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .step-card {
-            background: #ffffff;
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid #f1f5f9;
-            transition: all 0.3s ease;
-        }
-
-        .step-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-        }
-
-        .step-top {
-            background: #f8fafc;
-            padding: 2.5rem 1.5rem;
-            border-bottom: 1px solid #f1f5f9;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .step-visual-mockup {
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 12px;
-            font-size: 0.75rem;
-            color: #94a3b8;
-            width: 100%;
-            position: relative;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-            text-align: center;
-        }
-
-        .step-body {
-            padding: 2rem;
-        }
-
-        .step-title {
-            font-size: 1.125rem;
-            font-weight: 700;
-            color: #1e293b;
-            margin-bottom: 0.75rem;
-        }
-
-        .step-desc {
-            font-size: 0.875rem;
-            color: #64748b;
-            line-height: 1.6;
-        }
-
-        .feature-item {
-            text-align: left;
-        }
-
-        .feature-icon {
-            width: 40px;
-            height: 40px;
-            color: #3b82f6;
-            margin-bottom: 1.25rem;
-        }
-
-        .feature-title {
-            font-size: 1.125rem;
-            font-weight: 700;
-            color: #1e293b;
-            margin-bottom: 0.75rem;
-        }
-
-        .feature-desc {
-            font-size: 0.875rem;
-            color: #64748b;
-            line-height: 1.6;
-        }
-
         .feature-detail-card {
             background: #ffffff;
             border-radius: 16px;
@@ -501,21 +385,49 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
             }
         }
 
-        .feature-detail-content h3 {
-            font-size: 1.75rem;
-            font-weight: 800;
-            color: #1e293b;
-            margin-bottom: 1.25rem;
+        .intro-card {
+            background: #ffffff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
+            display: flex;
+            margin-bottom: 80px;
+            border: 1px solid #f1f5f9;
         }
 
-        .feature-detail-text {
-            color: #64748b;
-            line-height: 1.7;
+        .intro-visual {
+            background: linear-gradient(135deg, #7c3aed 0%, #c026d3 50%, #db2777 100%);
+            width: 300px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .intro-content {
+            padding: 40px;
+            flex: 1;
+        }
+
+        @keyframes fade-up {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-up {
+            animation: fade-up 0.6s ease forwards;
         }
     </style>
 </head>
 
-<body class="flex flex-col">
+<body class="flex flex-col min-h-screen">
     <!-- Navigation -->
     <nav class="fixed top-0 w-full z-50 py-4 glass-header">
         <div class="max-w-7xl mx-auto px-6 flex items-center justify-between">
@@ -579,9 +491,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
             </div>
 
             <!-- Title -->
-            <h1 class="section-title animate-fade-up">
-                <?php echo $t['heading']; ?>
-            </h1>
+            <h1 class="section-title animate-fade-up"><?php echo $t['hero_title']; ?></h1>
             <p class="section-subtitle animate-fade-up" style="animation-delay: 0.1s">
                 <?php echo $t['subtitle']; ?>
             </p>
@@ -605,81 +515,79 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
     </section>
 
     <!-- Content Sections Wrapper -->
-    <main class="py-20 bg-slate-50">
-        <div class="max-w-5xl mx-auto px-6">
+    <main class="py-20 bg-slate-50 flex-grow">
+        <div class="max-w-6xl mx-auto px-6">
 
             <!-- Intro Card -->
             <div class="intro-card animate-fade-up">
                 <div class="intro-visual">
-                    <div
-                        class="bg-white p-4 rounded-xl shadow-lg relative z-10 w-32 h-32 flex items-center justify-center">
-                        <i data-lucide="image" class="w-16 h-16 text-purple-600"></i>
+                    <div class="bg-white/20 backdrop-blur-md p-6 rounded-2xl border border-white/30 text-white">
+                        <i data-lucide="image" class="w-16 h-16"></i>
                     </div>
                 </div>
                 <div class="intro-content">
-                    <h2 class="text-2xl font-bold text-blue-600 mb-4">
-                        <?php echo $t['intro_title']; ?>
-                    </h2>
-                    <p class="text-slate-500 text-sm leading-relaxed">
+                    <h2 class="text-2xl font-bold text-blue-600 mb-4"><?php echo $t['intro_title']; ?></h2>
+                    <p class="text-slate-500 text-lg leading-relaxed">
                         <?php echo $t['intro_desc']; ?>
                     </p>
                 </div>
             </div>
 
-            <!-- How to Section -->
+            <!-- How to Section (Redesigned) -->
             <section id="how-to" class="mb-32 animate-fade-up" style="animation-delay: 0.1s">
-                <h2 class="section-header-blue">
-                    <?php echo $t['how_to_title']; ?>
-                </h2>
+                <h2 class="section-header-blue"><?php echo $t['how_to_title']; ?></h2>
                 <p class="text-center text-slate-500 text-sm mb-12 max-w-2xl mx-auto">
                     <?php echo $t['how_to_subtitle']; ?>
                 </p>
 
                 <div class="grid md:grid-cols-3 gap-8">
                     <!-- Step 1 -->
-                    <div class="step-card">
-                        <div class="step-top">
-                            <div class="step-visual-mockup">
-                                instagram.com/p/Cmc...
+                    <div class="step-card-modern">
+                        <div class="step-number">01</div>
+                        <div class="step-content">
+                            <div class="mb-6 flex justify-center">
+                                <div class="bg-blue-50 p-4 rounded-xl text-blue-600">
+                                    <i data-lucide="link" class="w-8 h-8"></i>
+                                </div>
                             </div>
-                        </div>
-                        <div class="step-body">
-                            <h3 class="step-title">
+                            <h3 class="text-xl font-bold text-slate-800 mb-3 text-center">
                                 <?php echo $t['step1_title']; ?>
                             </h3>
-                            <p class="step-desc">
+                            <p class="text-slate-500 text-sm text-center leading-relaxed">
                                 <?php echo $t['step1_desc']; ?>
                             </p>
                         </div>
                     </div>
                     <!-- Step 2 -->
-                    <div class="step-card">
-                        <div class="step-top">
-                            <div class="step-visual-mockup">
-                                <i data-lucide="clipboard" class="w-4 h-4 inline"></i> Paste
+                    <div class="step-card-modern">
+                        <div class="step-number">02</div>
+                        <div class="step-content">
+                            <div class="mb-6 flex justify-center">
+                                <div class="bg-purple-50 p-4 rounded-xl text-purple-600">
+                                    <i data-lucide="clipboard-copy" class="w-8 h-8"></i>
+                                </div>
                             </div>
-                        </div>
-                        <div class="step-body">
-                            <h3 class="step-title">
+                            <h3 class="text-xl font-bold text-slate-800 mb-3 text-center">
                                 <?php echo $t['step2_title']; ?>
                             </h3>
-                            <p class="step-desc">
+                            <p class="text-slate-500 text-sm text-center leading-relaxed">
                                 <?php echo $t['step2_desc']; ?>
                             </p>
                         </div>
                     </div>
                     <!-- Step 3 -->
-                    <div class="step-card">
-                        <div class="step-top">
-                            <div class="step-visual-mockup font-bold text-blue-600">
-                                Download
+                    <div class="step-card-modern">
+                        <div class="step-number">03</div>
+                        <div class="step-content">
+                            <div class="mb-6 flex justify-center">
+                                <div class="bg-pink-50 p-4 rounded-xl text-pink-600">
+                                    <i data-lucide="download-cloud" class="w-8 h-8"></i>
+                                </div>
                             </div>
-                        </div>
-                        <div class="step-body">
-                            <h3 class="step-title">
+                            <h3 class="text-xl font-bold text-slate-800 mb-3 text-center">
                                 <?php echo $t['step3_title']; ?>
                             </h3>
-                            <p class="step-desc">
+                            <p class="text-slate-500 text-sm text-center leading-relaxed">
                                 <?php echo $t['step3_desc']; ?>
                             </p>
                         </div>
@@ -687,51 +595,41 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                 </div>
             </section>
 
-            <!-- Features Section -->
+            <!-- Features Section (Redesigned) -->
             <section id="features" class="animate-fade-up" style="animation-delay: 0.2s">
-                <h2 class="section-header-blue">
-                    <?php echo $t['features_title']; ?>
-                </h2>
+                <h2 class="section-header-blue"><?php echo $t['features_title']; ?></h2>
                 <p class="text-center text-slate-500 text-sm mb-12 max-w-2xl mx-auto">
                     <?php echo $t['features_subtitle']; ?>
                 </p>
 
-                <div class="grid md:grid-cols-2 gap-y-12 gap-x-16">
-                    <div class="feature-item">
-                        <i data-lucide="zap" class="feature-icon"></i>
-                        <h4 class="feature-title">
-                            <?php echo $t['feat1_t']; ?>
-                        </h4>
-                        <p class="feature-desc">
-                            <?php echo $t['feat1_d']; ?>
-                        </p>
+                <div class="grid md:grid-cols-4 gap-6">
+                    <div class="feature-card-modern">
+                        <div class="icon-circle">
+                            <i data-lucide="image" class="w-8 h-8"></i>
+                        </div>
+                        <h4 class="text-lg font-bold text-slate-800 mb-2"><?php echo $t['feat1_t']; ?></h4>
+                        <p class="text-slate-500 text-xs leading-relaxed"><?php echo $t['feat1_d']; ?></p>
                     </div>
-                    <div class="feature-item">
-                        <i data-lucide="check-circle" class="feature-icon"></i>
-                        <h4 class="feature-title">
-                            <?php echo $t['feat2_t']; ?>
-                        </h4>
-                        <p class="feature-desc">
-                            <?php echo $t['feat2_d']; ?>
-                        </p>
+                    <div class="feature-card-modern">
+                        <div class="icon-circle">
+                            <i data-lucide="maximize" class="w-8 h-8"></i>
+                        </div>
+                        <h4 class="text-lg font-bold text-slate-800 mb-2"><?php echo $t['feat2_t']; ?></h4>
+                        <p class="text-slate-500 text-xs leading-relaxed"><?php echo $t['feat2_d']; ?></p>
                     </div>
-                    <div class="feature-item">
-                        <i data-lucide="infinity" class="feature-icon"></i>
-                        <h4 class="feature-title">
-                            <?php echo $t['feat3_t']; ?>
-                        </h4>
-                        <p class="feature-desc">
-                            <?php echo $t['feat3_d']; ?>
-                        </p>
+                    <div class="feature-card-modern">
+                        <div class="icon-circle">
+                            <i data-lucide="download" class="w-8 h-8"></i>
+                        </div>
+                        <h4 class="text-lg font-bold text-slate-800 mb-2"><?php echo $t['feat3_t']; ?></h4>
+                        <p class="text-slate-500 text-xs leading-relaxed"><?php echo $t['feat3_d']; ?></p>
                     </div>
-                    <div class="feature-item">
-                        <i data-lucide="lock" class="feature-icon"></i>
-                        <h4 class="feature-title">
-                            <?php echo $t['feat4_t']; ?>
-                        </h4>
-                        <p class="feature-desc">
-                            <?php echo $t['feat4_d']; ?>
-                        </p>
+                    <div class="feature-card-modern">
+                        <div class="icon-circle">
+                            <i data-lucide="shield" class="w-8 h-8"></i>
+                        </div>
+                        <h4 class="text-lg font-bold text-slate-800 mb-2"><?php echo $t['feat4_t']; ?></h4>
+                        <p class="text-slate-500 text-xs leading-relaxed"><?php echo $t['feat4_d']; ?></p>
                     </div>
                 </div>
             </section>
@@ -740,16 +638,16 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
             <section id="detailed-features" class="mt-32 animate-fade-up">
                 <div class="feature-detail-card">
                     <div class="feature-detail-content">
-                        <h3 class="feature-detail-title">
-                            <?php echo __('Crystal Clear Memories', $lang); ?>
+                        <h3 class="text-2xl font-extrabold text-slate-800 mb-4">
+                            <?php echo __('Full Resolution Photos', $lang); ?>
                         </h3>
-                        <p class="feature-detail-text">
-                            <?php echo __('Our Photo Downloader ensures that every pixel is preserved. We access the source file hosted on Instagram servers, giving you the highest resolution available, perfect for printing, archiving, or reposting.', $lang); ?>
+                        <p class="text-slate-500 leading-relaxed">
+                            <?php echo __('Don\'t settle for screenshots. Our tool extracts the original image file directly from Instagram\'s servers, giving you the best possible quality for every photo you save.', $lang); ?>
                         </p>
                     </div>
-                    <div class="feature-detail-visual">
-                        <img src="images/photo-feature.png" alt="Photo Downloader Features"
-                            class="w-full rounded-2xl shadow-xl">
+                    <div class="flex items-center justify-center p-8 bg-slate-50 rounded-xl">
+                        <img src="images/photo-feature.png" alt="Photo Features"
+                            class="rounded-xl shadow-lg transform rotate-2 hover:rotate-0 transition-transform duration-500">
                     </div>
                 </div>
             </section>
@@ -759,41 +657,23 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
     <!-- FAQ Section -->
     <section id="faq" class="py-24 bg-white animate-fade-up">
         <div class="max-w-4xl mx-auto px-6">
-            <h2 class="section-header-blue">
-                <?php echo $t['faq_title']; ?>
-            </h2>
-            <div class="faq-list mt-12">
-                <div class="faq-item">
-                    <span class="faq-question">
-                        <?php echo $t['faq_q1']; ?>
-                    </span>
-                    <div class="faq-answer">
-                        <?php echo $t['faq_a1']; ?>
-                    </div>
+            <h2 class="section-header-blue"><?php echo $t['faq_title']; ?></h2>
+            <div class="mt-12 space-y-4">
+                <div class="border border-slate-100 rounded-xl p-6 hover:shadow-lg transition-shadow bg-white">
+                    <span class="text-blue-600 font-bold block mb-2 text-lg"><?php echo $t['faq_q1']; ?></span>
+                    <div class="text-slate-500 leading-relaxed"><?php echo $t['faq_a1']; ?></div>
                 </div>
-                <div class="faq-item">
-                    <span class="faq-question">
-                        <?php echo $t['faq_q2']; ?>
-                    </span>
-                    <div class="faq-answer">
-                        <?php echo $t['faq_a2']; ?>
-                    </div>
+                <div class="border border-slate-100 rounded-xl p-6 hover:shadow-lg transition-shadow bg-white">
+                    <span class="text-blue-600 font-bold block mb-2 text-lg"><?php echo $t['faq_q2']; ?></span>
+                    <div class="text-slate-500 leading-relaxed"><?php echo $t['faq_a2']; ?></div>
                 </div>
-                <div class="faq-item">
-                    <span class="faq-question">
-                        <?php echo $t['faq_q3']; ?>
-                    </span>
-                    <div class="faq-answer">
-                        <?php echo $t['faq_a3']; ?>
-                    </div>
+                <div class="border border-slate-100 rounded-xl p-6 hover:shadow-lg transition-shadow bg-white">
+                    <span class="text-blue-600 font-bold block mb-2 text-lg"><?php echo $t['faq_q3']; ?></span>
+                    <div class="text-slate-500 leading-relaxed"><?php echo $t['faq_a3']; ?></div>
                 </div>
-                <div class="faq-item">
-                    <span class="faq-question">
-                        <?php echo $t['faq_q4']; ?>
-                    </span>
-                    <div class="faq-answer">
-                        <?php echo $t['faq_a4']; ?>
-                    </div>
+                <div class="border border-slate-100 rounded-xl p-6 hover:shadow-lg transition-shadow bg-white">
+                    <span class="text-blue-600 font-bold block mb-2 text-lg"><?php echo $t['faq_q4']; ?></span>
+                    <div class="text-slate-500 leading-relaxed"><?php echo $t['faq_a4']; ?></div>
                 </div>
             </div>
         </div>
@@ -802,38 +682,37 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
     <!-- Footer -->
     <footer class="py-16 bg-white border-t border-slate-100">
         <div class="max-w-4xl mx-auto px-6">
-            <div class="footer-brand text-center">
+            <div class="footer-brand">
                 <?php if (!empty($settings['logo_path'])): ?>
-                    <img src="<?php echo htmlspecialchars($settings['logo_path']); ?>" class="h-10 w-auto mx-auto mb-4"
-                        alt="Logo">
+                    <img src="<?php echo htmlspecialchars($settings['logo_path']); ?>" class="h-10 w-auto" alt="Logo">
                 <?php else: ?>
-                    <i data-lucide="layers" class="footer-logo-icon mx-auto mb-4"></i>
+                    <i data-lucide="layers" class="footer-logo-icon"></i>
                 <?php endif; ?>
-                <span class="footer-logo-text block">
-                    <?php echo htmlspecialchars($settings['site_name'] ?: 'MySeoFan'); ?>
-                </span>
+                <span
+                    class="footer-logo-text"><?php echo htmlspecialchars($settings['site_name'] ?: 'MySeoFan'); ?></span>
             </div>
 
-            <div class="footer-links-group mt-8 text-center">
+            <div class="flex flex-col items-center mt-8 mb-8">
                 <?php foreach ($footerItems as $group): ?>
-                    <?php if (isset($group['children']) && !empty($group['children'])): ?>
-                        <?php foreach ($group['children'] as $index => $item): ?>
-                            <a href="<?php echo htmlspecialchars($item['final_url']); ?>"
-                                class="footer-link inline-block hover:text-blue-600 transition-colors">
-                                <?php echo htmlspecialchars($item['label']); ?>
-                            </a>
-                            <?php if ($index < count($group['children']) - 1): ?>
-                                <span class="text-slate-200 px-2">|</span>
-                            <?php endif; ?>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
+                    <div class="flex flex-wrap justify-center gap-6 mb-4">
+                        <?php if (isset($group['children']) && !empty($group['children'])): ?>
+                            <?php foreach ($group['children'] as $index => $item): ?>
+                                <a href="<?php echo htmlspecialchars($item['final_url']); ?>"
+                                    class="text-sm font-semibold text-slate-500 hover:text-blue-600 transition-colors">
+                                    <?php echo htmlspecialchars($item['label']); ?>
+                                </a>
+                                <?php if ($index < count($group['children']) - 1): ?>
+                                    <span class="text-slate-200">|</span>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </div>
                 <?php endforeach; ?>
             </div>
 
-            <div class="footer-divider my-8 border-t border-slate-100"></div>
+            <div class="w-full h-px bg-slate-100 my-8"></div>
 
-            <p class="copyright-text text-center text-slate-400 text-xs mt-8">©
-                <?php echo date('Y'); ?>
+            <p class="text-center text-slate-400 text-xs">© <?php echo date('Y'); ?>
                 <?php echo htmlspecialchars($settings['site_name']); ?>. All rights reserved.
             </p>
         </div>
@@ -883,7 +762,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
             document.getElementById('result').innerHTML = `
                 <div class="flex flex-col gap-8 items-center bg-white/10 backdrop-blur-lg p-8 rounded-[3rem] border border-white/20 shadow-2xl">
                     <div class="relative group max-w-sm rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white">
-                        <img src="${dl}" class="w-full h-auto">
+                        ${data.type === 'video' ? `<video controls class="w-full h-auto"><source src="${dl}"></video>` : `<img src="${dl}" class="w-full h-auto">`}
                     </div>
                     <a href="${dl}" class="w-full max-w-xs bg-blue-600 text-white text-center py-5 rounded-2xl font-black text-xl shadow-2xl hover:bg-blue-700 transition-all flex items-center justify-center gap-3">
                         <i data-lucide="download" class="w-6 h-6"></i> Download

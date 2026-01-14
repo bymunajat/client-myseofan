@@ -231,26 +231,26 @@ $pageIdentifier = 'blog';
             <div class="flex items-center gap-6 text-white font-bold text-sm uppercase tracking-wider">
                 <nav class="hidden lg:flex items-center gap-6">
                     <a href="video.php?lang=<?php echo $lang; ?>"
-                        class="hover:text-[#ec4899] transition-colors">Video</a>
+                        class="text-white hover:text-[#ec4899] transition-colors">Video</a>
                     <a href="photo.php?lang=<?php echo $lang; ?>"
-                        class="hover:text-[#ec4899] transition-colors">Photo</a>
+                        class="text-white hover:text-[#ec4899] transition-colors">Photo</a>
                     <a href="reels.php?lang=<?php echo $lang; ?>"
-                        class="hover:text-[#ec4899] transition-colors">Reels</a>
+                        class="text-white hover:text-[#ec4899] transition-colors">Reels</a>
                     <a href="igtv.php?lang=<?php echo $lang; ?>"
-                        class="hover:text-[#ec4899] transition-colors">IGTV</a>
+                        class="text-white hover:text-[#ec4899] transition-colors">IGTV</a>
                     <a href="carousel.php?lang=<?php echo $lang; ?>"
-                        class="hover:text-[#ec4899] transition-colors">Carousel</a>
-                    <div class="w-px h-4 bg-slate-700 mx-2"></div>
+                        class="text-white hover:text-[#ec4899] transition-colors">Carousel</a>
+                    <div class="w-px h-4 bg-white/20 mx-2"></div>
                     <?php foreach ($headerItems as $item): ?>
                         <a href="<?php echo htmlspecialchars($item['final_url']); ?>"
-                            class="hover:text-[#ec4899] transition-colors">
+                            class="text-white hover:text-[#ec4899] transition-colors">
                             <?php echo htmlspecialchars($item['label']); ?>
                         </a>
                     <?php endforeach; ?>
                 </nav>
                 <div class="relative group cursor-pointer">
-                    <div class="flex items-center gap-1 hover:text-[#ec4899] transition-colors uppercase">
-                        <?php echo $lang; ?> <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400"></i>
+                    <div class="flex items-center gap-1 text-white hover:text-[#ec4899] transition-colors uppercase">
+                        <?php echo $lang; ?> <i data-lucide="chevron-down" class="w-4 h-4 text-white/50"></i>
                     </div>
                     <div class="absolute right-0 top-full pt-2 hidden group-hover:block z-50">
                         <div class="w-32 bg-slate-900 shadow-2xl rounded-xl p-2 border border-slate-800">

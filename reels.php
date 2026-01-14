@@ -133,6 +133,19 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
             justify-content: center;
             padding-top: 100px;
             padding-bottom: 120px;
+            border-bottom: 1px solid rgba(139, 92, 246, 0.1);
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(236, 72, 153, 0.1) 0%, transparent 50%);
+            pointer-events: none;
         }
 
         .glass-header {
@@ -152,27 +165,28 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
         }
 
         .tool-bar {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(30, 41, 59, 0.6);
             backdrop-filter: blur(12px);
-            border-radius: 10px;
+            border-radius: 16px;
             display: inline-flex;
             align-items: center;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(139, 92, 246, 0.3);
             overflow: hidden;
             margin-bottom: 2.5rem;
+            box-shadow: 0 8px 32px rgba(139, 92, 246, 0.15);
         }
 
         .tool-item {
             display: flex;
             align-items: center;
             gap: 10px;
-            padding: 12px 24px;
-            color: #ffffff;
+            padding: 14px 28px;
+            color: #cbd5e1;
             font-size: 0.95rem;
             font-weight: 500;
-            transition: all 0.2s;
+            transition: all 0.3s;
             text-decoration: none;
-            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            border-right: 1px solid rgba(139, 92, 246, 0.2);
         }
 
         .tool-item:last-child {
@@ -181,35 +195,90 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
 
         .tool-item:hover,
         .tool-item.active {
-            background: rgba(255, 255, 255, 0.1);
+            background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+            color: #ffffff;
             font-weight: 600;
+            transform: translateY(-2px);
         }
 
         .input-container {
             background: #ffffff;
-            border-radius: 12px;
-            padding: 6px;
+            border-radius: 9999px;
+            padding: 8px;
             display: flex;
             align-items: center;
             gap: 8px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
             max-width: 720px;
             width: 100%;
             margin: 0 auto;
+            position: relative;
+            animation: shadow-pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes shadow-pulse {
+
+            0%,
+            100% {
+                box-shadow: 0 20px 60px rgba(139, 92, 246, 0.6),
+                    0 0 40px rgba(139, 92, 246, 0.4),
+                    0 0 80px rgba(139, 92, 246, 0.2);
+            }
+
+            33% {
+                box-shadow: 0 20px 60px rgba(236, 72, 153, 0.6),
+                    0 0 40px rgba(236, 72, 153, 0.4),
+                    0 0 80px rgba(236, 72, 153, 0.2);
+            }
+
+            66% {
+                box-shadow: 0 20px 60px rgba(245, 158, 11, 0.6),
+                    0 0 40px rgba(245, 158, 11, 0.4),
+                    0 0 80px rgba(245, 158, 11, 0.2);
+            }
+        }
+
+        .input-container::before {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 9999px;
+            padding: 4px;
+            background: linear-gradient(135deg, #8b5cf6, #ec4899, #f59e0b, #8b5cf6);
+            background-size: 300% 300%;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            animation: gradient-rotate 3s ease infinite;
+            pointer-events: none;
+            filter: brightness(1.3) blur(0.5px);
+        }
+
+        @keyframes gradient-rotate {
+
+            0%,
+            100% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
         }
 
         .input-field {
             flex: 1;
-            padding: 14px 20px;
+            padding: 16px 24px;
             border: none;
             outline: none;
             font-size: 1.1rem;
-            color: #334155;
+            color: #0f172a;
             background: transparent;
+            font-weight: 600;
+            border-radius: 9999px;
         }
 
         .input-field::placeholder {
-            color: #475569;
+            color: #64748b;
             font-weight: 500;
             opacity: 1;
         }
@@ -218,34 +287,39 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
             display: flex;
             align-items: center;
             gap: 8px;
-            padding: 12px 20px;
-            background: #f1f5f9;
-            color: #475569;
+            padding: 14px 24px;
+            background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+            color: #ffffff;
             font-weight: 700;
-            border-radius: 10px;
+            border-radius: 9999px;
             border: none;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
         }
 
         .btn-paste:hover {
-            background: #e2e8f0;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(139, 92, 246, 0.4);
+            filter: brightness(1.1);
         }
 
         .btn-download {
-            padding: 12px 28px;
-            background: #3b82f6;
+            padding: 14px 32px;
+            background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
             color: #ffffff;
             font-weight: 700;
-            border-radius: 10px;
+            border-radius: 9999px;
             border: none;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: all 0.3s;
             white-space: nowrap;
+            box-shadow: 0 8px 24px rgba(139, 92, 246, 0.3);
         }
 
         .btn-download:hover {
-            background: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(139, 92, 246, 0.4);
         }
 
         .section-title {
@@ -632,14 +706,14 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                 <nav class="hidden md:flex items-center gap-6">
                     <?php foreach ($headerItems as $item): ?>
                         <a href="<?php echo htmlspecialchars($item['final_url']); ?>"
-                            class="hover:text-[#ec4899] transition-colors">
+                            class="text-white hover:text-[#ec4899] transition-colors">
                             <?php echo htmlspecialchars($item['label']); ?>
                         </a>
                     <?php endforeach; ?>
                 </nav>
                 <div class="relative group cursor-pointer">
-                    <div class="flex items-center gap-1 hover:text-[#ec4899] transition-colors uppercase">
-                        <?php echo $lang; ?> <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400"></i>
+                    <div class="flex items-center gap-1 text-white hover:text-[#ec4899] transition-colors uppercase">
+                        <?php echo $lang; ?> <i data-lucide="chevron-down" class="w-4 h-4 text-white/50"></i>
                     </div>
                     <div class="absolute right-0 top-full pt-2 hidden group-hover:block z-50">
                         <div class="w-32 bg-slate-900 shadow-2xl rounded-xl p-2 border border-slate-800">

@@ -21,7 +21,7 @@ if (empty($user_role))
     <nav class="mt-4 px-4 space-y-1 flex-1">
         <!-- Dashboard -->
         <a href="dashboard.php"
-            class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all <?php echo $current_page == 'dashboard.php' ? 'nav-active text-white' : 'text-gray-400 hover:bg-gray-800 hover:text-white'; ?>">
+            class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all <?php echo $current_page == 'dashboard.php' ? 'nav-active text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white'; ?>">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
@@ -32,18 +32,18 @@ if (empty($user_role))
 
         <!-- Group: Main Content -->
         <div class="pt-4 pb-2">
-            <p class="px-4 text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">Content Management</p>
+            <p class="px-4 text-[10px] font-bold text-gray-300 uppercase tracking-wider mb-2">Content Management</p>
 
             <!-- Blog Sub-menu -->
             <div class="mb-1">
                 <button onclick="toggleSection('blog-submenu')"
-                    class="w-full flex items-center justify-between px-4 py-2 text-gray-400 hover:text-white transition-all rounded-xl hover:bg-gray-800 text-left <?php echo $current_page == 'blog.php' ? 'bg-gray-800/50' : ''; ?>">
+                    class="w-full flex items-center justify-between px-4 py-2 text-gray-300 hover:text-white transition-all rounded-xl hover:bg-gray-800 text-left <?php echo $current_page == 'blog.php' ? 'bg-gray-800/50' : ''; ?>">
                     <div class="flex items-center gap-3">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-width="2"
                                 d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6m-6 4h3" />
                         </svg>
-                        <span class="text-sm font-medium">Articles & Blog</span>
+                        <span class="text-sm font-medium">Posts</span>
                     </div>
                     <svg id="blog-submenu-chevron"
                         class="w-3 h-3 transition-transform <?php echo $current_page == 'blog.php' ? 'rotate-180' : ''; ?>"
@@ -54,10 +54,10 @@ if (empty($user_role))
                 <div id="blog-submenu"
                     class="<?php echo $current_page == 'blog.php' ? 'block' : 'hidden'; ?> mt-1 ml-6 border-l border-gray-700 pl-2 space-y-1">
                     <a href="blog.php?action=list"
-                        class="block py-1 text-xs <?php echo ($current_page == 'blog.php' && $_sb_action != 'add') ? 'text-emerald-400 font-bold' : 'text-gray-500 hover:text-white'; ?>">Manage
+                        class="block py-1 text-xs <?php echo ($current_page == 'blog.php' && $_sb_action != 'add') ? 'text-emerald-400 font-bold' : 'text-gray-300 hover:text-white'; ?>">All
                         Posts</a>
                     <a href="blog.php?action=add"
-                        class="block py-1 text-xs <?php echo ($current_page == 'blog.php' && $_sb_action == 'add') ? 'text-emerald-400 font-bold' : 'text-gray-500 hover:text-white'; ?>">Create
+                        class="block py-1 text-xs <?php echo ($current_page == 'blog.php' && $_sb_action == 'add') ? 'text-emerald-400 font-bold' : 'text-gray-300 hover:text-white'; ?>">Create
                         New</a>
                 </div>
             </div>
@@ -72,7 +72,7 @@ if (empty($user_role))
                                 <path stroke-width="2"
                                     d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                             </svg>
-                            <span class="text-sm font-medium">Static Pages</span>
+                            <span class="text-sm font-medium">Pages</span>
                         </div>
                         <svg id="static-pages-submenu-chevron"
                             class="w-3 h-3 transition-transform <?php echo $current_page == 'pages.php' ? 'rotate-180' : ''; ?>"
@@ -86,7 +86,7 @@ if (empty($user_role))
                         <!-- Page Content (was All Pages) -->
                         <a href="pages.php?action=list"
                             class="block py-1 text-xs <?php echo ($current_page == 'pages.php') ? 'text-emerald-400 font-bold' : 'text-gray-500 hover:text-white'; ?>">
-                            Page Content
+                            All Pages
                         </a>
 
                         <!-- Header Menu -->
@@ -97,7 +97,7 @@ if (empty($user_role))
 
                         <!-- Footer Menu -->
                         <a href="menus.php?menu_location=footer"
-                            class="block py-1 text-xs <?php echo ($current_page == 'menus.php' && ($_GET['menu_location'] ?? '') == 'footer') ? 'text-emerald-400 font-bold' : 'text-gray-500 hover:text-white'; ?>">
+                            class="block py-1 text-xs <?php echo ($current_page == 'menus.php' && ($_GET['menu_location'] ?? '') == 'footer') ? 'text-emerald-400 font-bold' : 'text-gray-300 hover:text-white'; ?>">
                             Footer Menu
                         </a>
                     </div>
@@ -108,9 +108,9 @@ if (empty($user_role))
         <!-- Group: Media & Assets -->
         <?php if (in_array($user_role, ['super_admin', 'editor'])): ?>
             <div class="pt-4 pb-2">
-                <p class="px-4 text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">Media & Assets</p>
+                <p class="px-4 text-[10px] font-bold text-gray-300 uppercase tracking-wider mb-2">Media & Assets</p>
                 <a href="media.php"
-                    class="flex items-center gap-3 px-4 py-2 rounded-xl text-sm transition-all <?php echo $current_page == 'media.php' ? 'text-white bg-gray-800' : 'text-gray-400 hover:text-white hover:bg-gray-800'; ?>">
+                    class="flex items-center gap-3 px-4 py-2 rounded-xl text-sm transition-all <?php echo $current_page == 'media.php' ? 'text-white bg-gray-800' : 'text-gray-300 hover:text-white hover:bg-gray-800'; ?>">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-width="2"
                             d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h14a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -134,7 +134,7 @@ if (empty($user_role))
         <!-- Group: System -->
         <?php if ($user_role === 'super_admin'): ?>
             <div class="pt-4 pb-2">
-                <p class="px-4 text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">System Config</p>
+                <p class="px-4 text-[10px] font-bold text-gray-300 uppercase tracking-wider mb-2">System Config</p>
                 <a href="settings.php"
                     class="flex items-center gap-3 px-4 py-2 rounded-xl text-sm transition-all <?php echo $current_page == 'settings.php' ? 'text-white bg-gray-800' : 'text-gray-400 hover:text-white hover:bg-gray-800'; ?>">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -172,7 +172,7 @@ if (empty($user_role))
 
         <!-- Group: Account -->
         <div class="pt-8 pb-8 mt-auto border-t border-gray-800">
-            <p class="px-4 text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">Account</p>
+            <p class="px-4 text-[10px] font-bold text-gray-300 uppercase tracking-wider mb-2">Account</p>
             <a href="profile.php"
                 class="flex items-center gap-3 px-4 py-2 rounded-xl text-sm transition-all <?php echo $current_page == 'profile.php' ? 'text-white bg-gray-800' : 'text-gray-400 hover:text-white hover:bg-gray-800'; ?>">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

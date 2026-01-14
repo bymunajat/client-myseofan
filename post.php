@@ -6,27 +6,94 @@ require_once 'includes/Translator.php';
 $slug = $_GET['slug'] ?? '';
 $lang = $_GET['lang'] ?? 'en';
 
-// Fetch post (Try requested language first)
-$stmt = $pdo->prepare("SELECT * FROM blog_posts WHERE slug = ? AND lang_code = ?");
-$stmt->execute([$slug, $lang]);
+$slug = $_GET['slug'] ?? '';
+$lang = $_GET['lang'] ?? 'en';
+
+// 1. Fetch the requested post by slug (Slug is Unique)
+$stmt = $pdo->prepare("SELECT * FROM blog_posts WHERE slug = ?");
+$stmt->execute([$slug]);
 $post = $stmt->fetch();
 
-// If not found, try English version to auto-translate
-if (!$post && $lang !== 'en') {
-    $stmt = $pdo->prepare("SELECT * FROM blog_posts WHERE slug = ? AND lang_code = 'en'");
-    $stmt->execute([$slug]);
-    $post = $stmt->fetch();
-
-    if ($post) {
-        $post['title'] = Translator::translate($post['title'], $lang);
-        $post['content'] = Translator::translate($post['content'], $lang);
-        $post['lang_code'] = $lang;
-    }
-}
-
 if (!$post) {
+    // 404 - Redirect to blog
     header("Location: blog.php?lang=$lang");
     exit;
+}
+
+// 2. Check if the post's language matches the requested language
+if ($post['lang_code'] !== $lang) {
+    // Mismatch! We have the "English" (or source) slug, but want "ID" lang.
+
+    // A. Check if a translation already exists in the same group
+    $group_id = $post['translation_group'];
+
+    // Ensure the current post has a group ID (Data repair)
+    if (empty($group_id)) {
+        $group_id = uniqid('group_', true);
+        $pdo->prepare("UPDATE blog_posts SET translation_group = ? WHERE id = ?")->execute([$group_id, $post['id']]);
+        $post['translation_group'] = $group_id;
+    }
+
+    $stmt = $pdo->prepare("SELECT slug FROM blog_posts WHERE translation_group = ? AND lang_code = ?");
+    $stmt->execute([$group_id, $lang]);
+    $existing_translation = $stmt->fetch();
+
+    if ($existing_translation) {
+        // Found! Redirect to the correct slug for this language
+        header("Location: post.php?slug=" . $existing_translation['slug'] . "&lang=" . $lang);
+        exit;
+    } else {
+        // B. Not found? AUTO-TRANSLATE and SAVE (The Magic Step)
+
+        // Only translate if we have a source post (which we do, $post)
+        // AND if the source is English (to keep quality high) OR we just translate from whatever we have.
+        // Let's assume we translate from the current $post content.
+
+        $new_title = Translator::translate($post['title'], $lang);
+        $new_content = Translator::translate($post['content'], $lang);
+        $new_meta_title = Translator::translate($post['meta_title'] ?? $post['title'], $lang);
+        $new_meta_desc = Translator::translate($post['meta_description'] ?? '', $lang);
+
+        // Generate new slug
+        $new_slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $new_title)));
+        if (empty($new_slug))
+            $new_slug = $post['slug'] . '-' . $lang;
+
+        // Ensure unique slug
+        $checkSlug = $pdo->prepare("SELECT COUNT(*) FROM blog_posts WHERE slug = ?");
+        $checkSlug->execute([$new_slug]);
+        if ($checkSlug->fetchColumn() > 0) {
+            $new_slug .= '-' . $lang . '-' . time();
+        }
+
+        try {
+            // Insert the new translated post
+            $stmtInsert = $pdo->prepare("INSERT INTO blog_posts (title, slug, content, thumbnail, lang_code, meta_title, meta_description, translation_group, author_id, excerpt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmtInsert->execute([
+                $new_title,
+                $new_slug,
+                $new_content,
+                $post['thumbnail'],
+                $lang,
+                $new_meta_title,
+                $new_meta_desc,
+                $group_id,
+                $post['author_id'] ?? 1, // Default to admin if null
+                Translator::translate($post['excerpt'] ?? '', $lang)
+            ]);
+
+            // Redirect to the new baby
+            header("Location: post.php?slug=" . $new_slug . "&lang=" . $lang);
+            exit;
+
+        } catch (\Exception $e) {
+            // If save fails, just show the auto-translated content on the fly (Fallback)
+            // But don't redirect, just render below
+            $post['title'] = $new_title;
+            $post['content'] = $new_content;
+            $post['lang_code'] = $lang;
+        }
+    }
 }
 
 $settings = getSiteSettings($pdo);

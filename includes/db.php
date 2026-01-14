@@ -106,6 +106,56 @@ try {
     if (!$hasGroupPost)
         $pdo->exec("ALTER TABLE blog_posts ADD COLUMN translation_group TEXT");
 
+    // Migration Check: Add status, tags, excerpt, and author_id to blog_posts
+    $hasStatus = false;
+    $hasTags = false;
+    $hasExcerpt = false;
+    $hasAuthorId = false;
+    foreach ($colsPost as $col) {
+        if ($col['name'] == 'status')
+            $hasStatus = true;
+        if ($col['name'] == 'tags')
+            $hasTags = true;
+        if ($col['name'] == 'excerpt')
+            $hasExcerpt = true;
+        if ($col['name'] == 'author_id')
+            $hasAuthorId = true;
+    }
+    if (!$hasStatus)
+        $pdo->exec("ALTER TABLE blog_posts ADD COLUMN status TEXT DEFAULT 'published'");
+    if (!$hasTags)
+        $pdo->exec("ALTER TABLE blog_posts ADD COLUMN tags TEXT");
+    if (!$hasExcerpt)
+        $pdo->exec("ALTER TABLE blog_posts ADD COLUMN excerpt TEXT");
+    if (!$hasAuthorId)
+        $pdo->exec("ALTER TABLE blog_posts ADD COLUMN author_id INTEGER");
+
+    // Migration Check: Create categories table
+    $pdo->exec("CREATE TABLE IF NOT EXISTS categories (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT,
+        slug TEXT,
+        lang_code TEXT DEFAULT 'en',
+        UNIQUE(slug, lang_code)
+    )");
+
+    // Seed default categories if empty
+    $catCount = $pdo->query("SELECT COUNT(*) FROM categories")->fetchColumn();
+    if ($catCount == 0) {
+        $defaultCats = [
+            ['General', 'general', 'en'],
+            ['Tutorial', 'tutorial', 'en'],
+            ['News', 'news', 'en'],
+            ['Tips', 'tips', 'en'],
+            ['Umum', 'umum', 'id'],
+            ['Berita', 'berita', 'id']
+        ];
+        $stmtC = $pdo->prepare("INSERT INTO categories (name, slug, lang_code) VALUES (?, ?, ?)");
+        foreach ($defaultCats as $dc) {
+            $stmtC->execute($dc);
+        }
+    }
+
     // Migration Check: Pages table migrations
     $colsPage = $pdo->query("PRAGMA table_info(pages)")->fetchAll();
     $hasGroupPage = false;

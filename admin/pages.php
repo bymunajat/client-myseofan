@@ -177,7 +177,7 @@ if ($action === 'list') {
     $cu_p = $stmt->fetch();
 }
 
-$page_title = "Page Content Manager";
+$page_title = "Pages";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -265,28 +265,15 @@ $page_title = "Page Content Manager";
             <?php endif; ?>
 
             <?php if ($action === 'list'): ?>
-                <!-- Language Tabs -->
-                <div class="flex flex-wrap gap-2 mb-8 bg-white p-2 rounded-2xl shadow-sm border border-gray-100">
-                    <?php foreach ($available_langs as $code => $info): ?>
-                        <a href="?filter_lang=<?php echo $code; ?>"
-                            class="px-5 py-2.5 rounded-xl font-bold transition-all flex items-center gap-2 <?php echo $_curr_lang === $code ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-200' : 'text-gray-500 hover:bg-gray-50'; ?> text-sm">
-                            <span class="text-base"><?php echo $info['flag']; ?></span>
-                            <span><?php echo $info['label']; ?></span>
-                            <?php
-                            // Optional: Count badges could go here
-                            ?>
-                        </a>
-                    <?php endforeach; ?>
-                </div>
-
                 <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
                     <table class="w-full text-left">
                         <thead class="bg-gray-50 border-b text-center">
                             <tr>
                                 <th class="w-16 py-4"></th>
-                                <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest text-left">
+                                <th class="px-8 py-4 text-xs font-black text-gray-700 uppercase tracking-widest text-left">
+                                <th class="px-8 py-4 text-xs font-black text-gray-700 uppercase tracking-widest text-left">
                                     Page Title</th>
-                                <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest text-right">
+                                <th class="px-8 py-4 text-xs font-black text-gray-700 uppercase tracking-widest text-right">
                                     Actions</th>
                             </tr>
                         </thead>
@@ -308,8 +295,8 @@ $page_title = "Page Content Manager";
                             <?php foreach ($pages as $p): ?>
                                 <tr data-id="<?php echo $p['id']; ?>" class="group hover:bg-gray-50/50 transition-colors">
                                     <td class="px-6 py-5 border-r border-gray-50">
-                                        <div class="flex items-center justify-center text-gray-300">
-                                            <span class="text-xs font-mono text-gray-300">#<?php echo $p['id']; ?></span>
+                                        <div class="flex items-center justify-center text-gray-500 font-bold">
+                                            <span class="text-xs font-mono">#<?php echo $p['id']; ?></span>
                                         </div>
                                     </td>
                                     <td class="px-8 py-5">
@@ -322,39 +309,6 @@ $page_title = "Page Content Manager";
                                     </td>
                                     <td class="px-8 py-5 text-right flex items-center justify-end gap-3">
 
-                                        <!-- Clone Dropdown -->
-                                        <div class="relative group/clone">
-                                            <button
-                                                class="text-xs font-bold text-gray-400 hover:text-emerald-600 bg-gray-50 hover:bg-emerald-50 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1 cursor-pointer">
-                                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-width="2"
-                                                        d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
-                                                </svg>
-                                                Clone
-                                            </button>
-
-                                            <!-- Dropdown with invisible bridge (pt-2) -->
-                                            <div class="absolute right-0 top-full hidden group-hover/clone:block z-20">
-                                                <div class="pt-2">
-                                                    <div
-                                                        class="w-40 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden">
-                                                        <div
-                                                            class="px-3 py-2 text-[10px] font-bold text-gray-400 uppercase tracking-wider bg-gray-50/50">
-                                                            Clone to...
-                                                        </div>
-                                                        <?php foreach ($available_langs as $code => $info): ?>
-                                                            <?php if ($code !== $_curr_lang): ?>
-                                                                <a href="?action=clone&id=<?php echo $p['id']; ?>&target_lang=<?php echo $code; ?>"
-                                                                    class="block px-4 py-2 text-xs font-bold text-gray-600 hover:bg-emerald-50 hover:text-emerald-700 transition-colors flex items-center gap-2">
-                                                                    <span><?php echo $info['flag']; ?></span>
-                                                                    <?php echo $info['label']; ?>
-                                                                </a>
-                                                            <?php endif; ?>
-                                                        <?php endforeach; ?>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
 
                                         <a href="?action=edit&id=<?php echo $p['id']; ?>"
                                             class="text-sm font-bold text-emerald-600 hover:text-emerald-800 bg-emerald-50 hover:bg-emerald-100 px-4 py-1.5 rounded-lg transition-colors">Edit</a>
@@ -387,9 +341,10 @@ $page_title = "Page Content Manager";
                                 </div>
                             </div>
 
-                            <input type="hidden" name="lang_code" value="<?php echo $cu_p['lang_code'] ?? $_curr_lang; ?>">
+                            <input type="hidden" name="lang_code"
+                                value="<?php echo htmlspecialchars($cu_p['lang_code'] ?? ($_GET['filter_lang'] ?? $_curr_lang)); ?>">
                             <input type="hidden" name="translation_group"
-                                value="<?php echo htmlspecialchars($cu_p['translation_group'] ?? uniqid('group_', true)); ?>">
+                                value="<?php echo htmlspecialchars($_GET['translation_group'] ?? ($cu_p['translation_group'] ?? uniqid('group_', true))); ?>">
                         </div>
 
                         <div class="grid md:grid-cols-2 gap-8">
@@ -449,19 +404,29 @@ $page_title = "Page Content Manager";
                             <label class="block text-xs font-black text-gray-500 uppercase tracking-widest mb-3">Page
                                 Content</label>
                             <div class="rounded-2xl overflow-hidden border border-gray-200">
-                                <textarea name="content"
+                                <textarea name="content" id="contentEditor"
                                     class="tinymce-editor"><?php echo htmlspecialchars($cu_p['content'] ?? ''); ?></textarea>
                             </div>
                         </div>
 
                         <div class="flex items-center gap-4 pt-6 border-t border-gray-100">
-                            <button type="submit"
-                                class="flex-1 bg-gray-900 text-white py-4 rounded-xl font-bold hover:bg-emerald-600 shadow-xl shadow-gray-200 hover:shadow-emerald-200 transition-all uppercase tracking-widest text-sm flex items-center justify-center gap-2">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-width="2" d="M5 13l4 4L19 7" />
-                                </svg>
-                                Save Page
-                            </button>
+                            <div class="flex flex-col gap-4 flex-1">
+                                <button type="button" onclick="autoTranslateAll()" id="translateBtn"
+                                    class="w-full bg-gradient-to-r from-purple-600 to-emerald-600 text-white py-4 rounded-xl font-bold hover:from-purple-700 hover:to-emerald-700 shadow-xl transition-all uppercase tracking-widest text-xs flex items-center justify-center gap-2">
+                                    <svg class="w-4 h-4 translate-icon" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                    </svg>
+                                    <span id="translateText">✨ Auto Translate Content</span>
+                                </button>
+                                <button type="submit"
+                                    class="w-full bg-gray-900 text-white py-4 rounded-xl font-bold hover:bg-emerald-600 shadow-xl shadow-gray-200 hover:shadow-emerald-200 transition-all uppercase tracking-widest text-sm flex items-center justify-center gap-2">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-width="2" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                    Save Page
+                                </button>
+                            </div>
                             <a href="?action=list&filter_lang=<?php echo $_curr_lang; ?>"
                                 class="px-8 py-4 rounded-xl font-bold text-gray-500 hover:bg-gray-100 transition-all uppercase tracking-widest text-sm">Cancel</a>
                         </div>
@@ -478,6 +443,84 @@ $page_title = "Page Content Manager";
     </div>
 
     <script>
+        async function translateText(text, targetLang) {
+            if (!text || text.trim() === '') return '';
+            const formData = new FormData();
+            formData.append('text', text);
+            formData.append('lang', targetLang);
+
+            try {
+                const response = await fetch('ajax_translate.php', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+                return data.translatedText || text;
+            } catch (e) {
+                console.error('Translation error:', e);
+                return text;
+            }
+        }
+
+        async function autoTranslateAll() {
+            const btn = document.getElementById('translateBtn');
+            const btnText = document.getElementById('translateText');
+            const targetLang = document.getElementsByName('lang_code')[0].value;
+
+            if (targetLang === 'en') {
+                showToast('Target language is English. No translation needed.', 'error');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.classList.add('opacity-50', 'cursor-not-allowed');
+            btnText.innerText = 'Translating...';
+            showToast('Translating content... Please wait.');
+
+            try {
+                // 1. Title
+                const titleInput = document.getElementsByName('title')[0];
+                const translatedTitle = await translateText(titleInput.value, targetLang);
+                titleInput.value = translatedTitle;
+
+                // 1b. Slug
+                const slugInput = document.getElementsByName('slug')[0];
+                slugInput.value = translatedTitle.toLowerCase()
+                    .replace(/[^a-z0-9\s-]/g, '')
+                    .replace(/\s+/g, '-')
+                    .replace(/-+/g, '-')
+                    .replace(/(^-|-$)/g, '');
+
+                // 2. SEO Title
+                const seoTitle = document.getElementsByName('meta_title')[0];
+                seoTitle.value = await translateText(seoTitle.value, targetLang);
+
+                // 3. SEO Desc
+                const seoDesc = document.getElementsByName('meta_description')[0];
+                seoDesc.value = await translateText(seoDesc.value, targetLang);
+
+                // 4. Content (TinyMCE)
+                if (tinymce.get('contentEditor')) {
+                    const content = tinymce.get('contentEditor').getContent();
+                    const translatedContent = await translateText(content, targetLang);
+                    tinymce.get('contentEditor').setContent(translatedContent);
+                }
+
+                showToast('✨ Translation Complete!');
+                btnText.innerText = '✨ Success!';
+                setTimeout(() => {
+                    btnText.innerText = '✨ Auto Translate Content';
+                    btn.disabled = false;
+                    btn.classList.remove('opacity-50', 'cursor-not-allowed');
+                }, 2000);
+            } catch (err) {
+                showToast('Translation failed. Please try again.', 'error');
+                btnText.innerText = '✨ Auto Translate Content';
+                btn.disabled = false;
+                btn.classList.remove('opacity-50', 'cursor-not-allowed');
+            }
+        }
+
         function showToast(msg, type = 'success') {
             const toast = document.getElementById('toast');
             const span = toast.querySelector('span');
@@ -490,12 +533,12 @@ $page_title = "Page Content Manager";
             setTimeout(() => {
                 toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
             }, 3000);
-    }
+        }
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.2/tinymce.min.js"></script>
     <script>
         tinymce.init({
-            selector: 'textarea[name="content"]',
+            selector: '#contentEditor',
             plugins: 'link lists code table autoresize searchreplace visualblocks wordcount',
             toolbar: 'undo redo | blocks | bold italic forecolor | alignleft aligncenter alignright | indent outdent | bullist numlist | link table | code',
             height: 600,
@@ -505,7 +548,7 @@ $page_title = "Page Content Manager";
             skin: 'oxide',
             content_css: 'default',
             content_style: "@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600&display=swap'); body { font-family: 'Outfit', sans-serif; font-size: 16px; color: #333; line-height: 1.6; padding: 20px; } h1,h2,h3 { font-weight: 700; color: #111; } a { color: #10b981; text-decoration: none; }"
-    });
+        });
     </script>
 </body>
 

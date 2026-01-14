@@ -348,14 +348,14 @@ $page_title = "Pages";
                         </div>
 
                         <div class="grid md:grid-cols-2 gap-8">
-                            <!-- Left Column: Core Info -->
+                            <!-- Left Column: Core Info (Blue Card) -->
                             <div
-                                class="bg-white p-8 rounded-[2rem] border-4 border-gray-200 shadow-sm space-y-6 relative overflow-hidden">
+                                class="bg-white p-8 rounded-[2rem] border-4 border-blue-600 shadow-xl space-y-6 relative overflow-hidden">
                                 <h4
-                                    class="flex items-center gap-3 text-sm font-black text-gray-800 uppercase tracking-widest mb-6 border-b-4 border-gray-100 pb-4">
+                                    class="flex items-center gap-3 text-lg font-black text-blue-700 uppercase tracking-widest mb-6 border-b-4 border-blue-100 pb-4">
                                     <span
-                                        class="w-8 h-8 rounded-lg bg-gray-200 flex items-center justify-center text-gray-600">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-width="3"
                                                 d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                         </svg>
@@ -363,27 +363,28 @@ $page_title = "Pages";
                                     Basic Information
                                 </h4>
                                 <div>
-                                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-3">Page
+                                    <label
+                                        class="block text-sm font-black text-gray-900 uppercase tracking-widest mb-3">Page
                                         Title</label>
                                     <input type="text" name="title"
                                         value="<?php echo htmlspecialchars($cu_p['title'] ?? ''); ?>" required
                                         placeholder="e.g. Terms of Service"
-                                        class="w-full px-6 py-5 rounded-2xl border-4 border-gray-200 bg-gray-50 focus:bg-white focus:border-gray-900 outline-none font-bold text-xl text-gray-900 transition-all placeholder-gray-300">
+                                        class="w-full px-6 py-5 rounded-2xl border-4 border-gray-900 bg-white text-xl font-bold text-gray-900 outline-none placeholder-gray-400">
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-3">URL
+                                    <label class="block text-sm font-black text-gray-900 uppercase tracking-widest mb-3">URL
                                         Slug</label>
                                     <div
-                                        class="flex items-center rounded-2xl overflow-hidden border-4 border-gray-200 bg-gray-50 focus-within:border-gray-900 focus-within:bg-white transition-all">
+                                        class="flex items-center rounded-2xl overflow-hidden border-4 border-gray-900 bg-white">
                                         <span
-                                            class="bg-gray-200 text-gray-600 px-5 py-5 border-r-4 border-gray-200 font-mono text-sm font-bold">/</span>
+                                            class="bg-gray-100 text-gray-900 px-5 py-5 border-r-4 border-gray-900 font-mono text-sm font-bold">/</span>
                                         <input type="text" name="slug"
                                             value="<?php echo htmlspecialchars($cu_p['slug'] ?? ''); ?>"
                                             placeholder="terms-of-service"
-                                            class="w-full px-6 py-5 bg-transparent outline-none font-mono font-bold text-gray-700 placeholder-gray-300">
+                                            class="w-full px-6 py-5 bg-transparent outline-none font-mono font-bold text-gray-900 placeholder-gray-400">
                                     </div>
-                                    <p class="text-[11px] font-bold text-gray-400 mt-3 ml-1 flex items-center gap-1">
-                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <p class="text-xs font-bold text-blue-600 mt-3 ml-1 flex items-center gap-1">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                                         </svg>
                                         Auto-generated if left empty
@@ -391,43 +392,49 @@ $page_title = "Pages";
                                 </div>
                             </div>
 
-                            <!-- Right Column: SEO -->
-                            <div class="bg-emerald-50/50 p-6 rounded-3xl border border-emerald-100 space-y-6">
+                            <!-- Right Column: SEO (Emerald Card) -->
+                            <div class="bg-white p-8 rounded-[2rem] border-4 border-emerald-500 shadow-xl space-y-6">
                                 <h4
-                                    class="flex items-center gap-2 text-xs font-black text-emerald-600 uppercase tracking-widest">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                                    </svg>
+                                    class="flex items-center gap-3 text-lg font-black text-emerald-700 uppercase tracking-widest mb-6 border-b-4 border-emerald-100 pb-4">
+                                    <span
+                                        class="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center text-emerald-600">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-width="3" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                        </svg>
+                                    </span>
                                     SEO Configuration
                                 </h4>
                                 <div>
-                                    <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Meta Title</label>
+                                    <label
+                                        class="block text-sm font-black text-gray-900 uppercase tracking-widest mb-3">Meta
+                                        Title</label>
                                     <input type="text" name="meta_title"
                                         value="<?php echo htmlspecialchars($cu_p['meta_title'] ?? ''); ?>"
-                                        class="w-full px-4 py-3 rounded-xl border border-emerald-200 bg-white focus:border-emerald-500 outline-none font-semibold text-gray-800">
+                                        class="w-full px-6 py-5 rounded-2xl border-4 border-gray-900 bg-white text-lg font-bold text-gray-900 outline-none">
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Meta
+                                    <label
+                                        class="block text-sm font-black text-gray-900 uppercase tracking-widest mb-3">Meta
                                         Description</label>
                                     <textarea name="meta_description" rows="3"
-                                        class="w-full px-4 py-3 rounded-xl border border-emerald-200 bg-white focus:border-emerald-500 outline-none font-medium text-gray-600 text-sm leading-relaxed"><?php echo htmlspecialchars($cu_p['meta_description'] ?? ''); ?></textarea>
+                                        class="w-full px-6 py-5 rounded-2xl border-4 border-gray-900 bg-white text-base font-bold text-gray-900 outline-none"><?php echo htmlspecialchars($cu_p['meta_description'] ?? ''); ?></textarea>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Editor -->
-                        <div class="mt-10 bg-white p-8 rounded-[2rem] border-4 border-gray-200 shadow-sm relative">
+                        <!-- Editor (Indigo Card) -->
+                        <div class="mt-10 bg-white p-8 rounded-[2rem] border-4 border-indigo-500 shadow-xl relative">
                             <h4
-                                class="flex items-center gap-3 text-sm font-black text-gray-800 uppercase tracking-widest mb-6 border-b-4 border-gray-100 pb-4">
-                                <span class="w-8 h-8 rounded-lg bg-gray-200 flex items-center justify-center text-gray-600">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path>
+                                class="flex items-center gap-3 text-lg font-black text-indigo-700 uppercase tracking-widest mb-6 border-b-4 border-indigo-100 pb-4">
+                                <span
+                                    class="w-10 h-10 rounded-xl bg-indigo-100 flex items-center justify-center text-indigo-600">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-width="3" d="M4 6h16M4 12h16M4 18h7"></path>
                                     </svg>
                                 </span>
                                 Page Content
                             </h4>
-                            <div
-                                class="rounded-2xl overflow-hidden border-4 border-gray-200 hover:border-gray-400 transition-colors bg-white">
+                            <div class="rounded-2xl overflow-hidden border-4 border-gray-900 bg-white">
                                 <textarea name="content" id="contentEditor"
                                     class="tinymce-editor"><?php echo htmlspecialchars($cu_p['content'] ?? ''); ?></textarea>
                             </div>

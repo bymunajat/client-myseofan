@@ -53,7 +53,7 @@ if (empty($user_role))
                 </button>
                 <div id="blog-submenu"
                     class="<?php echo $current_page == 'blog.php' ? 'block' : 'hidden'; ?> mt-1 ml-6 border-l border-gray-700 pl-2 space-y-1">
-                    <a href="blog.php?action=list"
+                    <a href="blog.php?action=list&filter_lang=en"
                         class="block py-1 text-xs <?php echo ($current_page == 'blog.php' && $_sb_action != 'add') ? 'text-emerald-400 font-bold' : 'text-gray-300 hover:text-white'; ?>">All
                         Posts</a>
                     <a href="blog.php?action=add"
@@ -166,6 +166,14 @@ if (empty($user_role))
                             d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 0 0112 0v1zm0 0h6v-1a6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                     </svg>
                     <span>Admin Management</span>
+                </a>
+                <a href="logs.php"
+                    class="flex items-center gap-3 px-4 py-2 rounded-xl text-sm transition-all <?php echo $current_page == 'logs.php' ? 'text-white bg-gray-800' : 'text-gray-400 hover:text-white hover:bg-gray-800'; ?>">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-width="2"
+                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                    </svg>
+                    <span>Activity Logs</span>
                 </a>
             </div>
         <?php endif; ?>

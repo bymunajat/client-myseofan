@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once '../includes/db.php';
+require_once '../includes/Logger.php';
 
 // Enable error reporting for debugging
 error_reporting(E_ALL);
@@ -28,9 +29,9 @@ $available_langs = [
 if (isset($_GET['filter_lang'])) {
     $_curr_lang = $_GET['filter_lang'];
     $_SESSION['last_blog_lang'] = $_curr_lang;
-} elseif (isset($_SESSION['last_blog_lang'])) {
-    $_curr_lang = $_SESSION['last_blog_lang'];
 } else {
+    // Force default to English (The "Main" language)
+    // Ignore session history to prevent user getting "stuck" in underground languages
     $_curr_lang = 'en';
 }
 
@@ -62,8 +63,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute([$title, $slug, $content, $excerpt, $thumbnail, $lang, $m_title, $m_desc, $category, $t_group, $_POST['status'] ?? 'published', $_POST['tags'] ?? '', $author_id]);
             $message = "Post created successfully!";
             $action = 'list';
-            $_curr_lang = $lang;
-            $_SESSION['last_blog_lang'] = $lang;
+            $_curr_lang = 'en'; // Return to Main List
+            $_SESSION['last_blog_lang'] = 'en';
         } catch (\Exception $e) {
             $error = "Error: " . $e->getMessage();
         }
@@ -73,8 +74,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute([$title, $slug, $content, $excerpt, $thumbnail, $lang, $m_title, $m_desc, $category, $t_group, $_POST['status'] ?? 'published', $_POST['tags'] ?? '', $author_id, $id]);
             $message = "Post updated successfully!";
             $action = 'list';
-            $_curr_lang = $lang;
-            $_SESSION['last_blog_lang'] = $lang;
+            $_curr_lang = 'en'; // Return to Main List
+            $_SESSION['last_blog_lang'] = 'en';
         } catch (\Exception $e) {
             $error = "Error: " . $e->getMessage();
         }
@@ -99,6 +100,7 @@ if ($action === 'delete' && $id) {
             $pdo->prepare("DELETE FROM blog_posts WHERE id=?")->execute([$id]);
             $message = "Post deleted.";
         }
+        Logger::log('delete_post', "Deleted post ID: $id (Group: " . ($group ?? 'none') . ")");
     } catch (\Exception $e) {
         $error = "Delete failed: " . $e->getMessage();
     }
@@ -183,12 +185,8 @@ if ($action === 'list') {
     // Search Logic
     $search = trim($_GET['search'] ?? '');
     $search_param = "%$search%";
-    $where_sql = "WHERE 1=1";
-    $params = [];
-
-    // Only filter by language if NOT global (implied logic: simplify to just search all if needed, but keeping lang consistency)
-    // Actually, user wants single stream, so generally we just show all.
-    // But to be safe let's search across everything since we removed language tabs.
+    $where_sql = "WHERE lang_code = ?"; // Force language filter
+    $params = [$_curr_lang];
 
     if (!empty($search)) {
         $where_sql .= " AND (title LIKE ? OR slug LIKE ?)";
@@ -213,6 +211,18 @@ if ($action === 'list') {
     // Merge params for final query
     $params[] = $per_page;
     $params[] = $offset;
+
+    // Fix for PDO limit/offset being strictly int
+    // Usually PDO handles it but sometimes prepared statements need explicit binding for LIMIT.
+    // However, for this codebase style, array execution is used elsewhere.
+    // Let's stick to array execution but ensure ints if driver allows, 
+    // or just concat limit if safe (params validated above). 
+    // Actually, execute($params) treats all as strings which breaks LIMIT in some drivers.
+    // Safest rewrite for LIMIT with strict mode:
+
+    // For simplicity in this specific setup which uses SQLite (which allows strings in LIMIT often or we can bind):
+    // Let's bind manually to be safe or just use the previous pattern if it worked (it seemed to use execute params).
+    // The previous code had `LIMIT ? OFFSET ?` and `$stmt->execute($params)`. PHP 8.1+ / PDO SQLite usually is fine.
 
     $stmt->execute($params);
     $posts = $stmt->fetchAll();
@@ -415,21 +425,27 @@ try {
                 <div class="bg-white p-10 rounded-[2.5rem] shadow-2xl border-2 border-emerald-200 max-w-4xl mx-auto mb-10">
                     <form action="?action=<?php echo $action; ?><?php echo $id ? '&id=' . $id : ''; ?>" method="POST"
                         class="space-y-8">
-                        <!-- 1. Top Section: Title & Slug -->
-                        <div class="grid md:grid-cols-2 gap-8">
-                            <div>
-                                <label class="block text-sm font-black text-gray-900 mb-2 uppercase tracking-widest">Post
-                                    Title</label>
-                                <input type="text" name="title"
-                                    value="<?php echo htmlspecialchars($current_post['title'] ?? ''); ?>" required
-                                    class="w-full px-5 py-4 rounded-2xl border-2 border-gray-400 bg-white focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100 outline-none font-bold text-gray-900 transition-all shadow-sm">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-black text-gray-900 mb-2 uppercase tracking-widest">Slug
-                                    (Auto if empty)</label>
-                                <input type="text" name="slug"
-                                    value="<?php echo htmlspecialchars($current_post['slug'] ?? ''); ?>"
-                                    class="w-full px-5 py-4 rounded-2xl border-2 border-gray-400 bg-white focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100 outline-none font-mono font-bold text-gray-800 transition-all shadow-sm">
+                        <!-- 1. Top Section: Core Info (Blue Card) -->
+                        <div class="bg-white p-8 rounded-[2rem] border-4 border-blue-600 shadow-xl space-y-6 relative overflow-hidden">
+                            <h4 class="flex items-center gap-3 text-lg font-black text-blue-700 uppercase tracking-widest mb-6 border-b-4 border-blue-100 pb-4">
+                                <span class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="3" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                </span>
+                                Basic Information
+                            </h4>
+                            <div class="grid md:grid-cols-2 gap-8">
+                                <div>
+                                    <label class="block text-sm font-black text-gray-900 mb-2 uppercase tracking-widest">Post Title</label>
+                                    <input type="text" name="title"
+                                        value="<?php echo htmlspecialchars($current_post['title'] ?? ''); ?>" required
+                                        class="w-full px-6 py-5 rounded-2xl border-4 border-gray-900 bg-white font-bold text-xl text-gray-900 outline-none placeholder-gray-400">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-black text-gray-900 mb-2 uppercase tracking-widest">Slug (Auto if empty)</label>
+                                    <input type="text" name="slug"
+                                        value="<?php echo htmlspecialchars($current_post['slug'] ?? ''); ?>"
+                                        class="w-full px-6 py-5 rounded-2xl border-4 border-gray-900 bg-white font-mono font-bold text-gray-900 outline-none placeholder-gray-400">
+                                </div>
                             </div>
                         </div>
 
@@ -438,48 +454,46 @@ try {
 
                             <!-- Left Column: Content & SEO (Span 2) -->
                             <div class="lg:col-span-2 space-y-8">
-                                <div>
-                                    <label
-                                        class="block text-sm font-black text-gray-900 mb-2 uppercase tracking-widest">Content</label>
-                                    <div
-                                        class="rounded-2xl border-2 border-gray-400 overflow-hidden focus-within:border-emerald-600 focus-within:ring-4 focus-within:ring-emerald-100 transition-all shadow-sm">
-                                        <textarea name="content" id="contentEditor" rows="20"
-                                            class="w-full px-5 py-4 bg-white outline-none font-bold text-gray-900"><?php echo htmlspecialchars($current_post['content'] ?? ''); ?></textarea>
+                                <!-- Content (Indigo Card) -->
+                                <div class="bg-white p-8 rounded-[2rem] border-4 border-indigo-600 shadow-xl space-y-6 relative">
+                                    <h4 class="flex items-center gap-3 text-lg font-black text-indigo-700 uppercase tracking-widest mb-6 border-b-4 border-indigo-100 pb-4">
+                                        <span class="w-10 h-10 rounded-xl bg-indigo-100 flex items-center justify-center text-indigo-600">
+                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="3" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+                                        </span>
+                                        Content
+                                    </h4>
+                                    <div>
+                                        <label class="block text-sm font-black text-gray-900 mb-2 uppercase tracking-widest">Post Content</label>
+                                        <div class="rounded-2xl border-4 border-gray-900 overflow-hidden bg-white">
+                                            <textarea name="content" id="contentEditor" rows="20"
+                                                class="w-full px-5 py-4 bg-white outline-none font-bold text-gray-900"><?php echo htmlspecialchars($current_post['content'] ?? ''); ?></textarea>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-black text-gray-900 mb-2 uppercase tracking-widest">Excerpt</label>
+                                        <textarea name="excerpt" rows="3"
+                                            class="w-full px-6 py-5 rounded-2xl border-4 border-gray-900 bg-white font-bold text-gray-900 outline-none placeholder-gray-400"><?php echo htmlspecialchars($current_post['excerpt'] ?? ''); ?></textarea>
                                     </div>
                                 </div>
 
-                                <div>
-                                    <label
-                                        class="block text-sm font-black text-gray-900 mb-2 uppercase tracking-widest">Excerpt</label>
-                                    <textarea name="excerpt" rows="3"
-                                        class="w-full px-5 py-4 rounded-2xl border-2 border-gray-400 bg-white focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100 outline-none font-bold text-gray-900 transition-all shadow-sm"><?php echo htmlspecialchars($current_post['excerpt'] ?? ''); ?></textarea>
-                                </div>
-
-                                <div class="bg-emerald-50/20 p-6 rounded-[2rem] border-2 border-dashed border-emerald-400">
-                                    <h4
-                                        class="font-black text-emerald-800 uppercase tracking-widest text-xs mb-6 flex items-center gap-2">
-                                        <span
-                                            class="w-8 h-8 bg-emerald-600 text-white rounded-lg flex items-center justify-center shadow-md">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                                            </svg>
+                                <!-- SEO (Emerald Card) -->
+                                <div class="bg-white p-8 rounded-[2rem] border-4 border-emerald-600 shadow-xl space-y-6">
+                                    <h4 class="flex items-center gap-3 text-lg font-black text-emerald-700 uppercase tracking-widest mb-6 border-b-4 border-emerald-100 pb-4">
+                                        <span class="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center text-emerald-600">
+                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="3" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                                         </span>
-                                        SEO Settings
+                                        SEO Configuration
                                     </h4>
-                                    <div class="space-y-6">
-                                        <div>
-                                            <label class="block text-xs font-black text-gray-700 mb-2 uppercase">Meta
-                                                Title</label>
-                                            <input type="text" name="meta_title"
-                                                value="<?php echo htmlspecialchars($current_post['meta_title'] ?? ''); ?>"
-                                                class="w-full px-4 py-3 rounded-xl border-2 border-gray-300 focus:border-emerald-500 outline-none font-bold text-gray-800 bg-white">
-                                        </div>
-                                        <div>
-                                            <label class="block text-xs font-black text-gray-700 mb-2 uppercase">Meta
-                                                Description</label>
-                                            <textarea name="meta_description" rows="3"
-                                                class="w-full px-4 py-3 rounded-xl border-2 border-gray-300 focus:border-emerald-500 outline-none font-bold text-gray-800 bg-white"><?php echo htmlspecialchars($current_post['meta_description'] ?? ''); ?></textarea>
-                                        </div>
+                                    <div>
+                                        <label class="block text-sm font-black text-gray-900 mb-2 uppercase tracking-widest">Meta Title</label>
+                                        <input type="text" name="meta_title"
+                                            value="<?php echo htmlspecialchars($current_post['meta_title'] ?? ''); ?>"
+                                            class="w-full px-6 py-5 rounded-2xl border-4 border-gray-900 bg-white font-bold text-xl text-gray-900 outline-none">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-black text-gray-900 mb-2 uppercase tracking-widest">Meta Description</label>
+                                        <textarea name="meta_description" rows="3"
+                                            class="w-full px-6 py-5 rounded-2xl border-4 border-gray-900 bg-white font-bold text-base text-gray-900 outline-none"><?php echo htmlspecialchars($current_post['meta_description'] ?? ''); ?></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -487,150 +501,170 @@ try {
                             <!-- Right Column: Meta & Sidebar (Span 1) -->
                             <div class="space-y-8">
 
-                                <!-- Author Selection -->
-                                <div>
-                                    <label
-                                        class="block text-sm font-black text-gray-900 mb-2 uppercase tracking-widest">Author</label>
-                                    <select name="author_id"
-                                        class="w-full px-5 py-4 rounded-2xl border-2 border-gray-400 bg-white focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100 outline-none font-bold text-gray-900 appearance-none cursor-pointer shadow-sm">
-                                        <?php
-                                        $current_author = $current_post['author_id'] ?? $_SESSION['admin_id'];
-                                        foreach ($admins as $admin):
-                                            ?>
-                                            <option value="<?php echo $admin['id']; ?>" <?php echo $current_author == $admin['id'] ? 'selected' : ''; ?>>
-                                                <?php echo htmlspecialchars($admin['username']); ?>
-                                            </option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </div>
-
-                                <!-- Status -->
-                                <div>
-                                    <label
-                                        class="block text-sm font-black text-gray-900 mb-2 uppercase tracking-widest">Status</label>
-                                    <select name="status"
-                                        class="w-full px-5 py-4 rounded-2xl border-2 border-gray-400 bg-white focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100 outline-none font-black text-gray-900 appearance-none cursor-pointer shadow-sm">
-                                        <option value="published" <?php echo ($current_post['status'] ?? 'published') === 'published' ? 'selected' : ''; ?>>Published (Live)</option>
-                                        <option value="draft" <?php echo ($current_post['status'] ?? '') === 'draft' ? 'selected' : ''; ?>>Draft (Hidden)</option>
-                                    </select>
-                                </div>
-
-                                <!-- Image Upload -->
-                                <div>
-                                    <label
-                                        class="block text-sm font-black text-gray-900 mb-2 uppercase tracking-widest">Featured
-                                        Image</label>
-                                    <input type="hidden" name="thumbnail" id="thumbnailInput"
-                                        value="<?php echo htmlspecialchars($current_post['thumbnail'] ?? ''); ?>">
-
-                                    <div id="uploadArea"
-                                        class="border-2 border-dashed border-gray-400 rounded-2xl p-6 text-center cursor-pointer hover:border-emerald-500 hover:bg-emerald-50 transition-all group relative overflow-hidden bg-white">
-                                        <input type="file" id="fileInput" accept="image/*"
-                                            class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
-
-                                        <!-- Placeholder State -->
-                                        <div id="uploadPlaceholder"
-                                            class="<?php echo !empty($current_post['thumbnail']) ? 'hidden' : ''; ?>">
-                                            <div
-                                                class="w-12 h-12 bg-gray-100 text-gray-400 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:bg-emerald-200 group-hover:text-emerald-700 transition-colors">
+                                <!-- Right Column: Settings -->
+                                <div class="space-y-8">
+                                    <div
+                                        class="bg-white p-8 rounded-[2rem] border-4 border-slate-600 shadow-xl space-y-6 relative">
+                                        <h4
+                                            class="flex items-center gap-3 text-lg font-black text-slate-700 uppercase tracking-widest mb-6 border-b-4 border-slate-200 pb-4">
+                                            <span
+                                                class="w-10 h-10 rounded-xl bg-slate-200 flex items-center justify-center text-slate-600">
                                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-width="2"
-                                                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                    <path stroke-width="3"
+                                                        d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4">
+                                                    </path>
                                                 </svg>
-                                            </div>
-                                            <div class="space-y-1">
-                                                <p class="text-xs font-bold text-gray-500 group-hover:text-emerald-700">
-                                                    Click to Upload</p>
-                                                <p class="text-[10px] text-gray-400">JPG, PNG, WEBP</p>
-                                            </div>
+                                            </span>
+                                            Publishing
+                                        </h4>
+
+                                        <!-- Author -->
+                                        <div>
+                                            <label
+                                                class="block text-sm font-black text-gray-900 mb-2 uppercase tracking-widest">Author</label>
+                                            <select name="author_id"
+                                                class="w-full px-6 py-4 rounded-xl border-4 border-gray-900 bg-white font-bold text-gray-900 appearance-none cursor-pointer shadow-sm focus:outline-none">
+                                                <?php
+                                                $current_author = $current_post['author_id'] ?? $_SESSION['admin_id'];
+                                                foreach ($admins as $admin):
+                                                    ?>
+                                                    <option value="<?php echo $admin['id']; ?>" <?php echo $current_author == $admin['id'] ? 'selected' : ''; ?>>
+                                                        <?php echo htmlspecialchars($admin['username']); ?>
+                                                    </option>
+                                                <?php endforeach; ?>
+                                            </select>
                                         </div>
 
-                                        <!-- Preview State -->
-                                        <div id="uploadPreview"
-                                            class="<?php echo !empty($current_post['thumbnail']) ? '' : 'hidden'; ?> relative h-40 w-full">
-                                            <img src="<?php echo !empty($current_post['thumbnail']) ? '../' . htmlspecialchars($current_post['thumbnail']) : ''; ?>"
-                                                id="previewImg"
-                                                class="w-full h-full object-cover rounded-xl shadow-sm border border-gray-100">
-                                            <button type="button" onclick="removeImage(event)"
-                                                class="absolute top-2 right-2 bg-white text-red-500 p-1.5 rounded-lg shadow-md hover:bg-red-50 transition-colors border border-gray-100">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-width="2.5" d="M6 18L18 6M6 6l12 12" />
-                                                </svg>
-                                            </button>
-                                        </div>
-
-                                        <!-- Loading -->
-                                        <div id="uploadLoading"
-                                            class="hidden absolute inset-0 bg-white/90 flex flex-col items-center justify-center z-10">
-                                            <svg class="animate-spin h-8 w-8 text-emerald-600 mb-2"
-                                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
-                                                    stroke-width="4"></circle>
-                                                <path class="opacity-75" fill="currentColor"
-                                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                                                </path>
-                                            </svg>
-                                            <span class="text-xs font-bold text-emerald-600">Uploading...</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Category -->
-                                <div>
-                                    <div class="flex items-center justify-between mb-2">
-                                        <label
-                                            class="block text-sm font-black text-gray-900 uppercase tracking-widest">Category</label>
-                                        <button type="button" onclick="quickAddCategory()"
-                                            class="text-[10px] font-black text-emerald-600 hover:text-emerald-700 uppercase tracking-wider bg-emerald-50 px-2 py-1 rounded-lg hover:bg-emerald-100 transition-colors">+
-                                            NEW</button>
-                                    </div>
-                                    <select name="category" id="categorySelect"
-                                        class="w-full px-5 py-4 rounded-2xl border-2 border-gray-400 bg-white focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100 outline-none font-bold text-gray-900 transition-all appearance-none cursor-pointer shadow-sm">
-                                        <?php if (empty($categories)): ?>
-                                            <option value="General">General</option>
-                                        <?php else: ?>
-                                            <?php foreach ($categories as $cat): ?>
-                                                <option value="<?php echo htmlspecialchars($cat['name']); ?>" <?php echo ($current_post['category'] ?? '') == $cat['name'] ? 'selected' : ''; ?>>
-                                                    <?php echo htmlspecialchars($cat['name']); ?>
+                                        <!-- Status -->
+                                        <div>
+                                            <label
+                                                class="block text-sm font-black text-gray-900 mb-2 uppercase tracking-widest">Status</label>
+                                            <select name="status"
+                                                class="w-full px-6 py-4 rounded-xl border-4 border-gray-900 bg-white font-black text-gray-900 appearance-none cursor-pointer shadow-sm focus:outline-none">
+                                                <option value="published" <?php echo ($current_post['status'] ?? 'published') === 'published' ? 'selected' : ''; ?>>Published (Live)
                                                 </option>
-                                            <?php endforeach; ?>
-                                        <?php endif; ?>
-                                    </select>
+                                                <option value="draft" <?php echo ($current_post['status'] ?? '') === 'draft' ? 'selected' : ''; ?>>Draft (Hidden)</option>
+                                            </select>
+                                        </div>
+
+                                        <!-- Image Upload -->
+                                        <div>
+                                            <label
+                                                class="block text-sm font-black text-gray-900 mb-2 uppercase tracking-widest">Featured
+                                                Image</label>
+                                            <input type="hidden" name="thumbnail" id="thumbnailInput"
+                                                value="<?php echo htmlspecialchars($current_post['thumbnail'] ?? ''); ?>">
+
+                                            <div id="uploadArea"
+                                                class="border-4 border-dashed border-gray-400 rounded-2xl p-6 text-center cursor-pointer hover:border-gray-900 hover:bg-gray-50 transition-all group relative overflow-hidden bg-white">
+                                                <input type="file" id="fileInput" accept="image/*"
+                                                    class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+
+                                                <!-- Placeholder State -->
+                                                <div id="uploadPlaceholder"
+                                                    class="<?php echo !empty($current_post['thumbnail']) ? 'hidden' : ''; ?>">
+                                                    <div
+                                                        class="w-12 h-12 bg-gray-100 text-gray-400 rounded-full flex items-center justify-center mx-auto mb-3 border-2 border-gray-200">
+                                                        <svg class="w-6 h-6" fill="none" stroke="currentColor"
+                                                            viewBox="0 0 24 24">
+                                                            <path stroke-width="2"
+                                                                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                        </svg>
+                                                    </div>
+                                                    <div class="space-y-1">
+                                                        <p class="text-xs font-bold text-gray-900 group-hover:text-black">
+                                                            Click to Upload</p>
+                                                        <p class="text-[10px] text-gray-500">JPG, PNG, WEBP</p>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Preview State -->
+                                                <div id="uploadPreview"
+                                                    class="<?php echo !empty($current_post['thumbnail']) ? '' : 'hidden'; ?> relative h-40 w-full">
+                                                    <img src="<?php echo !empty($current_post['thumbnail']) ? '../' . htmlspecialchars($current_post['thumbnail']) : ''; ?>"
+                                                        id="previewImg"
+                                                        class="w-full h-full object-cover rounded-xl shadow-sm border-2 border-gray-900">
+                                                    <button type="button" onclick="removeImage(event)"
+                                                        class="absolute top-2 right-2 bg-white text-red-500 p-1.5 rounded-lg shadow-md hover:bg-red-50 border-2 border-gray-200">
+                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                                                            viewBox="0 0 24 24">
+                                                            <path stroke-width="2.5" d="M6 18L18 6M6 6l12 12" />
+                                                        </svg>
+                                                    </button>
+                                                </div>
+
+                                                <!-- Loading -->
+                                                <div id="uploadLoading"
+                                                    class="hidden absolute inset-0 bg-white/90 flex flex-col items-center justify-center z-10">
+                                                    <span class="text-xs font-bold text-gray-900">Uploading...</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Category & Tags -->
+                                    <div class="bg-white p-8 rounded-[2rem] border-4 border-slate-600 shadow-xl space-y-6">
+                                        <h4
+                                            class="flex items-center gap-3 text-lg font-black text-slate-700 uppercase tracking-widest mb-6 border-b-4 border-slate-200 pb-4">
+                                            Organize
+                                        </h4>
+                                        <!-- Category -->
+                                        <div>
+                                            <div class="flex items-center justify-between mb-2">
+                                                <label
+                                                    class="block text-sm font-black text-gray-900 uppercase tracking-widest">Category</label>
+                                                <button type="button" onclick="quickAddCategory()"
+                                                    class="text-[10px] font-black text-blue-600 hover:text-blue-800 uppercase tracking-wider bg-blue-50 px-3 py-1.5 rounded-lg hover:bg-blue-100 border border-blue-200 transition-colors">+
+                                                    NEW</button>
+                                            </div>
+                                            <select name="category" id="categorySelect"
+                                                class="w-full px-6 py-4 rounded-xl border-4 border-gray-900 bg-white font-bold text-gray-900 outline-none appearance-none cursor-pointer shadow-sm">
+                                                <?php if (empty($categories)): ?>
+                                                    <option value="General">General</option>
+                                                <?php else: ?>
+                                                    <?php foreach ($categories as $cat): ?>
+                                                        <option value="<?php echo htmlspecialchars($cat['name']); ?>" <?php echo ($current_post['category'] ?? '') == $cat['name'] ? 'selected' : ''; ?>>
+                                                            <?php echo htmlspecialchars($cat['name']); ?>
+                                                        </option>
+                                                    <?php endforeach; ?>
+                                                <?php endif; ?>
+                                            </select>
+                                        </div>
+
+                                        <!-- Tags -->
+                                        <div>
+                                            <label
+                                                class="block text-sm font-black text-gray-900 mb-2 uppercase tracking-widest">Tags</label>
+                                            <input type="text" name="tags" placeholder="tech, news, updates"
+                                                value="<?php echo htmlspecialchars($current_post['tags'] ?? ''); ?>"
+                                                class="w-full px-6 py-4 rounded-xl border-4 border-gray-900 bg-white outline-none font-bold text-gray-900 transition-all shadow-sm placeholder-gray-400">
+                                        </div>
+                                    </div>
+
+                                    <!-- Hidden Fields -->
+                                    <input type="hidden" name="translation_group"
+                                        value="<?php echo htmlspecialchars($_GET['translation_group'] ?? ($current_post['translation_group'] ?? uniqid('group_', true))); ?>">
+                                    <input type="hidden" name="lang_code"
+                                        value="<?php echo htmlspecialchars($current_post['lang_code'] ?? ($_GET['lang_code'] ?? $_curr_lang)); ?>">
+
+                                    <!-- Submit -->
                                 </div>
+                            </div>
 
-                                <!-- Tags -->
-                                <div>
-                                    <label
-                                        class="block text-sm font-black text-gray-900 mb-2 uppercase tracking-widest">Tags</label>
-                                    <input type="text" name="tags" placeholder="tech, news, updates"
-                                        value="<?php echo htmlspecialchars($current_post['tags'] ?? ''); ?>"
-                                        class="w-full px-5 py-4 rounded-2xl border-2 border-gray-400 bg-white focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100 outline-none font-bold text-gray-800 transition-all shadow-sm">
-                                </div>
-
-                                <!-- Hidden Fields -->
-                                <input type="hidden" name="translation_group"
-                                    value="<?php echo htmlspecialchars($_GET['translation_group'] ?? ($current_post['translation_group'] ?? uniqid('group_', true))); ?>">
-                                <input type="hidden" name="lang_code"
-                                    value="<?php echo htmlspecialchars($current_post['lang_code'] ?? ($_GET['lang_code'] ?? $_curr_lang)); ?>">
-
-                                <!-- Submit -->
+                            <!-- Submit Button (Full Width Bottom) -->
+                            <div class="pt-8 border-t-4 border-gray-200 mt-8">
+                                <button type="submit"
+                                    class="w-full bg-gray-900 text-white py-6 rounded-2xl font-black hover:bg-gray-800 shadow-xl transition-all uppercase tracking-widest text-xl flex items-center justify-center gap-3 group border-4 border-gray-900">
+                                    <svg class="w-8 h-8 group-hover:scale-110 transition-transform" fill="none"
+                                        stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-width="3" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                    Save Post
+                                </button>
                             </div>
                         </div>
-
-                        <!-- Submit Button (Full Width Bottom) -->
-                        <div class="pt-8 border-t-2 border-gray-100">
-                            <button type="submit"
-                                class="w-full bg-emerald-600 text-white py-6 rounded-2xl font-black hover:bg-emerald-700 shadow-2xl shadow-emerald-200 hover:shadow-emerald-300 transition-all uppercase tracking-widest text-xl flex items-center justify-center gap-3 group">
-                                <svg class="w-8 h-8 group-hover:scale-110 transition-transform" fill="none"
-                                    stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-width="3" d="M5 13l4 4L19 7" />
-                                </svg>
-                                Save Post
-                            </button>
-                        </div>
                 </div>
-            </div>
-            </form>
+                </form>
             </div>
         <?php endif; ?>
         </div>

@@ -349,28 +349,44 @@ $page_title = "Pages";
 
                         <div class="grid md:grid-cols-2 gap-8">
                             <!-- Left Column: Core Info -->
-                            <div class="space-y-6">
+                            <div
+                                class="bg-white p-8 rounded-[2rem] border-4 border-gray-200 shadow-sm space-y-6 relative overflow-hidden">
+                                <h4
+                                    class="flex items-center gap-3 text-sm font-black text-gray-800 uppercase tracking-widest mb-6 border-b-4 border-gray-100 pb-4">
+                                    <span
+                                        class="w-8 h-8 rounded-lg bg-gray-200 flex items-center justify-center text-gray-600">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-width="3"
+                                                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                    </span>
+                                    Basic Information
+                                </h4>
                                 <div>
-                                    <label
-                                        class="block text-xs font-black text-gray-500 uppercase tracking-widest mb-2">Page
+                                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-3">Page
                                         Title</label>
                                     <input type="text" name="title"
                                         value="<?php echo htmlspecialchars($cu_p['title'] ?? ''); ?>" required
                                         placeholder="e.g. Terms of Service"
-                                        class="w-full px-5 py-4 rounded-2xl border border-gray-200 bg-gray-50 focus:bg-white focus:border-emerald-500 outline-none font-bold text-lg text-gray-800 transition-all">
+                                        class="w-full px-6 py-5 rounded-2xl border-4 border-gray-200 bg-gray-50 focus:bg-white focus:border-gray-900 outline-none font-bold text-xl text-gray-900 transition-all placeholder-gray-300">
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-black text-gray-500 uppercase tracking-widest mb-2">URL
+                                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-3">URL
                                         Slug</label>
-                                    <div class="flex items-center">
+                                    <div
+                                        class="flex items-center rounded-2xl overflow-hidden border-4 border-gray-200 bg-gray-50 focus-within:border-gray-900 focus-within:bg-white transition-all">
                                         <span
-                                            class="bg-gray-100 text-gray-500 px-4 py-4 rounded-l-2xl border-y border-l border-gray-200 font-mono text-sm">/</span>
+                                            class="bg-gray-200 text-gray-600 px-5 py-5 border-r-4 border-gray-200 font-mono text-sm font-bold">/</span>
                                         <input type="text" name="slug"
                                             value="<?php echo htmlspecialchars($cu_p['slug'] ?? ''); ?>"
                                             placeholder="terms-of-service"
-                                            class="w-full px-5 py-4 rounded-r-2xl border border-gray-200 bg-gray-50 focus:bg-white focus:border-emerald-500 outline-none font-mono font-semibold text-gray-700 transition-all">
+                                            class="w-full px-6 py-5 bg-transparent outline-none font-mono font-bold text-gray-700 placeholder-gray-300">
                                     </div>
-                                    <p class="text-[10px] text-gray-400 mt-2 ml-2">Leave empty to auto-generate from title.
+                                    <p class="text-[11px] font-bold text-gray-400 mt-3 ml-1 flex items-center gap-1">
+                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                        </svg>
+                                        Auto-generated if left empty
                                     </p>
                                 </div>
                             </div>
@@ -400,25 +416,25 @@ $page_title = "Pages";
                         </div>
 
                         <!-- Editor -->
-                        <div>
-                            <label class="block text-xs font-black text-gray-500 uppercase tracking-widest mb-3">Page
-                                Content</label>
-                            <div class="rounded-2xl overflow-hidden border border-gray-200">
+                        <div class="mt-10 bg-white p-8 rounded-[2rem] border-4 border-gray-200 shadow-sm relative">
+                            <h4
+                                class="flex items-center gap-3 text-sm font-black text-gray-800 uppercase tracking-widest mb-6 border-b-4 border-gray-100 pb-4">
+                                <span class="w-8 h-8 rounded-lg bg-gray-200 flex items-center justify-center text-gray-600">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path>
+                                    </svg>
+                                </span>
+                                Page Content
+                            </h4>
+                            <div
+                                class="rounded-2xl overflow-hidden border-4 border-gray-200 hover:border-gray-400 transition-colors bg-white">
                                 <textarea name="content" id="contentEditor"
                                     class="tinymce-editor"><?php echo htmlspecialchars($cu_p['content'] ?? ''); ?></textarea>
                             </div>
                         </div>
 
                         <div class="flex items-center gap-4 pt-6 border-t border-gray-100">
-                            <div class="flex flex-col gap-4 flex-1">
-                                <button type="button" onclick="autoTranslateAll()" id="translateBtn"
-                                    class="w-full bg-gradient-to-r from-purple-600 to-emerald-600 text-white py-4 rounded-xl font-bold hover:from-purple-700 hover:to-emerald-700 shadow-xl transition-all uppercase tracking-widest text-xs flex items-center justify-center gap-2">
-                                    <svg class="w-4 h-4 translate-icon" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                                    </svg>
-                                    <span id="translateText">✨ Auto Translate Content</span>
-                                </button>
+                            <div class="flex-1">
                                 <button type="submit"
                                     class="w-full bg-gray-900 text-white py-4 rounded-xl font-bold hover:bg-emerald-600 shadow-xl shadow-gray-200 hover:shadow-emerald-200 transition-all uppercase tracking-widest text-sm flex items-center justify-center gap-2">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -443,83 +459,7 @@ $page_title = "Pages";
     </div>
 
     <script>
-        async function translateText(text, targetLang) {
-            if (!text || text.trim() === '') return '';
-            const formData = new FormData();
-            formData.append('text', text);
-            formData.append('lang', targetLang);
-
-            try {
-                const response = await fetch('ajax_translate.php', {
-                    method: 'POST',
-                    body: formData
-                });
-                const data = await response.json();
-                return data.translatedText || text;
-            } catch (e) {
-                console.error('Translation error:', e);
-                return text;
-            }
-        }
-
-        async function autoTranslateAll() {
-            const btn = document.getElementById('translateBtn');
-            const btnText = document.getElementById('translateText');
-            const targetLang = document.getElementsByName('lang_code')[0].value;
-
-            if (targetLang === 'en') {
-                showToast('Target language is English. No translation needed.', 'error');
-                return;
-            }
-
-            btn.disabled = true;
-            btn.classList.add('opacity-50', 'cursor-not-allowed');
-            btnText.innerText = 'Translating...';
-            showToast('Translating content... Please wait.');
-
-            try {
-                // 1. Title
-                const titleInput = document.getElementsByName('title')[0];
-                const translatedTitle = await translateText(titleInput.value, targetLang);
-                titleInput.value = translatedTitle;
-
-                // 1b. Slug
-                const slugInput = document.getElementsByName('slug')[0];
-                slugInput.value = translatedTitle.toLowerCase()
-                    .replace(/[^a-z0-9\s-]/g, '')
-                    .replace(/\s+/g, '-')
-                    .replace(/-+/g, '-')
-                    .replace(/(^-|-$)/g, '');
-
-                // 2. SEO Title
-                const seoTitle = document.getElementsByName('meta_title')[0];
-                seoTitle.value = await translateText(seoTitle.value, targetLang);
-
-                // 3. SEO Desc
-                const seoDesc = document.getElementsByName('meta_description')[0];
-                seoDesc.value = await translateText(seoDesc.value, targetLang);
-
-                // 4. Content (TinyMCE)
-                if (tinymce.get('contentEditor')) {
-                    const content = tinymce.get('contentEditor').getContent();
-                    const translatedContent = await translateText(content, targetLang);
-                    tinymce.get('contentEditor').setContent(translatedContent);
-                }
-
-                showToast('✨ Translation Complete!');
-                btnText.innerText = '✨ Success!';
-                setTimeout(() => {
-                    btnText.innerText = '✨ Auto Translate Content';
-                    btn.disabled = false;
-                    btn.classList.remove('opacity-50', 'cursor-not-allowed');
-                }, 2000);
-            } catch (err) {
-                showToast('Translation failed. Please try again.', 'error');
-                btnText.innerText = '✨ Auto Translate Content';
-                btn.disabled = false;
-                btn.classList.remove('opacity-50', 'cursor-not-allowed');
-            }
-        }
+        // Translation functions removed
 
         function showToast(msg, type = 'success') {
             const toast = document.getElementById('toast');

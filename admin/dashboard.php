@@ -10,10 +10,11 @@ if (!isset($_SESSION['admin_id'])) {
 $settings = getSiteSettings($pdo);
 
 // Fetch Stats
-$postCount = $pdo->query("SELECT COUNT(*) FROM blog_posts")->fetchColumn();
-$pageCount = $pdo->query("SELECT COUNT(*) FROM pages")->fetchColumn();
-$transCount = $pdo->query("SELECT COUNT(*) FROM translations")->fetchColumn();
-$recentPosts = $pdo->query("SELECT title, created_at FROM blog_posts ORDER BY created_at DESC LIMIT 5")->fetchAll();
+$postCount = $pdo->query("SELECT COUNT(*) FROM blog_posts WHERE lang_code = 'en'")->fetchColumn();
+$pageCount = $pdo->query("SELECT COUNT(*) FROM pages WHERE lang_code = 'en'")->fetchColumn();
+$pageCount = $pdo->query("SELECT COUNT(*) FROM pages WHERE lang_code = 'en'")->fetchColumn();
+$logCount = $pdo->query("SELECT COUNT(*) FROM activity_logs")->fetchColumn();
+$recentPosts = $pdo->query("SELECT title, created_at FROM blog_posts WHERE lang_code = 'en' ORDER BY created_at DESC LIMIT 5")->fetchAll();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -77,8 +78,8 @@ $recentPosts = $pdo->query("SELECT title, created_at FROM blog_posts ORDER BY cr
                     <h4 class="text-3xl font-bold text-blue-600"><?php echo $pageCount; ?></h4>
                 </div>
                 <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
-                    <p class="text-sm text-gray-500 font-medium mb-1">Translations</p>
-                    <h4 class="text-3xl font-bold text-purple-600"><?php echo $transCount; ?></h4>
+                    <p class="text-sm text-gray-500 font-medium mb-1">System Activities</p>
+                    <h4 class="text-3xl font-bold text-orange-600"><?php echo $logCount; ?></h4>
                 </div>
                 <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
                     <p class="text-sm text-gray-500 font-medium mb-1">PHP Version</p>

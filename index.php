@@ -870,8 +870,10 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
 
         #features .features-subtitle-white,
         #how-to .features-subtitle-white,
+        #detailed-features .features-subtitle-white,
         section#features p.features-subtitle-white,
-        section#how-to p.features-subtitle-white {
+        section#how-to p.features-subtitle-white,
+        section#detailed-features p.features-subtitle-white {
             color: #ffffff !important;
         }
     </style>
@@ -1105,10 +1107,12 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
             <!-- Detailed Feature Cards -->
             <section id="detailed-features" class="mt-32">
                 <h2 class="section-header-blue">MySeoFan.app features</h2>
-                <p class="text-center text-slate-700 font-medium text-sm mb-12 max-w-2xl mx-auto">
-                    With MySeoFan you can download any type of content from Instagram. Our service has an IG video
-                    downloader, Reels, IGTV, photo or carousel.
-                </p>
+                <div class="text-center mb-12">
+                    <p class="features-subtitle-white max-w-2xl mx-auto">
+                        With MySeoFan you can download any type of content from Instagram. Our service has an IG video
+                        downloader, Reels, IGTV, photo or carousel.
+                    </p>
+                </div>
 
                 <div class="space-y-8">
                     <!-- Video Downloader -->

@@ -156,7 +156,10 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
         }
 
         .logo-text {
-            color: #7c3aed;
+            background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             font-weight: 800;
             font-size: 1.75rem;
             display: flex;
@@ -509,7 +512,10 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
         .footer-logo-text {
             font-size: 2.25rem;
             font-weight: 800;
-            color: #7c3aed;
+            background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .footer-logo-icon {

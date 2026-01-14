@@ -16,12 +16,15 @@ if (empty($user_role))
 <aside
     class="sidebar w-64 bg-[#111827] flex flex-col flex-shrink-0 h-screen sticky top-0 overflow-y-auto custom-scrollbar">
     <div class="p-8">
-        <h2 class="text-xl font-bold text-emerald-500">MySeoFan Admin</h2>
+        <h2
+            class="text-xl font-black bg-gradient-to-r from-violet-400 via-fuchsia-400 to-pink-400 bg-clip-text text-transparent">
+            MySeoFan Admin</h2>
     </div>
     <nav class="mt-4 px-4 space-y-1 flex-1">
         <!-- Dashboard -->
+        <!-- Dashboard -->
         <a href="dashboard.php"
-            class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all <?php echo $current_page == 'dashboard.php' ? 'nav-active text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white'; ?>">
+            class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all <?php echo $current_page == 'dashboard.php' ? 'bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-600 text-white shadow-lg shadow-fuchsia-900/40 font-bold' : 'text-gray-400 hover:bg-gray-800 hover:text-white'; ?>">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
@@ -54,10 +57,10 @@ if (empty($user_role))
                 <div id="blog-submenu"
                     class="<?php echo $current_page == 'blog.php' ? 'block' : 'hidden'; ?> mt-1 ml-6 border-l border-gray-700 pl-2 space-y-1">
                     <a href="blog.php?action=list&filter_lang=en"
-                        class="block py-1 text-xs <?php echo ($current_page == 'blog.php' && $_sb_action != 'add') ? 'text-emerald-400 font-bold' : 'text-gray-300 hover:text-white'; ?>">All
+                        class="block py-1.5 text-xs <?php echo ($current_page == 'blog.php' && $_sb_action != 'add') ? 'text-fuchsia-400 font-bold border-l-2 border-fuchsia-400 pl-2' : 'text-gray-400 hover:text-white border-l-2 border-transparent pl-2'; ?>">All
                         Posts</a>
                     <a href="blog.php?action=add"
-                        class="block py-1 text-xs <?php echo ($current_page == 'blog.php' && $_sb_action == 'add') ? 'text-emerald-400 font-bold' : 'text-gray-300 hover:text-white'; ?>">Create
+                        class="block py-1.5 text-xs <?php echo ($current_page == 'blog.php' && $_sb_action == 'add') ? 'text-fuchsia-400 font-bold border-l-2 border-fuchsia-400 pl-2' : 'text-gray-400 hover:text-white border-l-2 border-transparent pl-2'; ?>">Create
                         New</a>
                 </div>
             </div>
@@ -85,19 +88,19 @@ if (empty($user_role))
 
                         <!-- Page Content (was All Pages) -->
                         <a href="pages.php?action=list"
-                            class="block py-1 text-xs <?php echo ($current_page == 'pages.php') ? 'text-emerald-400 font-bold' : 'text-gray-500 hover:text-white'; ?>">
+                            class="block py-1.5 text-xs <?php echo ($current_page == 'pages.php') ? 'text-fuchsia-400 font-bold border-l-2 border-fuchsia-400 pl-2' : 'text-gray-500 hover:text-white border-l-2 border-transparent pl-2'; ?>">
                             All Pages
                         </a>
 
                         <!-- Header Menu -->
                         <a href="menus.php?menu_location=header"
-                            class="block py-1 text-xs <?php echo ($current_page == 'menus.php' && ($_GET['menu_location'] ?? '') == 'header') ? 'text-emerald-400 font-bold' : 'text-gray-500 hover:text-white'; ?>">
+                            class="block py-1.5 text-xs <?php echo ($current_page == 'menus.php' && ($_GET['menu_location'] ?? '') == 'header') ? 'text-fuchsia-400 font-bold border-l-2 border-fuchsia-400 pl-2' : 'text-gray-500 hover:text-white border-l-2 border-transparent pl-2'; ?>">
                             Header Menu
                         </a>
 
                         <!-- Footer Menu -->
                         <a href="menus.php?menu_location=footer"
-                            class="block py-1 text-xs <?php echo ($current_page == 'menus.php' && ($_GET['menu_location'] ?? '') == 'footer') ? 'text-emerald-400 font-bold' : 'text-gray-300 hover:text-white'; ?>">
+                            class="block py-1.5 text-xs <?php echo ($current_page == 'menus.php' && ($_GET['menu_location'] ?? '') == 'footer') ? 'text-fuchsia-400 font-bold border-l-2 border-fuchsia-400 pl-2' : 'text-gray-300 hover:text-white border-l-2 border-transparent pl-2'; ?>">
                             Footer Menu
                         </a>
                     </div>
@@ -222,8 +225,8 @@ if (empty($user_role))
                 text: message,
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: '#10b981',
-                cancelButtonColor: '#3085d6',
+                confirmButtonColor: '#c026d3', // Fuchsia-600
+                cancelButtonColor: '#334155', // Slate-700
                 confirmButtonText: 'Yes, delete it!',
                 cancelButtonText: 'Cancel',
                 background: '#ffffff',

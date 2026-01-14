@@ -41,26 +41,29 @@ $logs = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <style>
         body {
             font-family: 'Outfit', sans-serif;
-            background-color: #f8fafc;
+            background-color: #0f172a;
+            /* Slate 900 */
+            color: #f8fafc;
         }
     </style>
 </head>
 
-<body class="flex bg-gray-50/50">
+<body class="flex bg-[#0f172a]">
 
     <?php include 'includes/sidebar.php'; ?>
 
     <main class="flex-1 min-h-screen relative overflow-y-auto">
         <!-- Header -->
-        <header class="bg-white/80 backdrop-blur-md sticky top-0 z-20 border-b border-gray-100 px-8 py-6">
+        <header
+            class="bg-[#1e293b]/95 backdrop-blur-md sticky top-0 z-20 border-b border-slate-700/50 px-8 py-6 shadow-lg shadow-black/10">
             <div class="flex items-center justify-between">
                 <div>
-                    <h1 class="text-2xl font-black text-gray-800 tracking-tight">Activity Logs</h1>
+                    <h1 class="text-2xl font-black text-white tracking-tight">Activity Logs</h1>
                     <p class="text-sm text-gray-400 font-medium mt-1">Audit trail of system activities</p>
                 </div>
                 <div class="flex items-center gap-4">
                     <span
-                        class="bg-gray-100 text-gray-500 px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider">
+                        class="bg-[#0f172a] text-gray-400 px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider border border-slate-700">
                         Total:
                         <?php echo number_format($total_logs); ?> Events
                     </span>
@@ -72,25 +75,29 @@ $logs = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
                 <table class="w-full text-left">
                     <thead>
-                        <tr class="bg-gray-50/50 border-b border-gray-100">
-                            <th class="px-8 py-5 text-xs font-black text-gray-400 uppercase tracking-widest w-48">Date &
+                        <tr class="bg-gray-50 border-b border-gray-100">
+                            <th class="px-8 py-5 text-xs font-black text-gray-500 uppercase tracking-widest w-48">
+                                Date &
                                 Time</th>
-                            <th class="px-8 py-5 text-xs font-black text-gray-400 uppercase tracking-widest w-40">Admin
+                            <th class="px-8 py-5 text-xs font-black text-gray-500 uppercase tracking-widest w-40">
+                                Admin
                             </th>
-                            <th class="px-8 py-5 text-xs font-black text-gray-400 uppercase tracking-widest w-40">Action
+                            <th class="px-8 py-5 text-xs font-black text-gray-500 uppercase tracking-widest w-40">
+                                Action
                             </th>
-                            <th class="px-8 py-5 text-xs font-black text-gray-400 uppercase tracking-widest">Details
+                            <th class="px-8 py-5 text-xs font-black text-gray-500 uppercase tracking-widest">
+                                Details
                             </th>
                             <th
-                                class="px-8 py-5 text-xs font-black text-gray-400 uppercase tracking-widest w-32 text-right">
+                                class="px-8 py-5 text-xs font-black text-gray-500 uppercase tracking-widest w-32 text-right">
                                 IP Address</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-50">
                         <?php foreach ($logs as $log): ?>
-                            <tr class="hover:bg-gray-50/50 transition-colors">
+                            <tr class="hover:bg-gray-50 transition-colors">
                                 <td class="px-8 py-5">
-                                    <span class="text-sm font-bold text-gray-700 block">
+                                    <span class="text-sm font-bold text-gray-900 block">
                                         <?php echo date('M d, Y', strtotime($log['created_at'])); ?>
                                     </span>
                                     <span class="text-xs font-mono text-gray-400">
@@ -100,7 +107,7 @@ $logs = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <td class="px-8 py-5">
                                     <div class="flex items-center gap-2">
                                         <div
-                                            class="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 font-bold text-xs">
+                                            class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 font-bold text-xs border border-gray-200">
                                             <?php echo strtoupper(substr($log['username'] ?? '?', 0, 1)); ?>
                                         </div>
                                         <span class="text-sm font-bold text-gray-700">
@@ -112,13 +119,13 @@ $logs = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wider
                                     <?php
                                     if (strpos($log['action'], 'delete') !== false)
-                                        echo 'bg-red-50 text-red-600';
+                                        echo 'bg-red-50 text-red-600 border border-red-100';
                                     elseif (strpos($log['action'], 'create') !== false)
-                                        echo 'bg-emerald-50 text-emerald-600';
+                                        echo 'bg-emerald-50 text-emerald-600 border border-emerald-100';
                                     elseif (strpos($log['action'], 'update') !== false)
-                                        echo 'bg-blue-50 text-blue-600';
+                                        echo 'bg-blue-50 text-blue-600 border border-blue-100';
                                     else
-                                        echo 'bg-gray-100 text-gray-600';
+                                        echo 'bg-gray-100 text-gray-600 border border-gray-200';
                                     ?>">
                                         <?php echo htmlspecialchars($log['action']); ?>
                                     </span>
@@ -130,7 +137,8 @@ $logs = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     </p>
                                 </td>
                                 <td class="px-8 py-5 text-right">
-                                    <span class="text-xs font-mono text-gray-400 bg-gray-100 px-2 py-1 rounded">
+                                    <span
+                                        class="text-xs font-mono text-gray-400 bg-gray-50 px-2 py-1 rounded border border-gray-100">
                                         <?php echo htmlspecialchars($log['ip_address']); ?>
                                     </span>
                                 </td>
@@ -155,7 +163,7 @@ $logs = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <?php for ($i = 1; $i <= $total_pages; $i++): ?>
                         <a href="?page=<?php echo $i; ?>"
                             class="w-10 h-10 flex items-center justify-center rounded-xl font-bold text-sm transition-all 
-                        <?php echo $i == $page ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-200' : 'bg-white text-gray-400 hover:bg-emerald-50 hover:text-emerald-600'; ?>">
+                        <?php echo $i == $page ? 'bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-600 text-white shadow-lg shadow-fuchsia-500/30' : 'bg-white text-gray-500 hover:bg-gray-50 hover:text-gray-900 border border-gray-200'; ?>">
                             <?php echo $i; ?>
                         </a>
                     <?php endfor; ?>

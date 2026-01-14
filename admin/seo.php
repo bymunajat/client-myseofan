@@ -83,27 +83,25 @@ if ($pdo) {
     <style>
         body {
             font-family: 'Outfit', sans-serif;
-            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 25%, #6ee7b7 50%, #86efac 100%);
-            /* Soft Green Gradient Background */
+            background: #0f172a;
+            /* Slate 900 */
+            color: #f8fafc;
             min-height: 100vh;
         }
 
         .sidebar {
             height: 100vh;
             background: #065f46;
-            /* Dark green sidebar */
+            /* Dark green sidebar is hardcoded here? It should be from sidebar.php */
             color: white;
         }
 
-        .nav-active {
-            background: #047857;
-            border-left: 4px solid #34d399;
-        }
-
-        /* Improve card visibility */
+        /* Improve card visibility in Dark Mode */
+        /* Improve card visibility in Dark Mode - Now White */
         .seo-card {
-            background: white;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            background: #ffffff;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            border: 2px solid #e2e8f0;
         }
     </style>
 </head>
@@ -112,27 +110,28 @@ if ($pdo) {
     <!-- Sidebar (Same as dashboard) -->
     <?php include 'includes/sidebar.php'; ?>
 
-    <main class="flex-1 min-h-screen">
-        <header class="bg-white border-b-4 border-emerald-300 px-8 h-20 flex items-center justify-between shadow-sm">
+    <main class="flex-1 min-h-screen bg-[#0f172a]">
+        <header
+            class="bg-[#1e293b] border-b-4 border-fuchsia-500/50 px-8 h-20 flex items-center justify-between shadow-lg shadow-black/20">
             <div>
-                <h3 class="text-xl font-bold text-gray-800">SEO Management</h3>
-                <p class="text-xs text-gray-500 mt-0.5">Optimize meta tags and search visibility</p>
+                <h3 class="text-xl font-bold text-white">SEO Management</h3>
+                <p class="text-xs text-gray-400 mt-0.5">Optimize meta tags and search visibility</p>
             </div>
-            <div class="text-gray-500 font-medium text-sm hidden md:block">
+            <div class="text-gray-400 font-medium text-sm hidden md:block">
                 Active Language: <span
-                    class="text-gray-900 font-bold ml-1"><?php echo $available_langs[$_curr_lang]['flag']; ?>
+                    class="text-white font-bold ml-1"><?php echo $available_langs[$_curr_lang]['flag']; ?>
                     <?php echo $available_langs[$_curr_lang]['label']; ?></span>
             </div>
         </header>
 
         <div class="p-8">
             <?php if ($message): ?>
-                <div class="bg-emerald-50 text-emerald-600 p-4 rounded-xl mb-6 font-medium">
+                <div class="bg-fuchsia-50 text-fuchsia-700 p-4 rounded-xl mb-6 font-bold border border-fuchsia-100">
                     <?php echo $message; ?>
                 </div>
             <?php endif; ?>
             <?php if ($error): ?>
-                <div class="bg-red-50 text-red-600 p-4 rounded-xl mb-6 font-medium">
+                <div class="bg-red-50 text-red-600 p-4 rounded-xl mb-6 font-medium border border-red-100">
                     <?php echo $error; ?>
                 </div>
             <?php endif; ?>
@@ -141,7 +140,7 @@ if ($pdo) {
             <div class="flex flex-wrap gap-2 mb-8 bg-white p-2 rounded-2xl shadow-sm border border-gray-100">
                 <?php foreach ($available_langs as $code => $info): ?>
                     <a href="?filter_lang=<?php echo $code; ?>"
-                        class="px-5 py-2.5 rounded-xl font-bold transition-all flex items-center gap-2 <?php echo $_curr_lang === $code ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-200' : 'text-gray-500 hover:bg-gray-50'; ?> text-sm">
+                        class="px-5 py-2.5 rounded-xl font-bold transition-all flex items-center gap-2 <?php echo $_curr_lang === $code ? 'bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-600 text-white shadow-lg shadow-fuchsia-500/30' : 'text-gray-500 hover:bg-gray-50'; ?> text-sm">
                         <span class="text-base"><?php echo $info['flag']; ?></span>
                         <span><?php echo $info['label']; ?></span>
                     </a>
@@ -154,14 +153,14 @@ if ($pdo) {
                     $icon = '';
                     $accentColor = 'border-emerald-500';
                     $iconColor = 'text-emerald-500';
-                    $headerBg = 'bg-slate-50'; // Reverted to light header
-                
-                
+                    $headerBg = 'bg-white';
+
+
                     switch ($page) {
                         case 'index':
                             $icon = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />';
-                            $accentColor = 'border-t-4 border-emerald-500';
-                            $iconColor = 'text-emerald-500';
+                            $accentColor = 'border-t-4 border-fuchsia-500';
+                            $iconColor = 'text-fuchsia-500';
                             break;
                         case 'video':
                             $icon = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />';
@@ -195,13 +194,13 @@ if ($pdo) {
                     }
                     ?>
                     <div
-                        class="seo-card bg-white rounded-3xl shadow-2xl border-2 border-gray-100 overflow-hidden transition-all duration-300 hover:shadow-emerald-200/50 hover:scale-[1.02] group flex flex-col h-full <?php echo $accentColor; ?>">
+                        class="seo-card bg-white rounded-3xl shadow-xl border-2 border-gray-100 overflow-hidden transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] group flex flex-col h-full <?php echo $accentColor; ?>">
                         <!-- Card Header -->
                         <div
                             class="px-8 py-6 border-b border-gray-100 flex items-center justify-between <?php echo $headerBg; ?>">
                             <div class="flex items-center gap-4">
                                 <span
-                                    class="w-12 h-12 rounded-2xl bg-white flex items-center justify-center <?php echo $iconColor; ?> shadow-sm border border-gray-100 group-hover:scale-105 transition-transform">
+                                    class="w-12 h-12 rounded-2xl bg-gray-50 flex items-center justify-center <?php echo $iconColor; ?> shadow-sm border border-gray-100 group-hover:scale-105 transition-transform">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <?php echo $icon; ?>
                                     </svg>
@@ -210,11 +209,11 @@ if ($pdo) {
                                     <h2 class="text-xl font-bold text-gray-800 capitalize tracking-tight">
                                         <?php echo $page; ?> Page
                                     </h2>
-                                    <p class="text-xs text-gray-400 font-medium">SEO Configuration</p>
+                                    <p class="text-xs text-gray-500 font-medium">SEO Configuration</p>
                                 </div>
                             </div>
                             <div
-                                class="text-xs font-bold text-gray-400 bg-gray-100 px-3 py-1 rounded-full uppercase tracking-wider">
+                                class="text-xs font-bold text-gray-500 bg-gray-100 px-3 py-1 rounded-full uppercase tracking-wider">
                                 Static
                             </div>
                         </div>
@@ -232,43 +231,43 @@ if ($pdo) {
                                 <div class="flex-1 space-y-4">
                                     <div class="flex items-center gap-2">
                                         <span
-                                            class="text-xs font-black uppercase tracking-widest bg-white border border-gray-200 text-gray-700 px-3 py-1 rounded-lg shadow-sm">
+                                            class="text-xs font-black uppercase tracking-widest bg-gray-50 border border-gray-200 text-gray-500 px-3 py-1 rounded-lg shadow-sm">
                                             <?php echo $info['flag']; ?>     <?php echo $info['label']; ?>
                                         </span>
                                     </div>
                                     <div class="grid md:grid-cols-2 gap-6">
                                         <div>
-                                            <label class="block text-xs font-black text-gray-700 uppercase mb-2">Meta
+                                            <label class="block text-xs font-black text-gray-400 uppercase mb-2">Meta
                                                 Title</label>
                                             <input type="text" name="meta_title"
                                                 value="<?php echo htmlspecialchars($data['meta_title'] ?? ''); ?>"
-                                                class="w-full px-4 py-3 rounded-xl border-2 border-emerald-400 bg-white outline-none focus:border-emerald-600 transition-all font-bold text-black">
+                                                class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 bg-white outline-none focus:border-fuchsia-500 transition-all font-bold text-gray-800 placeholder-gray-400">
                                         </div>
                                         <div>
-                                            <label class="block text-xs font-black text-gray-700 uppercase mb-2">OG Image
+                                            <label class="block text-xs font-black text-gray-400 uppercase mb-2">OG Image
                                                 URL</label>
                                             <input type="text" name="og_image"
                                                 value="<?php echo htmlspecialchars($data['og_image'] ?? ''); ?>"
-                                                class="w-full px-4 py-3 rounded-xl border-2 border-emerald-400 bg-white outline-none focus:border-emerald-600 transition-all font-semibold text-black">
+                                                class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 bg-white outline-none focus:border-fuchsia-500 transition-all font-semibold text-gray-800 placeholder-gray-400">
                                         </div>
                                     </div>
                                     <div>
-                                        <label class="block text-xs font-black text-gray-700 uppercase mb-2">Meta
+                                        <label class="block text-xs font-black text-gray-400 uppercase mb-2">Meta
                                             Description</label>
                                         <textarea name="meta_description" rows="3"
-                                            class="w-full px-4 py-3 rounded-xl border-2 border-emerald-400 bg-white outline-none focus:border-emerald-600 transition-all font-semibold text-black leading-relaxed"><?php echo htmlspecialchars($data['meta_description'] ?? ''); ?></textarea>
+                                            class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 bg-white outline-none focus:border-fuchsia-500 transition-all font-semibold text-gray-800 leading-relaxed placeholder-gray-400"><?php echo htmlspecialchars($data['meta_description'] ?? ''); ?></textarea>
                                     </div>
                                     <div>
-                                        <label class="block text-xs font-black text-gray-700 uppercase mb-2">Schema
+                                        <label class="block text-xs font-black text-gray-400 uppercase mb-2">Schema
                                             (JSON-LD)</label>
                                         <textarea name="schema_markup" rows="2"
-                                            class="w-full px-4 py-3 rounded-xl border-2 border-emerald-400 bg-white outline-none focus:border-emerald-600 transition-all font-mono text-xs font-semibold text-black"><?php echo htmlspecialchars($data['schema_markup'] ?? ''); ?></textarea>
+                                            class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 bg-white outline-none focus:border-fuchsia-500 transition-all font-mono text-xs font-semibold text-gray-600 placeholder-gray-400"><?php echo htmlspecialchars($data['schema_markup'] ?? ''); ?></textarea>
                                     </div>
                                 </div>
 
                                 <div class="pt-4">
                                     <button type="submit"
-                                        class="w-full bg-gray-900 text-white py-4 rounded-xl font-bold text-sm hover:bg-emerald-600 transition-all shadow-lg hover:shadow-emerald-200/50 flex items-center justify-center gap-2">
+                                        class="w-full bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-600 text-white py-4 rounded-xl font-bold text-sm hover:shadow-lg hover:shadow-fuchsia-500/30 transition-all flex items-center justify-center gap-2 hover:scale-[1.02]">
                                         <span>Save Changes</span>
                                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

@@ -192,23 +192,14 @@ $page_title = "Pages";
     <style>
         body {
             font-family: 'Outfit', sans-serif;
-            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 25%, #6ee7b7 50%, #86efac 100%);
+            background: #0f172a;
+            /* Slate 900 */
+            color: #f8fafc;
             min-height: 100vh;
         }
 
-        .sidebar {
-            height: 100vh;
-            background: #065f46;
-            color: white;
-        }
-
-        .nav-active {
-            background: #047857;
-            border-left: 4px solid #34d399;
-        }
-
         .glass-panel {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(15, 23, 42, 0.95);
             backdrop-filter: blur(10px);
         }
     </style>
@@ -217,8 +208,8 @@ $page_title = "Pages";
 <body class="flex">
     <?php include 'includes/sidebar.php'; ?>
 
-    <main class="flex-1 min-h-screen">
-        <header class="bg-white border-b-4 border-emerald-300 px-8 h-20 flex items-center justify-between shadow-sm">
+    <main class="flex-1 min-h-screen bg-[#0f172a]">
+        <header class="bg-white border-b-4 border-fuchsia-200 px-8 h-20 flex items-center justify-between shadow-sm">
             <div>
                 <h3 class="text-xl font-bold text-gray-800"><?php echo $page_title; ?></h3>
                 <p class="text-xs text-gray-500 mt-0.5">Manage static pages and content</p>
@@ -226,7 +217,7 @@ $page_title = "Pages";
             <div class="flex items-center gap-4">
                 <?php if ($action === 'list'): ?>
                     <a href="?action=add&filter_lang=<?php echo $_curr_lang; ?>"
-                        class="bg-emerald-600 text-white px-5 py-2.5 rounded-xl font-bold hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-200 text-sm flex items-center gap-2">
+                        class="bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-600 text-white px-5 py-2.5 rounded-xl font-bold shadow-lg shadow-fuchsia-500/30 hover:shadow-fuchsia-500/50 hover:scale-[1.02] transition-all text-sm flex items-center gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-width="3" d="M12 4v16m8-8H4" />
                         </svg>
@@ -247,7 +238,7 @@ $page_title = "Pages";
         <div class="p-8">
             <?php if ($message): ?>
                 <div
-                    class="bg-emerald-50 text-emerald-600 p-4 rounded-xl mb-6 font-medium border border-emerald-100 flex items-center gap-2">
+                    class="bg-fuchsia-50 text-fuchsia-700 p-4 rounded-xl mb-6 font-bold border border-fuchsia-100 flex items-center gap-2">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-width="2" d="M5 13l4 4L19 7" />
                     </svg>
@@ -267,10 +258,9 @@ $page_title = "Pages";
             <?php if ($action === 'list'): ?>
                 <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
                     <table class="w-full text-left">
-                        <thead class="bg-gray-50 border-b text-center">
+                        <thead class="bg-gray-50 border-b border-gray-100 text-center">
                             <tr>
                                 <th class="w-16 py-4"></th>
-                                <th class="px-8 py-4 text-xs font-black text-gray-700 uppercase tracking-widest text-left">
                                 <th class="px-8 py-4 text-xs font-black text-gray-700 uppercase tracking-widest text-left">
                                     Page Title</th>
                                 <th class="px-8 py-4 text-xs font-black text-gray-700 uppercase tracking-widest text-right">
@@ -286,7 +276,7 @@ $page_title = "Pages";
                                         </div>
                                         <div class="flex justify-center gap-4">
                                             <a href="?action=add&filter_lang=<?php echo $_curr_lang; ?>"
-                                                class="bg-emerald-50 text-emerald-600 px-4 py-2 rounded-lg font-bold hover:bg-emerald-100">Create
+                                                class="bg-fuchsia-50 text-fuchsia-600 px-4 py-2 rounded-lg font-bold hover:bg-fuchsia-100">Create
                                                 page</a>
                                         </div>
                                     </td>
@@ -303,7 +293,18 @@ $page_title = "Pages";
                                         <div class="font-bold text-gray-800 text-lg">
                                             <?php echo htmlspecialchars($p['title']); ?>
                                         </div>
-                                        <div class="text-xs text-emerald-600 font-mono mt-0.5">
+                                    <td class="px-6 py-5 border-r border-slate-700/50">
+                                        <div class="flex items-center justify-center text-gray-500 font-bold">
+                                            <span class="text-xs font-mono">#
+                                                <?php echo $p['id']; ?>
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td class="px-8 py-5">
+                                        <div class="font-bold text-gray-800 text-lg">
+                                            <?php echo htmlspecialchars($p['title']); ?>
+                                        </div>
+                                        <div class="text-xs text-fuchsia-600 font-mono mt-0.5">
                                             /<?php echo htmlspecialchars($p['slug'] ?? ''); ?>
                                         </div>
                                     </td>
@@ -311,7 +312,7 @@ $page_title = "Pages";
 
 
                                         <a href="?action=edit&id=<?php echo $p['id']; ?>"
-                                            class="text-sm font-bold text-emerald-600 hover:text-emerald-800 bg-emerald-50 hover:bg-emerald-100 px-4 py-1.5 rounded-lg transition-colors">Edit</a>
+                                            class="text-sm font-bold text-fuchsia-600 hover:text-fuchsia-700 bg-fuchsia-50 hover:bg-fuchsia-100 px-4 py-1.5 rounded-lg transition-colors border border-fuchsia-200">Edit</a>
 
                                         <a href="javascript:void(0);"
                                             onclick="confirmDelete('?action=delete&id=<?php echo $p['id']; ?>', 'This page will be permanently deleted.')"
@@ -323,7 +324,7 @@ $page_title = "Pages";
                     </table>
                 </div>
             <?php else: ?>
-                <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 max-w-5xl mx-auto">
+                <div class="bg-white p-8 rounded-3xl shadow-2xl border-2 border-emerald-200 max-w-5xl mx-auto">
                     <form action="?action=<?php echo $action; ?><?php echo $id ? '&id=' . $id : ''; ?>" method="POST"
                         class="space-y-8">
 
@@ -335,7 +336,7 @@ $page_title = "Pages";
                                 <div>
                                     <h2 class="text-lg font-bold text-gray-800">
                                         <?php echo $action === 'edit' ? 'Editing Page' : 'New Page'; ?>
-                                        <span class="text-gray-400 font-normal">in
+                                        <span class="text-gray-500 font-normal">in
                                             <?php echo $available_langs[$cu_p['lang_code'] ?? $_curr_lang]['label']; ?></span>
                                     </h2>
                                 </div>
@@ -375,9 +376,9 @@ $page_title = "Pages";
                                     <label class="block text-sm font-black text-gray-900 uppercase tracking-widest mb-3">URL
                                         Slug</label>
                                     <div
-                                        class="flex items-center rounded-2xl overflow-hidden border-4 border-gray-900 bg-white">
+                                        class="flex items-center rounded-2xl overflow-hidden border-4 border-gray-900 bg-white group transition-colors">
                                         <span
-                                            class="bg-gray-100 text-gray-900 px-5 py-5 border-r-4 border-gray-900 font-mono text-sm font-bold">/</span>
+                                            class="bg-gray-50 text-gray-500 px-5 py-5 border-r-4 border-gray-900 font-mono text-sm font-bold">/</span>
                                         <input type="text" name="slug"
                                             value="<?php echo htmlspecialchars($cu_p['slug'] ?? ''); ?>"
                                             placeholder="terms-of-service"
@@ -392,12 +393,12 @@ $page_title = "Pages";
                                 </div>
                             </div>
 
-                            <!-- Right Column: SEO (Emerald Card) -->
-                            <div class="bg-white p-8 rounded-[2rem] border-4 border-emerald-500 shadow-xl space-y-6">
+                            <!-- Right Column: SEO (Fuchsia Card) -->
+                            <div class="bg-white p-8 rounded-[2rem] border-4 border-fuchsia-500 shadow-xl space-y-6">
                                 <h4
-                                    class="flex items-center gap-3 text-lg font-black text-emerald-700 uppercase tracking-widest mb-6 border-b-4 border-emerald-100 pb-4">
+                                    class="flex items-center gap-3 text-lg font-black text-fuchsia-700 uppercase tracking-widest mb-6 border-b-4 border-fuchsia-100 pb-4">
                                     <span
-                                        class="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center text-emerald-600">
+                                        class="w-10 h-10 rounded-xl bg-fuchsia-100 flex items-center justify-center text-fuchsia-600">
                                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-width="3" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                                         </svg>
@@ -443,15 +444,16 @@ $page_title = "Pages";
                         <div class="flex items-center gap-4 pt-6 border-t border-gray-100">
                             <div class="flex-1">
                                 <button type="submit"
-                                    class="w-full bg-gray-900 text-white py-4 rounded-xl font-bold hover:bg-emerald-600 shadow-xl shadow-gray-200 hover:shadow-emerald-200 transition-all uppercase tracking-widest text-sm flex items-center justify-center gap-2">
+                                    class="w-full bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-600 text-white py-4 rounded-xl font-bold hover:shadow-lg hover:shadow-fuchsia-500/30 transition-all uppercase tracking-widest text-sm flex items-center justify-center gap-2 transform hover:scale-[1.02]">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-width="2" d="M5 13l4 4L19 7" />
                                     </svg>
                                     Save Page
                                 </button>
+                                </button>
                             </div>
                             <a href="?action=list&filter_lang=<?php echo $_curr_lang; ?>"
-                                class="px-8 py-4 rounded-xl font-bold text-gray-500 hover:bg-gray-100 transition-all uppercase tracking-widest text-sm">Cancel</a>
+                                class="px-8 py-4 rounded-xl font-bold text-gray-400 hover:bg-gray-50 hover:text-gray-900 transition-all uppercase tracking-widest text-sm border-2 border-gray-200">Cancel</a>
                         </div>
                     </form>
                 </div>

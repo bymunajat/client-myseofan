@@ -266,19 +266,10 @@ try {
     <style>
         body {
             font-family: 'Outfit', sans-serif;
-            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 25%, #6ee7b7 50%, #86efac 100%);
+            background: #0f172a;
+            /* Slate 900 */
+            color: #f8fafc;
             min-height: 100vh;
-        }
-
-        .sidebar {
-            height: 100vh;
-            background: #065f46;
-            color: white;
-        }
-
-        .nav-active {
-            background: #047857;
-            border-left: 4px solid #34d399;
         }
     </style>
 </head>
@@ -286,11 +277,12 @@ try {
 <body class="flex">
     <?php include 'includes/sidebar.php'; ?>
 
-    <main class="flex-1 min-h-screen">
-        <header class="bg-white border-b-4 border-emerald-300 px-8 h-20 flex items-center justify-between shadow-sm">
+    <main class="flex-1 min-h-screen bg-[#0f172a]">
+        <header
+            class="bg-[#1e293b] border-b-4 border-fuchsia-500/50 px-8 h-20 flex items-center justify-between shadow-lg shadow-black/20">
             <div>
-                <h3 class="text-xl font-bold text-gray-800">Posts</h3>
-                <p class="text-xs text-gray-500 mt-0.5">Manage your blog posts and articles</p>
+                <h3 class="text-xl font-bold text-white">Posts</h3>
+                <p class="text-xs text-gray-400 mt-0.5">Manage your blog posts and articles</p>
             </div>
             <?php if ($action === 'list'): ?>
                 <div class="flex items-center gap-4">
@@ -298,14 +290,14 @@ try {
                         <input type="hidden" name="action" value="list">
                         <input type="text" name="search" value="<?php echo htmlspecialchars($search ?? ''); ?>"
                             placeholder="Search posts..."
-                            class="pl-11 pr-4 py-2.5 rounded-2xl border-2 border-gray-100 bg-gray-50 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 outline-none text-gray-700 font-bold placeholder-gray-400 transition-all w-64 focus:w-72 shadow-sm">
-                        <svg class="w-5 h-5 text-gray-400 group-focus-within:text-emerald-500 transition-colors absolute left-4 top-1/2 -translate-y-1/2"
+                            class="pl-11 pr-4 py-2.5 rounded-2xl border-2 border-slate-200 bg-white focus:bg-white focus:border-fuchsia-500 focus:ring-4 focus:ring-fuchsia-100/50 outline-none text-gray-900 font-bold placeholder-gray-400 transition-all w-64 focus:w-72 shadow-sm">
+                        <svg class="w-5 h-5 text-gray-400 group-focus-within:text-fuchsia-500 transition-colors absolute left-4 top-1/2 -translate-y-1/2"
                             fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
                     </form>
                     <a href="?action=add"
-                        class="bg-emerald-600 text-white px-6 py-2 rounded-xl font-bold hover:bg-emerald-700 transition-all flex items-center gap-2 shadow-lg shadow-emerald-200">
+                        class="bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-600 text-white px-6 py-2 rounded-xl font-bold shadow-lg shadow-fuchsia-500/30 hover:shadow-fuchsia-500/50 hover:scale-[1.02] transition-all flex items-center gap-2">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-width="3" d="M12 4v16m8-8H4" />
                         </svg>
@@ -313,13 +305,26 @@ try {
                     </a>
                 </div>
             <?php else: ?>
-                <a href="?action=list" class="text-gray-500 hover:text-gray-800 font-bold">← Back to List</a>
+                <a href="?action=list"
+                    class="bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-600 text-white px-6 py-2 rounded-xl font-bold shadow-lg shadow-fuchsia-500/30 hover:shadow-fuchsia-500/50 hover:scale-[1.02] transition-all flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-width="3" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                    Back to List
+                </a>
             <?php endif; ?>
         </header>
 
         <div class="p-8">
             <?php if ($message): ?>
-                <div class="bg-emerald-50 text-emerald-600 p-4 rounded-xl mb-6 font-medium border border-emerald-100">
+                <div
+                    class="bg-fuchsia-900/20 text-fuchsia-400 p-4 rounded-xl mb-6 font-bold border border-fuchsia-500/30 flex items-center gap-3">
+                    <span
+                        class="w-6 h-6 bg-fuchsia-500/20 text-fuchsia-400 rounded-full flex items-center justify-center border border-fuchsia-500/30">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-width="3" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                    </span>
                     <?php echo $message; ?>
                 </div>
             <?php endif; ?>
@@ -330,19 +335,26 @@ try {
             <?php endif; ?>
 
             <?php if ($action === 'list'): ?>
-                <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="bg-white rounded-3xl shadow-lg border border-slate-100 overflow-hidden">
                     <table class="w-full text-left">
-                        <thead class="bg-gray-50 border-b">
+                        <thead class="bg-gray-50 border-b border-gray-100 text-gray-500">
                             <tr>
-                                <th class="px-8 py-4 text-xs font-black text-gray-700 uppercase tracking-widest">Title</th>
-                                <th class="px-8 py-4 text-xs font-black text-gray-700 uppercase tracking-widest">Category
+                                <th
+                                    class="px-8 py-4 text-xs font-black uppercase tracking-widest hover:text-gray-900 transition-colors">
+                                    Title</th>
+                                <th
+                                    class="px-8 py-4 text-xs font-black uppercase tracking-widest hover:text-gray-900 transition-colors">
+                                    Category
                                 </th>
-                                <th class="px-8 py-4 text-xs font-black text-gray-700 uppercase tracking-widest">Date</th>
-                                <th class="px-8 py-4 text-xs font-black text-gray-700 uppercase tracking-widest text-right">
+                                <th
+                                    class="px-8 py-4 text-xs font-black uppercase tracking-widest hover:text-gray-900 transition-colors">
+                                    Date</th>
+                                <th
+                                    class="px-8 py-4 text-xs font-black uppercase tracking-widest text-right hover:text-gray-900 transition-colors">
                                     Actions</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-gray-50">
+                        <tbody class="divide-y divide-gray-100">
                             <?php if (empty($posts)): ?>
                                 <tr>
                                     <td colspan="4" class="px-8 py-12 text-center">
@@ -403,48 +415,58 @@ try {
                             <div class="flex gap-2">
                                 <?php if ($page > 1): ?>
                                     <a href="?page=<?php echo $page - 1; ?>&filter_lang=<?php echo $_curr_lang; ?>"
-                                        class="px-4 py-2 bg-white border-2 border-gray-200 rounded-xl font-bold text-gray-700 hover:border-emerald-600 hover:text-emerald-700 transition-all shadow-sm">Previous</a>
+                                        class="px-4 py-2 bg-white border-2 border-gray-200 rounded-xl font-bold text-gray-700 hover:border-fuchsia-400 hover:text-fuchsia-600 transition-all shadow-sm">Previous</a>
                                 <?php endif; ?>
 
                                 <?php for ($i = 1; $i <= $total_pages; $i++): ?>
                                     <a href="?page=<?php echo $i; ?>&filter_lang=<?php echo $_curr_lang; ?>"
-                                        class="px-4 py-2 rounded-xl font-bold transition-all shadow-sm <?php echo $i === $page ? 'bg-emerald-600 text-white shadow-emerald-200' : 'bg-white border-2 border-gray-200 text-gray-700 hover:border-emerald-600 hover:text-emerald-700'; ?>">
+                                        class="px-4 py-2 rounded-xl font-bold transition-all shadow-sm <?php echo $i === $page ? 'bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-600 text-white shadow-lg shadow-fuchsia-900/40' : 'bg-white border-2 border-gray-200 text-gray-700 hover:border-fuchsia-400 hover:text-fuchsia-600'; ?>">
                                         <?php echo $i; ?>
                                     </a>
                                 <?php endfor; ?>
 
                                 <?php if ($page < $total_pages): ?>
                                     <a href="?page=<?php echo $page + 1; ?>&filter_lang=<?php echo $_curr_lang; ?>"
-                                        class="px-4 py-2 bg-white border-2 border-gray-200 rounded-xl font-bold text-gray-700 hover:border-emerald-600 hover:text-emerald-700 transition-all shadow-sm">Next</a>
+                                        class="px-4 py-2 bg-white border-2 border-gray-200 rounded-xl font-bold text-gray-700 hover:border-fuchsia-400 hover:text-fuchsia-600 transition-all shadow-sm">Next</a>
                                 <?php endif; ?>
                             </div>
                         </div>
                     <?php endif; ?>
                 </div>
             <?php else: ?>
-                <div class="bg-white p-10 rounded-[2.5rem] shadow-2xl border-2 border-emerald-200 max-w-4xl mx-auto mb-10">
+                <div class="bg-white p-10 rounded-[2.5rem] shadow-2xl border-2 border-slate-100 max-w-4xl mx-auto mb-10">
                     <form action="?action=<?php echo $action; ?><?php echo $id ? '&id=' . $id : ''; ?>" method="POST"
                         class="space-y-8">
                         <!-- 1. Top Section: Core Info (Blue Card) -->
-                        <div class="bg-white p-8 rounded-[2rem] border-4 border-blue-600 shadow-xl space-y-6 relative overflow-hidden">
-                            <h4 class="flex items-center gap-3 text-lg font-black text-blue-700 uppercase tracking-widest mb-6 border-b-4 border-blue-100 pb-4">
-                                <span class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600">
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="3" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <div
+                            class="bg-white p-8 rounded-[2rem] border-4 border-blue-600 shadow-xl space-y-6 relative overflow-hidden">
+                            <h4
+                                class="flex items-center gap-3 text-lg font-black text-blue-700 uppercase tracking-widest mb-6 border-b-4 border-blue-100 pb-4">
+                                <span
+                                    class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-width="3"
+                                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
                                 </span>
                                 Basic Information
                             </h4>
                             <div class="grid md:grid-cols-2 gap-8">
                                 <div>
-                                    <label class="block text-sm font-black text-gray-900 mb-2 uppercase tracking-widest">Post Title</label>
+                                    <label
+                                        class="block text-sm font-black text-gray-900 mb-2 uppercase tracking-widest">Post
+                                        Title</label>
                                     <input type="text" name="title"
                                         value="<?php echo htmlspecialchars($current_post['title'] ?? ''); ?>" required
-                                        class="w-full px-6 py-5 rounded-2xl border-4 border-gray-900 bg-white font-bold text-xl text-gray-900 outline-none placeholder-gray-400">
+                                        class="w-full px-6 py-5 rounded-2xl border-4 border-gray-900 bg-white font-bold text-xl text-gray-900 outline-none placeholder-gray-400 focus:border-blue-500 transition-colors">
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-black text-gray-900 mb-2 uppercase tracking-widest">Slug (Auto if empty)</label>
+                                    <label
+                                        class="block text-sm font-black text-gray-900 mb-2 uppercase tracking-widest">Slug
+                                        (Auto if empty)</label>
                                     <input type="text" name="slug"
                                         value="<?php echo htmlspecialchars($current_post['slug'] ?? ''); ?>"
-                                        class="w-full px-6 py-5 rounded-2xl border-4 border-gray-900 bg-white font-mono font-bold text-gray-900 outline-none placeholder-gray-400">
+                                        class="w-full px-6 py-5 rounded-2xl border-4 border-gray-900 bg-white font-mono font-bold text-gray-600 outline-none placeholder-gray-400 focus:border-blue-500 transition-colors">
                                 </div>
                             </div>
                         </div>
@@ -455,45 +477,62 @@ try {
                             <!-- Left Column: Content & SEO (Span 2) -->
                             <div class="lg:col-span-2 space-y-8">
                                 <!-- Content (Indigo Card) -->
-                                <div class="bg-white p-8 rounded-[2rem] border-4 border-indigo-600 shadow-xl space-y-6 relative">
-                                    <h4 class="flex items-center gap-3 text-lg font-black text-indigo-700 uppercase tracking-widest mb-6 border-b-4 border-indigo-100 pb-4">
-                                        <span class="w-10 h-10 rounded-xl bg-indigo-100 flex items-center justify-center text-indigo-600">
-                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="3" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+                                <div
+                                    class="bg-white p-8 rounded-[2rem] border-4 border-indigo-600 shadow-xl space-y-6 relative">
+                                    <h4
+                                        class="flex items-center gap-3 text-lg font-black text-indigo-700 uppercase tracking-widest mb-6 border-b-4 border-indigo-100 pb-4">
+                                        <span
+                                            class="w-10 h-10 rounded-xl bg-indigo-100 flex items-center justify-center text-indigo-600">
+                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-width="3" d="M4 6h16M4 12h16M4 18h7"></path>
+                                            </svg>
                                         </span>
                                         Content
                                     </h4>
                                     <div>
-                                        <label class="block text-sm font-black text-gray-900 mb-2 uppercase tracking-widest">Post Content</label>
+                                        <label
+                                            class="block text-sm font-black text-gray-900 mb-2 uppercase tracking-widest">Post
+                                            Content</label>
                                         <div class="rounded-2xl border-4 border-gray-900 overflow-hidden bg-white">
                                             <textarea name="content" id="contentEditor" rows="20"
                                                 class="w-full px-5 py-4 bg-white outline-none font-bold text-gray-900"><?php echo htmlspecialchars($current_post['content'] ?? ''); ?></textarea>
                                         </div>
                                     </div>
                                     <div>
-                                        <label class="block text-sm font-black text-gray-900 mb-2 uppercase tracking-widest">Excerpt</label>
+                                        <label
+                                            class="block text-sm font-black text-gray-900 mb-2 uppercase tracking-widest">Excerpt</label>
                                         <textarea name="excerpt" rows="3"
-                                            class="w-full px-6 py-5 rounded-2xl border-4 border-gray-900 bg-white font-bold text-gray-900 outline-none placeholder-gray-400"><?php echo htmlspecialchars($current_post['excerpt'] ?? ''); ?></textarea>
+                                            class="w-full px-6 py-5 rounded-2xl border-4 border-gray-900 bg-white font-bold text-gray-900 outline-none placeholder-gray-400 focus:border-indigo-500 transition-colors"><?php echo htmlspecialchars($current_post['excerpt'] ?? ''); ?></textarea>
                                     </div>
                                 </div>
 
-                                <!-- SEO (Emerald Card) -->
-                                <div class="bg-white p-8 rounded-[2rem] border-4 border-emerald-600 shadow-xl space-y-6">
-                                    <h4 class="flex items-center gap-3 text-lg font-black text-emerald-700 uppercase tracking-widest mb-6 border-b-4 border-emerald-100 pb-4">
-                                        <span class="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center text-emerald-600">
-                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="3" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                                <!-- SEO (Fuchsia Card) -->
+                                <div class="bg-white p-8 rounded-[2rem] border-4 border-fuchsia-500 shadow-xl space-y-6">
+                                    <h4
+                                        class="flex items-center gap-3 text-lg font-black text-fuchsia-700 uppercase tracking-widest mb-6 border-b-4 border-fuchsia-100 pb-4">
+                                        <span
+                                            class="w-10 h-10 rounded-xl bg-fuchsia-100 flex items-center justify-center text-fuchsia-600">
+                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-width="3" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z">
+                                                </path>
+                                            </svg>
                                         </span>
                                         SEO Configuration
                                     </h4>
                                     <div>
-                                        <label class="block text-sm font-black text-gray-900 mb-2 uppercase tracking-widest">Meta Title</label>
+                                        <label
+                                            class="block text-sm font-black text-gray-900 mb-2 uppercase tracking-widest">Meta
+                                            Title</label>
                                         <input type="text" name="meta_title"
                                             value="<?php echo htmlspecialchars($current_post['meta_title'] ?? ''); ?>"
-                                            class="w-full px-6 py-5 rounded-2xl border-4 border-gray-900 bg-white font-bold text-xl text-gray-900 outline-none">
+                                            class="w-full px-6 py-5 rounded-2xl border-4 border-gray-900 bg-white font-bold text-xl text-gray-900 outline-none focus:border-fuchsia-500 transition-colors">
                                     </div>
                                     <div>
-                                        <label class="block text-sm font-black text-gray-900 mb-2 uppercase tracking-widest">Meta Description</label>
+                                        <label
+                                            class="block text-sm font-black text-gray-900 mb-2 uppercase tracking-widest">Meta
+                                            Description</label>
                                         <textarea name="meta_description" rows="3"
-                                            class="w-full px-6 py-5 rounded-2xl border-4 border-gray-900 bg-white font-bold text-base text-gray-900 outline-none"><?php echo htmlspecialchars($current_post['meta_description'] ?? ''); ?></textarea>
+                                            class="w-full px-6 py-5 rounded-2xl border-4 border-gray-900 bg-white font-bold text-base text-gray-900 outline-none focus:border-fuchsia-500 transition-colors"><?php echo htmlspecialchars($current_post['meta_description'] ?? ''); ?></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -508,7 +547,7 @@ try {
                                         <h4
                                             class="flex items-center gap-3 text-lg font-black text-slate-700 uppercase tracking-widest mb-6 border-b-4 border-slate-200 pb-4">
                                             <span
-                                                class="w-10 h-10 rounded-xl bg-slate-200 flex items-center justify-center text-slate-600">
+                                                class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-500 border border-slate-200">
                                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-width="3"
                                                         d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4">
@@ -523,7 +562,7 @@ try {
                                             <label
                                                 class="block text-sm font-black text-gray-900 mb-2 uppercase tracking-widest">Author</label>
                                             <select name="author_id"
-                                                class="w-full px-6 py-4 rounded-xl border-4 border-gray-900 bg-white font-bold text-gray-900 appearance-none cursor-pointer shadow-sm focus:outline-none">
+                                                class="w-full px-6 py-4 rounded-xl border-4 border-gray-900 bg-white font-bold text-gray-900 appearance-none cursor-pointer shadow-sm focus:outline-none focus:border-fuchsia-500">
                                                 <?php
                                                 $current_author = $current_post['author_id'] ?? $_SESSION['admin_id'];
                                                 foreach ($admins as $admin):
@@ -540,7 +579,7 @@ try {
                                             <label
                                                 class="block text-sm font-black text-gray-900 mb-2 uppercase tracking-widest">Status</label>
                                             <select name="status"
-                                                class="w-full px-6 py-4 rounded-xl border-4 border-gray-900 bg-white font-black text-gray-900 appearance-none cursor-pointer shadow-sm focus:outline-none">
+                                                class="w-full px-6 py-4 rounded-xl border-4 border-gray-900 bg-white font-black text-gray-900 appearance-none cursor-pointer shadow-sm focus:outline-none focus:border-fuchsia-500">
                                                 <option value="published" <?php echo ($current_post['status'] ?? 'published') === 'published' ? 'selected' : ''; ?>>Published (Live)
                                                 </option>
                                                 <option value="draft" <?php echo ($current_post['status'] ?? '') === 'draft' ? 'selected' : ''; ?>>Draft (Hidden)</option>
@@ -556,7 +595,7 @@ try {
                                                 value="<?php echo htmlspecialchars($current_post['thumbnail'] ?? ''); ?>">
 
                                             <div id="uploadArea"
-                                                class="border-4 border-dashed border-gray-400 rounded-2xl p-6 text-center cursor-pointer hover:border-gray-900 hover:bg-gray-50 transition-all group relative overflow-hidden bg-white">
+                                                class="border-4 border-dashed border-gray-300 rounded-2xl p-6 text-center cursor-pointer hover:border-fuchsia-500 hover:bg-gray-50 transition-all group relative overflow-hidden bg-white">
                                                 <input type="file" id="fileInput" accept="image/*"
                                                     class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
 
@@ -564,7 +603,7 @@ try {
                                                 <div id="uploadPlaceholder"
                                                     class="<?php echo !empty($current_post['thumbnail']) ? 'hidden' : ''; ?>">
                                                     <div
-                                                        class="w-12 h-12 bg-gray-100 text-gray-400 rounded-full flex items-center justify-center mx-auto mb-3 border-2 border-gray-200">
+                                                        class="w-12 h-12 bg-slate-800 text-gray-400 rounded-full flex items-center justify-center mx-auto mb-3 border-2 border-slate-700">
                                                         <svg class="w-6 h-6" fill="none" stroke="currentColor"
                                                             viewBox="0 0 24 24">
                                                             <path stroke-width="2"
@@ -654,7 +693,7 @@ try {
                             <!-- Submit Button (Full Width Bottom) -->
                             <div class="pt-8 border-t-4 border-gray-200 mt-8">
                                 <button type="submit"
-                                    class="w-full bg-gray-900 text-white py-6 rounded-2xl font-black hover:bg-gray-800 shadow-xl transition-all uppercase tracking-widest text-xl flex items-center justify-center gap-3 group border-4 border-gray-900">
+                                    class="w-full bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-600 text-white py-6 rounded-2xl font-black hover:shadow-2xl hover:shadow-fuchsia-500/40 hover:scale-[1.01] transition-all uppercase tracking-widest text-xl flex items-center justify-center gap-3 group border-4 border-transparent">
                                     <svg class="w-8 h-8 group-hover:scale-110 transition-transform" fill="none"
                                         stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-width="3" d="M5 13l4 4L19 7" />

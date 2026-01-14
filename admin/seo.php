@@ -136,6 +136,70 @@ if ($pdo) {
                 </div>
             <?php endif; ?>
 
+            <!-- Info Card (Collapsible) -->
+            <div
+                class="bg-gradient-to-r from-violet-50 via-fuchsia-50 to-pink-50 border-2 border-fuchsia-200 rounded-2xl mb-8 overflow-hidden">
+                <!-- Header (Always Visible) -->
+                <button onclick="toggleInfoCard('seo-info')"
+                    class="w-full p-4 flex items-center justify-between hover:bg-fuchsia-100/50 transition-all">
+                    <div class="flex items-center gap-3">
+                        <div
+                            class="bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-600 p-2 rounded-lg shadow-lg">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <div class="text-left">
+                            <h4 class="text-sm font-black text-gray-900">SEO Meta Tags Manager - How It Works</h4>
+                            <p class="text-xs text-gray-600">Click to expand/collapse</p>
+                        </div>
+                    </div>
+                    <svg id="seo-info-icon" class="w-5 h-5 text-gray-600 transition-transform" fill="none"
+                        stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
+
+                <!-- Content (Collapsible) -->
+                <div id="seo-info" class="hidden px-6 pb-6">
+                    <p class="text-sm text-gray-600 leading-relaxed mb-3">
+                        This feature allows you to optimize your website's search engine visibility by customizing meta
+                        tags for each <strong>static page</strong> (Home, Video, Reels, Photo, IGTV, Carousel, etc.).
+                        Proper SEO meta tags help search engines understand your content and improve your rankings in
+                        search results.
+                    </p>
+
+                    <!-- Available Languages -->
+                    <div class="bg-white rounded-lg p-3 border border-fuchsia-100 mb-3">
+                        <p class="text-xs text-gray-700 font-semibold mb-2">🌍 <strong>Available Languages:</strong></p>
+                        <div class="flex flex-wrap gap-2">
+                            <?php foreach ($available_langs as $code => $info): ?>
+                                <span
+                                    class="inline-flex items-center gap-1 px-2 py-1 bg-gradient-to-r from-violet-50 to-fuchsia-50 border border-fuchsia-200 rounded-lg text-xs font-bold text-gray-700">
+                                    <span class="text-sm"><?php echo $info['flag']; ?></span>
+                                    <?php echo $info['label']; ?>
+                                </span>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-lg p-4 border border-fuchsia-100">
+                        <p class="text-xs text-gray-700 font-semibold mb-2">💡 <strong>What you can manage:</strong></p>
+                        <ul class="text-xs text-gray-600 space-y-1 ml-4 list-disc">
+                            <li><strong>Meta Title</strong> - The title that appears in search results and browser tabs
+                                (50-60 characters recommended)</li>
+                            <li><strong>Meta Description</strong> - A brief summary shown in search results (150-160
+                                characters recommended)</li>
+                            <li><strong>OG Image</strong> - The image displayed when sharing on social media platforms
+                            </li>
+                            <li><strong>Static Pages Only</strong> - Manage SEO for Home, Video, Reels, Photo, IGTV,
+                                Carousel pages (not blog posts)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
             <!-- Language Navigation Tabs -->
             <div class="flex flex-wrap gap-2 mb-8 bg-white p-2 rounded-2xl shadow-sm border border-gray-100">
                 <?php foreach ($available_langs as $code => $info): ?>
@@ -282,6 +346,22 @@ if ($pdo) {
             </div>
         </div>
     </main>
+    
+    <script>
+        // Toggle Info Card Function
+        function toggleInfoCard(id) {
+            const content = document.getElementById(id);
+            const icon = document.getElementById(id + '-icon');
+            
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                content.classList.add('hidden');
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+    </script>
 </body>
 
 </html>

@@ -360,6 +360,52 @@ if (!empty($current_page_keys)) {
                 </div>
             <?php endif; ?>
 
+            <!-- Info Card (Collapsible) -->
+            <div
+                class="bg-gradient-to-r from-violet-50 via-fuchsia-50 to-pink-50 border-2 border-fuchsia-200 rounded-2xl mb-8 overflow-hidden">
+                <!-- Header (Always Visible) -->
+                <button onclick="toggleInfoCard('translations-info')"
+                    class="w-full p-4 flex items-center justify-between hover:bg-fuchsia-100/50 transition-all">
+                    <div class="flex items-center gap-3">
+                        <div
+                            class="bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-600 p-2 rounded-lg shadow-lg">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <div class="text-left">
+                            <h4 class="text-sm font-black text-gray-900">Multi-Language Translation Manager - How It
+                                Works</h4>
+                            <p class="text-xs text-gray-600">Click to expand/collapse</p>
+                        </div>
+                    </div>
+                    <svg id="translations-info-icon" class="w-5 h-5 text-gray-600 transition-transform" fill="none"
+                        stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
+
+                <!-- Content (Collapsible) -->
+                <div id="translations-info" class="hidden px-6 pb-6">
+                    <p class="text-sm text-gray-600 leading-relaxed mb-3">
+                        This feature allows you to manage translations for all text displayed on your website. Each
+                        <strong>Translation Key</strong> represents a specific piece of text (like buttons, headings, or
+                        messages) that appears on the frontend.
+                    </p>
+                    <div class="bg-white rounded-lg p-4 border border-fuchsia-100">
+                        <p class="text-xs text-gray-700 font-semibold mb-2">💡 <strong>How it works:</strong></p>
+                        <ul class="text-xs text-gray-600 space-y-1 ml-4 list-disc">
+                            <li><strong>English</strong> is the master language - edit here to update the default text
+                            </li>
+                            <li>Other languages will <strong>auto-translate</strong> if left empty</li>
+                            <li>Manually override auto-translations by entering custom text</li>
+                            <li>Changes take effect <strong>immediately</strong> on the website</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
             <!-- Language Tabs -->
             <div class="flex flex-wrap gap-2 mb-8 bg-white p-2 rounded-2xl shadow-sm border border-gray-100">
                 <?php foreach ($supported_langs as $code => $info): ?>
@@ -372,14 +418,16 @@ if (!empty($current_page_keys)) {
             </div>
 
             <div class="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 overflow-hidden">
-                <div class="p-6 border-b border-gray-50 bg-gradient-to-r from-violet-50 via-fuchsia-50 to-pink-50 flex items-center justify-between">
+                <div
+                    class="p-6 border-b border-gray-50 bg-gradient-to-r from-violet-50 via-fuchsia-50 to-pink-50 flex items-center justify-between">
                     <div>
                         <h3 class="font-bold text-gray-900 flex items-center gap-2 text-lg mb-1">
                             <span class="w-2 h-2 rounded-full bg-fuchsia-500"></span>
                             Translation Keys - <?php echo $supported_langs[$active_lang]['label']; ?>
                         </h3>
                         <p class="text-xs text-gray-500 font-medium">
-                            Showing <?php echo count($current_page_keys); ?> of <?php echo count($all_keys); ?> total keys
+                            Showing <?php echo count($current_page_keys); ?> of <?php echo count($all_keys); ?> total
+                            keys
                         </p>
                     </div>
 
@@ -412,7 +460,8 @@ if (!empty($current_page_keys)) {
                     </div>
                     <div class="col-span-12 md:col-span-9 flex gap-3">
                         <div class="flex-1">
-                            <span class="text-xs font-black uppercase tracking-wider text-gray-600">Translation Text</span>
+                            <span class="text-xs font-black uppercase tracking-wider text-gray-600">Translation
+                                Text</span>
                         </div>
                         <div class="w-[100px] text-center">
                             <span class="text-xs font-black uppercase tracking-wider text-gray-600">Action</span>
@@ -445,7 +494,7 @@ if (!empty($current_page_keys)) {
                                     <input type="hidden" name="p_redirect" value="<?php echo $_curr_p; ?>">
 
                                     <textarea name="t_value" rows="1" placeholder="Enter translation..."
-                                        class="flex-1 px-5 py-3 rounded-xl border border-gray-200 bg-white focus:ring-4 focus:ring-fuchsia-100 focus:border-fuchsia-500 outline-none text-sm transition-all resize-none shadow-sm font-semibold text-gray-800"
+                                        class="flex-1 px-5 py-3 rounded-xl border-2 border-fuchsia-500 bg-white focus:ring-4 focus:ring-fuchsia-100 focus:border-fuchsia-600 outline-none text-sm transition-all resize-none shadow-lg shadow-fuchsia-500/20 font-semibold text-gray-800"
                                         oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'><?php echo htmlspecialchars($current_translations[$key] ?? ''); ?></textarea>
 
                                     <button type="submit"
@@ -469,6 +518,20 @@ if (!empty($current_page_keys)) {
         document.querySelectorAll('textarea').forEach(el => {
             el.style.height = (el.scrollHeight > 40 ? el.scrollHeight : 48) + "px";
         });
+
+        // Toggle Info Card Function
+        function toggleInfoCard(id) {
+            const content = document.getElementById(id);
+            const icon = document.getElementById(id + '-icon');
+
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                content.classList.add('hidden');
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
     </script>
 </body>
 

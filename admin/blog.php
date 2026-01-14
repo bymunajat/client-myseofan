@@ -335,6 +335,67 @@ try {
             <?php endif; ?>
 
             <?php if ($action === 'list'): ?>
+                <!-- Info Card (Collapsible) -->
+                <div
+                    class="bg-gradient-to-r from-violet-50 via-fuchsia-50 to-pink-50 border-2 border-fuchsia-200 rounded-2xl mb-8 overflow-hidden">
+                    <!-- Header (Always Visible) -->
+                    <button onclick="toggleInfoCard('blog-info')"
+                        class="w-full p-4 flex items-center justify-between hover:bg-fuchsia-100/50 transition-all">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-600 p-2 rounded-lg shadow-lg">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <div class="text-left">
+                                <h4 class="text-sm font-black text-gray-900">Blog Post Manager - How It Works</h4>
+                                <p class="text-xs text-gray-600">Click to expand/collapse</p>
+                            </div>
+                        </div>
+                        <svg id="blog-info-icon" class="w-5 h-5 text-gray-600 transition-transform" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+
+                    <!-- Content (Collapsible) -->
+                    <div id="blog-info" class="hidden px-6 pb-6">
+                        <p class="text-sm text-gray-600 leading-relaxed mb-3">
+                            Create and manage blog posts for your website. Posts can be organized by categories, translated
+                            into multiple languages, and displayed on your blog page to engage visitors and improve SEO.
+                        </p>
+
+                        <!-- Auto-Translation Info -->
+                        <div class="bg-emerald-50 border-l-4 border-emerald-500 p-3 mb-3 rounded-r-lg">
+                            <p class="text-xs text-emerald-800 font-bold mb-1">✨ <strong>Auto-Translation:</strong> Write
+                                Once, Publish Everywhere</p>
+                            <p class="text-xs text-emerald-700">
+                                Simply write your blog post in <strong>English</strong>, and the system will
+                                <strong>automatically translate</strong> it to all other languages (Indonesia, Español,
+                                Français, Deutsch, 日本語) behind the scenes. No manual translation needed!
+                            </p>
+                        </div>
+
+                        <div class="bg-white rounded-lg p-4 border border-fuchsia-100">
+                            <p class="text-xs text-gray-700 font-semibold mb-2">📝 <strong>Blog Post Workflow:</strong></p>
+                            <ul class="text-xs text-gray-600 space-y-1 ml-4 list-disc">
+                                <li><strong>Create Post</strong> - Click "New Post" to write a new article in English with
+                                    title, content, and featured image</li>
+                                <li><strong>Assign Category</strong> - Organize posts by topic (e.g., Tutorials, News,
+                                    Updates)</li>
+                                <li><strong>Auto-Translation</strong> - System automatically translates your post to all
+                                    supported languages</li>
+                                <li><strong>SEO Fields</strong> - Each post has built-in meta title and description fields
+                                    for search engine optimization</li>
+                                <li><strong>Publish</strong> - Posts appear automatically on your blog page in all languages
+                                    once saved</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="bg-white rounded-3xl shadow-lg border border-slate-100 overflow-hidden">
                     <table class="w-full text-left">
                         <thead class="bg-gray-50 border-b border-gray-100 text-gray-500">
@@ -861,6 +922,20 @@ try {
                     });
                 }
             });
+
+            // Toggle Info Card Function
+            function toggleInfoCard(id) {
+                const content = document.getElementById(id);
+                const icon = document.getElementById(id + '-icon');
+                
+                if (content.classList.contains('hidden')) {
+                    content.classList.remove('hidden');
+                    icon.style.transform = 'rotate(180deg)';
+                } else {
+                    content.classList.add('hidden');
+                    icon.style.transform = 'rotate(0deg)';
+                }
+            }
         </script>
 </body>
 

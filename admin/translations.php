@@ -372,12 +372,16 @@ if (!empty($current_page_keys)) {
             </div>
 
             <div class="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 overflow-hidden">
-                <div class="p-6 border-b border-gray-50 bg-gray-50/50 flex items-center justify-between">
-                    <h3 class="font-bold text-gray-800 flex items-center gap-2 text-sm uppercase tracking-wider">
-                        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-                        Translating: <span
-                            class="text-black"><?php echo $supported_langs[$active_lang]['label']; ?></span>
-                    </h3>
+                <div class="p-6 border-b border-gray-50 bg-gradient-to-r from-violet-50 via-fuchsia-50 to-pink-50 flex items-center justify-between">
+                    <div>
+                        <h3 class="font-bold text-gray-900 flex items-center gap-2 text-lg mb-1">
+                            <span class="w-2 h-2 rounded-full bg-fuchsia-500"></span>
+                            Translation Keys - <?php echo $supported_langs[$active_lang]['label']; ?>
+                        </h3>
+                        <p class="text-xs text-gray-500 font-medium">
+                            Showing <?php echo count($current_page_keys); ?> of <?php echo count($all_keys); ?> total keys
+                        </p>
+                    </div>
 
                     <!-- PAGINATION -->
                     <?php if ($_total_p > 1): ?>
@@ -401,6 +405,21 @@ if (!empty($current_page_keys)) {
                     <?php endif; ?>
                 </div>
 
+                <!-- Table Header -->
+                <div class="px-6 py-4 bg-gray-50 border-b-2 border-gray-200 grid grid-cols-12 gap-6 items-center">
+                    <div class="col-span-12 md:col-span-3">
+                        <span class="text-xs font-black uppercase tracking-wider text-gray-600">Translation Key</span>
+                    </div>
+                    <div class="col-span-12 md:col-span-9 flex gap-3">
+                        <div class="flex-1">
+                            <span class="text-xs font-black uppercase tracking-wider text-gray-600">Translation Text</span>
+                        </div>
+                        <div class="w-[100px] text-center">
+                            <span class="text-xs font-black uppercase tracking-wider text-gray-600">Action</span>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="divide-y divide-gray-50">
                     <?php foreach ($current_page_keys as $key): ?>
                         <div class="group hover:bg-gray-50/50 transition-all p-6 grid grid-cols-12 gap-6 items-start">
@@ -408,10 +427,10 @@ if (!empty($current_page_keys)) {
                             <div class="col-span-12 md:col-span-3">
                                 <div class="inline-block">
                                     <code
-                                        class="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-1 rounded border border-emerald-100"><?php echo $key; ?></code>
+                                        class="text-sm font-black text-fuchsia-700 bg-fuchsia-50 px-3 py-1.5 rounded-lg border-2 border-fuchsia-200"><?php echo $key; ?></code>
                                 </div>
                                 <?php if ($active_lang !== 'en'): ?>
-                                    <div class="mt-2 text-xs text-gray-400 italic">
+                                    <div class="mt-2 text-sm text-gray-600 font-semibold">
                                         "<?php echo htmlspecialchars($en_translations[$key] ?? '...'); ?>"
                                     </div>
                                 <?php endif; ?>
@@ -420,20 +439,21 @@ if (!empty($current_page_keys)) {
                             <!-- Input Column -->
                             <div class="col-span-12 md:col-span-9">
                                 <form action="?lang=<?php echo $active_lang; ?>&p=<?php echo $_curr_p; ?>" method="POST"
-                                    class="relative">
+                                    class="flex gap-3">
                                     <input type="hidden" name="lang_code" value="<?php echo $active_lang; ?>">
                                     <input type="hidden" name="t_key" value="<?php echo $key; ?>">
                                     <input type="hidden" name="p_redirect" value="<?php echo $_curr_p; ?>">
 
                                     <textarea name="t_value" rows="1" placeholder="Enter translation..."
-                                        class="w-full px-5 py-3 rounded-xl border border-gray-200 bg-white focus:ring-4 focus:ring-emerald-100 focus:border-emerald-500 outline-none text-sm transition-all resize-none shadow-sm font-semibold text-gray-800"
+                                        class="flex-1 px-5 py-3 rounded-xl border border-gray-200 bg-white focus:ring-4 focus:ring-fuchsia-100 focus:border-fuchsia-500 outline-none text-sm transition-all resize-none shadow-sm font-semibold text-gray-800"
                                         oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'><?php echo htmlspecialchars($current_translations[$key] ?? ''); ?></textarea>
 
                                     <button type="submit"
-                                        class="absolute right-2 bottom-2 bg-emerald-100 text-emerald-700 p-1.5 rounded-lg hover:bg-emerald-600 hover:text-white transition-all opacity-0 group-hover:opacity-100 focus:opacity-100">
+                                        class="bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-600 text-white px-4 py-3 rounded-xl hover:shadow-lg hover:shadow-fuchsia-500/40 transition-all shadow-md font-bold flex items-center gap-2 whitespace-nowrap">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-width="2" d="M5 13l4 4L19 7" />
                                         </svg>
+                                        Save
                                     </button>
                                 </form>
                             </div>

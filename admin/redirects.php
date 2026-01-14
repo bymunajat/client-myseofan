@@ -99,20 +99,20 @@ if ($action === 'edit' && $id) {
                                 /old-page)</label>
                             <input type="text" name="source_url"
                                 value="<?php echo htmlspecialchars($editData['source_url'] ?? ''); ?>" required
-                                class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white outline-none font-bold text-black text-sm">
+                                class="w-full px-4 py-3 rounded-xl border-2 border-fuchsia-500 bg-white focus:bg-white outline-none font-bold text-black text-sm shadow-lg shadow-fuchsia-500/20">
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Target URL (e.g.
                                 /new-page)</label>
                             <input type="text" name="target_url"
                                 value="<?php echo htmlspecialchars($editData['target_url'] ?? ''); ?>" required
-                                class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white outline-none font-bold text-black text-sm">
+                                class="w-full px-4 py-3 rounded-xl border-2 border-fuchsia-500 bg-white focus:bg-white outline-none font-bold text-black text-sm shadow-lg shadow-fuchsia-500/20">
                         </div>
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Redirect Type</label>
                                 <select name="redirect_type"
-                                    class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white outline-none font-bold text-black text-sm">
+                                    class="w-full px-4 py-3 rounded-xl border-2 border-fuchsia-500 bg-white focus:bg-white outline-none font-bold text-black text-sm shadow-lg shadow-fuchsia-500/20">
                                     <option value="301" <?php echo ($editData['redirect_type'] ?? 301) == 301 ? 'selected' : ''; ?>>301 (Permanent)</option>
                                     <option value="302" <?php echo ($editData['redirect_type'] ?? 301) == 302 ? 'selected' : ''; ?>>302 (Temporary)</option>
                                 </select>

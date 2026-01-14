@@ -5,6 +5,7 @@
  */
 session_start();
 require_once '../includes/db.php';
+require_once '../includes/Logger.php';
 
 // 1. Security Check
 if (!isset($_SESSION['admin_id'])) {
@@ -47,6 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new Exception("Username and password are required.");
             $hash = password_hash($password, PASSWORD_DEFAULT);
             $pdo->prepare("INSERT INTO admins (username, password_hash, role) VALUES (?, ?, ?)")->execute([$username, $hash, $role]);
+            Logger::log('create_user', "Created new admin user: $username (Role: $role)", $_SESSION['admin_id'] ?? 0);
             $message = "User '{$username}' successfully created.";
             $action = 'list';
         } catch (Exception $e) {
@@ -62,6 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 $pdo->prepare("UPDATE admins SET username = ?, role = ? WHERE id = ?")->execute([$username, $role, $id]);
             }
+            Logger::log('update_user', "Updated user ID: $id ($username)", $_SESSION['admin_id'] ?? 0);
             $message = "Account updated successfully.";
             $action = 'list';
         } catch (Exception $e) {
@@ -77,6 +80,7 @@ if ($action === 'delete' && $id) {
     } else {
         try {
             $pdo->prepare("DELETE FROM admins WHERE id = ?")->execute([$id]);
+            Logger::log('delete_user', "Deleted user ID: $id", $_SESSION['admin_id'] ?? 0);
             $message = "Account permanently deleted.";
         } catch (Exception $e) {
             $error = "Error: " . $e->getMessage();

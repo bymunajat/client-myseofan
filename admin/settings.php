@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once '../includes/db.php';
+require_once '../includes/Logger.php';
 
 if (!isset($_SESSION['admin_id']) || ($_SESSION['role'] ?? '') !== 'super_admin') {
     header('Location: dashboard.php');
@@ -31,6 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($pdo) {
         $stmt = $pdo->prepare("UPDATE site_settings SET site_name = ?, logo_path = ?, favicon_path = ?, header_code = ?, footer_code = ? WHERE id = 1");
         if ($stmt->execute([$site_name, $logo_path, $favicon_path, $header_code, $footer_code])) {
+            Logger::log('update_settings', "Updated site settings", $_SESSION['admin_id'] ?? 0);
             $message = 'Settings updated successfully!';
             $settings = getSiteSettings($pdo);
         }

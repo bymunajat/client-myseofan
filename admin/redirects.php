@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once '../includes/db.php';
+require_once '../includes/Logger.php';
 
 if (!isset($_SESSION['admin_id'])) {
     header('Location: login.php');
@@ -23,12 +24,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($action === 'add') {
         $stmt = $pdo->prepare("INSERT INTO redirects (source_url, target_url, redirect_type, is_active) VALUES (?, ?, ?, ?)");
         if ($stmt->execute([$source, $target, $type, $active])) {
+            Logger::log('create_redirect', "Created redirect: $source -> $target", $_SESSION['admin_id'] ?? 0);
             header('Location: redirects.php?msg=added');
             exit;
         }
     } elseif ($action === 'edit' && $id) {
         $stmt = $pdo->prepare("UPDATE redirects SET source_url = ?, target_url = ?, redirect_type = ?, is_active = ? WHERE id = ?");
         if ($stmt->execute([$source, $target, $type, $active, $id])) {
+            Logger::log('update_redirect', "Updated redirect ID: $id", $_SESSION['admin_id'] ?? 0);
             header('Location: redirects.php?msg=updated');
             exit;
         }
@@ -37,6 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 if ($action === 'delete' && $id) {
     $pdo->prepare("DELETE FROM redirects WHERE id = ?")->execute([$id]);
+    Logger::log('delete_redirect', "Deleted redirect ID: $id", $_SESSION['admin_id'] ?? 0);
     header('Location: redirects.php?msg=deleted');
     exit;
 }

@@ -2,6 +2,10 @@
 require_once 'includes/db.php';
 require_once 'includes/SEO_Helper.php';
 require_once 'includes/Translator.php';
+require_once 'includes/RedirectHelper.php';
+
+// Handle Redirects immediately
+handle_custom_redirects($pdo);
 
 // 1. Initialize State
 $lang = $_GET['lang'] ?? 'en';

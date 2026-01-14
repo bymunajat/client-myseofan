@@ -113,17 +113,20 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
     <style>
         :root {
             --hero-gradient: linear-gradient(135deg, #7c3aed 0%, #c026d3 50%, #db2777 100%);
+            --dark-bg: #0f172a;
+            --dark-card: #1e293b;
+            --instagram-gradient: linear-gradient(135deg, #833ab4 0%, #fd1d1d 50%, #fcb045 100%);
         }
 
         body {
             font-family: 'Outfit', sans-serif;
-            background-color: #ffffff;
-            color: #1a1a1a;
+            background-color: var(--dark-bg) !important;
+            color: #94a3b8;
             scroll-behavior: smooth;
         }
 
         .hero-section {
-            background: var(--hero-gradient);
+            background: rgb(15, 23, 42);
             position: relative;
             min-height: 550px;
             display: flex;
@@ -131,16 +134,33 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
             justify-content: center;
             padding-top: 100px;
             padding-bottom: 120px;
+            border-bottom: 1px solid rgba(139, 92, 246, 0.1);
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(236, 72, 153, 0.1) 0%, transparent 50%);
+            pointer-events: none;
         }
 
         .glass-header {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(15, 23, 42, 0.98);
             backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
 
         .logo-text {
-            color: #7c3aed;
+            background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             font-weight: 800;
             font-size: 1.75rem;
             display: flex;
@@ -149,27 +169,28 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
         }
 
         .tool-bar {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(30, 41, 59, 0.6);
             backdrop-filter: blur(12px);
-            border-radius: 10px;
+            border-radius: 16px;
             display: inline-flex;
             align-items: center;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(139, 92, 246, 0.3);
             overflow: hidden;
             margin-bottom: 2.5rem;
+            box-shadow: 0 8px 32px rgba(139, 92, 246, 0.15);
         }
 
         .tool-item {
             display: flex;
             align-items: center;
             gap: 10px;
-            padding: 12px 24px;
-            color: #ffffff;
+            padding: 14px 28px;
+            color: #cbd5e1;
             font-size: 0.95rem;
             font-weight: 500;
-            transition: all 0.2s;
+            transition: all 0.3s;
             text-decoration: none;
-            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            border-right: 1px solid rgba(139, 92, 246, 0.2);
         }
 
         .tool-item:last-child {
@@ -178,35 +199,104 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
 
         .tool-item:hover,
         .tool-item.active {
-            background: rgba(255, 255, 255, 0.1);
+            background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+            color: #ffffff;
             font-weight: 600;
+            transform: translateY(-2px);
         }
 
         .input-container {
             background: #ffffff;
-            border-radius: 12px;
-            padding: 6px;
+            border-radius: 9999px;
+            padding: 8px;
             display: flex;
             align-items: center;
             gap: 8px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
             max-width: 720px;
             width: 100%;
             margin: 0 auto;
+            position: relative;
+            animation: shadow-pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes gradient-shift {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        @keyframes shadow-pulse {
+
+            0%,
+            100% {
+                box-shadow: 0 20px 60px rgba(139, 92, 246, 0.6),
+                    0 0 40px rgba(139, 92, 246, 0.4),
+                    0 0 80px rgba(139, 92, 246, 0.2);
+            }
+
+            33% {
+                box-shadow: 0 20px 60px rgba(236, 72, 153, 0.6),
+                    0 0 40px rgba(236, 72, 153, 0.4),
+                    0 0 80px rgba(236, 72, 153, 0.2);
+            }
+
+            66% {
+                box-shadow: 0 20px 60px rgba(245, 158, 11, 0.6),
+                    0 0 40px rgba(245, 158, 11, 0.4),
+                    0 0 80px rgba(245, 158, 11, 0.2);
+            }
+        }
+
+        .input-container::before {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 9999px;
+            padding: 4px;
+            background: linear-gradient(135deg, #8b5cf6, #ec4899, #f59e0b, #8b5cf6);
+            background-size: 300% 300%;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            animation: gradient-rotate 3s ease infinite;
+            pointer-events: none;
+            filter: brightness(1.3) blur(0.5px);
+        }
+
+        @keyframes gradient-rotate {
+
+            0%,
+            100% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
         }
 
         .input-field {
             flex: 1;
-            padding: 14px 20px;
+            padding: 16px 24px;
             border: none;
             outline: none;
             font-size: 1.1rem;
-            color: #334155;
+            color: #0f172a;
             background: transparent;
+            font-weight: 600;
+            border-radius: 9999px;
         }
 
         .input-field::placeholder {
-            color: #475569;
+            color: #64748b;
             font-weight: 500;
             opacity: 1;
         }
@@ -215,34 +305,39 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
             display: flex;
             align-items: center;
             gap: 8px;
-            padding: 12px 20px;
-            background: #f1f5f9;
-            color: #475569;
+            padding: 14px 24px;
+            background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+            color: #ffffff;
             font-weight: 700;
-            border-radius: 10px;
+            border-radius: 9999px;
             border: none;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
         }
 
         .btn-paste:hover {
-            background: #e2e8f0;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(139, 92, 246, 0.4);
+            filter: brightness(1.1);
         }
 
         .btn-download {
-            padding: 12px 28px;
-            background: #3b82f6;
+            padding: 14px 32px;
+            background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
             color: #ffffff;
             font-weight: 700;
-            border-radius: 10px;
+            border-radius: 9999px;
             border: none;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: all 0.3s;
             white-space: nowrap;
+            box-shadow: 0 8px 24px rgba(139, 92, 246, 0.3);
         }
 
         .btn-download:hover {
-            background: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(139, 92, 246, 0.4);
         }
 
         .section-title {
@@ -281,7 +376,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
         }
 
         .faq-question {
-            color: #3b82f6;
+            color: #a78bfa;
             font-size: 1.125rem;
             font-weight: 700;
             margin-bottom: 12px;
@@ -289,7 +384,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
         }
 
         .faq-answer {
-            color: #334155;
+            color: #cbd5e1;
             font-size: 0.875rem;
             line-height: 1.7;
             font-weight: 500;
@@ -306,11 +401,14 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
         .footer-logo-text {
             font-size: 2.25rem;
             font-weight: 800;
-            color: #7c3aed;
+            background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .footer-logo-icon {
-            color: #a855f7;
+            color: #a78bfa;
             width: 36px;
             height: 36px;
         }
@@ -326,7 +424,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
         .footer-link {
             color: #475569;
             font-size: 0.8125rem;
-            font-weight: 600;
+            font-weight: 700;
             transition: color 0.2s;
             text-decoration: none;
         }
@@ -338,17 +436,18 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
         .footer-divider {
             width: 100%;
             height: 1px;
-            background: #e2e8f0;
+            background: rgba(139, 92, 246, 0.2);
             margin: 40px 0;
         }
 
         .social-label {
             text-align: center;
-            color: #64748b;
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: lowercase;
+            color: #1e293b;
+            font-size: 0.875rem;
+            font-weight: 800;
+            text-transform: uppercase;
             margin-bottom: 20px;
+            letter-spacing: 0.05em;
         }
 
         .social-icons {
@@ -370,9 +469,9 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
 
         .copyright-text {
             text-align: center;
-            color: #94a3b8;
-            font-size: 0.6875rem;
-            font-weight: 600;
+            color: #64748b;
+            font-size: 0.75rem;
+            font-weight: 700;
         }
 
         .intro-card {
@@ -657,6 +756,124 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                 transform: rotate(360deg);
             }
         }
+
+
+        /* Override Tailwind light colors to dark */
+        .bg-slate-50,
+        .bg-slate-100,
+        .bg-slate-200,
+        .bg-gray-50,
+        .bg-gray-100,
+        .bg-gray-200 {
+            background-color: var(--dark-bg) !important;
+        }
+
+        /* Protect actual dark theme text */
+        body>nav *,
+        .hero-section *,
+        footer * {
+            /* Keep these as they are or inherited from body */
+        }
+
+        .text-slate-500,
+        .text-slate-600,
+        .text-slate-700 {
+            color: #94a3b8 !important;
+        }
+
+        .text-slate-800,
+        .text-slate-900 {
+            color: #cbd5e1 !important;
+        }
+
+        /* Re-apply dark overrides only for elements NOT in light sections */
+        :not(.intro-card):not(#how-to):not(#features):not(#detailed-features):not(#faq):not(#blog)>.text-slate-700 {
+            color: #94a3b8 !important;
+        }
+
+        /* High Contrast Text for Light Sections - FINAL PRIORITY */
+        .intro-card,
+        #how-to,
+        #features,
+        #detailed-features,
+        #blog {
+            color: #0f172a !important;
+        }
+
+        .intro-card .text-slate-700,
+        #how-to .text-slate-700,
+        #features .text-slate-700,
+        #detailed-features .text-slate-700,
+        #blog .text-slate-700,
+        .feature-detail-text,
+        .step-desc,
+        .feature-card-modern p,
+        .intro-card p,
+        #features p,
+        .feature-card-modern .font-medium {
+            color: #000000 !important;
+            font-weight: 600 !important;
+            /* SEMI BOLD */
+            font-size: 1.1rem !important;
+            /* Larger size */
+            line-height: 1.6;
+        }
+
+        .intro-card h2,
+        #how-to h3,
+        #features h4,
+        #detailed-features h3,
+        #blog h3,
+        .step-title,
+        .feature-detail-title {
+            color: #000000 !important;
+            font-weight: 800 !important;
+        }
+
+        /* FAQ Section - High Contrast Styling */
+        #faq,
+        .faq-item,
+        .faq-answer {
+            color: #ffffff !important;
+        }
+
+        .faq-question {
+            font-weight: 700 !important;
+            font-size: 1.25rem !important;
+            color: #3b82f6 !important;
+            /* Premium Blue */
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .faq-answer {
+            color: #ffffff !important;
+            font-weight: 700 !important;
+            font-size: 1.1rem !important;
+            line-height: 1.6;
+        }
+
+        /* Specific White Subtitles - PREMIUM CAPSULE LOOK */
+        .features-subtitle-white {
+            color: #ffffff !important;
+            font-weight: 700 !important;
+            font-size: 1.15rem !important;
+            opacity: 1 !important;
+            background: rgba(15, 23, 42, 0.9);
+            padding: 12px 32px;
+            border-radius: 9999px;
+            display: inline-block;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        #features .features-subtitle-white,
+        #how-to .features-subtitle-white,
+        section#features p.features-subtitle-white,
+        section#how-to p.features-subtitle-white {
+            color: #ffffff !important;
+        }
     </style>
 </head>
 
@@ -673,24 +890,24 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                 <?php echo htmlspecialchars($settings['site_name'] ?: 'MySeoFan'); ?>
             </a>
 
-            <div class="flex items-center gap-6 text-slate-700 font-bold text-sm uppercase tracking-wider">
+            <div class="flex items-center gap-6 text-white font-bold text-sm uppercase tracking-wider">
                 <nav class="hidden md:flex items-center gap-6">
                     <?php foreach ($headerItems as $item): ?>
                         <a href="<?php echo htmlspecialchars($item['final_url']); ?>"
-                            class="hover:text-purple-600 transition-colors">
+                            class="hover:text-[#ec4899] transition-colors">
                             <?php echo htmlspecialchars($item['label']); ?>
                         </a>
                     <?php endforeach; ?>
                 </nav>
                 <div class="relative group cursor-pointer">
-                    <div class="flex items-center gap-1 hover:text-purple-600 transition-colors uppercase">
-                        <?php echo $lang; ?> <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                    <div class="flex items-center gap-1 hover:text-[#ec4899] transition-colors uppercase">
+                        <?php echo $lang; ?> <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400"></i>
                     </div>
                     <div class="absolute right-0 top-full pt-2 hidden group-hover:block z-50">
-                        <div class="w-32 bg-white shadow-xl rounded-xl p-2 border border-gray-100">
+                        <div class="w-32 bg-slate-900 shadow-2xl rounded-xl p-2 border border-slate-800">
                             <?php foreach (['en' => '🇺🇸 EN', 'id' => '🇮🇩 ID', 'es' => '🇪🇸 ES', 'fr' => '🇫🇷 FR', 'de' => '🇩🇪 DE', 'ja' => '🇯🇵 JA'] as $code => $label): ?>
                                 <a href="?lang=<?php echo $code; ?>"
-                                    class="block px-4 py-2 text-xs hover:bg-purple-50 rounded-lg <?php echo $lang === $code ? 'text-purple-600 font-bold' : ''; ?>">
+                                    class="block px-4 py-2 text-xs hover:bg-slate-800 rounded-lg <?php echo $lang === $code ? 'text-[#ec4899] font-bold' : 'text-slate-300'; ?>">
                                     <?php echo $label; ?>
                                 </a>
                             <?php endforeach; ?>
@@ -770,9 +987,11 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
             <!-- How to Section -->
             <section id="how-to" class="mb-32">
                 <h2 class="section-header-blue"><?php echo $t['how_to_title']; ?></h2>
-                <p class="text-center text-slate-500 text-sm mb-12 max-w-2xl mx-auto">
-                    <?php echo $t['how_to_subtitle']; ?>
-                </p>
+                <div class="text-center mb-12">
+                    <p class="features-subtitle-white max-w-2xl mx-auto">
+                        <?php echo $t['how_to_subtitle']; ?>
+                    </p>
+                </div>
 
                 <div class="grid md:grid-cols-3 gap-8">
                     <!-- Step 1 -->
@@ -827,9 +1046,11 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
             <!-- Features Section -->
             <section id="features">
                 <h2 class="section-header-blue"><?php echo $t['features_title']; ?></h2>
-                <p class="text-center text-slate-700 font-medium text-sm mb-12 max-w-2xl mx-auto">
-                    <?php echo $t['features_subtitle']; ?>
-                </p>
+                <div class="text-center mb-12">
+                    <p class="features-subtitle-white max-w-2xl mx-auto">
+                        <?php echo $t['features_subtitle']; ?>
+                    </p>
+                </div>
 
                 <div class="grid md:grid-cols-4 gap-6">
                     <!-- Lightning Fast -->
@@ -1020,7 +1241,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                                 </a>
                             <?php else: ?>
                                 <a href="blog-detail.php?slug=<?php echo htmlspecialchars($post['slug']); ?>"
-                                    class="block h-48 bg-gradient-to-br from-emerald-400 to-cyan-500 flex items-center justify-center">
+                                    class="block h-48 bg-gradient-to-br from-[#8b5cf6] via-[#ec4899] to-[#f59e0b] flex items-center justify-center">
                                     <i data-lucide="image" class="w-12 h-12 text-white/50"></i>
                                 </a>
                             <?php endif; ?>
@@ -1028,7 +1249,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                             <div class="p-6">
                                 <div class="flex items-center gap-2 mb-3">
                                     <span
-                                        class="bg-emerald-50 text-emerald-600 text-xs font-bold px-2 py-1 rounded-md uppercase tracking-wider">
+                                        class="bg-purple-50 text-purple-600 text-xs font-bold px-2 py-1 rounded-md uppercase tracking-wider">
                                         <?php echo htmlspecialchars($post['category'] ?? 'General'); ?>
                                     </span>
                                     <span class="text-xs text-gray-400 font-medium">
@@ -1038,7 +1259,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
 
                                 <h3 class="text-xl font-bold text-gray-800 mb-2 leading-tight line-clamp-2">
                                     <a href="blog-detail.php?slug=<?php echo htmlspecialchars($post['slug']); ?>"
-                                        class="hover:text-emerald-600 transition-colors">
+                                        class="hover:text-[#ec4899] transition-colors">
                                         <?php echo htmlspecialchars($post['title']); ?>
                                     </a>
                                 </h3>
@@ -1048,7 +1269,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                                 </p>
 
                                 <a href="blog-detail.php?slug=<?php echo htmlspecialchars($post['slug']); ?>"
-                                    class="inline-flex items-center text-emerald-600 font-bold text-sm hover:gap-2 transition-all gap-1">
+                                    class="inline-flex items-center text-[#ec4899] font-bold text-sm hover:gap-2 transition-all gap-1">
                                     Read Article <i data-lucide="arrow-right" class="w-4 h-4"></i>
                                 </a>
                             </div>
@@ -1058,7 +1279,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
 
                 <div class="text-center mt-12">
                     <a href="blog.php?lang=<?php echo $lang; ?>"
-                        class="inline-block px-8 py-3 rounded-full border-2 border-emerald-500 text-emerald-600 font-bold hover:bg-emerald-50 transition-colors">
+                        class="inline-block px-8 py-3 rounded-full border-2 border-[#ec4899] text-[#ec4899] font-bold hover:bg-[#ec4899]/5 transition-colors">
                         View All Articles
                     </a>
                 </div>
@@ -1143,17 +1364,17 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
 
             <div class="flex flex-col md:flex-row items-center justify-between gap-6">
                 <div class="flex items-center gap-2">
-                    <span class="text-sm font-medium text-slate-400 uppercase tracking-widest">follow us:</span>
+                    <span class="social-label mb-0">follow us:</span>
                     <div class="flex gap-4">
-                        <a href="#" class="text-slate-400 hover:text-blue-600 transition-colors"><i
+                        <a href="#" class="text-slate-600 hover:text-blue-600 transition-colors"><i
                                 data-lucide="instagram" class="w-5 h-5"></i></a>
-                        <a href="#" class="text-slate-400 hover:text-blue-600 transition-colors"><i
+                        <a href="#" class="text-slate-600 hover:text-blue-600 transition-colors"><i
                                 data-lucide="facebook" class="w-5 h-5"></i></a>
-                        <a href="#" class="text-slate-400 hover:text-blue-600 transition-colors"><i
+                        <a href="#" class="text-slate-600 hover:text-blue-600 transition-colors"><i
                                 data-lucide="youtube" class="w-5 h-5"></i></a>
-                        <a href="#" class="text-slate-400 hover:text-blue-600 transition-colors"><i
+                        <a href="#" class="text-slate-600 hover:text-blue-600 transition-colors"><i
                                 data-lucide="twitter" class="w-5 h-5"></i></a>
-                        <a href="#" class="text-slate-400 hover:text-blue-600 transition-colors"><i
+                        <a href="#" class="text-slate-600 hover:text-blue-600 transition-colors"><i
                                 data-lucide="music-2" class="w-5 h-5"></i></a>
                     </div>
                 </div>
@@ -1164,7 +1385,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
         </div>
     </footer>
 
-    <script src="js/app.js"></script>
+    <script src="js/app.js?v=1.1"></script>
     <?php echo $settings['footer_code'] ?? ''; ?>
 </body>
 

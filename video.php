@@ -119,13 +119,13 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
 
         body {
             font-family: 'Outfit', sans-serif;
-            background-color: #ffffff;
-            color: #1a1a1a;
+            background-color: #0f172a !important;
+            color: #94a3b8;
             scroll-behavior: smooth;
         }
 
         .hero-section {
-            background: var(--hero-gradient);
+            background: rgb(15, 23, 42);
             position: relative;
             min-height: 550px;
             display: flex;
@@ -136,9 +136,10 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
         }
 
         .glass-header {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(15, 23, 42, 0.98);
             backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
 
         .logo-text {
@@ -497,6 +498,120 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
         .animate-fade-up {
             animation: fade-up 0.6s ease forwards;
         }
+
+        /* High Contrast Text for Light Sections */
+        .intro-card,
+        #how-to,
+        #features,
+        #detailed-features,
+        #faq,
+        #blog {
+            color: #0f172a;
+        }
+
+        .intro-card p,
+        .step-desc,
+        .feature-card-modern p,
+        .feature-detail-text,
+        .faq-answer,
+        .text-slate-700 {
+            color: #0f172a !important;
+            font-weight: 600 !important;
+        }
+
+        .intro-card h2,
+        #how-to h3,
+        #features h4,
+        #detailed-features h3,
+        #faq .faq-question,
+        #blog h3,
+        .step-title,
+        .feature-detail-title {
+            color: #0f172a !important;
+            font-weight: 900 !important;
+        }
+
+        /* High Contrast Text for Light Sections - FINAL PRIORITY */
+        .intro-card,
+        #how-to,
+        #features,
+        #detailed-features,
+        #blog {
+            color: #000000 !important;
+        }
+
+        .intro-card .text-slate-700,
+        #how-to .text-slate-700,
+        #features .text-slate-700,
+        #detailed-features .text-slate-700,
+        #blog .text-slate-700,
+        .feature-detail-text,
+        .step-desc,
+        .feature-card-modern p,
+        .intro-card p,
+        #features p,
+        .feature-card-modern .font-medium {
+            color: #000000 !important;
+            font-weight: 600 !important;
+            font-size: 1.1rem !important;
+            line-height: 1.6;
+        }
+
+        .intro-card h2,
+        #how-to h3,
+        #features h4,
+        #detailed-features h3,
+        #blog h3,
+        .step-title,
+        .feature-detail-title {
+            color: #000000 !important;
+            font-weight: 800 !important;
+        }
+
+        /* FAQ Section - High Contrast Styling */
+        #faq,
+        .faq-item,
+        .faq-answer {
+            color: #ffffff !important;
+        }
+
+        .faq-question {
+            font-weight: 700 !important;
+            font-size: 1.25rem !important;
+            color: #3b82f6 !important;
+            /* Premium Blue */
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .faq-answer {
+            color: #ffffff !important;
+            font-weight: 700 !important;
+            font-size: 1.1rem !important;
+            line-height: 1.6;
+        }
+
+        /* Specific White Subtitles - PREMIUM CAPSULE LOOK */
+        .features-subtitle-white {
+            color: #ffffff !important;
+            font-weight: 700 !important;
+            font-size: 1.15rem !important;
+            opacity: 1 !important;
+            background: rgba(15, 23, 42, 0.9);
+            padding: 12px 32px;
+            border-radius: 9999px;
+            display: inline-block;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        #features .features-subtitle-white,
+        #how-to .features-subtitle-white,
+        section#features p.features-subtitle-white,
+        section#how-to p.features-subtitle-white {
+            color: #ffffff !important;
+        }
     </style>
 </head>
 
@@ -513,24 +628,24 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                 <?php echo htmlspecialchars($settings['site_name'] ?: 'MySeoFan'); ?>
             </a>
 
-            <div class="flex items-center gap-6 text-slate-700 font-bold text-sm uppercase tracking-wider">
+            <div class="flex items-center gap-6 text-white font-bold text-sm uppercase tracking-wider">
                 <nav class="hidden md:flex items-center gap-6">
                     <?php foreach ($headerItems as $item): ?>
                         <a href="<?php echo htmlspecialchars($item['final_url']); ?>"
-                            class="hover:text-purple-600 transition-colors">
+                            class="hover:text-[#ec4899] transition-colors">
                             <?php echo htmlspecialchars($item['label']); ?>
                         </a>
                     <?php endforeach; ?>
                 </nav>
                 <div class="relative group cursor-pointer">
-                    <div class="flex items-center gap-1 hover:text-purple-600 transition-colors uppercase">
-                        <?php echo $lang; ?> <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                    <div class="flex items-center gap-1 hover:text-[#ec4899] transition-colors uppercase">
+                        <?php echo $lang; ?> <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400"></i>
                     </div>
                     <div class="absolute right-0 top-full pt-2 hidden group-hover:block z-50">
-                        <div class="w-32 bg-white shadow-xl rounded-xl p-2 border border-gray-100">
+                        <div class="w-32 bg-slate-900 shadow-2xl rounded-xl p-2 border border-slate-800">
                             <?php foreach (['en' => '🇺🇸 EN', 'id' => '🇮🇩 ID', 'es' => '🇪🇸 ES', 'fr' => '🇫🇷 FR', 'de' => '🇩🇪 DE', 'ja' => '🇯🇵 JA'] as $code => $label): ?>
                                 <a href="?lang=<?php echo $code; ?>"
-                                    class="block px-4 py-2 text-xs hover:bg-purple-50 rounded-lg <?php echo $lang === $code ? 'text-purple-600 font-bold' : ''; ?>">
+                                    class="block px-4 py-2 text-xs hover:bg-slate-800 rounded-lg <?php echo $lang === $code ? 'text-[#ec4899] font-bold' : 'text-slate-300'; ?>">
                                     <?php echo $label; ?>
                                 </a>
                             <?php endforeach; ?>
@@ -609,9 +724,11 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
             <!-- How to Section (Redesigned) -->
             <section id="how-to" class="mb-32 animate-fade-up" style="animation-delay: 0.1s">
                 <h2 class="section-header-blue"><?php echo $t['how_to_title']; ?></h2>
-                <p class="text-center text-slate-700 font-medium text-sm mb-12 max-w-2xl mx-auto">
-                    <?php echo $t['how_to_subtitle']; ?>
-                </p>
+                <div class="text-center mb-12">
+                    <p class="features-subtitle-white max-w-2xl mx-auto">
+                        <?php echo $t['how_to_subtitle']; ?>
+                    </p>
+                </div>
 
                 <div class="grid md:grid-cols-3 gap-8">
                     <!-- Step 1 -->
@@ -668,9 +785,11 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
             <!-- Features Section (Redesigned) -->
             <section id="features" class="animate-fade-up" style="animation-delay: 0.2s">
                 <h2 class="section-header-blue"><?php echo $t['features_title']; ?></h2>
-                <p class="text-center text-slate-700 font-medium text-sm mb-12 max-w-2xl mx-auto">
-                    <?php echo $t['features_subtitle']; ?>
-                </p>
+                <div class="text-center mb-12">
+                    <p class="features-subtitle-white max-w-2xl mx-auto">
+                        <?php echo $t['features_subtitle']; ?>
+                    </p>
+                </div>
 
                 <div class="grid md:grid-cols-4 gap-6">
                     <!-- Lightning Fast -->
@@ -787,7 +906,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                         <?php if (isset($group['children']) && !empty($group['children'])): ?>
                             <?php foreach ($group['children'] as $index => $item): ?>
                                 <a href="<?php echo htmlspecialchars($item['final_url']); ?>"
-                                    class="text-sm font-semibold text-slate-700 font-medium hover:text-blue-600 transition-colors">
+                                    class="text-sm font-bold text-slate-700 hover:text-blue-600 transition-colors">
                                     <?php echo htmlspecialchars($item['label']); ?>
                                 </a>
                                 <?php if ($index < count($group['children']) - 1): ?>
@@ -801,13 +920,30 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
 
             <div class="w-full h-px bg-slate-200 my-8"></div>
 
-            <p class="text-center text-slate-400 text-xs">© <?php echo date('Y'); ?>
-                <?php echo htmlspecialchars($settings['site_name']); ?>. All rights reserved.
-            </p>
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="flex items-center gap-2">
+                    <span class="text-xs font-black text-slate-900 uppercase tracking-widest">follow us:</span>
+                    <div class="flex gap-4">
+                        <a href="#" class="text-slate-600 hover:text-blue-600 transition-colors"><i
+                                data-lucide="instagram" class="w-5 h-5"></i></a>
+                        <a href="#" class="text-slate-600 hover:text-blue-600 transition-colors"><i
+                                data-lucide="facebook" class="w-5 h-5"></i></a>
+                        <a href="#" class="text-slate-600 hover:text-blue-600 transition-colors"><i
+                                data-lucide="youtube" class="w-5 h-5"></i></a>
+                        <a href="#" class="text-slate-600 hover:text-blue-600 transition-colors"><i
+                                data-lucide="twitter" class="w-5 h-5"></i></a>
+                        <a href="#" class="text-slate-600 hover:text-blue-600 transition-colors"><i
+                                data-lucide="music-2" class="w-5 h-5"></i></a>
+                    </div>
+                </div>
+                <p class="text-slate-600 font-bold text-sm">© <?php echo date('Y'); ?>
+                    <?php echo htmlspecialchars($settings['site_name']); ?>. All rights reserved.
+                </p>
+            </div>
         </div>
     </footer>
 
-    <script src="js/app.js"></script>
+    <script src="js/app.js?v=1.1"></script>
     <?php echo $settings['footer_code'] ?? ''; ?>
 </body>
 

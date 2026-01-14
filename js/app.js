@@ -119,8 +119,8 @@ function renderSingle(data, container) {
         <div class="animate-fade-up max-w-sm mx-auto bg-white/60 backdrop-blur-2xl p-6 rounded-[2rem] border border-white/60 shadow-[0_30px_60px_rgba(0,0,0,0.12)] flex flex-col items-center gap-5 mt-6 relative overflow-hidden group">
             
             <!-- Atmospheric Glow -->
-            <div class="absolute -top-20 -left-20 w-60 h-60 bg-purple-500/20 rounded-full blur-[80px] pointer-events-none"></div>
-            <div class="absolute -bottom-20 -right-20 w-60 h-60 bg-blue-500/20 rounded-full blur-[80px] pointer-events-none"></div>
+            <div class="absolute -top-20 -left-20 w-60 h-60 bg-gradient-to-br from-violet-500/20 to-fuchsia-500/20 rounded-full blur-[80px] pointer-events-none"></div>
+            <div class="absolute -bottom-20 -right-20 w-60 h-60 bg-gradient-to-br from-pink-500/20 to-orange-500/20 rounded-full blur-[80px] pointer-events-none"></div>
 
             <div class="w-full relative z-10 transition-transform duration-500 hover:scale-[1.02] flex justify-center">
                 <div class="bg-white p-2 rounded-[1.5rem] shadow-xl border border-white/50 inline-block">
@@ -133,7 +133,7 @@ function renderSingle(data, container) {
                 </div>
             </div>
             
-            <a href="${dl}" class="relative z-10 w-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white text-center py-4 rounded-xl font-black text-lg shadow-[0_10px_30px_rgba(79,70,229,0.4)] hover:shadow-[0_20px_40px_rgba(79,70,229,0.6)] transition-all transform hover:-translate-y-1 active:translate-y-0.5 flex items-center justify-center gap-2 group">
+            <a href="${dl}" class="relative z-10 w-full bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-600 text-white text-center py-4 rounded-xl font-black text-lg shadow-[0_10px_30px_rgba(219,39,119,0.3)] hover:shadow-[0_20px_40px_rgba(219,39,119,0.5)] transition-all transform hover:-translate-y-1 active:translate-y-0.5 flex items-center justify-center gap-2 group">
                 <span class="bg-white/20 p-1.5 rounded-full group-hover:rotate-12 transition-transform">
                     <i data-lucide="download" class="w-5 h-5"></i>
                 </span>
@@ -167,12 +167,12 @@ function renderMultiple(mediaList, container) {
                     ${mediaHtml}
                     
                     <!-- Index Badge -->
-                    <div class="absolute top-4 left-4 bg-white/90 backdrop-blur-md text-slate-800 text-xs font-black px-3 py-1.5 rounded-xl shadow-lg border border-white/50 z-20">
+                    <div class="absolute top-4 left-4 bg-gradient-to-br from-violet-600 to-pink-600 text-white text-xs font-black px-3 py-1.5 rounded-xl shadow-lg border border-white/30 z-20">
                         #${String(index + 1).padStart(2, '0')}
                     </div>
                     
                     <!-- Type Badge -->
-                    <div class="absolute top-4 right-4 bg-black/50 backdrop-blur-md text-white p-2.5 rounded-full z-20 border border-white/10">
+                    <div class="absolute top-4 right-4 bg-black/40 backdrop-blur-md text-white p-2.5 rounded-full z-20 border border-white/10">
                         <i data-lucide="${icon}" class="w-4 h-4"></i>
                     </div>
 
@@ -182,7 +182,7 @@ function renderMultiple(mediaList, container) {
 
                 <!-- Action Area -->
                 <div class="p-5 relative z-20 bg-white">
-                    <a href="${dl}" class="w-full bg-slate-900 hover:bg-blue-600 text-white py-4 rounded-xl font-bold text-sm shadow-lg transition-all flex items-center justify-center gap-2 group-hover:scale-[1.02] hover:shadow-blue-500/30">
+                    <a href="${dl}" class="w-full bg-gradient-to-r from-violet-600 to-pink-600 hover:brightness-110 text-white py-4 rounded-xl font-bold text-sm shadow-lg transition-all flex items-center justify-center gap-2 group-hover:scale-[1.02] hover:shadow-pink-500/30">
                         <i data-lucide="download" class="w-4 h-4"></i>
                         <span>Download ${item.type === 'video' ? 'Video' : 'Photo'}</span>
                     </a>
@@ -197,18 +197,21 @@ function renderMultiple(mediaList, container) {
     container.innerHTML = `
         <div class="flex flex-col gap-10 items-center animate-fade-up w-full max-w-6xl mx-auto mt-8">
             <div class="text-center space-y-2">
-                <div class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-lg px-6 py-2 rounded-full border border-white/30 shadow-lg mb-2">
+                <div class="inline-flex items-center gap-2 bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-600 px-6 py-2 rounded-full shadow-xl mb-2 border border-white/20">
                     <i data-lucide="layers" class="w-5 h-5 text-white"></i>
-                    <span class="text-white font-bold tracking-wide">ALBUM FOUND</span>
+                    <span class="text-white font-black tracking-widest text-xs">ALBUM FOUND</span>
                 </div>
                 <h3 class="text-3xl md:text-5xl font-black text-white drop-shadow-xl tracking-tight">
-                    ${mediaList.length} <span class="text-white/80 font-bold text-2xl md:text-4xl">Media Items Ready</span>
+                    <span class="bg-gradient-to-r from-fuchsia-400 to-pink-400 bg-clip-text text-transparent">${mediaList.length}</span> <span class="text-white/80 font-bold text-2xl md:text-4xl text-white">Media Items Ready</span>
                 </h3>
             </div>
             ${gridHtml}
             
-            <div class="mt-8 p-6 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 text-center max-w-2xl">
-                 <p class="text-white/90 text-sm font-medium">✨ Pro Tip: You can download items individually by clicking the buttons above.</p>
+            <div class="mt-8 p-6 bg-gradient-to-br from-violet-600/20 to-pink-600/20 backdrop-blur-md rounded-2xl border border-fuchsia-500/30 text-center max-w-2xl">
+                 <p class="text-white font-medium flex items-center justify-center gap-2">
+                    <span class="bg-gradient-to-r from-violet-400 to-pink-400 bg-clip-text text-transparent font-black">✨ Pro Tip:</span> 
+                    <span class="text-white/90">You can download items individually by clicking the buttons above.</span>
+                 </p>
             </div>
         </div>`;
 

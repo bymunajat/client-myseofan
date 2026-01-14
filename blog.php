@@ -111,9 +111,10 @@ $pageIdentifier = 'blog';
         }
 
         .glass-header {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(15, 23, 42, 0.98);
             backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
 
         .logo-text {
@@ -155,7 +156,10 @@ $pageIdentifier = 'blog';
         .footer-logo-text {
             font-size: 2.25rem;
             font-weight: 800;
-            color: #3b82f6;
+            background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .footer-logo-icon {
@@ -175,7 +179,7 @@ $pageIdentifier = 'blog';
         .footer-link {
             color: #475569;
             font-size: 0.8125rem;
-            font-weight: 600;
+            font-weight: 700;
             transition: color 0.2s;
             text-decoration: none;
         }
@@ -193,9 +197,19 @@ $pageIdentifier = 'blog';
 
         .copyright-text {
             text-align: center;
-            color: #94a3b8;
-            font-size: 0.6875rem;
-            font-weight: 600;
+            color: #64748b;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .social-label {
+            text-align: center;
+            color: #1e293b;
+            font-size: 0.875rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            letter-spacing: 0.05em;
         }
     </style>
     <?php echo $settings['header_code'] ?? ''; ?>
@@ -214,24 +228,35 @@ $pageIdentifier = 'blog';
                 <?php echo htmlspecialchars($settings['site_name'] ?: 'MySeoFan'); ?>
             </a>
 
-            <div class="flex items-center gap-6 text-slate-700 font-bold text-sm uppercase tracking-wider">
-                <nav class="hidden md:flex items-center gap-6">
+            <div class="flex items-center gap-6 text-white font-bold text-sm uppercase tracking-wider">
+                <nav class="hidden lg:flex items-center gap-6">
+                    <a href="video.php?lang=<?php echo $lang; ?>"
+                        class="hover:text-[#ec4899] transition-colors">Video</a>
+                    <a href="photo.php?lang=<?php echo $lang; ?>"
+                        class="hover:text-[#ec4899] transition-colors">Photo</a>
+                    <a href="reels.php?lang=<?php echo $lang; ?>"
+                        class="hover:text-[#ec4899] transition-colors">Reels</a>
+                    <a href="igtv.php?lang=<?php echo $lang; ?>"
+                        class="hover:text-[#ec4899] transition-colors">IGTV</a>
+                    <a href="carousel.php?lang=<?php echo $lang; ?>"
+                        class="hover:text-[#ec4899] transition-colors">Carousel</a>
+                    <div class="w-px h-4 bg-slate-700 mx-2"></div>
                     <?php foreach ($headerItems as $item): ?>
                         <a href="<?php echo htmlspecialchars($item['final_url']); ?>"
-                            class="hover:text-purple-600 transition-colors">
+                            class="hover:text-[#ec4899] transition-colors">
                             <?php echo htmlspecialchars($item['label']); ?>
                         </a>
                     <?php endforeach; ?>
                 </nav>
                 <div class="relative group cursor-pointer">
-                    <div class="flex items-center gap-1 hover:text-purple-600 transition-colors uppercase">
-                        <?php echo $lang; ?> <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                    <div class="flex items-center gap-1 hover:text-[#ec4899] transition-colors uppercase">
+                        <?php echo $lang; ?> <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400"></i>
                     </div>
                     <div class="absolute right-0 top-full pt-2 hidden group-hover:block z-50">
-                        <div class="w-32 bg-white shadow-xl rounded-xl p-2 border border-gray-100">
+                        <div class="w-32 bg-slate-900 shadow-2xl rounded-xl p-2 border border-slate-800">
                             <?php foreach (['en' => '🇺🇸 EN', 'id' => '🇮🇩 ID', 'es' => '🇪🇸 ES', 'fr' => '🇫🇷 FR', 'de' => '🇩🇪 DE', 'ja' => '🇯🇵 JA'] as $code => $label): ?>
                                 <a href="?lang=<?php echo $code; ?>"
-                                    class="block px-4 py-2 text-xs hover:bg-purple-50 rounded-lg <?php echo $lang === $code ? 'text-purple-600 font-bold' : ''; ?>">
+                                    class="block px-4 py-2 text-xs hover:bg-slate-800 rounded-lg <?php echo $lang === $code ? 'text-[#ec4899] font-bold' : 'text-slate-200'; ?>">
                                     <?php echo $label; ?>
                                 </a>
                             <?php endforeach; ?>
@@ -331,19 +356,21 @@ $pageIdentifier = 'blog';
                 </div>
             <?php endforeach; ?>
 
+            <div class="footer-divider"></div>
+
             <div class="flex flex-col md:flex-row items-center justify-between gap-6">
                 <div class="flex items-center gap-2">
-                    <span class="text-sm font-medium text-slate-400 uppercase tracking-widest">follow us:</span>
+                    <span class="social-label mb-0">follow us:</span>
                     <div class="flex gap-4">
-                        <a href="#" class="text-slate-400 hover:text-blue-600 transition-colors"><i
+                        <a href="#" class="text-slate-600 hover:text-blue-600 transition-colors"><i
                                 data-lucide="instagram" class="w-5 h-5"></i></a>
-                        <a href="#" class="text-slate-400 hover:text-blue-600 transition-colors"><i
+                        <a href="#" class="text-slate-600 hover:text-blue-600 transition-colors"><i
                                 data-lucide="facebook" class="w-5 h-5"></i></a>
-                        <a href="#" class="text-slate-400 hover:text-blue-600 transition-colors"><i
+                        <a href="#" class="text-slate-600 hover:text-blue-600 transition-colors"><i
                                 data-lucide="youtube" class="w-5 h-5"></i></a>
-                        <a href="#" class="text-slate-400 hover:text-blue-600 transition-colors"><i
+                        <a href="#" class="text-slate-600 hover:text-blue-600 transition-colors"><i
                                 data-lucide="twitter" class="w-5 h-5"></i></a>
-                        <a href="#" class="text-slate-400 hover:text-blue-600 transition-colors"><i
+                        <a href="#" class="text-slate-600 hover:text-blue-600 transition-colors"><i
                                 data-lucide="music-2" class="w-5 h-5"></i></a>
                     </div>
                 </div>

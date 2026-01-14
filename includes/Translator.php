@@ -9,19 +9,46 @@ class Translator
     private static $translator = null;
     private static $cache = [];
 
+    // Optimized Preloader: Loads all translations for a language in ONE query
+    public static function preload($targetLang)
+    {
+        if ($targetLang === 'en')
+            return;
+
+        global $pdo;
+        if ($pdo) {
+            try {
+                $stmt = $pdo->prepare("SELECT hash, translated_text FROM translation_cache WHERE target_lang = ?");
+                $stmt->execute([$targetLang]);
+                $results = $stmt->fetchAll(\PDO::FETCH_KEY_PAIR); // Fetch as [hash => text]
+
+                if ($results) {
+                    // Merge into memory cache
+                    self::$cache = array_merge(self::$cache, $results);
+                }
+            } catch (\Exception $e) {
+                // Silent fail
+            }
+        }
+    }
+
     public static function translate($text, $targetLang = 'en')
     {
         if ($targetLang === 'en' || empty($text)) {
             return $text;
         }
 
-        // 1. Check Memory Cache
+        // 1. Check Memory Cache (Hit mostly here after preload)
         $cacheKey = md5($text . $targetLang);
+        // Note: The preloader likely keyed by 'hash' which IS the md5. 
+        // We used FETCH_KEY_PAIR so $results is [hash => text].
+        // So checking self::$cache[$cacheKey] works perfectly.
+
         if (isset(self::$cache[$cacheKey])) {
             return self::$cache[$cacheKey];
         }
 
-        // 2. Check Database Cache
+        // 2. Check Database Cache (Fallback for un-preloaded items)
         global $pdo;
         if ($pdo) {
             try {

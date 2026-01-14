@@ -7,6 +7,10 @@ require_once 'includes/Translator.php';
 $lang = $_GET['lang'] ?? 'en';
 $pageIdentifier = 'index';
 
+// Optmization: Preload all translations for this language into memory
+// This reduces 60+ DB queries to just 1 query per page load
+Translator::preload($lang);
+
 // 2. Fetch Data
 $settings = getSiteSettings($pdo);
 $translations = getTranslations($pdo, $lang);
@@ -953,6 +957,115 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
             </section>
         </div>
     </main>
+
+    <!-- Latest Articles -->
+    <section id="blog" class="py-20 bg-white">
+        <div class="max-w-6xl mx-auto px-6">
+            <h2 class="section-header-blue text-center mb-12">Latest Articles</h2>
+
+            <?php
+            // Fetch latest posts with Smart Fallback
+            try {
+                // 1. Native
+                $stmt = $pdo->prepare("SELECT * FROM blog_posts WHERE lang_code = ? AND status = 'published' ORDER BY created_at DESC LIMIT 6"); // Fetch more to allow merging
+                $stmt->execute([$lang]);
+                $nativePosts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                $latest_posts = $nativePosts;
+
+                // 2. Fallback if not EN
+                if ($lang !== 'en') {
+                    $stmt = $pdo->prepare("SELECT * FROM blog_posts WHERE lang_code = 'en' AND status = 'published' ORDER BY created_at DESC LIMIT 6");
+                    $stmt->execute();
+                    $englishPosts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                    $existingGroups = array_column($nativePosts, 'translation_group');
+
+                    foreach ($englishPosts as $enPost) {
+                        if (empty($enPost['translation_group']) || !in_array($enPost['translation_group'], $existingGroups)) {
+                            // On-the-fly translate
+                            $enPost['title'] = Translator::translate($enPost['title'], $lang);
+                            $enPost['excerpt'] = Translator::translate($enPost['excerpt'], $lang);
+                            $latest_posts[] = $enPost;
+                        }
+                    }
+
+                    // 3. Sort & Limit
+                    usort($latest_posts, function ($a, $b) {
+                        return strtotime($b['created_at']) <=> strtotime($a['created_at']);
+                    });
+
+                    $latest_posts = array_slice($latest_posts, 0, 3);
+                }
+            } catch (Exception $e) {
+                $latest_posts = [];
+            }
+            ?>
+
+            <?php if (!empty($latest_posts)): ?>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <?php foreach ($latest_posts as $post): ?>
+                        <article
+                            class="bg-white rounded-2xl shadow-lg shadow-gray-100 overflow-hidden border border-gray-100 hover:-translate-y-2 transition-transform duration-300">
+                            <!-- Thumbnail -->
+                            <?php if (!empty($post['thumbnail'])): ?>
+                                <a href="blog-detail.php?slug=<?php echo htmlspecialchars($post['slug']); ?>"
+                                    class="block h-48 overflow-hidden">
+                                    <img src="<?php echo htmlspecialchars($post['thumbnail']); ?>"
+                                        alt="<?php echo htmlspecialchars($post['title']); ?>" class="w-full h-full object-cover">
+                                </a>
+                            <?php else: ?>
+                                <a href="blog-detail.php?slug=<?php echo htmlspecialchars($post['slug']); ?>"
+                                    class="block h-48 bg-gradient-to-br from-emerald-400 to-cyan-500 flex items-center justify-center">
+                                    <i data-lucide="image" class="w-12 h-12 text-white/50"></i>
+                                </a>
+                            <?php endif; ?>
+
+                            <div class="p-6">
+                                <div class="flex items-center gap-2 mb-3">
+                                    <span
+                                        class="bg-emerald-50 text-emerald-600 text-xs font-bold px-2 py-1 rounded-md uppercase tracking-wider">
+                                        <?php echo htmlspecialchars($post['category'] ?? 'General'); ?>
+                                    </span>
+                                    <span class="text-xs text-gray-400 font-medium">
+                                        <?php echo date('M d, Y', strtotime($post['created_at'])); ?>
+                                    </span>
+                                </div>
+
+                                <h3 class="text-xl font-bold text-gray-800 mb-2 leading-tight line-clamp-2">
+                                    <a href="blog-detail.php?slug=<?php echo htmlspecialchars($post['slug']); ?>"
+                                        class="hover:text-emerald-600 transition-colors">
+                                        <?php echo htmlspecialchars($post['title']); ?>
+                                    </a>
+                                </h3>
+
+                                <p class="text-gray-500 text-sm line-clamp-3 mb-4">
+                                    <?php echo htmlspecialchars($post['excerpt']); ?>
+                                </p>
+
+                                <a href="blog-detail.php?slug=<?php echo htmlspecialchars($post['slug']); ?>"
+                                    class="inline-flex items-center text-emerald-600 font-bold text-sm hover:gap-2 transition-all gap-1">
+                                    Read Article <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                                </a>
+                            </div>
+                        </article>
+                    <?php endforeach; ?>
+                </div>
+
+                <div class="text-center mt-12">
+                    <a href="blog.php?lang=<?php echo $lang; ?>"
+                        class="inline-block px-8 py-3 rounded-full border-2 border-emerald-500 text-emerald-600 font-bold hover:bg-emerald-50 transition-colors">
+                        View All Articles
+                    </a>
+                </div>
+            <?php else: ?>
+                <div class="text-center py-12 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
+                    <i data-lucide="file-text" class="w-12 h-12 text-gray-300 mx-auto mb-4"></i>
+                    <p class="text-gray-500 font-medium">No articles found yet.</p>
+                </div>
+            <?php endif; ?>
+        </div>
+    </section>
 
     <!-- FAQ -->
     <section id="faq" class="py-24 bg-slate-100">

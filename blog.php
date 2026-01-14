@@ -32,20 +32,46 @@ $footerItems = getMenuTree($pdo, 'footer', $lang);
 $seoHelper = new SEO_Helper($pdo, 'blog', $lang);
 
 // Fetch posts for current language (Published only)
+// 4. Fetch Posts Logic (Smart Fallback)
+// Step A: Fetch native posts for the current language
 $stmt = $pdo->prepare("SELECT * FROM blog_posts WHERE lang_code = ? AND status = 'published' ORDER BY created_at DESC");
 $stmt->execute([$lang]);
-$posts = $stmt->fetchAll();
+$nativePosts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// If no posts in current language, fetch English and Translate
-if (empty($posts) && $lang !== 'en') {
+$posts = $nativePosts;
+
+// Step B: If not English, fetch English posts to fill gaps (Partial Translation Support)
+if ($lang !== 'en') {
     $stmt = $pdo->prepare("SELECT * FROM blog_posts WHERE lang_code = 'en' AND status = 'published' ORDER BY created_at DESC");
     $stmt->execute();
-    $posts = $stmt->fetchAll();
+    $englishPosts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    foreach ($posts as &$p) {
-        $p['title'] = Translator::translate($p['title'], $lang);
-        $p['lang_code'] = $lang;
+    // Collect translation groups present in native posts
+    $existingGroups = [];
+    foreach ($nativePosts as $np) {
+        if (!empty($np['translation_group'])) {
+            $existingGroups[] = $np['translation_group'];
+        }
     }
+
+    // Merge missing English posts
+    foreach ($englishPosts as $enPost) {
+        // If this post's group is NOT in the native list, add it as a fallback
+        if (empty($enPost['translation_group']) || !in_array($enPost['translation_group'], $existingGroups)) {
+            // Translate Metadata On-the-Fly
+            $enPost['title'] = Translator::translate($enPost['title'], $lang);
+            $enPost['excerpt'] = Translator::translate($enPost['excerpt'], $lang);
+            // Mark as fallback (optional, for UI styling if needed)
+            $enPost['is_fallback'] = true;
+
+            $posts[] = $enPost;
+        }
+    }
+
+    // Step C: Re-sort merged list by Date
+    usort($posts, function ($a, $b) {
+        return strtotime($b['created_at']) <=> strtotime($a['created_at']);
+    });
 }
 
 $pageIdentifier = 'blog';

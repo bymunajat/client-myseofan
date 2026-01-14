@@ -48,19 +48,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <style>
         body {
             font-family: 'Outfit', sans-serif;
-            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 25%, #6ee7b7 50%, #86efac 100%);
+            background: #0f172a;
+            color: #f8fafc;
             min-height: 100vh;
-        }
-
-        .sidebar {
-            height: 100vh;
-            background: #065f46;
-            color: white;
-        }
-
-        .nav-active {
-            background: #047857;
-            border-left: 4px solid #34d399;
         }
     </style>
 </head>
@@ -69,10 +59,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <!-- Sidebar -->
     <?php include 'includes/sidebar.php'; ?>
 
-    <main class="flex-1 min-h-screen">
-        <header class="bg-white border-b-4 border-emerald-300 px-8 h-20 flex items-center justify-between shadow-sm">
+    <main class="flex-1 min-h-screen bg-[#0f172a]">
+        <header
+            class="bg-[#1e293b] border-b-4 border-fuchsia-500/50 px-8 h-20 flex items-center justify-between shadow-lg shadow-black/20">
             <div>
-                <h3 class="text-xl font-bold text-gray-800">Settings</h3>
+                <h3 class="text-xl font-bold text-white">Settings</h3>
             </div>
         </header>
 
@@ -80,7 +71,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
             <?php if ($message): ?>
-                <div class="bg-emerald-50 text-emerald-600 p-4 rounded-xl mb-6 font-medium">
+                <div
+                    class="bg-fuchsia-50 text-fuchsia-600 p-4 rounded-xl mb-6 font-medium border border-fuchsia-100 flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
                     <?php echo $message; ?>
                 </div>
             <?php endif; ?>
@@ -92,12 +87,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label class="block text-xs font-black text-gray-700 uppercase mb-2">Website Name</label>
                             <input type="text" name="site_name"
                                 value="<?php echo htmlspecialchars($settings['site_name'] ?? ''); ?>"
-                                class="w-full px-4 py-3 rounded-xl border-2 border-emerald-400 bg-white outline-none focus:border-emerald-600 font-bold text-black">
+                                class="w-full px-4 py-3 rounded-xl border-2 border-fuchsia-500 bg-white outline-none font-bold text-black transition-colors focus:ring-4 focus:ring-fuchsia-500/20 shadow-sm shadow-fuchsia-100">
                         </div>
                         <div>
                             <label class="block text-xs font-black text-gray-700 uppercase mb-2">Logo</label>
                             <input type="file" name="logo"
-                                class="w-full text-sm font-semibold text-black file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100">
+                                class="w-full text-sm font-semibold text-black file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-fuchsia-50 file:text-fuchsia-700 hover:file:bg-fuchsia-100 transition-colors cursor-pointer">
                             <?php if (!empty($settings['logo_path'])): ?>
                                 <img src="../<?php echo $settings['logo_path']; ?>" class="mt-2 h-10">
                             <?php endif; ?>
@@ -108,7 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div>
                             <label class="block text-xs font-black text-gray-700 uppercase mb-2">Favicon</label>
                             <input type="file" name="favicon"
-                                class="w-full text-sm font-semibold text-black file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100">
+                                class="w-full text-sm font-semibold text-black file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-fuchsia-50 file:text-fuchsia-700 hover:file:bg-fuchsia-100 transition-colors cursor-pointer">
                             <?php if (!empty($settings['favicon_path'])): ?>
                                 <img src="../<?php echo $settings['favicon_path']; ?>" class="mt-2 h-8">
                             <?php endif; ?>
@@ -120,18 +115,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             Google
                             Analytics)</label>
                         <textarea name="header_code" rows="4"
-                            class="w-full px-4 py-3 rounded-xl border-2 border-emerald-400 bg-white outline-none focus:border-emerald-600 font-mono text-sm font-semibold text-black"><?php echo htmlspecialchars($settings['header_code'] ?? ''); ?></textarea>
+                            class="w-full px-4 py-3 rounded-xl border-2 border-fuchsia-500 bg-white outline-none font-mono text-sm font-semibold text-black transition-colors focus:ring-4 focus:ring-fuchsia-500/20 shadow-sm shadow-fuchsia-100"><?php echo htmlspecialchars($settings['header_code'] ?? ''); ?></textarea>
                     </div>
 
                     <div>
                         <label class="block text-xs font-black text-gray-700 uppercase mb-2">Footer Code
                             Injection</label>
                         <textarea name="footer_code" rows="4"
-                            class="w-full px-4 py-3 rounded-xl border-2 border-emerald-400 bg-white outline-none focus:border-emerald-600 font-mono text-sm font-semibold text-black"><?php echo htmlspecialchars($settings['footer_code'] ?? ''); ?></textarea>
+                            class="w-full px-4 py-3 rounded-xl border-2 border-fuchsia-500 bg-white outline-none font-mono text-sm font-semibold text-black transition-colors focus:ring-4 focus:ring-fuchsia-500/20 shadow-sm shadow-fuchsia-100"><?php echo htmlspecialchars($settings['footer_code'] ?? ''); ?></textarea>
                     </div>
 
                     <button type="submit"
-                        class="bg-emerald-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-100">
+                        class="bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-600 text-white px-8 py-3 rounded-xl font-bold hover:shadow-lg hover:shadow-fuchsia-500/40 transition-all shadow-md shadow-fuchsia-900/20">
                         Save Changes
                     </button>
                 </form>

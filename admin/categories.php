@@ -94,21 +94,22 @@ if ($action === 'list') {
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Outfit', sans-serif; background: #f3f4f6; min-height: 100vh; }
-        .sidebar { height: 100vh; background: #111827; color: white; }
-        .nav-active { background: #047857; border-left: 4px solid #34d399; }
+        body { font-family: 'Outfit', sans-serif; background: #0f172a; min-height: 100vh; }
     </style>
 </head>
-<body class="flex bg-gray-50">
+<body class="flex bg-[#0f172a]">
     <?php include 'includes/sidebar.php'; ?>
 
     <main class="flex-1 min-h-screen">
-        <header class="bg-white border-b px-8 h-20 flex items-center justify-between shadow-sm">
+        <header class="bg-[#1e293b] border-b-4 border-fuchsia-500/50 px-8 h-20 flex items-center justify-between shadow-lg shadow-black/20">
             <div>
-                <h3 class="text-xl font-bold text-gray-800">Post Categories</h3>
-                <p class="text-xs text-gray-500 mt-0.5">Organize your content</p>
+                <h3 class="text-xl font-bold text-white">Post Categories</h3>
+                <p class="text-xs text-gray-400 mt-0.5">Organize your content</p>
             </div>
-            <a href="?action=add&lang_code=<?php echo $_curr_lang; ?>" class="bg-emerald-600 text-white px-6 py-2 rounded-xl font-bold hover:bg-emerald-700 transition-all">+ New Category</a>
+            <a href="?action=add&lang_code=<?php echo $_curr_lang; ?>" class="bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-600 text-white px-6 py-2 rounded-xl font-bold hover:shadow-lg hover:shadow-fuchsia-500/40 hover:scale-105 transition-all shadow-md shadow-fuchsia-900/20 flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="3" d="M12 4v16m8-8H4"/></svg>
+                New Category
+            </a>
         </header>
 
         <div class="p-8">
@@ -124,7 +125,7 @@ if ($action === 'list') {
                 <div class="flex-1">
                     <div class="flex items-center gap-2 mb-6 overflow-x-auto pb-2 scrollbar-thin">
                         <?php foreach ($available_langs as $code => $l): ?>
-                            <a href="?filter_lang=<?php echo $code; ?>" class="px-5 py-2.5 rounded-2xl font-bold transition-all flex items-center gap-2 whitespace-nowrap shadow-sm <?php echo $_curr_lang === $code ? 'bg-emerald-600 text-white shadow-emerald-200' : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-100'; ?>">
+                            <a href="?filter_lang=<?php echo $code; ?>" class="px-5 py-2.5 rounded-2xl font-bold transition-all flex items-center gap-2 whitespace-nowrap shadow-sm <?php echo $_curr_lang === $code ? 'bg-fuchsia-600 text-white shadow-fuchsia-200' : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-100'; ?>">
                                 <span class="text-xs uppercase"><?php echo $code; ?></span>
                                 <span><?php echo $l['label']; ?></span>
                             </a>

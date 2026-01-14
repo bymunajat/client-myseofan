@@ -41,19 +41,9 @@ if (is_dir($uploadsDir)) {
     <style>
         body {
             font-family: 'Outfit', sans-serif;
-            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 25%, #6ee7b7 50%, #86efac 100%);
+            background: #0f172a;
+            color: #f8fafc;
             min-height: 100vh;
-        }
-
-        .sidebar {
-            height: 100vh;
-            background: #065f46;
-            color: white;
-        }
-
-        .nav-active {
-            background: #047857;
-            border-left: 4px solid #34d399;
         }
     </style>
 </head>
@@ -61,11 +51,12 @@ if (is_dir($uploadsDir)) {
 <body class="flex">
     <?php include 'includes/sidebar.php'; ?>
 
-    <main class="flex-1 min-h-screen">
-        <header class="bg-white border-b-4 border-emerald-300 px-8 h-20 flex items-center justify-between shadow-sm">
+    <main class="flex-1 min-h-screen bg-[#0f172a]">
+        <header
+            class="bg-[#1e293b] border-b-4 border-fuchsia-500/50 px-8 h-20 flex items-center justify-between shadow-lg shadow-black/20">
             <div>
-                <h3 class="text-xl font-bold text-gray-800">Media Library</h3>
-                <p class="text-xs text-gray-500 mt-0.5">Upload and manage images and files</p>
+                <h3 class="text-xl font-bold text-white">Media Library</h3>
+                <p class="text-xs text-gray-400 mt-0.5">Upload and manage images and files</p>
             </div>
         </header>
 

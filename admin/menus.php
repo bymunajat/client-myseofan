@@ -112,19 +112,10 @@ $page_title = ucfirst($location) . " Menu Manager";
     <style>
         body {
             font-family: 'Outfit', sans-serif;
-            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 25%, #6ee7b7 50%, #86efac 100%);
+            background: #0f172a;
+            /* Slate 900 */
+            color: #f8fafc;
             min-height: 100vh;
-        }
-
-        .sidebar {
-            height: 100vh;
-            background: #065f46;
-            color: white;
-        }
-
-        .nav-active {
-            background: #047857;
-            border-left: 4px solid #34d399;
         }
 
         .nested-sortable {
@@ -146,17 +137,18 @@ $page_title = ucfirst($location) . " Menu Manager";
 <body class="flex">
     <?php include 'includes/sidebar.php'; ?>
 
-    <main class="flex-1 min-h-screen">
-        <header class="bg-white border-b-4 border-emerald-300 px-8 h-20 flex items-center justify-between shadow-sm">
+    <main class="flex-1 min-h-screen bg-[#0f172a]">
+        <header
+            class="bg-[#1e293b] border-b-4 border-fuchsia-500/50 px-8 h-20 flex items-center justify-between shadow-lg shadow-black/20">
             <div>
-                <h3 class="text-xl font-bold text-gray-800">
+                <h3 class="text-xl font-bold text-white">
                     <?php echo $page_title; ?>
                 </h3>
-                <p class="text-xs text-gray-500 mt-0.5">Configure header and footer navigation</p>
+                <p class="text-xs text-gray-400 mt-0.5">Configure header and footer navigation</p>
             </div>
             <div class="flex items-center gap-4">
                 <button onclick="saveMenu()" id="saveBtn"
-                    class="bg-emerald-600 text-white px-6 py-2 rounded-xl font-bold hover:bg-emerald-700 transition-all">
+                    class="bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-600 text-white px-6 py-2 rounded-xl font-bold hover:shadow-lg hover:shadow-fuchsia-500/40 hover:scale-105 transition-all shadow-md shadow-fuchsia-900/20">
                     Save Menu
                 </button>
             </div>
@@ -174,10 +166,10 @@ $page_title = ucfirst($location) . " Menu Manager";
                         <div class="max-h-60 overflow-y-auto space-y-2 mb-4 pr-2">
                             <?php foreach ($availPages as $p): ?>
                                 <label class="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
-                                    <input type="checkbox" class="page-checkbox w-4 h-4 text-emerald-600 rounded"
+                                    <input type="checkbox" class="page-checkbox w-4 h-4 text-fuchsia-600 rounded focus:ring-fuchsia-500 border-gray-300"
                                         data-id="<?php echo $p['id']; ?>"
                                         data-title="<?php echo htmlspecialchars($p['title']); ?>">
-                                    <span class="text-sm text-gray-600">
+                                    <span class="text-sm text-gray-700 font-bold">
                                         <?php echo htmlspecialchars($p['title']); ?>
                                     </span>
                                 </label>
@@ -252,10 +244,10 @@ $page_title = ucfirst($location) . " Menu Manager";
                                     <div class="flex items-center justify-between p-3 bg-gray-50 rounded-t-lg">
                                         <div class="flex items-center gap-3">
                                             <span class="cursor-move text-gray-400">☰</span>
-                                            <span class="font-bold text-gray-700 item-label-display">
+                                            <span class="font-bold text-gray-900 item-label-display">
                                                 <?php echo htmlspecialchars($item['label']); ?>
                                             </span>
-                                            <span class="text-xs bg-gray-200 text-gray-500 px-2 py-0.5 rounded">
+                                            <span class="text-xs bg-gray-100 text-gray-500 font-bold px-2 py-0.5 rounded border border-gray-200">
                                                 <?php echo $typeLabel; ?>
                                             </span>
                                         </div>

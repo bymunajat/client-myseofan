@@ -206,14 +206,14 @@ if ($pdo) {
                                     </svg>
                                 </span>
                                 <div>
-                                    <h2 class="text-xl font-bold text-gray-800 capitalize tracking-tight">
+                                    <h2 class="text-xl font-bold text-black capitalize tracking-tight">
                                         <?php echo $page; ?> Page
                                     </h2>
-                                    <p class="text-xs text-gray-500 font-medium">SEO Configuration</p>
+                                    <p class="text-xs text-gray-700 font-bold">SEO Configuration</p>
                                 </div>
                             </div>
                             <div
-                                class="text-xs font-bold text-gray-500 bg-gray-100 px-3 py-1 rounded-full uppercase tracking-wider">
+                                class="text-xs font-black text-gray-900 bg-gray-100 px-3 py-1 rounded-full uppercase tracking-wider">
                                 Static
                             </div>
                         </div>
@@ -237,31 +237,31 @@ if ($pdo) {
                                     </div>
                                     <div class="grid md:grid-cols-2 gap-6">
                                         <div>
-                                            <label class="block text-xs font-black text-gray-400 uppercase mb-2">Meta
+                                            <label class="block text-xs font-black text-gray-800 uppercase mb-2">Meta
                                                 Title</label>
                                             <input type="text" name="meta_title"
                                                 value="<?php echo htmlspecialchars($data['meta_title'] ?? ''); ?>"
-                                                class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 bg-white outline-none focus:border-fuchsia-500 transition-all font-bold text-gray-800 placeholder-gray-400">
+                                                class="w-full px-4 py-3 rounded-xl border-2 border-fuchsia-500 bg-white outline-none transition-all font-bold text-gray-900 placeholder-gray-400 focus:ring-4 focus:ring-fuchsia-500/20 shadow-sm shadow-fuchsia-100">
                                         </div>
                                         <div>
-                                            <label class="block text-xs font-black text-gray-400 uppercase mb-2">OG Image
+                                            <label class="block text-xs font-black text-gray-800 uppercase mb-2">OG Image
                                                 URL</label>
                                             <input type="text" name="og_image"
                                                 value="<?php echo htmlspecialchars($data['og_image'] ?? ''); ?>"
-                                                class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 bg-white outline-none focus:border-fuchsia-500 transition-all font-semibold text-gray-800 placeholder-gray-400">
+                                                class="w-full px-4 py-3 rounded-xl border-2 border-fuchsia-500 bg-white outline-none transition-all font-semibold text-gray-900 placeholder-gray-400 focus:ring-4 focus:ring-fuchsia-500/20 shadow-sm shadow-fuchsia-100">
                                         </div>
                                     </div>
                                     <div>
-                                        <label class="block text-xs font-black text-gray-400 uppercase mb-2">Meta
+                                        <label class="block text-xs font-black text-gray-800 uppercase mb-2">Meta
                                             Description</label>
                                         <textarea name="meta_description" rows="3"
-                                            class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 bg-white outline-none focus:border-fuchsia-500 transition-all font-semibold text-gray-800 leading-relaxed placeholder-gray-400"><?php echo htmlspecialchars($data['meta_description'] ?? ''); ?></textarea>
+                                            class="w-full px-4 py-3 rounded-xl border-2 border-fuchsia-500 bg-white outline-none transition-all font-semibold text-gray-900 leading-relaxed placeholder-gray-400 focus:ring-4 focus:ring-fuchsia-500/20 shadow-sm shadow-fuchsia-100"><?php echo htmlspecialchars($data['meta_description'] ?? ''); ?></textarea>
                                     </div>
                                     <div>
-                                        <label class="block text-xs font-black text-gray-400 uppercase mb-2">Schema
+                                        <label class="block text-xs font-black text-gray-800 uppercase mb-2">Schema
                                             (JSON-LD)</label>
                                         <textarea name="schema_markup" rows="2"
-                                            class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 bg-white outline-none focus:border-fuchsia-500 transition-all font-mono text-xs font-semibold text-gray-600 placeholder-gray-400"><?php echo htmlspecialchars($data['schema_markup'] ?? ''); ?></textarea>
+                                            class="w-full px-4 py-3 rounded-xl border-2 border-fuchsia-500 bg-white outline-none transition-all font-mono text-xs font-semibold text-gray-900 placeholder-gray-400 focus:ring-4 focus:ring-fuchsia-500/20 shadow-sm shadow-fuchsia-100"><?php echo htmlspecialchars($data['schema_markup'] ?? ''); ?></textarea>
                                     </div>
                                 </div>
 

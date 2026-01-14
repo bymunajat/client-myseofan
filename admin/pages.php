@@ -209,10 +209,10 @@ $page_title = "Pages";
     <?php include 'includes/sidebar.php'; ?>
 
     <main class="flex-1 min-h-screen bg-[#0f172a]">
-        <header class="bg-white border-b-4 border-fuchsia-200 px-8 h-20 flex items-center justify-between shadow-sm">
+        <header class="bg-[#1e293b] border-b-4 border-fuchsia-500/50 px-8 h-20 flex items-center justify-between shadow-lg shadow-black/20">
             <div>
-                <h3 class="text-xl font-bold text-gray-800"><?php echo $page_title; ?></h3>
-                <p class="text-xs text-gray-500 mt-0.5">Manage static pages and content</p>
+                <h3 class="text-xl font-bold text-white"><?php echo $page_title; ?></h3>
+                <p class="text-xs text-gray-400 mt-0.5">Manage static pages and content</p>
             </div>
             <div class="flex items-center gap-4">
                 <?php if ($action === 'list'): ?>
@@ -225,9 +225,9 @@ $page_title = "Pages";
                     </a>
                 <?php else: ?>
                     <a href="?action=list&filter_lang=<?php echo $_curr_lang; ?>"
-                        class="text-gray-500 hover:text-gray-800 font-bold flex items-center gap-1">
+                        class="bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-600 text-white px-5 py-2.5 rounded-xl font-bold shadow-lg shadow-fuchsia-500/30 hover:shadow-fuchsia-500/50 hover:scale-[1.02] transition-all text-sm flex items-center gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                            <path stroke-width="3" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                         </svg>
                         Back to List
                     </a>
@@ -285,38 +285,24 @@ $page_title = "Pages";
                             <?php foreach ($pages as $p): ?>
                                 <tr data-id="<?php echo $p['id']; ?>" class="group hover:bg-gray-50/50 transition-colors">
                                     <td class="px-6 py-5 border-r border-gray-50">
-                                        <div class="flex items-center justify-center text-gray-500 font-bold">
+                                        <div class="flex items-center justify-center text-gray-400 font-bold">
                                             <span class="text-xs font-mono">#<?php echo $p['id']; ?></span>
                                         </div>
                                     </td>
                                     <td class="px-8 py-5">
-                                        <div class="font-bold text-gray-800 text-lg">
+                                        <div class="font-bold text-gray-900 text-lg">
                                             <?php echo htmlspecialchars($p['title']); ?>
                                         </div>
-                                    <td class="px-6 py-5 border-r border-slate-700/50">
-                                        <div class="flex items-center justify-center text-gray-500 font-bold">
-                                            <span class="text-xs font-mono">#
-                                                <?php echo $p['id']; ?>
-                                            </span>
+                                        <div class="text-xs font-bold text-gray-400 font-mono mt-1">
+                                            /<?php echo htmlspecialchars($p['slug']); ?>
                                         </div>
                                     </td>
-                                    <td class="px-8 py-5">
-                                        <div class="font-bold text-gray-800 text-lg">
-                                            <?php echo htmlspecialchars($p['title']); ?>
-                                        </div>
-                                        <div class="text-xs text-fuchsia-600 font-mono mt-0.5">
-                                            /<?php echo htmlspecialchars($p['slug'] ?? ''); ?>
-                                        </div>
-                                    </td>
-                                    <td class="px-8 py-5 text-right flex items-center justify-end gap-3">
-
-
-                                        <a href="?action=edit&id=<?php echo $p['id']; ?>"
-                                            class="text-sm font-bold text-fuchsia-600 hover:text-fuchsia-700 bg-fuchsia-50 hover:bg-fuchsia-100 px-4 py-1.5 rounded-lg transition-colors border border-fuchsia-200">Edit</a>
-
+                                    <td class="px-8 py-5 text-right space-x-4">
+                                        <a href="?action=edit&id=<?php echo $p['id']; ?>&filter_lang=<?php echo $_curr_lang; ?>"
+                                            class="text-emerald-600 hover:text-emerald-800 font-bold text-sm uppercase tracking-wider">Edit</a>
                                         <a href="javascript:void(0);"
-                                            onclick="confirmDelete('?action=delete&id=<?php echo $p['id']; ?>', 'This page will be permanently deleted.')"
-                                            class="text-sm font-bold text-red-400 hover:text-red-600 hover:bg-red-50 px-4 py-1.5 rounded-lg transition-colors">Delete</a>
+                                            onclick="confirmDelete('?action=delete&id=<?php echo $p['id']; ?>&filter_lang=<?php echo $_curr_lang; ?>', 'Are you sure? This cannot be undone.')"
+                                            class="text-red-400 hover:text-red-600 font-bold text-sm uppercase tracking-wider">Delete</a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

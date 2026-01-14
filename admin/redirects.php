@@ -61,27 +61,24 @@ if ($action === 'edit' && $id) {
     <style>
         body {
             font-family: 'Outfit', sans-serif;
-            background: #f9fafb;
-        }
-
-        .nav-active {
-            background: #065f46;
-            border-left: 4px solid #34d399;
+            background: #0f172a;
+            color: #f8fafc;
+            min-height: 100vh;
         }
     </style>
 </head>
 
 <body class="flex">
     <?php include 'includes/sidebar.php'; ?>
-    <main class="flex-1 min-h-screen pb-20">
+    <main class="flex-1 min-h-screen pb-20 bg-[#0f172a]">
         <header
-            class="bg-white border-b border-gray-100 px-8 h-20 flex items-center justify-between shadow-sm sticky top-0 z-10">
+            class="bg-[#1e293b] border-b-4 border-fuchsia-500/50 px-8 h-20 flex items-center justify-between shadow-lg shadow-black/20 sticky top-0 z-10">
             <div>
-                <h1 class="text-xl font-bold text-gray-800">Redirects Manager</h1>
+                <h1 class="text-xl font-bold text-white">Redirects Manager</h1>
                 <p class="text-xs text-gray-400">Manage 301/302 URL redirects</p>
             </div>
             <a href="?action=add"
-                class="bg-emerald-600 text-white px-6 py-2.5 rounded-xl font-bold text-sm hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-200">
+                class="bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-600 text-white px-6 py-2.5 rounded-xl font-bold text-sm hover:shadow-lg hover:shadow-fuchsia-500/40 transition-all shadow-md shadow-fuchsia-900/20">
                 + New Redirect
             </a>
         </header>

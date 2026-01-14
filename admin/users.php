@@ -117,19 +117,9 @@ if ($action === 'list') {
     <style>
         body {
             font-family: 'Outfit', sans-serif;
-            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 25%, #6ee7b7 50%, #86efac 100%);
+            background: #0f172a;
+            color: #f8fafc;
             min-height: 100vh;
-        }
-
-        .sidebar {
-            height: 100vh;
-            background: #065f46;
-            color: white;
-        }
-
-        .nav-active {
-            background: #047857;
-            border-left: 4px solid #34d399;
         }
     </style>
 </head>
@@ -138,14 +128,20 @@ if ($action === 'list') {
 
     <?php include 'includes/sidebar.php'; ?>
 
-    <main class="flex-1 min-h-screen">
-
+    <main class="flex-1 min-h-screen bg-[#0f172a]">
+        <header
+            class="bg-[#1e293b] border-b-4 border-fuchsia-500/50 px-8 h-20 flex items-center justify-between shadow-lg shadow-black/20">
+            <div>
+                <h3 class="text-xl font-bold text-white">Admin Management</h3>
+                <p class="text-xs text-gray-400 mt-0.5">Manage system access and roles</p>
+            </div>
+        </header>
 
         <div class="p-8">
             <!-- Alert Messages -->
             <?php if ($message): ?>
                 <div
-                    class="mb-8 p-4 bg-emerald-50 text-emerald-700 rounded-2xl border border-emerald-100 flex items-center gap-3">
+                    class="mb-8 p-4 bg-fuchsia-50 text-fuchsia-700 rounded-2xl border border-fuchsia-100 flex items-center gap-3">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -181,18 +177,18 @@ if ($action === 'list') {
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Username</label>
                                 <input type="text" name="username" required
                                     value="<?php echo htmlspecialchars($editData['username'] ?? ''); ?>"
-                                    class="w-full px-5 py-4 rounded-2xl border border-gray-100 bg-gray-50 focus:bg-white focus:border-emerald-500 outline-none transition-all font-bold text-black">
+                                    class="w-full px-5 py-4 rounded-2xl border border-gray-100 bg-gray-50 focus:bg-white focus:border-fuchsia-500 outline-none transition-all font-bold text-black focus:ring-4 focus:ring-fuchsia-500/10">
                             </div>
                             <div>
                                 <label
                                     class="block text-sm font-semibold text-gray-700 mb-2"><?php echo ($action === 'add' ? 'Password' : 'New Password (Optional)'); ?></label>
                                 <input type="password" name="password" <?php echo ($action === 'add' ? 'required' : ''); ?>
-                                    class="w-full px-5 py-4 rounded-2xl border border-gray-100 bg-gray-50 focus:bg-white focus:border-emerald-500 outline-none transition-all font-semibold text-black">
+                                    class="w-full px-5 py-4 rounded-2xl border border-gray-100 bg-gray-50 focus:bg-white focus:border-fuchsia-500 outline-none transition-all font-semibold text-black focus:ring-4 focus:ring-fuchsia-500/10">
                             </div>
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Role Permissions</label>
                                 <select name="role"
-                                    class="w-full px-5 py-4 rounded-2xl border border-gray-100 bg-gray-50 focus:bg-white focus:border-emerald-500 outline-none transition-all appearance-none cursor-pointer font-bold text-black">
+                                    class="w-full px-5 py-4 rounded-2xl border border-gray-100 bg-gray-50 focus:bg-white focus:border-fuchsia-500 outline-none transition-all appearance-none cursor-pointer font-bold text-black focus:ring-4 focus:ring-fuchsia-500/10">
                                     <option value="super_admin" <?php echo ($editData['role'] ?? '') === 'super_admin' ? 'selected' : ''; ?>>Super Admin</option>
                                     <option value="editor" <?php echo ($editData['role'] ?? '') === 'editor' ? 'selected' : ''; ?>>Editor</option>
                                     <option value="author" <?php echo ($editData['role'] ?? '') === 'author' ? 'selected' : ''; ?>>Author</option>
@@ -200,7 +196,7 @@ if ($action === 'list') {
                             </div>
                             <div class="flex flex-col gap-4 pt-4">
                                 <button type="submit"
-                                    class="w-full py-4 bg-emerald-600 text-white rounded-2xl font-bold hover:bg-emerald-700 shadow-xl shadow-emerald-100 transition-all">
+                                    class="w-full py-4 bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-600 text-white rounded-2xl font-bold hover:shadow-lg hover:shadow-fuchsia-500/40 transition-all shadow-md shadow-fuchsia-900/20">
                                     <?php echo ($action === 'add' ? 'Generate Account' : 'Save Changes'); ?>
                                 </button>
                                 <a href="?action=list"
@@ -215,10 +211,10 @@ if ($action === 'list') {
                 <!-- LIST VIEW (DEFAULT) -->
                 <div class="flex justify-between items-center mb-8">
                     <div>
-                        <h3 class="text-lg font-bold text-gray-700 uppercase tracking-tighter">System Administrators</h3>
+                        <h3 class="text-lg font-bold text-white uppercase tracking-tighter">System Administrators</h3>
                     </div>
                     <a href="?action=add"
-                        class="bg-gradient-to-r from-emerald-500 to-emerald-600 text-white px-8 py-3.5 rounded-2xl font-bold hover:shadow-xl hover:shadow-emerald-100 transition-all flex items-center gap-2">
+                        class="bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-600 text-white px-8 py-3.5 rounded-2xl font-bold hover:shadow-xl hover:shadow-fuchsia-500/40 transition-all flex items-center gap-2 shadow-lg shadow-fuchsia-900/20">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                         </svg>
@@ -241,7 +237,7 @@ if ($action === 'list') {
                                 </div>
                                 <div class="flex items-start justify-between mb-8 relative">
                                     <div
-                                        class="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-400 to-emerald-600 text-white flex items-center justify-center font-bold text-2xl">
+                                        class="w-16 h-16 rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-500 text-white flex items-center justify-center font-bold text-2xl shadow-lg shadow-fuchsia-500/30">
                                         <?php echo strtoupper(substr($u['username'], 0, 1)); ?>
                                     </div>
                                     <span class="px-4 py-1.5 rounded-xl text-[10px] font-bold uppercase tracking-widest <?php
@@ -260,7 +256,7 @@ if ($action === 'list') {
                                 </div>
                                 <div class="flex items-center gap-3 relative border-t border-gray-50 pt-6">
                                     <a href="?action=edit&id=<?php echo $u['id']; ?>"
-                                        class="flex-1 text-center py-3.5 text-sm font-bold text-emerald-700 bg-emerald-50 rounded-2xl hover:bg-emerald-600 hover:text-white transition-all duration-300">Edit</a>
+                                        class="flex-1 text-center py-3.5 text-sm font-bold text-fuchsia-700 bg-fuchsia-50 rounded-2xl hover:bg-fuchsia-600 hover:text-white transition-all duration-300">Edit</a>
                                     <a href="javascript:void(0);"
                                         onclick="confirmDelete('?action=delete&id=<?php echo $u['id']; ?>', 'This administrator account will be permanently deactivated.')"
                                         class="px-4 py-3.5 text-red-100 hover:text-white hover:bg-red-500 rounded-2xl transition-all duration-300 border border-red-50 bg-red-50/50">

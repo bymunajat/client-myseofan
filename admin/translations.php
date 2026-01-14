@@ -299,14 +299,16 @@ if (!empty($current_page_keys)) {
     <style>
         body {
             font-family: 'Outfit', sans-serif;
-            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 25%, #6ee7b7 50%, #86efac 100%);
+            background: #0f172a;
+            color: #f8fafc;
             min-height: 100vh;
         }
 
         .page-active {
-            background: #059669;
+            background: #d946ef;
+            /* Fuchsia 500 */
             color: white;
-            border-color: #059669;
+            border-color: #d946ef;
         }
     </style>
 </head>
@@ -314,12 +316,12 @@ if (!empty($current_page_keys)) {
 <body class="flex">
     <?php include 'includes/sidebar.php'; ?>
 
-    <main class="flex-1 min-h-screen">
+    <main class="flex-1 min-h-screen bg-[#0f172a]">
         <header
-            class="bg-white border-b-4 border-emerald-300 px-8 h-20 flex items-center justify-between shadow-sm sticky top-0 z-50">
+            class="bg-[#1e293b] border-b-4 border-fuchsia-500/50 px-8 h-20 flex items-center justify-between shadow-lg shadow-black/20 sticky top-0 z-50">
             <div>
-                <h1 class="text-xl font-bold text-gray-800">Site UI Translations</h1>
-                <p class="text-xs text-gray-500 mt-0.5">Manage multi-language content strings</p>
+                <h1 class="text-xl font-bold text-white">Site UI Translations</h1>
+                <p class="text-xs text-gray-400 mt-0.5">Manage multi-language content strings</p>
             </div>
 
             <div class="flex items-center gap-3">
@@ -329,7 +331,7 @@ if (!empty($current_page_keys)) {
                         <input type="hidden" name="action" value="autofill">
                         <input type="hidden" name="lang_code" value="<?php echo $active_lang; ?>">
                         <button type="submit"
-                            class="text-sm bg-gray-100 text-gray-600 px-4 py-2.5 rounded-xl font-bold hover:bg-emerald-50 hover:text-emerald-700 transition-all flex items-center gap-2">
+                            class="text-sm bg-slate-700 text-gray-300 px-4 py-2.5 rounded-xl font-bold hover:bg-fuchsia-600 hover:text-white transition-all flex items-center gap-2">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-width="2"
                                     d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
@@ -341,7 +343,7 @@ if (!empty($current_page_keys)) {
 
                 <a href="?seed=1"
                     onclick="return confirm('WARNING: This will reset translations to the default values. Are you sure?')"
-                    class="text-sm bg-gray-900 text-white px-5 py-2.5 rounded-xl font-bold hover:bg-emerald-600 transition-all shadow-lg hover:shadow-emerald-200">
+                    class="text-sm bg-gray-900 text-white px-5 py-2.5 rounded-xl font-bold hover:bg-red-500 transition-all shadow-lg">
                     Reset DB Keys
                 </a>
             </div>
@@ -362,7 +364,7 @@ if (!empty($current_page_keys)) {
             <div class="flex flex-wrap gap-2 mb-8 bg-white p-2 rounded-2xl shadow-sm border border-gray-100">
                 <?php foreach ($supported_langs as $code => $info): ?>
                     <a href="?lang=<?php echo $code; ?>"
-                        class="px-5 py-3 rounded-xl font-bold transition-all flex items-center gap-2 <?php echo $active_lang === $code ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-200' : 'text-gray-500 hover:bg-gray-50'; ?> text-sm">
+                        class="px-5 py-3 rounded-xl font-bold transition-all flex items-center gap-2 <?php echo $active_lang === $code ? 'bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-600 text-white shadow-lg shadow-fuchsia-500/30' : 'text-gray-500 hover:bg-gray-50'; ?> text-sm">
                         <span class="text-base"><?php echo $info['flag']; ?></span>
                         <span><?php echo $info['label']; ?></span>
                     </a>

@@ -114,8 +114,8 @@ if ($action === 'edit' && $id) {
                                 </select>
                             </div>
                             <div class="flex items-center gap-3 pt-8">
-                                <input type="checkbox" name="is_active" id="is_active" <?php echo ($editData['is_active'] ?? 1) ? 'checked' : ''; ?> class="w-5 h-5 rounded border-gray-300 text-emerald-600
-                            focus:ring-emerald-500">
+                                <input type="checkbox" name="is_active" id="is_active" <?php echo ($editData['is_active'] ?? 1) ? 'checked' : ''; ?> class="w-5 h-5 rounded border-gray-300 text-fuchsia-600
+                            focus:ring-fuchsia-500">
                                 <label for="is_active" class="text-sm font-bold text-gray-700">Is Active</label>
                             </div>
                         </div>
@@ -133,20 +133,20 @@ if ($action === 'edit' && $id) {
                     <table class="w-full text-left">
                         <thead class="bg-gray-50 border-b border-gray-100">
                             <tr>
-                                <th class="px-6 py-4 text-[10px] font-black uppercase text-gray-400">Source</th>
-                                <th class="px-6 py-4 text-[10px] font-black uppercase text-gray-400">Target</th>
-                                <th class="px-6 py-4 text-[10px] font-black uppercase text-gray-400">Type</th>
-                                <th class="px-6 py-4 text-[10px] font-black uppercase text-gray-400">Status</th>
-                                <th class="px-6 py-4 text-[10px] font-black uppercase text-gray-400 text-right">Actions</th>
+                                <th class="px-6 py-4 text-xs font-black uppercase text-black">Source</th>
+                                <th class="px-6 py-4 text-xs font-black uppercase text-black">Target</th>
+                                <th class="px-6 py-4 text-xs font-black uppercase text-black">Type</th>
+                                <th class="px-6 py-4 text-xs font-black uppercase text-black">Status</th>
+                                <th class="px-6 py-4 text-xs font-black uppercase text-black text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-50">
                             <?php foreach ($redirects as $r): ?>
                                 <tr class="hover:bg-gray-50/50 transition-colors">
-                                    <td class="px-6 py-4 font-mono text-xs font-bold text-emerald-600">
+                                    <td class="px-6 py-4 font-mono text-sm font-bold text-gray-900">
                                         <?php echo htmlspecialchars($r['source_url']); ?>
                                     </td>
-                                    <td class="px-6 py-4 font-mono text-xs font-bold text-gray-500">
+                                    <td class="px-6 py-4 font-mono text-sm font-bold text-gray-900">
                                         <?php echo htmlspecialchars($r['target_url']); ?>
                                     </td>
                                     <td class="px-6 py-4"><span class="px-2 py-1 bg-gray-100 rounded text-[10px] font-black">
@@ -154,8 +154,8 @@ if ($action === 'edit' && $id) {
                                         </span></td>
                                     <td class="px-6 py-4">
                                         <?php if ($r['is_active']): ?>
-                                            <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block mr-2"></span>
-                                            <span class="text-[10px] font-bold text-emerald-600 uppercase">Active</span>
+                                            <span class="w-2 h-2 rounded-full bg-fuchsia-500 inline-block mr-2"></span>
+                                            <span class="text-[10px] font-black text-fuchsia-700 uppercase">Active</span>
                                         <?php else: ?>
                                             <span class="w-2 h-2 rounded-full bg-gray-300 inline-block mr-2"></span>
                                             <span class="text-[10px] font-bold text-gray-400 uppercase">Inactive</span>
@@ -164,10 +164,10 @@ if ($action === 'edit' && $id) {
                                     <td class="px-6 py-4 text-right">
                                         <div class="flex justify-end gap-3">
                                             <a href="?action=edit&id=<?php echo $r['id']; ?>"
-                                                class="p-2 hover:bg-emerald-50 text-emerald-600 rounded-lg transition-all">Edit</a>
+                                                class="px-3 py-1.5 hover:bg-fuchsia-50 text-fuchsia-700 font-bold rounded-lg transition-all border border-transparent hover:border-fuchsia-100">Edit</a>
                                             <a href="javascript:void(0);"
                                                 onclick="confirmDelete('?action=delete&id=<?php echo $r['id']; ?>', 'This redirect rule will be removed.')"
-                                                class="p-2 hover:bg-red-50 text-red-500 rounded-lg transition-all">Delete</a>
+                                                class="px-3 py-1.5 hover:bg-red-50 text-red-600 font-bold rounded-lg transition-all border border-transparent hover:border-red-100">Delete</a>
                                         </div>
                                     </td>
                                 </tr>

@@ -35,146 +35,137 @@ $logs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <title>Activity Logs - MySeoFan Admin</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <style>
-        body {
-            font-family: 'Outfit', sans-serif;
-            background-color: #0f172a;
-            /* Slate 900 */
-            color: #f8fafc;
-        }
-    </style>
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css"
+        crossorigin="anonymous">
+    <!-- OVerlayScrollbars -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css"
+        crossorigin="anonymous">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
+        crossorigin="anonymous">
+    <!-- AdminLTE -->
+    <link rel="stylesheet" href="../AdminLTE/dist/css/adminlte.css">
 </head>
 
-<body class="flex bg-[#0f172a]">
+<body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
+    <div class="app-wrapper">
+        <?php include 'includes/header_lte.php'; ?>
+        <?php include 'includes/sidebar_lte.php'; ?>
 
-    <?php include 'includes/sidebar.php'; ?>
-
-    <main class="flex-1 min-h-screen relative overflow-y-auto">
-        <!-- Header -->
-        <header
-            class="bg-[#1e293b]/95 backdrop-blur-md sticky top-0 z-20 border-b border-slate-700/50 px-8 py-6 shadow-lg shadow-black/10">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h1 class="text-2xl font-black text-white tracking-tight">Activity Logs</h1>
-                    <p class="text-sm text-gray-400 font-medium mt-1">Audit trail of system activities</p>
-                </div>
-                <div class="flex items-center gap-4">
-                    <span
-                        class="bg-[#0f172a] text-gray-400 px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider border border-slate-700">
-                        Total:
-                        <?php echo number_format($total_logs); ?> Events
-                    </span>
+        <main class="app-main">
+            <div class="app-content-header">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h3 class="mb-0">Activity Logs</h3>
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-end">
+                                <li class="breadcrumb-item"><a href="dashboard.php">Home</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Logs</li>
+                            </ol>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </header>
 
-        <div class="p-8 max-w-7xl mx-auto">
-            <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
-                <table class="w-full text-left">
-                    <thead>
-                        <tr class="bg-gray-50 border-b border-gray-100">
-                            <th class="px-8 py-5 text-xs font-black text-gray-500 uppercase tracking-widest w-48">
-                                Date &
-                                Time</th>
-                            <th class="px-8 py-5 text-xs font-black text-gray-500 uppercase tracking-widest w-40">
-                                Admin
-                            </th>
-                            <th class="px-8 py-5 text-xs font-black text-gray-500 uppercase tracking-widest w-40">
-                                Action
-                            </th>
-                            <th class="px-8 py-5 text-xs font-black text-gray-500 uppercase tracking-widest">
-                                Details
-                            </th>
-                            <th
-                                class="px-8 py-5 text-xs font-black text-gray-500 uppercase tracking-widest w-32 text-right">
-                                IP Address</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-50">
-                        <?php foreach ($logs as $log): ?>
-                            <tr class="hover:bg-gray-50 transition-colors">
-                                <td class="px-8 py-5">
-                                    <span class="text-sm font-bold text-gray-900 block">
-                                        <?php echo date('M d, Y', strtotime($log['created_at'])); ?>
-                                    </span>
-                                    <span class="text-xs font-mono text-gray-400">
-                                        <?php echo date('H:i:s', strtotime($log['created_at'])); ?>
-                                    </span>
-                                </td>
-                                <td class="px-8 py-5">
-                                    <div class="flex items-center gap-2">
-                                        <div
-                                            class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 font-bold text-xs border border-gray-200">
-                                            <?php echo strtoupper(substr($log['username'] ?? '?', 0, 1)); ?>
-                                        </div>
-                                        <span class="text-sm font-bold text-gray-700">
-                                            <?php echo htmlspecialchars($log['username'] ?? 'System/Unknown'); ?>
-                                        </span>
-                                    </div>
-                                </td>
-                                <td class="px-8 py-5">
-                                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wider
-                                    <?php
-                                    if (strpos($log['action'], 'delete') !== false)
-                                        echo 'bg-red-50 text-red-600 border border-red-100';
-                                    elseif (strpos($log['action'], 'create') !== false)
-                                        echo 'bg-emerald-50 text-emerald-600 border border-emerald-100';
-                                    elseif (strpos($log['action'], 'update') !== false)
-                                        echo 'bg-blue-50 text-blue-600 border border-blue-100';
-                                    else
-                                        echo 'bg-gray-100 text-gray-600 border border-gray-200';
-                                    ?>">
-                                        <?php echo htmlspecialchars($log['action']); ?>
-                                    </span>
-                                </td>
-                                <td class="px-8 py-5">
-                                    <p class="text-sm font-medium text-gray-600 line-clamp-2"
-                                        title="<?php echo htmlspecialchars($log['details']); ?>">
-                                        <?php echo htmlspecialchars($log['details']); ?>
-                                    </p>
-                                </td>
-                                <td class="px-8 py-5 text-right">
-                                    <span
-                                        class="text-xs font-mono text-gray-400 bg-gray-50 px-2 py-1 rounded border border-gray-100">
-                                        <?php echo htmlspecialchars($log['ip_address']); ?>
-                                    </span>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
+            <div class="app-content">
+                <div class="container-fluid">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h3 class="card-title">Audit Trail</h3>
+                            <div class="card-tools">
+                                <span class="badge text-bg-secondary">Total:
+                                    <?php echo number_format($total_logs); ?></span>
+                            </div>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover align-middle">
+                                    <thead>
+                                        <tr>
+                                            <th>Date & Time</th>
+                                            <th>Admin</th>
+                                            <th>Action</th>
+                                            <th>Details</th>
+                                            <th class="text-end">IP Address</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ($logs as $log): ?>
+                                            <tr>
+                                                <td>
+                                                    <strong><?php echo date('M d, Y', strtotime($log['created_at'])); ?></strong><br>
+                                                    <small
+                                                        class="text-muted"><?php echo date('H:i:s', strtotime($log['created_at'])); ?></small>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-2"
+                                                            style="width: 30px; height: 30px; font-size: 12px; font-weight: bold;">
+                                                            <?php echo strtoupper(substr($log['username'] ?? '?', 0, 1)); ?>
+                                                        </div>
+                                                        <span><?php echo htmlspecialchars($log['username'] ?? 'System/Unknown'); ?></span>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <?php
+                                                    $badgeClass = 'text-bg-secondary';
+                                                    if (strpos($log['action'], 'delete') !== false)
+                                                        $badgeClass = 'text-bg-danger';
+                                                    elseif (strpos($log['action'], 'create') !== false)
+                                                        $badgeClass = 'text-bg-success';
+                                                    elseif (strpos($log['action'], 'update') !== false)
+                                                        $badgeClass = 'text-bg-primary';
+                                                    ?>
+                                                    <span
+                                                        class="badge <?php echo $badgeClass; ?>"><?php echo htmlspecialchars($log['action']); ?></span>
+                                                </td>
+                                                <td>
+                                                    <span title="<?php echo htmlspecialchars($log['details']); ?>">
+                                                        <?php echo htmlspecialchars($log['details']); ?>
+                                                    </span>
+                                                </td>
+                                                <td class="text-end">
+                                                    <code><?php echo htmlspecialchars($log['ip_address']); ?></code>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
 
-                        <?php if (empty($logs)): ?>
-                            <tr>
-                                <td colspan="5" class="px-8 py-16 text-center text-gray-400">
-                                    <i data-lucide="clipboard-list" class="w-12 h-12 mx-auto mb-3 opacity-20"></i>
-                                    <p class="text-sm font-bold">No activity recorded yet.</p>
-                                </td>
-                            </tr>
+                                        <?php if (empty($logs)): ?>
+                                            <tr>
+                                                <td colspan="5" class="text-center py-5 text-muted">
+                                                    <i class="bi bi-clipboard-x display-4"></i>
+                                                    <p class="mt-2">No activity recorded yet.</p>
+                                                </td>
+                                            </tr>
+                                        <?php endif; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <?php if ($total_pages > 1): ?>
+                            <div class="card-footer clearfix">
+                                <ul class="pagination pagination-sm m-0 float-end">
+                                    <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                                        <li class="page-item <?php echo $i == $page ? 'active' : ''; ?>">
+                                            <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                                        </li>
+                                    <?php endfor; ?>
+                                </ul>
+                            </div>
                         <?php endif; ?>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Pagination -->
-            <?php if ($total_pages > 1): ?>
-                <div class="flex justify-center mt-8 gap-2">
-                    <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-                        <a href="?page=<?php echo $i; ?>"
-                            class="w-10 h-10 flex items-center justify-center rounded-xl font-bold text-sm transition-all 
-                        <?php echo $i == $page ? 'bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-600 text-white shadow-lg shadow-fuchsia-500/30' : 'bg-white text-gray-500 hover:bg-gray-50 hover:text-gray-900 border border-gray-200'; ?>">
-                            <?php echo $i; ?>
-                        </a>
-                    <?php endfor; ?>
+                    </div>
                 </div>
-            <?php endif; ?>
-        </div>
-    </main>
+            </div>
+        </main>
 
-    <script>
-        lucide.createIcons();
-    </script>
+        <?php include 'includes/footer_lte.php'; ?>
+    </div>
+
+    <?php include 'includes/scripts_lte.php'; ?>
 </body>
 
 </html>

@@ -88,112 +88,216 @@ if ($action === 'list') {
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Categories - MySeoFan Admin</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Outfit', sans-serif; background: #0f172a; min-height: 100vh; }
-    </style>
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css"
+        crossorigin="anonymous">
+    <!-- OVerlayScrollbars -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css"
+        crossorigin="anonymous">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
+        crossorigin="anonymous">
+    <!-- AdminLTE -->
+    <link rel="stylesheet" href="../AdminLTE/dist/css/adminlte.css">
 </head>
-<body class="flex bg-[#0f172a]">
-    <?php include 'includes/sidebar.php'; ?>
 
-    <main class="flex-1 min-h-screen">
-        <header class="bg-[#1e293b] border-b-4 border-fuchsia-500/50 px-8 h-20 flex items-center justify-between shadow-lg shadow-black/20">
-            <div>
-                <h3 class="text-xl font-bold text-white">Post Categories</h3>
-                <p class="text-xs text-gray-400 mt-0.5">Organize your content</p>
-            </div>
-            <a href="?action=add&lang_code=<?php echo $_curr_lang; ?>" class="bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-600 text-white px-6 py-2 rounded-xl font-bold hover:shadow-lg hover:shadow-fuchsia-500/40 hover:scale-105 transition-all shadow-md shadow-fuchsia-900/20 flex items-center gap-2">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="3" d="M12 4v16m8-8H4"/></svg>
-                New Category
-            </a>
-        </header>
+<body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
+    <div class="app-wrapper">
+        <?php include 'includes/header_lte.php'; ?>
+        <?php include 'includes/sidebar_lte.php'; ?>
 
-        <div class="p-8">
-            <?php if ($message): ?>
-                <div class="bg-emerald-50 text-emerald-600 p-4 rounded-xl mb-6 font-medium border border-emerald-100"><?php echo $message; ?></div>
-            <?php endif; ?>
-            <?php if ($error): ?>
-                <div class="bg-red-50 text-red-600 p-4 rounded-xl mb-6 font-medium border border-red-100"><?php echo $error; ?></div>
-            <?php endif; ?>
-
-            <div class="flex gap-8">
-                <!-- List View (Left) -->
-                <div class="flex-1">
-                    <div class="flex items-center gap-2 mb-6 overflow-x-auto pb-2 scrollbar-thin">
-                        <?php foreach ($available_langs as $code => $l): ?>
-                            <a href="?filter_lang=<?php echo $code; ?>" class="px-5 py-2.5 rounded-2xl font-bold transition-all flex items-center gap-2 whitespace-nowrap shadow-sm <?php echo $_curr_lang === $code ? 'bg-fuchsia-600 text-white shadow-fuchsia-200' : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-100'; ?>">
-                                <span class="text-xs uppercase"><?php echo $code; ?></span>
-                                <span><?php echo $l['label']; ?></span>
-                            </a>
-                        <?php endforeach; ?>
-                    </div>
-
-                    <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
-                        <table class="w-full text-left">
-                            <thead class="bg-gray-50 border-b">
-                                <tr>
-                                    <th class="px-8 py-4 text-xs font-black text-gray-700 uppercase tracking-widest">Name</th>
-                                    <th class="px-8 py-4 text-xs font-black text-gray-700 uppercase tracking-widest">Slug</th>
-                                    <th class="px-8 py-4 text-xs font-black text-gray-700 uppercase tracking-widest text-right">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-50 font-bold text-gray-900">
-                                <?php if (empty($categories)): ?>
-                                    <tr><td colspan="3" class="px-8 py-10 text-center text-gray-400">No categories found for this language.</td></tr>
-                                <?php endif; ?>
-                                <?php foreach ($categories as $cat): ?>
-                                    <tr class="hover:bg-gray-50/50 transition-colors">
-                                        <td class="px-8 py-4"><?php echo htmlspecialchars($cat['name']); ?></td>
-                                        <td class="px-8 py-4 text-xs font-mono text-gray-500"><?php echo htmlspecialchars($cat['slug']); ?></td>
-                                        <td class="px-8 py-4 text-right space-x-3">
-                                            <a href="?action=edit&id=<?php echo $cat['id']; ?>" class="text-emerald-600 hover:underline">Edit</a>
-                                            <a href="javascript:void(0);" onclick="confirmDelete('?action=delete&id=<?php echo $cat['id']; ?>', 'Deleting this category will not delete the posts using it.')" class="text-red-400 hover:text-red-600">Delete</a>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
+        <main class="app-main">
+            <div class="app-content-header">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h3 class="mb-0">Post Categories</h3>
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-end">
+                                <li class="breadcrumb-item"><a href="dashboard.php">Home</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Categories</li>
+                            </ol>
+                        </div>
                     </div>
                 </div>
-
-                <!-- Form View (Right) -->
-                <?php if ($action === 'add' || $action === 'edit'): ?>
-                <div class="w-96">
-                    <div class="bg-white p-8 rounded-3xl shadow-xl border border-emerald-100 flex-shrink-0 sticky top-28">
-                        <h4 class="text-lg font-black text-gray-900 mb-6"><?php echo $action === 'add' ? 'Add New Category' : 'Edit Category'; ?></h4>
-                        <form action="?action=<?php echo $action; ?><?php echo $id ? '&id=' . $id : ''; ?>" method="POST" class="space-y-6">
-                            <div>
-                                <label class="block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-2">Language</label>
-                                <select name="lang_code" class="w-full px-5 py-3 rounded-xl border-2 border-gray-100 focus:border-emerald-600 outline-none font-bold text-gray-900 transition-all">
-                                    <?php foreach ($available_langs as $code => $l): ?>
-                                        <option value="<?php echo $code; ?>" <?php echo (isset($current_cat['lang_code']) && $current_cat['lang_code'] == $code) || ($_curr_lang == $code) ? 'selected' : ''; ?>><?php echo $l['label']; ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-2">Category Name</label>
-                                <input type="text" name="name" value="<?php echo htmlspecialchars($current_cat['name'] ?? ''); ?>" required placeholder="e.g. Tips & Tricks" class="w-full px-5 py-3 rounded-xl border-2 border-gray-100 focus:border-emerald-600 outline-none font-bold text-gray-900 transition-all">
-                            </div>
-                            <div>
-                                <label class="block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-2">Slug (Auto if empty)</label>
-                                <input type="text" name="slug" value="<?php echo htmlspecialchars($current_cat['slug'] ?? ''); ?>" placeholder="tips-tricks" class="w-full px-5 py-3 rounded-xl border-2 border-gray-100 focus:border-emerald-600 outline-none font-mono font-bold text-gray-900 transition-all">
-                            </div>
-                            <div class="pt-4 flex gap-3">
-                                <button type="submit" class="flex-1 bg-emerald-600 text-white py-3 rounded-xl font-black hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-200 uppercase tracking-widest text-[10px]">Save Category</button>
-                                <?php if ($action === 'edit'): ?>
-                                    <a href="?action=list" class="px-5 py-3 bg-gray-100 text-gray-600 rounded-xl font-bold hover:bg-gray-200 transition-all flex items-center justify-center text-[10px] uppercase tracking-widest">Cancel</a>
-                                <?php endif; ?>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <?php endif; ?>
             </div>
-        </div>
-    </main>
+
+            <div class="app-content">
+                <div class="container-fluid">
+
+                    <?php if ($message): ?>
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <i class="bi bi-check-circle-fill me-2"></i> <?php echo $message; ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if ($error): ?>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i> <?php echo $error; ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <?php endif; ?>
+
+                    <div class="row">
+                        <!-- List View -->
+                        <div class="<?php echo ($action === 'add' || $action === 'edit') ? 'col-lg-8' : 'col-12'; ?>">
+                            <div class="card card-primary card-outline mb-4">
+                                <div class="card-header">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <h3 class="card-title">Categories List</h3>
+
+                                        <div class="card-tools d-flex gap-2">
+                                            <!-- Language Filter -->
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-tool dropdown-toggle"
+                                                    data-bs-toggle="dropdown">
+                                                    <i class="bi bi-globe me-1"></i>
+                                                    <?php echo $available_langs[$_curr_lang]['label']; ?>
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-end">
+                                                    <?php foreach ($available_langs as $code => $l): ?>
+                                                        <li><a href="?filter_lang=<?php echo $code; ?>"
+                                                                class="dropdown-item <?php echo $_curr_lang === $code ? 'active' : ''; ?>"><?php echo $l['flag'] . ' ' . $l['label']; ?></a>
+                                                        </li>
+                                                    <?php endforeach; ?>
+                                                </ul>
+                                            </div>
+
+                                            <?php if ($action !== 'add' && $action !== 'edit'): ?>
+                                                <a href="?action=add&lang_code=<?php echo $_curr_lang; ?>"
+                                                    class="btn btn-primary btn-sm">
+                                                    <i class="bi bi-plus-lg"></i> New Category
+                                                </a>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card-body p-0">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped table-hover align-middle">
+                                            <thead>
+                                                <tr>
+                                                    <th>Name</th>
+                                                    <th>Slug</th>
+                                                    <th class="text-end">Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php if (empty($categories)): ?>
+                                                    <tr>
+                                                        <td colspan="3" class="text-center py-4 text-muted">
+                                                            No categories found for this language.
+                                                        </td>
+                                                    </tr>
+                                                <?php endif; ?>
+                                                <?php foreach ($categories as $cat): ?>
+                                                    <tr
+                                                        class="<?php echo (isset($current_cat) && $current_cat['id'] == $cat['id']) ? 'table-primary' : ''; ?>">
+                                                        <td>
+                                                            <span
+                                                                class="fw-bold"><?php echo htmlspecialchars($cat['name']); ?></span>
+                                                        </td>
+                                                        <td>
+                                                            <code
+                                                                class="text-muted"><?php echo htmlspecialchars($cat['slug']); ?></code>
+                                                        </td>
+                                                        <td class="text-end">
+                                                            <a href="?action=edit&id=<?php echo $cat['id']; ?>"
+                                                                class="btn btn-sm btn-info text-white me-1" title="Edit">
+                                                                <i class="bi bi-pencil"></i>
+                                                            </a>
+                                                            <button type="button" class="btn btn-sm btn-danger"
+                                                                title="Delete"
+                                                                onclick="confirmDelete('?action=delete&id=<?php echo $cat['id']; ?>')">
+                                                                <i class="bi bi-trash"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                <?php endforeach; ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Form View -->
+                        <?php if ($action === 'add' || $action === 'edit'): ?>
+                            <div class="col-lg-4">
+                                <div class="card <?php echo $action === 'edit' ? 'card-warning' : 'card-success'; ?> card-outline mb-4 sticky-top"
+                                    style="top: 1rem; z-index: 1020;">
+                                    <div class="card-header">
+                                        <h3 class="card-title">
+                                            <?php echo $action === 'add' ? 'Add New Category' : 'Edit Category'; ?></h3>
+                                    </div>
+                                    <form action="?action=<?php echo $action; ?><?php echo $id ? '&id=' . $id : ''; ?>"
+                                        method="POST">
+                                        <div class="card-body">
+                                            <div class="mb-3">
+                                                <label class="form-label">Language</label>
+                                                <select name="lang_code" class="form-select">
+                                                    <?php foreach ($available_langs as $code => $l): ?>
+                                                        <option value="<?php echo $code; ?>" <?php echo (isset($current_cat['lang_code']) && $current_cat['lang_code'] == $code) || ($_curr_lang == $code) ? 'selected' : ''; ?>>
+                                                            <?php echo $l['flag'] . ' ' . $l['label']; ?>
+                                                        </option>
+                                                    <?php endforeach; ?>
+                                                </select>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Category Name</label>
+                                                <input type="text" name="name" class="form-control"
+                                                    value="<?php echo htmlspecialchars($current_cat['name'] ?? ''); ?>"
+                                                    required placeholder="e.g. Tips & Tricks">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Slug</label>
+                                                <input type="text" name="slug" class="form-control font-monospace"
+                                                    value="<?php echo htmlspecialchars($current_cat['slug'] ?? ''); ?>"
+                                                    placeholder="auto-if-empty">
+                                                <div class="form-text">Leave empty to auto-generate.</div>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer d-flex gap-2">
+                                            <button type="submit"
+                                                class="btn <?php echo $action === 'edit' ? 'btn-warning' : 'btn-success'; ?> flex-fill">
+                                                <i class="bi bi-save me-1"></i> Save
+                                            </button>
+                                            <?php if ($action === 'edit'): ?>
+                                                <a href="?action=list" class="btn btn-default">Cancel</a>
+                                            <?php endif; ?>
+                                            <?php if ($action === 'add'): ?>
+                                                <a href="?action=list" class="btn btn-default">Close</a>
+                                            <?php endif; ?>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+
+        <?php include 'includes/footer_lte.php'; ?>
+    </div>
+
+    <?php include 'includes/scripts_lte.php'; ?>
+
+    <script>
+        function confirmDelete(url) {
+            if (confirm('Deleting this category will not delete the posts using it.\\nAre you sure you want to proceed?')) {
+                window.location.href = url;
+            }
+        }
+    </script>
 </body>
+
 </html>

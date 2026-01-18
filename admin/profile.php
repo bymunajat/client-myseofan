@@ -40,66 +40,93 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <title>Profile Settings - MySeoFan Admin</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Outfit', sans-serif;
-            background: #0f172a;
-            color: #f8fafc;
-            min-height: 100vh;
-        }
-    </style>
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css"
+        crossorigin="anonymous">
+    <!-- OVerlayScrollbars -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css"
+        crossorigin="anonymous">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
+        crossorigin="anonymous">
+    <!-- AdminLTE -->
+    <link rel="stylesheet" href="../AdminLTE/dist/css/adminlte.css">
 </head>
 
-<body class="flex">
-    <?php include 'includes/sidebar.php'; ?>
+<body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
+    <div class="app-wrapper">
+        <?php include 'includes/header_lte.php'; ?>
+        <?php include 'includes/sidebar_lte.php'; ?>
 
-    <main class="flex-1 min-h-screen bg-[#0f172a]">
-        <header
-            class="bg-[#1e293b] border-b-4 border-fuchsia-500/50 px-8 h-20 flex items-center justify-between shadow-lg shadow-black/20">
-            <div>
-                <h3 class="text-xl font-bold text-white">Admin Profile</h3>
-                <p class="text-xs text-gray-400 mt-0.5">Update your account information</p>
-            </div>
-        </header>
-
-        <div class="p-8">
-            <div class="max-w-xl mx-auto">
-                <?php if ($message): ?>
-                    <div class="bg-emerald-50 text-emerald-600 p-4 rounded-xl mb-6 font-medium">
-                        <?php echo $message; ?>
-                    </div>
-                <?php endif; ?>
-                <?php if ($error): ?>
-                    <div class="bg-red-50 text-red-600 p-4 rounded-xl mb-6 font-medium">
-                        <?php echo $error; ?>
-                    </div>
-                <?php endif; ?>
-
-                <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-100">
-                    <form action="" method="POST" class="space-y-6">
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Username</label>
-                            <input type="text" name="username"
-                                value="<?php echo htmlspecialchars($_SESSION['username']); ?>" required
-                                class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white focus:border-emerald-500 outline-none transition-all font-bold text-black">
+        <main class="app-main">
+            <div class="app-content-header">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h3 class="mb-0">Profile Settings</h3>
                         </div>
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">New Password (leave blank to
-                                keep current)</label>
-                            <input type="password" name="password"
-                                class="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white focus:border-emerald-500 outline-none transition-all font-semibold text-black">
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-end">
+                                <li class="breadcrumb-item"><a href="dashboard.php">Home</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Profile</li>
+                            </ol>
                         </div>
-                        <button type="submit"
-                            class="w-full py-4 bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-600 text-white rounded-xl font-bold hover:shadow-lg hover:shadow-fuchsia-500/40 transition-all shadow-md shadow-fuchsia-900/20">
-                            Update Profile
-                        </button>
-                    </form>
+                    </div>
                 </div>
             </div>
-        </div>
-    </main>
+
+            <div class="app-content">
+                <div class="container-fluid">
+
+                    <?php if ($message): ?>
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <i class="bi bi-check-circle-fill me-2"></i> <?php echo $message; ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if ($error): ?>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i> <?php echo $error; ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <?php endif; ?>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card card-primary card-outline">
+                                <div class="card-header">
+                                    <h3 class="card-title">Update Profile</h3>
+                                </div>
+                                <form action="" method="POST">
+                                    <div class="card-body">
+                                        <div class="mb-3">
+                                            <label for="username" class="form-label">Username</label>
+                                            <input type="text" class="form-control" id="username" name="username"
+                                                value="<?php echo htmlspecialchars($_SESSION['username']); ?>" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="password" class="form-label">New Password <small
+                                                    class="text-muted">(leave blank to keep current)</small></label>
+                                            <input type="password" class="form-control" id="password" name="password">
+                                        </div>
+                                    </div>
+                                    <div class="card-footer">
+                                        <button type="submit" class="btn btn-primary">Update Profile</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+
+        <?php include 'includes/footer_lte.php'; ?>
+    </div>
+
+    <?php include 'includes/scripts_lte.php'; ?>
 </body>
 
 </html>

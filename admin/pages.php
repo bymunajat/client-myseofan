@@ -185,305 +185,333 @@ $page_title = "Pages";
 <head>
     <meta charset="UTF-8">
     <title><?php echo $page_title; ?> - MySeoFan Admin</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css"
+        crossorigin="anonymous">
+    <!-- OVerlayScrollbars -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css"
+        crossorigin="anonymous">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
+        crossorigin="anonymous">
+    <!-- AdminLTE -->
+    <link rel="stylesheet" href="../AdminLTE/dist/css/adminlte.css">
+
+    <!-- SortableJS -->
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet">
+
+    <!-- TinyMCE -->
     <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
-    <style>
-        body {
-            font-family: 'Outfit', sans-serif;
-            background: #0f172a;
-            /* Slate 900 */
-            color: #f8fafc;
-            min-height: 100vh;
-        }
-
-        .glass-panel {
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(10px);
-        }
-    </style>
-</head>
-
-<body class="flex">
-    <?php include 'includes/sidebar.php'; ?>
-
-    <main class="flex-1 min-h-screen bg-[#0f172a]">
-        <header class="bg-[#1e293b] border-b-4 border-fuchsia-500/50 px-8 h-20 flex items-center justify-between shadow-lg shadow-black/20">
-            <div>
-                <h3 class="text-xl font-bold text-white"><?php echo $page_title; ?></h3>
-                <p class="text-xs text-gray-400 mt-0.5">Manage static pages and content</p>
-            </div>
-            <div class="flex items-center gap-4">
-                <?php if ($action === 'list'): ?>
-                    <a href="?action=add&filter_lang=<?php echo $_curr_lang; ?>"
-                        class="bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-600 text-white px-5 py-2.5 rounded-xl font-bold shadow-lg shadow-fuchsia-500/30 hover:shadow-fuchsia-500/50 hover:scale-[1.02] transition-all text-sm flex items-center gap-2">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-width="3" d="M12 4v16m8-8H4" />
-                        </svg>
-                        New Page
-                    </a>
-                <?php else: ?>
-                    <a href="?action=list&filter_lang=<?php echo $_curr_lang; ?>"
-                        class="bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-600 text-white px-5 py-2.5 rounded-xl font-bold shadow-lg shadow-fuchsia-500/30 hover:shadow-fuchsia-500/50 hover:scale-[1.02] transition-all text-sm flex items-center gap-2">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-width="3" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                        </svg>
-                        Back to List
-                    </a>
-                <?php endif; ?>
-            </div>
-        </header>
-
-        <div class="p-8">
-            <?php if ($message): ?>
-                <div
-                    class="bg-fuchsia-50 text-fuchsia-700 p-4 rounded-xl mb-6 font-bold border border-fuchsia-100 flex items-center gap-2">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-width="2" d="M5 13l4 4L19 7" />
-                    </svg>
-                    <?php echo $message; ?>
-                </div>
-            <?php endif; ?>
-            <?php if ($error): ?>
-                <div
-                    class="bg-red-50 text-red-600 p-4 rounded-xl mb-6 font-medium border border-red-100 flex items-center gap-2">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <?php echo $error; ?>
-                </div>
-            <?php endif; ?>
-
-            <?php if ($action === 'list'): ?>
-                <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
-                    <table class="w-full text-left">
-                        <thead class="bg-gray-50 border-b border-gray-100 text-center">
-                            <tr>
-                                <th class="w-16 py-4"></th>
-                                <th class="px-8 py-4 text-xs font-black text-gray-700 uppercase tracking-widest text-left">
-                                    Page Title</th>
-                                <th class="px-8 py-4 text-xs font-black text-gray-700 uppercase tracking-widest text-right">
-                                    Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-50">
-                            <?php if (empty($pages)): ?>
-                                <tr>
-                                    <td colspan="3" class="px-8 py-12 text-center">
-                                        <div class="text-gray-400 font-medium mb-4">No pages found in
-                                            <?php echo $available_langs[$_curr_lang]['label']; ?>.
-                                        </div>
-                                        <div class="flex justify-center gap-4">
-                                            <a href="?action=add&filter_lang=<?php echo $_curr_lang; ?>"
-                                                class="bg-fuchsia-50 text-fuchsia-600 px-4 py-2 rounded-lg font-bold hover:bg-fuchsia-100">Create
-                                                page</a>
-                                        </div>
-                                    </td>
-                                </tr>
-                            <?php endif; ?>
-                            <?php foreach ($pages as $p): ?>
-                                <tr data-id="<?php echo $p['id']; ?>" class="group hover:bg-gray-50/50 transition-colors">
-                                    <td class="px-6 py-5 border-r border-gray-50">
-                                        <div class="flex items-center justify-center text-gray-400 font-bold">
-                                            <span class="text-xs font-mono">#<?php echo $p['id']; ?></span>
-                                        </div>
-                                    </td>
-                                    <td class="px-8 py-5">
-                                        <div class="font-bold text-gray-900 text-lg">
-                                            <?php echo htmlspecialchars($p['title']); ?>
-                                        </div>
-                                        <div class="text-xs font-bold text-gray-400 font-mono mt-1">
-                                            /<?php echo htmlspecialchars($p['slug']); ?>
-                                        </div>
-                                    </td>
-                                    <td class="px-8 py-5 text-right space-x-4">
-                                        <a href="?action=edit&id=<?php echo $p['id']; ?>&filter_lang=<?php echo $_curr_lang; ?>"
-                                            class="text-emerald-600 hover:text-emerald-800 font-bold text-sm uppercase tracking-wider">Edit</a>
-                                        <a href="javascript:void(0);"
-                                            onclick="confirmDelete('?action=delete&id=<?php echo $p['id']; ?>&filter_lang=<?php echo $_curr_lang; ?>', 'Are you sure? This cannot be undone.')"
-                                            class="text-red-400 hover:text-red-600 font-bold text-sm uppercase tracking-wider">Delete</a>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                </div>
-            <?php else: ?>
-                <div class="bg-white p-8 rounded-3xl shadow-2xl border-2 border-emerald-200 max-w-5xl mx-auto">
-                    <form action="?action=<?php echo $action; ?><?php echo $id ? '&id=' . $id : ''; ?>" method="POST"
-                        class="space-y-8">
-
-                        <!-- Header / Language Info -->
-                        <div class="flex items-center justify-between pb-6 border-b border-gray-100">
-                            <div class="flex items-center gap-3">
-                                <span
-                                    class="text-3xl"><?php echo $available_langs[$cu_p['lang_code'] ?? $_curr_lang]['flag']; ?></span>
-                                <div>
-                                    <h2 class="text-lg font-bold text-gray-800">
-                                        <?php echo $action === 'edit' ? 'Editing Page' : 'New Page'; ?>
-                                        <span class="text-gray-500 font-normal">in
-                                            <?php echo $available_langs[$cu_p['lang_code'] ?? $_curr_lang]['label']; ?></span>
-                                    </h2>
-                                </div>
-                            </div>
-
-                            <input type="hidden" name="lang_code"
-                                value="<?php echo htmlspecialchars($cu_p['lang_code'] ?? ($_GET['filter_lang'] ?? $_curr_lang)); ?>">
-                            <input type="hidden" name="translation_group"
-                                value="<?php echo htmlspecialchars($_GET['translation_group'] ?? ($cu_p['translation_group'] ?? uniqid('group_', true))); ?>">
-                        </div>
-
-                        <div class="grid md:grid-cols-2 gap-8">
-                            <!-- Left Column: Core Info (Blue Card) -->
-                            <div
-                                class="bg-white p-8 rounded-[2rem] border-4 border-blue-600 shadow-xl space-y-6 relative overflow-hidden">
-                                <h4
-                                    class="flex items-center gap-3 text-lg font-black text-blue-700 uppercase tracking-widest mb-6 border-b-4 border-blue-100 pb-4">
-                                    <span
-                                        class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600">
-                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-width="3"
-                                                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                        </svg>
-                                    </span>
-                                    Basic Information
-                                </h4>
-                                <div>
-                                    <label
-                                        class="block text-sm font-black text-gray-900 uppercase tracking-widest mb-3">Page
-                                        Title</label>
-                                    <input type="text" name="title"
-                                        value="<?php echo htmlspecialchars($cu_p['title'] ?? ''); ?>" required
-                                        placeholder="e.g. Terms of Service"
-                                        class="w-full px-6 py-5 rounded-2xl border-4 border-gray-900 bg-white text-xl font-bold text-gray-900 outline-none placeholder-gray-400">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-black text-gray-900 uppercase tracking-widest mb-3">URL
-                                        Slug</label>
-                                    <div
-                                        class="flex items-center rounded-2xl overflow-hidden border-4 border-gray-900 bg-white group transition-colors">
-                                        <span
-                                            class="bg-gray-50 text-gray-500 px-5 py-5 border-r-4 border-gray-900 font-mono text-sm font-bold">/</span>
-                                        <input type="text" name="slug"
-                                            value="<?php echo htmlspecialchars($cu_p['slug'] ?? ''); ?>"
-                                            placeholder="terms-of-service"
-                                            class="w-full px-6 py-5 bg-transparent outline-none font-mono font-bold text-gray-900 placeholder-gray-400">
-                                    </div>
-                                    <p class="text-xs font-bold text-blue-600 mt-3 ml-1 flex items-center gap-1">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                                        </svg>
-                                        Auto-generated if left empty
-                                    </p>
-                                </div>
-                            </div>
-
-                            <!-- Right Column: SEO (Fuchsia Card) -->
-                            <div class="bg-white p-8 rounded-[2rem] border-4 border-fuchsia-500 shadow-xl space-y-6">
-                                <h4
-                                    class="flex items-center gap-3 text-lg font-black text-fuchsia-700 uppercase tracking-widest mb-6 border-b-4 border-fuchsia-100 pb-4">
-                                    <span
-                                        class="w-10 h-10 rounded-xl bg-fuchsia-100 flex items-center justify-center text-fuchsia-600">
-                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-width="3" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                                        </svg>
-                                    </span>
-                                    SEO Configuration
-                                </h4>
-                                <div>
-                                    <label
-                                        class="block text-sm font-black text-gray-900 uppercase tracking-widest mb-3">Meta
-                                        Title</label>
-                                    <input type="text" name="meta_title"
-                                        value="<?php echo htmlspecialchars($cu_p['meta_title'] ?? ''); ?>"
-                                        class="w-full px-6 py-5 rounded-2xl border-4 border-gray-900 bg-white text-lg font-bold text-gray-900 outline-none">
-                                </div>
-                                <div>
-                                    <label
-                                        class="block text-sm font-black text-gray-900 uppercase tracking-widest mb-3">Meta
-                                        Description</label>
-                                    <textarea name="meta_description" rows="3"
-                                        class="w-full px-6 py-5 rounded-2xl border-4 border-gray-900 bg-white text-base font-bold text-gray-900 outline-none"><?php echo htmlspecialchars($cu_p['meta_description'] ?? ''); ?></textarea>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Editor (Indigo Card) -->
-                        <div class="mt-10 bg-white p-8 rounded-[2rem] border-4 border-indigo-500 shadow-xl relative">
-                            <h4
-                                class="flex items-center gap-3 text-lg font-black text-indigo-700 uppercase tracking-widest mb-6 border-b-4 border-indigo-100 pb-4">
-                                <span
-                                    class="w-10 h-10 rounded-xl bg-indigo-100 flex items-center justify-center text-indigo-600">
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-width="3" d="M4 6h16M4 12h16M4 18h7"></path>
-                                    </svg>
-                                </span>
-                                Page Content
-                            </h4>
-                            <div class="rounded-2xl overflow-hidden border-4 border-gray-900 bg-white">
-                                <textarea name="content" id="contentEditor"
-                                    class="tinymce-editor"><?php echo htmlspecialchars($cu_p['content'] ?? ''); ?></textarea>
-                            </div>
-                        </div>
-
-                        <div class="flex items-center gap-4 pt-6 border-t border-gray-100">
-                            <div class="flex-1">
-                                <button type="submit"
-                                    class="w-full bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-600 text-white py-4 rounded-xl font-bold hover:shadow-lg hover:shadow-fuchsia-500/30 transition-all uppercase tracking-widest text-sm flex items-center justify-center gap-2 transform hover:scale-[1.02]">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-width="2" d="M5 13l4 4L19 7" />
-                                    </svg>
-                                    Save Page
-                                </button>
-                                </button>
-                            </div>
-                            <a href="?action=list&filter_lang=<?php echo $_curr_lang; ?>"
-                                class="px-8 py-4 rounded-xl font-bold text-gray-400 hover:bg-gray-50 hover:text-gray-900 transition-all uppercase tracking-widest text-sm border-2 border-gray-200">Cancel</a>
-                        </div>
-                    </form>
-                </div>
-            <?php endif; ?>
-        </div>
-    </main>
-
-    <div id="toast"
-        class="fixed bottom-8 right-8 bg-gray-900 text-white px-6 py-3 rounded-2xl shadow-2xl transition-all duration-300 transform translate-y-20 opacity-0 pointer-events-none z-[100] flex items-center gap-3">
-        <div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
-        <span class="font-bold text-sm"></span>
-    </div>
-
-    <script>
-        // Translation functions removed
-
-        function showToast(msg, type = 'success') {
-            const toast = document.getElementById('toast');
-            const span = toast.querySelector('span');
-            const dot = toast.querySelector('div');
-
-            span.innerText = msg;
-            dot.className = `w-2 h-2 rounded-full animate-pulse ${type === 'success' ? 'bg-emerald-500' : 'bg-red-500'}`;
-
-            toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
-            setTimeout(() => {
-                toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
-            }, 3000);
-        }
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.2/tinymce.min.js"></script>
     <script>
         tinymce.init({
-            selector: '#contentEditor',
-            plugins: 'link lists code table autoresize searchreplace visualblocks wordcount',
-            toolbar: 'undo redo | blocks | bold italic forecolor | alignleft aligncenter alignright | indent outdent | bullist numlist | link table | code',
+            selector: 'textarea[name="content"]',
+            plugins: 'advlist autolink lists link image charmap preview anchor pagebreak searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking save table directionality emoticons template',
+            toolbar: 'undo redo | blocks | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
             height: 600,
-            branding: false,
-            promotion: false,
-            menubar: false,
-            skin: 'oxide',
-            content_css: 'default',
-            content_style: "@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600&display=swap'); body { font-family: 'Outfit', sans-serif; font-size: 16px; color: #333; line-height: 1.6; padding: 20px; } h1,h2,h3 { font-weight: 700; color: #111; } a { color: #10b981; text-decoration: none; }"
+            setup: function (editor) {
+                editor.on('change', function () {
+                    editor.save();
+                });
+            }
         });
+    </script>
+</head>
+
+<body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
+    <div class="app-wrapper">
+        <?php include 'includes/header_lte.php'; ?>
+        <?php include 'includes/sidebar_lte.php'; ?>
+
+        <main class="app-main">
+            <div class="app-content-header">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h3 class="mb-0"><?php echo $page_title; ?></h3>
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-end">
+                                <li class="breadcrumb-item"><a href="dashboard.php">Home</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Pages</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="app-content">
+                <div class="container-fluid">
+
+                    <?php if ($message): ?>
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <i class="bi bi-check-circle-fill me-2"></i> <?php echo $message; ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if ($error): ?>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i> <?php echo $error; ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if ($action === 'list'): ?>
+                        <div class="card card-primary card-outline mb-4">
+                            <div class="card-header">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h3 class="card-title">Pages List</h3>
+                                    <div class="card-tools">
+                                        <div class="btn-group me-2">
+                                            <button type="button" class="btn btn-tool dropdown-toggle"
+                                                data-bs-toggle="dropdown">
+                                                <i class="bi bi-globe me-1"></i>
+                                                <?php echo $available_langs[$_curr_lang]['label']; ?>
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-end">
+                                                <?php foreach ($available_langs as $code => $lang): ?>
+                                                    <li><a href="?filter_lang=<?php echo $code; ?>"
+                                                            class="dropdown-item <?php echo $_curr_lang === $code ? 'active' : ''; ?>"><?php echo $lang['flag'] . ' ' . $lang['label']; ?></a>
+                                                    </li>
+                                                <?php endforeach; ?>
+                                            </ul>
+                                        </div>
+                                        <a href="?action=add&filter_lang=<?php echo $_curr_lang; ?>"
+                                            class="btn btn-primary btn-sm">
+                                            <i class="bi bi-plus-lg"></i> New Page
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-hover align-middle">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 50px;">#</th>
+                                                <th>Page Title</th>
+                                                <th class="text-end">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="page-list">
+                                            <?php if (empty($pages)): ?>
+                                                <tr>
+                                                    <td colspan="3" class="text-center py-4 text-muted">
+                                                        No pages found in <?php echo $available_langs[$_curr_lang]['label']; ?>.
+                                                        <br>
+                                                        <a href="?action=add&filter_lang=<?php echo $_curr_lang; ?>"
+                                                            class="btn btn-link">Create one?</a>
+                                                    </td>
+                                                </tr>
+                                            <?php endif; ?>
+                                            <?php foreach ($pages as $p): ?>
+                                                <tr data-id="<?php echo $p['id']; ?>" class="sortable-item"
+                                                    style="cursor: move;">
+                                                    <td class="text-center text-muted">
+                                                        <i class="bi bi-grip-vertical"></i>
+                                                    </td>
+                                                    <td>
+                                                        <div class="fw-bold"><?php echo htmlspecialchars($p['title']); ?></div>
+                                                        <small
+                                                            class="text-secondary">/<?php echo htmlspecialchars($p['slug']); ?></small>
+                                                    </td>
+                                                    <td class="text-end">
+                                                        <div class="btn-group">
+                                                            <button type="button" class="btn btn-sm btn-default dropdown-toggle"
+                                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                                Actions
+                                                            </button>
+                                                            <ul class="dropdown-menu">
+                                                                <li><a class="dropdown-item"
+                                                                        href="?action=edit&id=<?php echo $p['id']; ?>&filter_lang=<?php echo $_curr_lang; ?>"><i
+                                                                            class="bi bi-pencil me-2"></i> Edit</a></li>
+                                                                <?php foreach ($available_langs as $code => $lang): ?>
+                                                                    <?php if ($code !== $_curr_lang): ?>
+                                                                        <li><a class="dropdown-item"
+                                                                                href="?action=clone&id=<?php echo $p['id']; ?>&target_lang=<?php echo $code; ?>"><i
+                                                                                    class="bi bi-copy me-2"></i> Clone to
+                                                                                <?php echo $lang['label']; ?></a></li>
+                                                                    <?php endif; ?>
+                                                                <?php endforeach; ?>
+                                                                <li>
+                                                                    <hr class="dropdown-divider">
+                                                                </li>
+                                                                <li><a class="dropdown-item text-danger"
+                                                                        href="javascript:void(0);"
+                                                                        onclick="confirmDelete('?action=delete&id=<?php echo $p['id']; ?>&filter_lang=<?php echo $_curr_lang; ?>')"><i
+                                                                            class="bi bi-trash me-2"></i> Delete</a></li>
+                                                            </ul>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            <?php endforeach; ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="card-footer text-muted">
+                                <small><i class="bi bi-info-circle"></i> Drag and drop rows to reorder navigation menu
+                                    items.</small>
+                            </div>
+                        </div>
+
+                    <?php else: ?>
+                        <!-- Add/Edit Form -->
+                        <form action="?action=<?php echo $action; ?><?php echo $id ? '&id=' . $id : ''; ?>" method="POST">
+                            <div class="row">
+                                <!-- Left Column -->
+                                <div class="col-lg-8">
+                                    <div class="card card-primary card-outline mb-4">
+                                        <div class="card-header">
+                                            <h5 class="card-title">Basic Information</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="mb-3">
+                                                <label class="form-label fw-bold">Page Title</label>
+                                                <input type="text" name="title" class="form-control form-control-lg"
+                                                    required value="<?php echo htmlspecialchars($cu_p['title'] ?? ''); ?>"
+                                                    placeholder="e.g. Terms of Service">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">URL Slug</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text bg-light">/</span>
+                                                    <input type="text" name="slug" class="form-control"
+                                                        value="<?php echo htmlspecialchars($cu_p['slug'] ?? ''); ?>"
+                                                        placeholder="auto-generated-if-empty">
+                                                </div>
+                                                <div class="form-text">Leave empty to auto-generate from title.</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="card card-indigo card-outline mb-4">
+                                        <div class="card-header">
+                                            <h5 class="card-title">Page Content</h5>
+                                        </div>
+                                        <div class="card-body p-0">
+                                            <textarea name="content"
+                                                id="contentEditor"><?php echo htmlspecialchars($cu_p['content'] ?? ''); ?></textarea>
+                                        </div>
+                                        <div class="card-footer bg-transparent">
+                                            <!-- Footer Section for Save Buttons placed outside commonly, but here is fine too -->
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Right Column -->
+                                <div class="col-lg-4">
+                                    <div class="card card-secondary card-outline mb-4">
+                                        <div class="card-header">
+                                            <h5 class="card-title">Publish Options</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="mb-3">
+                                                <label class="form-label">Language</label>
+                                                <div class="input-group">
+                                                    <span
+                                                        class="input-group-text"><?php echo $available_langs[$cu_p['lang_code'] ?? $_curr_lang]['flag']; ?></span>
+                                                    <input type="text" class="form-control"
+                                                        value="<?php echo $available_langs[$cu_p['lang_code'] ?? $_curr_lang]['label']; ?>"
+                                                        disabled>
+                                                </div>
+                                                <input type="hidden" name="lang_code"
+                                                    value="<?php echo htmlspecialchars($cu_p['lang_code'] ?? ($_GET['filter_lang'] ?? $_curr_lang)); ?>">
+                                            </div>
+                                            <input type="hidden" name="translation_group"
+                                                value="<?php echo htmlspecialchars($_GET['translation_group'] ?? ($cu_p['translation_group'] ?? uniqid('group_', true))); ?>">
+
+                                            <!-- Visibility Toggles could go here if schema supports it, for now just standard save -->
+                                            <div class="d-grid gap-2">
+                                                <button type="submit" class="btn btn-primary">
+                                                    <i class="bi bi-save me-1"></i> Save Page
+                                                </button>
+                                                <a href="?action=list&filter_lang=<?php echo $_curr_lang; ?>"
+                                                    class="btn btn-default">Cancel</a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="card card-info card-outline mb-4">
+                                        <div class="card-header">
+                                            <h5 class="card-title">SEO Configuration</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="mb-3">
+                                                <label class="form-label">Meta Title</label>
+                                                <input type="text" name="meta_title" class="form-control"
+                                                    value="<?php echo htmlspecialchars($cu_p['meta_title'] ?? ''); ?>">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Meta Description</label>
+                                                <textarea name="meta_description" class="form-control"
+                                                    rows="3"><?php echo htmlspecialchars($cu_p['meta_description'] ?? ''); ?></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    <?php endif; ?>
+
+                </div>
+            </div>
+        </main>
+
+        <?php include 'includes/footer_lte.php'; ?>
+    </div>
+
+    <?php include 'includes/scripts_lte.php'; ?>
+
+    <script>
+        function confirmDelete(url) {
+            if (confirm('Are you sure you want to delete this page?')) {
+                window.location.href = url;
+            }
+        }
+
+        // Sortable Logic
+        document.addEventListener('DOMContentLoaded', function () {
+            var el = document.getElementById('page-list');
+            if (el) {
+                var sortable = Sortable.create(el, {
+                    animation: 150,
+                    handle: 'tr', // Draggable by the whole row
+                    onEnd: function (evt) {
+                        var order = [];
+                        document.querySelectorAll('#page-list tr').forEach(function (row, index) {
+                            order.push(row.getAttribute('data-id'));
+                        });
+
+                        // Send new order to server
+                        fetch('pages.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                            },
+                            body: 'action=reorder&' + order.map((id, index) => `order[${index}]=${id}`).join('&')
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (!data.success) {
+                                    alert('Failed to save order');
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                alert('Network error saving order');
+                            });
+                    }
+                });
+            }
+        });
+
+        function confirmDelete(url) {
+            if (confirm('Are you sure you want to delete this page?')) {
+                window.location.href = url;
+            }
+        }
     </script>
 </body>
 

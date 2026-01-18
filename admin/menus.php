@@ -103,25 +103,28 @@ $page_title = ucfirst($location) . " Menu Manager";
 
 <head>
     <meta charset="UTF-8">
-    <title>
-        <?php echo $page_title; ?> - Admin
-    </title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title><?php echo $page_title; ?> - MySeoFan Admin</title>
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css"
+        crossorigin="anonymous">
+    <!-- OVerlayScrollbars -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css"
+        crossorigin="anonymous">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
+        crossorigin="anonymous">
+    <!-- AdminLTE -->
+    <link rel="stylesheet" href="../AdminLTE/dist/css/adminlte.css">
+    <!-- SortableJS -->
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Outfit', sans-serif;
-            background: #0f172a;
-            /* Slate 900 */
-            color: #f8fafc;
-            min-height: 100vh;
-        }
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    <style>
         .nested-sortable {
             min-height: 50px;
             padding-left: 30px;
-            border-left: 2px dashed #e5e7eb;
+            border-left: 2px dashed #dee2e6;
         }
 
         .menu-item {
@@ -134,173 +137,209 @@ $page_title = ucfirst($location) . " Menu Manager";
     </style>
 </head>
 
-<body class="flex">
-    <?php include 'includes/sidebar.php'; ?>
+<body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
+    <div class="app-wrapper">
+        <?php include 'includes/header_lte.php'; ?>
+        <?php include 'includes/sidebar_lte.php'; ?>
 
-    <main class="flex-1 min-h-screen bg-[#0f172a]">
-        <header
-            class="bg-[#1e293b] border-b-4 border-fuchsia-500/50 px-8 h-20 flex items-center justify-between shadow-lg shadow-black/20">
-            <div>
-                <h3 class="text-xl font-bold text-white">
-                    <?php echo $page_title; ?>
-                </h3>
-                <p class="text-xs text-gray-400 mt-0.5">Configure header and footer navigation</p>
-            </div>
-            <div class="flex items-center gap-4">
-                <button onclick="saveMenu()" id="saveBtn"
-                    class="bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-600 text-white px-6 py-2 rounded-xl font-bold hover:shadow-lg hover:shadow-fuchsia-500/40 hover:scale-105 transition-all shadow-md shadow-fuchsia-900/20">
-                    Save Menu
-                </button>
-            </div>
-        </header>
-
-        <div class="p-8">
-            <!-- Language tabs removed for simplification -->
-
-            <div class="grid grid-cols-12 gap-8">
-                <!-- Left Panel: Add Items -->
-                <div class="col-span-4 space-y-6">
-                    <!-- Add Pages -->
-                    <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
-                        <h4 class="font-bold text-gray-800 mb-4">Add Pages</h4>
-                        <div class="max-h-60 overflow-y-auto space-y-2 mb-4 pr-2">
-                            <?php foreach ($availPages as $p): ?>
-                                <label class="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
-                                    <input type="checkbox" class="page-checkbox w-4 h-4 text-fuchsia-600 rounded focus:ring-fuchsia-500 border-gray-300"
-                                        data-id="<?php echo $p['id']; ?>"
-                                        data-title="<?php echo htmlspecialchars($p['title']); ?>">
-                                    <span class="text-sm text-gray-700 font-bold">
-                                        <?php echo htmlspecialchars($p['title']); ?>
-                                    </span>
-                                </label>
-                            <?php endforeach; ?>
+        <main class="app-main">
+            <div class="app-content-header">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h3 class="mb-0"><?php echo $page_title; ?></h3>
                         </div>
-                        <button onclick="addPages()"
-                            class="w-full py-2 border border-gray-300 rounded-xl text-sm font-bold text-gray-600 hover:bg-gray-50">
-                            Add to Menu
-                        </button>
-                    </div>
-
-                    <!-- Add Custom Link -->
-                    <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
-                        <h4 class="font-bold text-gray-800 mb-4">Custom Link</h4>
-                        <div class="space-y-4 mb-4">
-                            <div>
-                                <label class="text-xs font-bold text-gray-400 uppercase">URL / Link</label>
-                                <input type="text" id="custom-url" placeholder="https://"
-                                    class="w-full p-2 border border-gray-200 rounded-lg text-sm">
-                            </div>
-                            <div>
-                                <label class="text-xs font-bold text-gray-400 uppercase">Label Text</label>
-                                <input type="text" id="custom-label" placeholder="Menu Text"
-                                    class="w-full p-2 border border-gray-200 rounded-lg text-sm">
-                            </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-end">
+                                <li class="breadcrumb-item"><a href="dashboard.php">Home</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Menus</li>
+                            </ol>
                         </div>
-                        <button onclick="addCustomLink()"
-                            class="w-full py-2 border border-gray-300 rounded-xl text-sm font-bold text-gray-600 hover:bg-gray-50">
-                            Add to Menu
-                        </button>
-                    </div>
-
-                    <!-- Add Label (Header Group) -->
-                    <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
-                        <h4 class="font-bold text-gray-800 mb-4">Section Label</h4>
-                        <p class="text-xs text-gray-400 mb-4">Use this for Footer column headers.</p>
-                        <div class="mb-4">
-                            <label class="text-xs font-bold text-gray-400 uppercase">Label Text</label>
-                            <input type="text" id="section-label" placeholder="e.g. Company"
-                                class="w-full p-2 border border-gray-200 rounded-lg text-sm">
-                        </div>
-                        <button onclick="addLabel()"
-                            class="w-full py-2 border border-gray-300 rounded-xl text-sm font-bold text-gray-600 hover:bg-gray-50">
-                            Add to Menu
-                        </button>
                     </div>
                 </div>
+            </div>
 
-                <!-- Right Panel: Menu Structure -->
-                <div class="col-span-8">
-                    <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 min-h-[500px]">
-                        <h4 class="font-bold text-gray-800 mb-2">Menu Structure</h4>
-                        <p class="text-sm text-gray-400 mb-6">Drag items to reorder. Drag right to create a sub-menu.
-                        </p>
+            <div class="app-content">
+                <div class="container-fluid">
+                    <div class="d-flex justify-content-end mb-3">
+                        <button onclick="saveMenu()" id="saveBtn" class="btn btn-primary">
+                            <i class="bi bi-save me-1"></i> Save Menu
+                        </button>
+                    </div>
 
-                        <div id="menu-root" class="nested-sortable space-y-2 pb-12">
-                            <!-- Items rendered via JS mostly, but we can pre-render PHP here if we want or just load via JSON. 
-                                 For simplicity in this V1, let's pre-render PHP. -->
-                            <?php
-                            function renderMenuItem($item)
-                            {
-                                $typeLabel = ($item['type'] === 'page') ? 'Page' : (($item['type'] === 'label') ? 'Label' : 'Custom Link');
-                                ob_start();
-                                ?>
-                                <div class="menu-item bg-white border border-gray-200 rounded-lg mb-2"
-                                    data-type="<?php echo $item['type']; ?>"
-                                    data-related-id="<?php echo $item['related_id'] ?? ''; ?>"
-                                    data-url="<?php echo htmlspecialchars($item['url'] ?? ''); ?>"
-                                    data-label="<?php echo htmlspecialchars($item['label']); ?>"
-                                    data-id="<?php echo $item['id']; ?>"> <!-- Track ID for logic -->
-
-                                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-t-lg">
-                                        <div class="flex items-center gap-3">
-                                            <span class="cursor-move text-gray-400">☰</span>
-                                            <span class="font-bold text-gray-900 item-label-display">
-                                                <?php echo htmlspecialchars($item['label']); ?>
-                                            </span>
-                                            <span class="text-xs bg-gray-100 text-gray-500 font-bold px-2 py-0.5 rounded border border-gray-200">
-                                                <?php echo $typeLabel; ?>
-                                            </span>
-                                        </div>
-                                        <div class="flex items-center gap-2">
-                                            <button onclick="toggleEdit(this)"
-                                                class="text-xs text-blue-500 hover:underline">Edit</button>
-                                            <button onclick="removeCreate(this)"
-                                                class="text-xs text-red-500 hover:underline">Remove</button>
-                                        </div>
+                    <div class="row">
+                        <!-- Left Panel: Add Items -->
+                        <div class="col-lg-4">
+                            <!-- Add Pages -->
+                            <div class="card card-outline card-info mb-4">
+                                <div class="card-header">
+                                    <h3 class="card-title">Add Pages</h3>
+                                    <div class="card-tools">
+                                        <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse">
+                                            <i class="bi bi-plus-lg"></i>
+                                        </button>
                                     </div>
-
-                                    <!-- Edit Drawer (Hidden) -->
-                                    <div class="edit-drawer hidden p-3 border-t border-gray-100 text-sm space-y-2">
-                                        <div>
-                                            <label class="block text-xs font-bold text-gray-400">Navigation Label</label>
-                                            <input type="text" class="edit-label-input w-full p-2 border rounded"
-                                                value="<?php echo htmlspecialchars($item['label']); ?>"
-                                                oninput="updateLabelLive(this)">
-                                        </div>
-                                        <?php if ($item['type'] === 'custom_link'): ?>
-                                            <div>
-                                                <label class="block text-xs font-bold text-gray-400">URL</label>
-                                                <input type="text" class="edit-url-input w-full p-2 border rounded"
-                                                    value="<?php echo htmlspecialchars($item['url']); ?>">
+                                </div>
+                                <div class="card-body">
+                                    <div class="max-h-60 overflow-y-auto mb-3 pe-2" style="max-height: 200px;">
+                                        <?php foreach ($availPages as $p): ?>
+                                            <div class="form-check">
+                                                <input class="form-check-input page-checkbox" type="checkbox" value=""
+                                                    id="pageCheck<?php echo $p['id']; ?>" data-id="<?php echo $p['id']; ?>"
+                                                    data-title="<?php echo htmlspecialchars($p['title']); ?>">
+                                                <label class="form-check-label" for="pageCheck<?php echo $p['id']; ?>">
+                                                    <?php echo htmlspecialchars($p['title']); ?>
+                                                </label>
                                             </div>
-                                        <?php endif; ?>
+                                        <?php endforeach; ?>
                                     </div>
+                                    <button onclick="addPages()" class="btn btn-sm btn-outline-secondary w-100">Add to
+                                        Menu</button>
+                                </div>
+                            </div>
 
-                                    <!-- Nested Container -->
-                                    <div class="nested-sortable pl-4 ml-4 border-l-2 border-gray-100 min-h-[10px] py-1">
+                            <!-- Add Custom Link -->
+                            <div class="card card-outline card-secondary mb-4">
+                                <div class="card-header">
+                                    <h3 class="card-title">Custom Link</h3>
+                                    <div class="card-tools">
+                                        <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse">
+                                            <i class="bi bi-plus-lg"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-2">
+                                        <label class="form-label text-muted small text-uppercase fw-bold">URL</label>
+                                        <input type="text" id="custom-url" placeholder="https://"
+                                            class="form-control form-control-sm">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label text-muted small text-uppercase fw-bold">Label
+                                            Text</label>
+                                        <input type="text" id="custom-label" placeholder="Menu Text"
+                                            class="form-control form-control-sm">
+                                    </div>
+                                    <button onclick="addCustomLink()" class="btn btn-sm btn-outline-secondary w-100">Add
+                                        to Menu</button>
+                                </div>
+                            </div>
+
+                            <!-- Add Label -->
+                            <div class="card card-outline card-secondary mb-4">
+                                <div class="card-header">
+                                    <h3 class="card-title">Section Label</h3>
+                                    <div class="card-tools">
+                                        <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse">
+                                            <i class="bi bi-plus-lg"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <p class="text-muted small">Use this for Footer column headers.</p>
+                                    <div class="mb-3">
+                                        <label class="form-label text-muted small text-uppercase fw-bold">Label
+                                            Text</label>
+                                        <input type="text" id="section-label" placeholder="e.g. Company"
+                                            class="form-control form-control-sm">
+                                    </div>
+                                    <button onclick="addLabel()" class="btn btn-sm btn-outline-secondary w-100">Add to
+                                        Menu</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Panel: Menu Structure -->
+                        <div class="col-lg-8">
+                            <div class="card card-outline card-primary">
+                                <div class="card-header">
+                                    <h3 class="card-title">Menu Structure</h3>
+                                </div>
+                                <div class="card-body">
+                                    <p class="text-muted small mb-4">Drag items to reorder. Drag right to create a
+                                        sub-menu.</p>
+
+                                    <div id="menu-root" class="nested-sortable pb-4">
                                         <?php
-                                        if (isset($item['children'])) {
-                                            foreach ($item['children'] as $child) {
-                                                echo renderMenuItem($child);
-                                            }
+                                        function renderMenuItem($item)
+                                        {
+                                            $typeLabel = ($item['type'] === 'page') ? 'Page' : (($item['type'] === 'label') ? 'Label' : 'Custom');
+                                            $badgeClass = ($item['type'] === 'page') ? 'text-bg-info' : (($item['type'] === 'label') ? 'text-bg-secondary' : 'text-bg-warning');
+                                            ob_start();
+                                            ?>
+                                            <div class="menu-item card mb-2 shadow-sm"
+                                                data-type="<?php echo $item['type']; ?>"
+                                                data-related-id="<?php echo $item['related_id'] ?? ''; ?>"
+                                                data-url="<?php echo htmlspecialchars($item['url'] ?? ''); ?>"
+                                                data-label="<?php echo htmlspecialchars($item['label']); ?>"
+                                                data-id="<?php echo $item['id']; ?>">
+
+                                                <div
+                                                    class="card-header d-flex justify-content-between align-items-center p-2 bg-light">
+                                                    <div class="d-flex align-items-center gap-2">
+                                                        <i class="bi bi-grip-vertical text-muted cursor-move"></i>
+                                                        <span
+                                                            class="fw-bold item-label-display"><?php echo htmlspecialchars($item['label']); ?></span>
+                                                        <span
+                                                            class="badge <?php echo $badgeClass; ?>"><?php echo $typeLabel; ?></span>
+                                                    </div>
+                                                    <div class="btn-group">
+                                                        <button type="button" onclick="toggleEdit(this)"
+                                                            class="btn btn-xs btn-link text-decoration-none">Edit</button>
+                                                        <button type="button" onclick="removeCreate(this)"
+                                                            class="btn btn-xs btn-link text-danger text-decoration-none">Remove</button>
+                                                    </div>
+                                                </div>
+
+                                                <div class="edit-drawer d-none p-3 border-top bg-body">
+                                                    <div class="mb-2">
+                                                        <label class="form-label small text-muted">Navigation Label</label>
+                                                        <input type="text"
+                                                            class="form-control form-control-sm edit-label-input"
+                                                            value="<?php echo htmlspecialchars($item['label']); ?>"
+                                                            oninput="updateLabelLive(this)">
+                                                    </div>
+                                                    <?php if ($item['type'] === 'custom_link'): ?>
+                                                        <div class="mb-2">
+                                                            <label class="form-label small text-muted">URL</label>
+                                                            <input type="text"
+                                                                class="form-control form-control-sm edit-url-input"
+                                                                value="<?php echo htmlspecialchars($item['url']); ?>">
+                                                        </div>
+                                                    <?php endif; ?>
+                                                </div>
+
+                                                <div class="nested-sortable ms-4 mt-2 mb-2">
+                                                    <?php
+                                                    if (isset($item['children'])) {
+                                                        foreach ($item['children'] as $child) {
+                                                            echo renderMenuItem($child);
+                                                        }
+                                                    }
+                                                    ?>
+                                                </div>
+                                            </div>
+                                            <?php
+                                            return ob_get_clean();
+                                        }
+
+                                        foreach ($menuTree as $rootItem) {
+                                            echo renderMenuItem($rootItem);
                                         }
                                         ?>
                                     </div>
                                 </div>
-                                <?php
-                                return ob_get_clean();
-                            }
-
-                            foreach ($menuTree as $rootItem) {
-                                echo renderMenuItem($rootItem);
-                            }
-                            ?>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </main>
+        </main>
+
+        <?php include 'includes/footer_lte.php'; ?>
+    </div>
+
+    <?php include 'includes/scripts_lte.php'; ?>
 
     <script>
         // --- Drag & Drop Logic ---
@@ -310,45 +349,47 @@ $page_title = ucfirst($location) . " Menu Manager";
                 animation: 150,
                 fallbackOnBody: true,
                 swapThreshold: 0.65,
+                handle: '.card-header', // Only drag by header
                 onEnd: function (evt) {
-                    // Logic to handle potential max depth if needed (not implemented for simplicity)
                 }
             });
         }
 
-        // Initialize root and recursive children
         initSortable(document.getElementById('menu-root'));
         document.querySelectorAll('.nested-sortable').forEach(el => initSortable(el));
 
         // --- Item Management ---
 
         function createItemHTML(type, label, relatedId = '', url = '') {
+            const badgeClass = (type === 'page') ? 'text-bg-info' : ((type === 'label') ? 'text-bg-secondary' : 'text-bg-warning');
+            const typeLabel = (type === 'page') ? 'Page' : ((type === 'label') ? 'Label' : 'Custom');
+
             const template = `
-                <div class="menu-item bg-white border border-gray-200 rounded-lg mb-2" 
+                <div class="menu-item card mb-2 shadow-sm" 
                      data-type="${type}" data-related-id="${relatedId}" data-url="${url}" data-label="${label}" data-id="new-${Date.now()}-${Math.random()}">
-                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-t-lg">
-                        <div class="flex items-center gap-3">
-                            <span class="cursor-move text-gray-400">☰</span>
-                            <span class="font-bold text-gray-700 item-label-display">${label}</span>
-                            <span class="text-xs bg-gray-200 text-gray-500 px-2 py-0.5 rounded">${type === 'page' ? 'Page' : (type === 'label' ? 'Label' : 'Custom Link')}</span>
+                    <div class="card-header d-flex justify-content-between align-items-center p-2 bg-light">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="bi bi-grip-vertical text-muted cursor-move"></i>
+                            <span class="fw-bold item-label-display">${label}</span>
+                            <span class="badge ${badgeClass}">${typeLabel}</span>
                         </div>
-                        <div class="flex items-center gap-2">
-                            <button onclick="toggleEdit(this)" class="text-xs text-blue-500 hover:underline">Edit</button>
-                            <button onclick="removeCreate(this)" class="text-xs text-red-500 hover:underline">Remove</button>
+                        <div class="btn-group">
+                            <button type="button" onclick="toggleEdit(this)" class="btn btn-xs btn-link text-decoration-none">Edit</button>
+                            <button type="button" onclick="removeCreate(this)" class="btn btn-xs btn-link text-danger text-decoration-none">Remove</button>
                         </div>
                     </div>
-                    <div class="edit-drawer hidden p-3 border-t border-gray-100 text-sm space-y-2">
-                        <div>
-                            <label class="block text-xs font-bold text-gray-400">Navigation Label</label>
-                            <input type="text" class="edit-label-input w-full p-2 border rounded" value="${label}" oninput="updateLabelLive(this)">
+                    <div class="edit-drawer d-none p-3 border-top bg-body">
+                        <div class="mb-2">
+                            <label class="form-label small text-muted">Navigation Label</label>
+                            <input type="text" class="form-control form-control-sm edit-label-input" value="${label}" oninput="updateLabelLive(this)">
                         </div>
                         ${type === 'custom_link' ? `
-                        <div>
-                            <label class="block text-xs font-bold text-gray-400">URL</label>
-                            <input type="text" class="edit-url-input w-full p-2 border rounded" value="${url}">
+                        <div class="mb-2">
+                            <label class="form-label small text-muted">URL</label>
+                            <input type="text" class="form-control form-control-sm edit-url-input" value="${url}">
                         </div>` : ''}
                     </div>
-                    <div class="nested-sortable pl-4 ml-4 border-l-2 border-gray-100 min-h-[10px] py-1"></div>
+                    <div class="nested-sortable ms-4 mt-2 mb-2"></div>
                 </div>
             `;
             return template;
@@ -368,7 +409,7 @@ $page_title = ucfirst($location) . " Menu Manager";
                 const id = c.getAttribute('data-id');
                 const title = c.getAttribute('data-title');
                 appendToRoot(createItemHTML('page', title, id));
-                c.checked = false; // reset
+                c.checked = false;
             });
         }
 
@@ -380,13 +421,10 @@ $page_title = ucfirst($location) . " Menu Manager";
                     icon: 'error',
                     title: 'Validation Error',
                     text: 'Label text is required for custom links.',
-                    confirmButtonColor: '#10b981'
                 });
                 return;
             }
             appendToRoot(createItemHTML('custom_link', label, '', url));
-
-            // reset
             document.getElementById('custom-url').value = '';
             document.getElementById('custom-label').value = '';
         }
@@ -398,7 +436,6 @@ $page_title = ucfirst($location) . " Menu Manager";
                     icon: 'error',
                     title: 'Validation Error',
                     text: 'Please enter a text for the label section.',
-                    confirmButtonColor: '#10b981',
                 });
                 return;
             }
@@ -409,15 +446,10 @@ $page_title = ucfirst($location) . " Menu Manager";
         function removeCreate(btn) {
             Swal.fire({
                 title: 'Remove item?',
-                text: "This will remove the item and its children from the menu.",
+                text: "This will remove the item and its children.",
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
                 confirmButtonText: 'Yes, remove it!',
-                customClass: {
-                    popup: 'rounded-[1.5rem]'
-                }
             }).then((result) => {
                 if (result.isConfirmed) {
                     btn.closest('.menu-item').remove();
@@ -427,19 +459,17 @@ $page_title = ucfirst($location) . " Menu Manager";
 
         function toggleEdit(btn) {
             const drawer = btn.closest('.menu-item').querySelector('.edit-drawer');
-            drawer.classList.toggle('hidden');
+            drawer.classList.toggle('d-none');
         }
 
         function updateLabelLive(input) {
             const newVal = input.value;
             const display = input.closest('.menu-item').querySelector('.item-label-display');
             display.textContent = newVal;
-            // update data-att
             input.closest('.menu-item').setAttribute('data-label', newVal);
         }
 
         // --- Save Logic ---
-        // Recursive function to scrape DOM tree into JSON
         function scrapMenu(container) {
             const items = [];
             Array.from(container.children).forEach(el => {
@@ -448,7 +478,7 @@ $page_title = ucfirst($location) . " Menu Manager";
                 const data = {
                     id: el.getAttribute('data-id'),
                     type: el.getAttribute('data-type'),
-                    label: el.querySelector('.edit-label-input').value, // Use input value directly
+                    label: el.querySelector('.edit-label-input').value,
                     url: el.querySelector('.edit-url-input')?.value || el.getAttribute('data-url'),
                     related_id: el.getAttribute('data-related-id'),
                     children: []
@@ -466,12 +496,11 @@ $page_title = ucfirst($location) . " Menu Manager";
 
         function saveMenu() {
             const btn = document.getElementById('saveBtn');
-            const originalText = btn.innerText;
-            btn.innerText = 'Saving...';
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving...';
             btn.disabled = true;
 
             const menuData = scrapMenu(document.getElementById('menu-root'));
-
             const formData = new FormData();
             formData.append('action', 'save_menu');
             formData.append('menu_data', JSON.stringify(menuData));
@@ -495,7 +524,6 @@ $page_title = ucfirst($location) . " Menu Manager";
                             icon: 'error',
                             title: 'Failed',
                             text: 'Error: ' + data.error,
-                            confirmButtonColor: '#10b981'
                         });
                     }
                 })
@@ -503,12 +531,11 @@ $page_title = ucfirst($location) . " Menu Manager";
                     Swal.fire({
                         icon: 'error',
                         title: 'Network Error',
-                        text: 'Unable to connect to the server. Please check your connection.',
-                        confirmButtonColor: '#10b981'
+                        text: 'Unable to connect to the server.',
                     });
                 })
                 .finally(() => {
-                    btn.innerText = originalText;
+                    btn.innerHTML = originalText;
                     btn.disabled = false;
                 });
         }

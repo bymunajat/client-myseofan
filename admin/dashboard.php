@@ -23,126 +23,197 @@ $recentPosts = $pdo->query("SELECT title, created_at FROM blog_posts WHERE lang_
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - MySeoFan</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Outfit', sans-serif;
-            background: #0f172a;
-            /* Slate 900 - Dark Mode Background */
-            color: #f8fafc;
-            /* Slate 50 Text */
-            min-height: 100vh;
-        }
-    </style>
+
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css"
+        integrity="sha256-tXJfXfp6Ewt1ilPzLDtQnJV4hclT9XuaZUKyUvmyr+Q=" crossorigin="anonymous">
+
+    <!-- OVerlayScrollbars -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css"
+        crossorigin="anonymous">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
+        crossorigin="anonymous">
+
+    <!-- AdminLTE -->
+    <link rel="stylesheet" href="../AdminLTE/dist/css/adminlte.css">
 </head>
 
-<body class="flex">
-    <!-- Sidebar -->
-    <?php include 'includes/sidebar.php'; ?>
+<body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
+    <div class="app-wrapper">
+        <!-- Header -->
+        <?php include 'includes/header_lte.php'; ?>
 
-    <!-- Main Content -->
-    <main class="flex-1 min-h-screen bg-[#0f172a]">
-        <header
-            class="bg-[#1e293b] border-b-4 border-fuchsia-500/50 px-8 h-20 flex items-center justify-between shadow-lg shadow-black/20">
-            <div>
-                <h3 class="text-xl font-bold text-white">Overview</h3>
-                <p class="text-xs text-gray-400 mt-0.5">Quick stats and recent activity</p>
-            </div>
-            <div class="flex items-center gap-4">
-                <span class="text-sm font-medium text-gray-400">Hello,
-                    <?php echo htmlspecialchars($_SESSION['username']); ?>
-                </span>
-                <div
-                    class="w-10 h-10 bg-slate-800 text-fuchsia-400 border border-fuchsia-500/30 rounded-full flex items-center justify-center font-bold shadow-inner">
-                    A</div>
-            </div>
-        </header>
+        <!-- Sidebar -->
+        <?php include 'includes/sidebar_lte.php'; ?>
 
-        <div class="p-8">
-            <!-- Stats -->
-            <!-- Stats -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
-                <div
-                    class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 hover:border-fuchsia-200 transition-all">
-                    <p class="text-sm text-gray-500 font-medium mb-1">Blog Posts</p>
-                    <h4
-                        class="text-3xl font-black bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-600 bg-clip-text text-transparent">
-                        <?php echo $postCount; ?>
-                    </h4>
-                </div>
-                <div
-                    class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 hover:border-blue-200 transition-all">
-                    <p class="text-sm text-gray-500 font-medium mb-1">Static Pages</p>
-                    <h4 class="text-3xl font-bold text-blue-600"><?php echo $pageCount; ?></h4>
-                </div>
-                <div
-                    class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 hover:border-orange-200 transition-all">
-                    <p class="text-sm text-gray-500 font-medium mb-1">System Activities</p>
-                    <h4 class="text-3xl font-bold text-orange-500"><?php echo $logCount; ?></h4>
-                </div>
-                <div
-                    class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 hover:border-gray-300 transition-all">
-                    <p class="text-sm text-gray-500 font-medium mb-1">PHP Version</p>
-                    <h4 class="text-3xl font-bold text-gray-800"><?php echo phpversion(); ?></h4>
-                </div>
-            </div>
-
-            <div class="grid md:grid-cols-3 gap-8 mb-10">
-                <!-- Welcome Card -->
-                <!-- Welcome Card -->
-                <div
-                    class="md:col-span-2 bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-600 rounded-[2.5rem] p-10 text-white relative overflow-hidden shadow-2xl shadow-fuchsia-200">
-                    <div class="relative z-10">
-                        <h2 class="text-3xl font-bold mb-4">Welcome to Your CMS</h2>
-                        <p class="opacity-90 leading-relaxed max-w-md">
-                            Your content platform is now fully dynamic. Manage translations, articles, and SEO from one
-                            centralized hub.
-                        </p>
-                        <div class="flex gap-4 mt-8">
-                            <a href="../index.php" target="_blank"
-                                class="px-6 py-3 bg-white text-fuchsia-600 rounded-xl font-bold hover:bg-gray-100 transition-all">
-                                Live Site
-                            </a>
-                            <a href="blog.php?action=add"
-                                class="px-6 py-3 bg-fuchsia-500 text-white rounded-xl font-bold hover:bg-fuchsia-400 transition-all border border-fuchsia-400/50">
-                                New Post
-                            </a>
+        <!-- Main Content -->
+        <main class="app-main">
+            <div class="app-content-header">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h3 class="mb-0">Dashboard</h3>
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-end">
+                                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+                            </ol>
                         </div>
                     </div>
-                    <div
-                        class="absolute -right-20 -bottom-20 w-80 h-80 bg-fuchsia-500 rounded-full opacity-50 blur-3xl">
-                    </div>
                 </div>
+            </div>
 
-                <!-- Recent Activity -->
-                <div class="bg-[#1e293b] p-8 rounded-[2.5rem] shadow-lg border border-slate-700/50">
-                    <h4 class="text-lg font-bold mb-6 text-white border-b border-slate-700 pb-4">Recent Blog Posts</h4>
-                    <div class="space-y-4">
-                        <?php foreach ($recentPosts as $p): ?>
-                            <div class="flex items-start gap-4 pb-4 border-b border-slate-700 last:border-0 last:pb-0">
-                                <div
-                                    class="w-2 h-2 mt-2 bg-gradient-to-r from-violet-500 to-fuchsia-500 rounded-full shadow-[0_0_10px_rgba(232,121,249,0.5)]">
+            <div class="app-content">
+                <div class="container-fluid">
+                    <!-- Stats Rows -->
+                    <div class="row">
+                        <div class="col-lg-3 col-6">
+                            <div class="small-box text-bg-primary">
+                                <div class="inner">
+                                    <h3><?php echo $postCount; ?></h3>
+                                    <p>Blog Posts</p>
                                 </div>
-                                <div>
-                                    <p
-                                        class="font-bold text-gray-200 line-clamp-1 hover:text-fuchsia-400 transition-colors cursor-default">
-                                        <?php echo htmlspecialchars($p['title']); ?>
-                                    </p>
-                                    <p class="text-xs text-gray-500 mt-1">
-                                        <?php echo date('M d, Y', strtotime($p['created_at'])); ?>
-                                    </p>
+                                <svg class="small-box-icon" fill="currentColor" viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z">
+                                    </path>
+                                </svg>
+                                <a href="blog.php?action=list&filter_lang=en"
+                                    class="small-box-footer link-light link-underline-opacity-0 link-underline-opacity-50-hover">
+                                    More info <i class="bi bi-link-45deg"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-6">
+                            <div class="small-box text-bg-success">
+                                <div class="inner">
+                                    <h3><?php echo $pageCount; ?></h3>
+                                    <p>Static Pages</p>
+                                </div>
+                                <svg class="small-box-icon" fill="currentColor" viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <path clip-rule="evenodd" fill-rule="evenodd"
+                                        d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm11.378-3.917c-.89-.777-2.366-.777-3.255 0a.75.75 0 01-.988-1.129c1.454-1.272 3.776-1.272 5.23 0 1.513 1.324 1.513 3.518 0 4.842a3.75 3.75 0 01-.837.552c-.676.328-1.028.774-1.028 1.152v.202a.75.75 0 01-1.5 0v-.202c0-.944.606-1.786 1.45-2.194a2.25 2.25 0 00.5-2.607zM12.75 16.75a.75.75 0 10-1.5 0 .75.75 0 001.5 0z">
+                                    </path>
+                                </svg>
+                                <a href="pages.php?action=list"
+                                    class="small-box-footer link-light link-underline-opacity-0 link-underline-opacity-50-hover">
+                                    More info <i class="bi bi-link-45deg"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-6">
+                            <div class="small-box text-bg-warning">
+                                <div class="inner">
+                                    <h3><?php echo $logCount; ?></h3>
+                                    <p>Activity Logs</p>
+                                </div>
+                                <svg class="small-box-icon" fill="currentColor" viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <path clip-rule="evenodd" fill-rule="evenodd"
+                                        d="M12 2.25a.75.75 0 01.75.75v.756a9.006 9.006 0 016.944 6.944h.756a.75.75 0 010 1.5h-.756a9.006 9.006 0 01-6.944 6.944v.756a.75.75 0 01-1.5 0v-.756a9.006 9.006 0 01-6.944-6.944h-.756a.75.75 0 010-1.5h.756a9.006 9.006 0 016.944-6.944V3a.75.75 0 01.75-.75zM8.25 12a3.75 3.75 0 117.5 0 3.75 3.75 0 01-7.5 0z">
+                                    </path>
+                                </svg>
+                                <a href="logs.php"
+                                    class="small-box-footer link-dark link-underline-opacity-0 link-underline-opacity-50-hover">
+                                    More info <i class="bi bi-link-45deg"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-6">
+                            <div class="small-box text-bg-info">
+                                <div class="inner">
+                                    <h3><?php echo phpversion(); ?></h3>
+                                    <p>PHP Version</p>
+                                </div>
+                                <svg class="small-box-icon" fill="currentColor" viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <path clip-rule="evenodd" fill-rule="evenodd"
+                                        d="M2.25 6a3 3 0 013-3h13.5a3 3 0 013 3v12a3 3 0 01-3 3H5.25a3 3 0 01-3-3V6zm3.97.97a.75.75 0 011.06 0l2.25 2.25a.75.75 0 010 1.06l-2.25 2.25a.75.75 0 01-1.06-1.06l1.72-1.72-1.72-1.72a.75.75 0 010-1.06zm4.28 4.28a.75.75 0 000 1.5h3a.75.75 0 000-1.5h-3z">
+                                    </path>
+                                </svg>
+                                <a href="#"
+                                    class="small-box-footer link-light link-underline-opacity-0 link-underline-opacity-50-hover">
+                                    System Info <i class="bi bi-link-45deg"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity and Actions -->
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <div class="card mb-4 card-primary card-outline">
+                                <div class="card-header">
+                                    <h3 class="card-title">Recent Blog Posts</h3>
+                                </div>
+                                <div class="card-body p-0">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped align-middle">
+                                            <thead>
+                                                <tr>
+                                                    <th>Title</th>
+                                                    <th>Date</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php foreach ($recentPosts as $p): ?>
+                                                    <tr>
+                                                        <td><?php echo htmlspecialchars($p['title']); ?></td>
+                                                        <td><?php echo date('M d, Y', strtotime($p['created_at'])); ?></td>
+                                                        <td>
+                                                            <a href="blog.php?action=list&filter_lang=en"
+                                                                class="btn btn-sm btn-primary">
+                                                                <i class="bi bi-eye"></i> View
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                <?php endforeach; ?>
+                                                <?php if (empty($recentPosts)): ?>
+                                                    <tr>
+                                                        <td colspan="3" class="text-center">No posts found.</td>
+                                                    </tr>
+                                                <?php endif; ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
-                        <?php endforeach; ?>
-                        <?php if (empty($recentPosts)): ?>
-                            <p class="text-gray-500 text-sm italic">No posts yet.</p>
-                        <?php endif; ?>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <div class="card mb-4 card-secondary card-outline">
+                                <div class="card-header">
+                                    <h3 class="card-title">Quick Actions</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-grid gap-2">
+                                        <a href="blog.php?action=add" class="btn btn-primary">
+                                            <i class="bi bi-plus-circle me-1"></i> New Blog Post
+                                        </a>
+                                        <a href="../index.php" target="_blank" class="btn btn-success">
+                                            <i class="bi bi-globe me-1"></i> View Live Site
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </main>
+        </main>
+
+        <?php include 'includes/footer_lte.php'; ?>
+    </div>
+
+    <?php include 'includes/scripts_lte.php'; ?>
 </body>
 
 </html>

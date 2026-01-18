@@ -39,61 +39,80 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login - MySeoFan</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Outfit', sans-serif;
-            font-family: 'Outfit', sans-serif;
-            background: #0f172a;
-        }
-
-        .glass {
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-        }
-    </style>
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css"
+        crossorigin="anonymous">
+    <!-- OVerlayScrollbars -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css"
+        crossorigin="anonymous">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
+        crossorigin="anonymous">
+    <!-- AdminLTE -->
+    <link rel="stylesheet" href="../AdminLTE/dist/css/adminlte.css">
 </head>
 
-<body class="flex items-center justify-center min-h-screen">
-    <div class="max-w-md w-full px-6">
-        <div class="text-center mb-10">
-            <h1
-                class="text-3xl font-black bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-600 bg-clip-text text-transparent mb-2">
-                MySeoFan Admin</h1>
-            <p class="text-gray-400 font-medium">Sign in to manage your downloader</p>
+<body class="login-page bg-body-secondary">
+    <div class="login-box">
+        <div class="login-logo">
+            <a href="#"><b>MySeoFan</b> Admin</a>
         </div>
+        <!-- /.login-logo -->
+        <div class="card">
+            <div class="card-body login-card-body">
+                <p class="login-box-msg">Sign in to start your session</p>
 
-        <div class="glass p-8 rounded-3xl shadow-xl">
-            <?php if ($error): ?>
-                <div class="bg-red-50 text-red-600 p-4 rounded-xl mb-6 text-sm font-medium">
-                    <?php echo $error; ?>
-                </div>
-            <?php endif; ?>
+                <?php if ($error): ?>
+                    <div class="alert alert-danger" role="alert">
+                        <?php echo $error; ?>
+                    </div>
+                <?php endif; ?>
 
-            <form action="" method="POST" class="space-y-6">
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">Username</label>
-                    <input type="text" name="username" required
-                        class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-4 focus:ring-fuchsia-500/10 focus:border-fuchsia-500 outline-none transition-all">
-                </div>
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">Password</label>
-                    <input type="password" name="password" required
-                        class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-4 focus:ring-fuchsia-500/10 focus:border-fuchsia-500 outline-none transition-all">
-                </div>
-                <button type="submit"
-                    class="w-full bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-600 text-white py-3 rounded-xl font-bold shadow-lg shadow-fuchsia-500/30 hover:scale-[1.02] transition-all">
-                    Sign In
-                </button>
-            </form>
+                <form action="" method="POST">
+                    <div class="input-group mb-3">
+                        <input type="text" name="username" class="form-control" placeholder="Username" required>
+                        <div class="input-group-text">
+                            <span class="bi bi-person"></span>
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="password" name="password" class="form-control" placeholder="Password" required>
+                        <div class="input-group-text">
+                            <span class="bi bi-lock-fill"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Remember Me
+                                </label>
+                            </div>
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-4">
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary">Sign In</button>
+                            </div>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                </form>
+
+                <p class="mb-1 mt-3">
+                    <a href="#" class="text-secondary small">I forgot my password</a>
+                </p>
+            </div>
+            <!-- /.login-card-body -->
         </div>
-
-        <p class="text-center mt-8 text-sm text-gray-500">
-            &copy;
-            <?php echo date('Y'); ?> MySeoFan Studio
-        </p>
     </div>
+    <!-- /.login-box -->
+
+    <!-- AdminLTE JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+    <script src="../AdminLTE/dist/js/adminlte.js"></script>
 </body>
 
 </html>

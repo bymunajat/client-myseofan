@@ -60,135 +60,199 @@ if ($action === 'edit' && $id) {
 <head>
     <meta charset="UTF-8">
     <title>Redirects Manager - MySeoFan Admin</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Outfit', sans-serif;
-            background: #0f172a;
-            color: #f8fafc;
-            min-height: 100vh;
-        }
-    </style>
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css"
+        crossorigin="anonymous">
+    <!-- OVerlayScrollbars -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css"
+        crossorigin="anonymous">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
+        crossorigin="anonymous">
+    <!-- AdminLTE -->
+    <link rel="stylesheet" href="../AdminLTE/dist/css/adminlte.css">
 </head>
 
-<body class="flex">
-    <?php include 'includes/sidebar.php'; ?>
-    <main class="flex-1 min-h-screen pb-20 bg-[#0f172a]">
-        <header
-            class="bg-[#1e293b] border-b-4 border-fuchsia-500/50 px-8 h-20 flex items-center justify-between shadow-lg shadow-black/20 sticky top-0 z-10">
-            <div>
-                <h1 class="text-xl font-bold text-white">Redirects Manager</h1>
-                <p class="text-xs text-gray-400">Manage 301/302 URL redirects</p>
-            </div>
-            <a href="?action=add"
-                class="bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-600 text-white px-6 py-2.5 rounded-xl font-bold text-sm hover:shadow-lg hover:shadow-fuchsia-500/40 transition-all shadow-md shadow-fuchsia-900/20">
-                + New Redirect
-            </a>
-        </header>
+<body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
+    <div class="app-wrapper">
+        <?php include 'includes/header_lte.php'; ?>
+        <?php include 'includes/sidebar_lte.php'; ?>
 
-        <div class="p-8">
-            <?php if ($action === 'add' || $action === 'edit'): ?>
-                <div class="max-w-2xl bg-white p-8 rounded-3xl border border-gray-100 shadow-sm mx-auto">
-                    <h2 class="text-2xl font-bold mb-6">
-                        <?php echo $action === 'add' ? 'Add New Redirect' : 'Edit Redirect'; ?>
-                    </h2>
-                    <form method="POST" class="space-y-6">
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Source URL (e.g.
-                                /old-page)</label>
-                            <input type="text" name="source_url"
-                                value="<?php echo htmlspecialchars($editData['source_url'] ?? ''); ?>" required
-                                class="w-full px-4 py-3 rounded-xl border-2 border-fuchsia-500 bg-white focus:bg-white outline-none font-bold text-black text-sm shadow-lg shadow-fuchsia-500/20">
+        <main class="app-main">
+            <div class="app-content-header">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h3 class="mb-0">Redirects Manager</h3>
                         </div>
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Target URL (e.g.
-                                /new-page)</label>
-                            <input type="text" name="target_url"
-                                value="<?php echo htmlspecialchars($editData['target_url'] ?? ''); ?>" required
-                                class="w-full px-4 py-3 rounded-xl border-2 border-fuchsia-500 bg-white focus:bg-white outline-none font-bold text-black text-sm shadow-lg shadow-fuchsia-500/20">
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-end">
+                                <li class="breadcrumb-item"><a href="dashboard.php">Home</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Redirects</li>
+                            </ol>
                         </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-2">Redirect Type</label>
-                                <select name="redirect_type"
-                                    class="w-full px-4 py-3 rounded-xl border-2 border-fuchsia-500 bg-white focus:bg-white outline-none font-bold text-black text-sm shadow-lg shadow-fuchsia-500/20">
-                                    <option value="301" <?php echo ($editData['redirect_type'] ?? 301) == 301 ? 'selected' : ''; ?>>301 (Permanent)</option>
-                                    <option value="302" <?php echo ($editData['redirect_type'] ?? 301) == 302 ? 'selected' : ''; ?>>302 (Temporary)</option>
-                                </select>
-                            </div>
-                            <div class="flex items-center gap-3 pt-8">
-                                <input type="checkbox" name="is_active" id="is_active" <?php echo ($editData['is_active'] ?? 1) ? 'checked' : ''; ?> class="w-5 h-5 rounded border-gray-300 text-fuchsia-600
-                            focus:ring-fuchsia-500">
-                                <label for="is_active" class="text-sm font-bold text-gray-700">Is Active</label>
-                            </div>
-                        </div>
-                        <div class="flex gap-4 pt-4">
-                            <button type="submit"
-                                class="flex-1 bg-gray-900 text-white py-3 rounded-xl font-bold hover:bg-black transition-all">Save
-                                Redirect</button>
-                            <a href="redirects.php"
-                                class="px-8 py-3 bg-gray-100 text-gray-600 rounded-xl font-bold hover:bg-gray-200 transition-all text-center">Cancel</a>
-                        </div>
-                    </form>
+                    </div>
                 </div>
-            <?php else: ?>
-                <div class="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
-                    <table class="w-full text-left">
-                        <thead class="bg-gray-50 border-b border-gray-100">
-                            <tr>
-                                <th class="px-6 py-4 text-xs font-black uppercase text-black">Source</th>
-                                <th class="px-6 py-4 text-xs font-black uppercase text-black">Target</th>
-                                <th class="px-6 py-4 text-xs font-black uppercase text-black">Type</th>
-                                <th class="px-6 py-4 text-xs font-black uppercase text-black">Status</th>
-                                <th class="px-6 py-4 text-xs font-black uppercase text-black text-right">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-50">
-                            <?php foreach ($redirects as $r): ?>
-                                <tr class="hover:bg-gray-50/50 transition-colors">
-                                    <td class="px-6 py-4 font-mono text-sm font-bold text-gray-900">
-                                        <?php echo htmlspecialchars($r['source_url']); ?>
-                                    </td>
-                                    <td class="px-6 py-4 font-mono text-sm font-bold text-gray-900">
-                                        <?php echo htmlspecialchars($r['target_url']); ?>
-                                    </td>
-                                    <td class="px-6 py-4"><span class="px-2 py-1 bg-gray-100 rounded text-[10px] font-black">
-                                            <?php echo $r['redirect_type']; ?>
-                                        </span></td>
-                                    <td class="px-6 py-4">
-                                        <?php if ($r['is_active']): ?>
-                                            <span class="w-2 h-2 rounded-full bg-fuchsia-500 inline-block mr-2"></span>
-                                            <span class="text-[10px] font-black text-fuchsia-700 uppercase">Active</span>
-                                        <?php else: ?>
-                                            <span class="w-2 h-2 rounded-full bg-gray-300 inline-block mr-2"></span>
-                                            <span class="text-[10px] font-bold text-gray-400 uppercase">Inactive</span>
-                                        <?php endif; ?>
-                                    </td>
-                                    <td class="px-6 py-4 text-right">
-                                        <div class="flex justify-end gap-3">
-                                            <a href="?action=edit&id=<?php echo $r['id']; ?>"
-                                                class="px-3 py-1.5 hover:bg-fuchsia-50 text-fuchsia-700 font-bold rounded-lg transition-all border border-transparent hover:border-fuchsia-100">Edit</a>
-                                            <a href="javascript:void(0);"
-                                                onclick="confirmDelete('?action=delete&id=<?php echo $r['id']; ?>', 'This redirect rule will be removed.')"
-                                                class="px-3 py-1.5 hover:bg-red-50 text-red-600 font-bold rounded-lg transition-all border border-transparent hover:border-red-100">Delete</a>
+            </div>
+
+            <div class="app-content">
+                <div class="container-fluid">
+
+                    <?php if (isset($_GET['msg'])): ?>
+                        <?php if ($_GET['msg'] == 'added'): ?>
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <i class="bi bi-check-circle-fill me-2"></i> Redirect added successfully.
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        <?php elseif ($_GET['msg'] == 'updated'): ?>
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <i class="bi bi-check-circle-fill me-2"></i> Redirect updated successfully.
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        <?php elseif ($_GET['msg'] == 'deleted'): ?>
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <i class="bi bi-trash-fill me-2"></i> Redirect deleted successfully.
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        <?php endif; ?>
+                    <?php endif; ?>
+
+                    <?php if ($action === 'add' || $action === 'edit'): ?>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card card-primary card-outline">
+                                    <div class="card-header">
+                                        <h3 class="card-title">
+                                            <?php echo $action === 'add' ? 'Add New Redirect' : 'Edit Redirect'; ?></h3>
+                                    </div>
+                                    <form method="POST">
+                                        <div class="card-body">
+                                            <div class="mb-3">
+                                                <label class="form-label">Source URL <small class="text-muted">(e.g.
+                                                        /old-page)</small></label>
+                                                <input type="text" name="source_url"
+                                                    value="<?php echo htmlspecialchars($editData['source_url'] ?? ''); ?>"
+                                                    class="form-control" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Target URL <small class="text-muted">(e.g.
+                                                        /new-page)</small></label>
+                                                <input type="text" name="target_url"
+                                                    value="<?php echo htmlspecialchars($editData['target_url'] ?? ''); ?>"
+                                                    class="form-control" required>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Type</label>
+                                                        <select name="redirect_type" class="form-select">
+                                                            <option value="301" <?php echo ($editData['redirect_type'] ?? 301) == 301 ? 'selected' : ''; ?>>301 (Permanent)</option>
+                                                            <option value="302" <?php echo ($editData['redirect_type'] ?? 301) == 302 ? 'selected' : ''; ?>>302 (Temporary)</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label d-block">&nbsp;</label>
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" name="is_active"
+                                                                id="is_active" <?php echo ($editData['is_active'] ?? 1) ? 'checked' : ''; ?>>
+                                                            <label class="form-check-label" for="is_active">
+                                                                Is Active
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                            <?php if (empty($redirects)): ?>
-                                <tr>
-                                    <td colspan="5"
-                                        class="px-6 py-20 text-center text-gray-400 font-bold uppercase tracking-widest">No
-                                        redirects found</td>
-                                </tr>
-                            <?php endif; ?>
-                        </tbody>
-                    </table>
+                                        <div class="card-footer">
+                                            <button type="submit" class="btn btn-primary">Save Redirect</button>
+                                            <a href="redirects.php" class="btn btn-default float-end">Cancel</a>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                    <?php else: ?>
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Manage Redirects</h3>
+                                <div class="card-tools">
+                                    <a href="?action=add" class="btn btn-primary btn-sm">
+                                        <i class="bi bi-plus-lg"></i> New Redirect
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-hover align-middle">
+                                        <thead>
+                                            <tr>
+                                                <th>Source</th>
+                                                <th>Target</th>
+                                                <th>Type</th>
+                                                <th>Status</th>
+                                                <th class="text-end">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach ($redirects as $r): ?>
+                                                <tr>
+                                                    <td><code><?php echo htmlspecialchars($r['source_url']); ?></code></td>
+                                                    <td><code><?php echo htmlspecialchars($r['target_url']); ?></code></td>
+                                                    <td><span
+                                                            class="badge text-bg-secondary"><?php echo $r['redirect_type']; ?></span>
+                                                    </td>
+                                                    <td>
+                                                        <?php if ($r['is_active']): ?>
+                                                            <span class="badge text-bg-success">Active</span>
+                                                        <?php else: ?>
+                                                            <span class="badge text-bg-secondary">Inactive</span>
+                                                        <?php endif; ?>
+                                                    </td>
+                                                    <td class="text-end">
+                                                        <a href="?action=edit&id=<?php echo $r['id']; ?>"
+                                                            class="btn btn-sm btn-info" title="Edit">
+                                                            <i class="bi bi-pencil"></i>
+                                                        </a>
+                                                        <a href="javascript:void(0);"
+                                                            onclick="confirmDelete('?action=delete&id=<?php echo $r['id']; ?>', 'This redirect rule will be removed.')"
+                                                            class="btn btn-sm btn-danger" title="Delete">
+                                                            <i class="bi bi-trash"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            <?php endforeach; ?>
+
+                                            <?php if (empty($redirects)): ?>
+                                                <tr>
+                                                    <td colspan="5" class="text-center py-5 text-muted">No redirects found</td>
+                                                </tr>
+                                            <?php endif; ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+
                 </div>
-            <?php endif; ?>
-        </div>
-    </main>
+            </div>
+        </main>
+
+        <?php include 'includes/footer_lte.php'; ?>
+    </div>
+
+    <?php include 'includes/scripts_lte.php'; ?>
+    <script>
+        function confirmDelete(url, msg) {
+            if (confirm(msg)) {
+                window.location.href = url;
+            }
+        }
+    </script>
 </body>
 
 </html>

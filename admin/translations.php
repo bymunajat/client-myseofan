@@ -293,245 +293,204 @@ if (!empty($current_page_keys)) {
 <head>
     <meta charset="UTF-8">
     <title>Global Translations - MySeoFan Admin</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet">
-    <script src="https://kit.fontawesome.com/yourcode.js" crossorigin="anonymous"></script>
-    <style>
-        body {
-            font-family: 'Outfit', sans-serif;
-            background: #0f172a;
-            color: #f8fafc;
-            min-height: 100vh;
-        }
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css"
+        crossorigin="anonymous">
+    <!-- OVerlayScrollbars -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css"
+        crossorigin="anonymous">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
+        crossorigin="anonymous">
+    <!-- AdminLTE -->
+    <link rel="stylesheet" href="../AdminLTE/dist/css/adminlte.css">
 
+    <style>
         .page-active {
-            background: #d946ef;
-            /* Fuchsia 500 */
-            color: white;
-            border-color: #d946ef;
+            font-weight: bold;
         }
     </style>
 </head>
 
-<body class="flex">
-    <?php include 'includes/sidebar.php'; ?>
+<body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
+    <div class="app-wrapper">
+        <?php include 'includes/header_lte.php'; ?>
+        <?php include 'includes/sidebar_lte.php'; ?>
 
-    <main class="flex-1 min-h-screen bg-[#0f172a]">
-        <header
-            class="bg-[#1e293b] border-b-4 border-fuchsia-500/50 px-8 h-20 flex items-center justify-between shadow-lg shadow-black/20 sticky top-0 z-50">
-            <div>
-                <h1 class="text-xl font-bold text-white">Site UI Translations</h1>
-                <p class="text-xs text-gray-400 mt-0.5">Manage multi-language content strings</p>
-            </div>
-
-            <div class="flex items-center gap-3">
-                <?php if ($active_lang !== 'en'): ?>
-                    <form action="" method="POST"
-                        onsubmit="return confirm('Use English values to fill all empty fields for this language?');">
-                        <input type="hidden" name="action" value="autofill">
-                        <input type="hidden" name="lang_code" value="<?php echo $active_lang; ?>">
-                        <button type="submit"
-                            class="text-sm bg-slate-700 text-gray-300 px-4 py-2.5 rounded-xl font-bold hover:bg-fuchsia-600 hover:text-white transition-all flex items-center gap-2">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-width="2"
-                                    d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
-                            </svg>
-                            Auto-Fill Missing
-                        </button>
-                    </form>
-                <?php endif; ?>
-
-                <a href="?seed=1"
-                    onclick="return confirm('WARNING: This will reset translations to the default values. Are you sure?')"
-                    class="text-sm bg-gray-900 text-white px-5 py-2.5 rounded-xl font-bold hover:bg-red-500 transition-all shadow-lg">
-                    Reset DB Keys
-                </a>
-            </div>
-        </header>
-
-        <div class="p-8">
-            <?php if ($message): ?>
-                <div
-                    class="bg-emerald-50 text-emerald-600 p-4 rounded-xl mb-6 font-medium border border-emerald-100 flex items-center gap-2">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-width="2" d="M5 13l4 4L19 7" />
-                    </svg>
-                    <?php echo $message; ?>
-                </div>
-            <?php endif; ?>
-
-            <!-- Info Card (Collapsible) -->
-            <div
-                class="bg-gradient-to-r from-violet-50 via-fuchsia-50 to-pink-50 border-2 border-fuchsia-200 rounded-2xl mb-8 overflow-hidden">
-                <!-- Header (Always Visible) -->
-                <button onclick="toggleInfoCard('translations-info')"
-                    class="w-full p-4 flex items-center justify-between hover:bg-fuchsia-100/50 transition-all">
-                    <div class="flex items-center gap-3">
-                        <div
-                            class="bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-600 p-2 rounded-lg shadow-lg">
-                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
+        <main class="app-main">
+            <div class="app-content-header">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h3 class="mb-0">Site UI Translations</h3>
                         </div>
-                        <div class="text-left">
-                            <h4 class="text-sm font-black text-gray-900">Multi-Language Translation Manager - How It
-                                Works</h4>
-                            <p class="text-xs text-gray-600">Click to expand/collapse</p>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-end">
+                                <li class="breadcrumb-item"><a href="dashboard.php">Home</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Translations</li>
+                            </ol>
                         </div>
-                    </div>
-                    <svg id="translations-info-icon" class="w-5 h-5 text-gray-600 transition-transform" fill="none"
-                        stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                    </svg>
-                </button>
-
-                <!-- Content (Collapsible) -->
-                <div id="translations-info" class="hidden px-6 pb-6">
-                    <p class="text-sm text-gray-600 leading-relaxed mb-3">
-                        This feature allows you to manage translations for all text displayed on your website. Each
-                        <strong>Translation Key</strong> represents a specific piece of text (like buttons, headings, or
-                        messages) that appears on the frontend.
-                    </p>
-                    <div class="bg-white rounded-lg p-4 border border-fuchsia-100">
-                        <p class="text-xs text-gray-700 font-semibold mb-2">💡 <strong>How it works:</strong></p>
-                        <ul class="text-xs text-gray-600 space-y-1 ml-4 list-disc">
-                            <li><strong>English</strong> is the master language - edit here to update the default text
-                            </li>
-                            <li>Other languages will <strong>auto-translate</strong> if left empty</li>
-                            <li>Manually override auto-translations by entering custom text</li>
-                            <li>Changes take effect <strong>immediately</strong> on the website</li>
-                        </ul>
                     </div>
                 </div>
             </div>
 
-            <!-- Language Tabs -->
-            <div class="flex flex-wrap gap-2 mb-8 bg-white p-2 rounded-2xl shadow-sm border border-gray-100">
-                <?php foreach ($supported_langs as $code => $info): ?>
-                    <a href="?lang=<?php echo $code; ?>"
-                        class="px-5 py-3 rounded-xl font-bold transition-all flex items-center gap-2 <?php echo $active_lang === $code ? 'bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-600 text-white shadow-lg shadow-fuchsia-500/30' : 'text-gray-500 hover:bg-gray-50'; ?> text-sm">
-                        <span class="text-base"><?php echo $info['flag']; ?></span>
-                        <span><?php echo $info['label']; ?></span>
-                    </a>
-                <?php endforeach; ?>
-            </div>
+            <div class="app-content">
+                <div class="container-fluid">
 
-            <div class="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 overflow-hidden">
-                <div
-                    class="p-6 border-b border-gray-50 bg-gradient-to-r from-violet-50 via-fuchsia-50 to-pink-50 flex items-center justify-between">
-                    <div>
-                        <h3 class="font-bold text-gray-900 flex items-center gap-2 text-lg mb-1">
-                            <span class="w-2 h-2 rounded-full bg-fuchsia-500"></span>
-                            Translation Keys - <?php echo $supported_langs[$active_lang]['label']; ?>
-                        </h3>
-                        <p class="text-xs text-gray-500 font-medium">
-                            Showing <?php echo count($current_page_keys); ?> of <?php echo count($all_keys); ?> total
-                            keys
-                        </p>
+                    <!-- Actions -->
+                    <div class="d-flex justify-content-end gap-2 mb-4">
+                        <?php if ($active_lang !== 'en'): ?>
+                            <form action="" method="POST"
+                                onsubmit="return confirm('Use English values to fill all empty fields for this language?');">
+                                <input type="hidden" name="action" value="autofill">
+                                <input type="hidden" name="lang_code" value="<?php echo $active_lang; ?>">
+                                <button type="submit" class="btn btn-outline-secondary btn-sm">
+                                    <i class="bi bi-magic me-1"></i> Auto-Fill Missing
+                                </button>
+                            </form>
+                        <?php endif; ?>
+
+                        <a href="?seed=1"
+                            onclick="return confirm('WARNING: This will reset translations to the default values. Are you sure?')"
+                            class="btn btn-danger btn-sm">
+                            <i class="bi bi-database-fill-exclamation me-1"></i> Reset DB Keys
+                        </a>
                     </div>
 
-                    <!-- PAGINATION -->
-                    <?php if ($_total_p > 1): ?>
-                        <div class="flex gap-2">
-                            <a href="?lang=<?php echo $active_lang; ?>&p=<?php echo max(1, $_curr_p - 1); ?>"
-                                class="w-8 h-8 flex items-center justify-center rounded-lg border text-xs font-bold transition-all <?php echo $_curr_p > 1 ? 'bg-white border-gray-200 text-gray-600 hover:bg-emerald-50' : 'bg-gray-50 border-gray-100 text-gray-300 cursor-not-allowed'; ?>">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-width="2" d="M15 19l-7-7 7-7" />
-                                </svg>
-                            </a>
-                            <span class="flex items-center text-xs font-bold text-gray-400">
-                                <?php echo $_curr_p; ?> / <?php echo $_total_p; ?>
-                            </span>
-                            <a href="?lang=<?php echo $active_lang; ?>&p=<?php echo min($_total_p, $_curr_p + 1); ?>"
-                                class="w-8 h-8 flex items-center justify-center rounded-lg border text-xs font-bold transition-all <?php echo $_curr_p < $_total_p ? 'bg-white border-gray-200 text-gray-600 hover:bg-emerald-50' : 'bg-gray-50 border-gray-100 text-gray-300 cursor-not-allowed'; ?>">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-width="2" d="M9 5l7 7-7 7" />
-                                </svg>
-                            </a>
+                    <?php if ($message): ?>
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <i class="bi bi-check-circle-fill me-2"></i> <?php echo $message; ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     <?php endif; ?>
-                </div>
 
-                <!-- Table Header -->
-                <div class="px-6 py-4 bg-gray-50 border-b-2 border-gray-200 grid grid-cols-12 gap-6 items-center">
-                    <div class="col-span-12 md:col-span-3">
-                        <span class="text-xs font-black uppercase tracking-wider text-gray-600">Translation Key</span>
-                    </div>
-                    <div class="col-span-12 md:col-span-9 flex gap-3">
-                        <div class="flex-1">
-                            <span class="text-xs font-black uppercase tracking-wider text-gray-600">Translation
-                                Text</span>
+                    <?php if ($error): ?>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i> <?php echo $error; ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
-                        <div class="w-[100px] text-center">
-                            <span class="text-xs font-black uppercase tracking-wider text-gray-600">Action</span>
-                        </div>
-                    </div>
-                </div>
+                    <?php endif; ?>
 
-                <div class="divide-y divide-gray-50">
-                    <?php foreach ($current_page_keys as $key): ?>
-                        <div class="group hover:bg-gray-50/50 transition-all p-6 grid grid-cols-12 gap-6 items-start">
-                            <!-- Label Column -->
-                            <div class="col-span-12 md:col-span-3">
-                                <div class="inline-block">
-                                    <code
-                                        class="text-sm font-black text-fuchsia-700 bg-fuchsia-50 px-3 py-1.5 rounded-lg border-2 border-fuchsia-200"><?php echo $key; ?></code>
-                                </div>
-                                <?php if ($active_lang !== 'en'): ?>
-                                    <div class="mt-2 text-sm text-gray-600 font-semibold">
-                                        "<?php echo htmlspecialchars($en_translations[$key] ?? '...'); ?>"
-                                    </div>
-                                <?php endif; ?>
-                            </div>
-
-                            <!-- Input Column -->
-                            <div class="col-span-12 md:col-span-9">
-                                <form action="?lang=<?php echo $active_lang; ?>&p=<?php echo $_curr_p; ?>" method="POST"
-                                    class="flex gap-3">
-                                    <input type="hidden" name="lang_code" value="<?php echo $active_lang; ?>">
-                                    <input type="hidden" name="t_key" value="<?php echo $key; ?>">
-                                    <input type="hidden" name="p_redirect" value="<?php echo $_curr_p; ?>">
-
-                                    <textarea name="t_value" rows="1" placeholder="Enter translation..."
-                                        class="flex-1 px-5 py-3 rounded-xl border-2 border-fuchsia-500 bg-white focus:ring-4 focus:ring-fuchsia-100 focus:border-fuchsia-600 outline-none text-sm transition-all resize-none shadow-lg shadow-fuchsia-500/20 font-semibold text-gray-800"
-                                        oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'><?php echo htmlspecialchars($current_translations[$key] ?? ''); ?></textarea>
-
-                                    <button type="submit"
-                                        class="bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-600 text-white px-4 py-3 rounded-xl hover:shadow-lg hover:shadow-fuchsia-500/40 transition-all shadow-md font-bold flex items-center gap-2 whitespace-nowrap">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-width="2" d="M5 13l4 4L19 7" />
-                                        </svg>
-                                        Save
-                                    </button>
-                                </form>
+                    <!-- Info Card -->
+                    <div class="card card-outline card-info collapsed-card mb-4">
+                        <div class="card-header">
+                            <h3 class="card-title"><i class="bi bi-info-circle me-1"></i> Multi-Language Manager</h3>
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse">
+                                    <i class="bi bi-plus-lg"></i>
+                                </button>
                             </div>
                         </div>
-                    <?php endforeach; ?>
-                </div>
+                        <div class="card-body" style="display: none;">
+                            <p class="mb-2">This feature allows you to manage translations for all text displayed on
+                                your website.</p>
+                            <ul>
+                                <li><strong>English</strong> is the master language.</li>
+                                <li>Other languages will <strong>auto-translate</strong> if left empty (fallback logic
+                                    depending on implementation).</li>
+                                <li>Manually override auto-translations by entering custom text.</li>
+                            </ul>
+                        </div>
+                    </div>
 
+                    <!-- Language Tabs -->
+                    <div class="mb-4">
+                        <ul class="nav nav-pills">
+                            <?php foreach ($supported_langs as $code => $info): ?>
+                                <li class="nav-item">
+                                    <a class="nav-link <?php echo $active_lang === $code ? 'active' : ''; ?>"
+                                        href="?lang=<?php echo $code; ?>">
+                                        <span class="me-1"><?php echo $info['flag']; ?></span> <?php echo $info['label']; ?>
+                                    </a>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+
+                    <!-- Main Table -->
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h3 class="card-title">
+                                Translation Keys - <?php echo $supported_langs[$active_lang]['label']; ?>
+                                <small class="text-muted ms-2">(Showing <?php echo count($current_page_keys); ?> of
+                                    <?php echo count($all_keys); ?>)</small>
+                            </h3>
+
+                            <!-- Pagination -->
+                            <?php if ($_total_p > 1): ?>
+                                <nav aria-label="Page navigation" class="card-tools ms-auto">
+                                    <ul class="pagination pagination-sm m-0">
+                                        <li class="page-item <?php echo $_curr_p <= 1 ? 'disabled' : ''; ?>">
+                                            <a class="page-link"
+                                                href="?lang=<?php echo $active_lang; ?>&p=<?php echo max(1, $_curr_p - 1); ?>">&laquo;</a>
+                                        </li>
+                                        <li class="page-item disabled"><span class="page-link"><?php echo $_curr_p; ?> /
+                                                <?php echo $_total_p; ?></span></li>
+                                        <li class="page-item <?php echo $_curr_p >= $_total_p ? 'disabled' : ''; ?>">
+                                            <a class="page-link"
+                                                href="?lang=<?php echo $active_lang; ?>&p=<?php echo min($_total_p, $_curr_p + 1); ?>">&raquo;</a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            <?php endif; ?>
+                        </div>
+
+                        <div class="card-body p-0">
+                            <table class="table table-hover align-middle">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 20%;">Key</th>
+                                        <th style="width: 70%;">Translation</th>
+                                        <th style="width: 10%;">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($current_page_keys as $key): ?>
+                                        <tr>
+                                            <td class="align-top">
+                                                <code><?php echo $key; ?></code>
+                                                <?php if ($active_lang !== 'en'): ?>
+                                                    <div class="text-muted small mt-1">
+                                                        <em>"<?php echo htmlspecialchars($en_translations[$key] ?? '...'); ?>"</em>
+                                                    </div>
+                                                <?php endif; ?>
+                                            </td>
+                                            <td>
+                                                <form action="?lang=<?php echo $active_lang; ?>&p=<?php echo $_curr_p; ?>"
+                                                    method="POST" class="d-flex gap-2">
+                                                    <input type="hidden" name="lang_code"
+                                                        value="<?php echo $active_lang; ?>">
+                                                    <input type="hidden" name="t_key" value="<?php echo $key; ?>">
+                                                    <input type="hidden" name="p_redirect" value="<?php echo $_curr_p; ?>">
+
+                                                    <textarea name="t_value" rows="1" class="form-control"
+                                                        placeholder="Enter translation..."
+                                                        oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'><?php echo htmlspecialchars($current_translations[$key] ?? ''); ?></textarea>
+                                                    <button type="submit" class="btn btn-primary btn-sm align-self-start">
+                                                        <i class="bi bi-save"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
             </div>
-        </div>
-    </main>
+        </main>
 
+        <?php include 'includes/footer_lte.php'; ?>
+    </div>
+
+    <?php include 'includes/scripts_lte.php'; ?>
     <script>
         document.querySelectorAll('textarea').forEach(el => {
-            el.style.height = (el.scrollHeight > 40 ? el.scrollHeight : 48) + "px";
+            el.style.height = (el.scrollHeight > 38 ? el.scrollHeight : 38) + "px";
         });
-
-        // Toggle Info Card Function
-        function toggleInfoCard(id) {
-            const content = document.getElementById(id);
-            const icon = document.getElementById(id + '-icon');
-
-            if (content.classList.contains('hidden')) {
-                content.classList.remove('hidden');
-                icon.style.transform = 'rotate(180deg)';
-            } else {
-                content.classList.add('hidden');
-                icon.style.transform = 'rotate(0deg)';
-            }
-        }
     </script>
 </body>
 

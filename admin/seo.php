@@ -78,290 +78,241 @@ if ($pdo) {
 <head>
     <meta charset="UTF-8">
     <title>SEO Manager - MySeoFan Admin</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css"
+        crossorigin="anonymous">
+    <!-- OVerlayScrollbars -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css"
+        crossorigin="anonymous">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
+        crossorigin="anonymous">
+    <!-- AdminLTE -->
+    <link rel="stylesheet" href="../AdminLTE/dist/css/adminlte.css">
     <style>
-        body {
-            font-family: 'Outfit', sans-serif;
-            background: #0f172a;
-            /* Slate 900 */
-            color: #f8fafc;
-            min-height: 100vh;
-        }
-
-        .sidebar {
-            height: 100vh;
-            background: #065f46;
-            /* Dark green sidebar is hardcoded here? It should be from sidebar.php */
-            color: white;
-        }
-
-        /* Improve card visibility in Dark Mode */
-        /* Improve card visibility in Dark Mode - Now White */
         .seo-card {
-            background: #ffffff;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            border: 2px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .seo-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 1rem 3rem rgba(0, 0, 0, .175) !important;
         }
     </style>
 </head>
 
-<body class="flex">
-    <!-- Sidebar (Same as dashboard) -->
-    <?php include 'includes/sidebar.php'; ?>
+<body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
+    <div class="app-wrapper">
+        <?php include 'includes/header_lte.php'; ?>
+        <?php include 'includes/sidebar_lte.php'; ?>
 
-    <main class="flex-1 min-h-screen bg-[#0f172a]">
-        <header
-            class="bg-[#1e293b] border-b-4 border-fuchsia-500/50 px-8 h-20 flex items-center justify-between shadow-lg shadow-black/20">
-            <div>
-                <h3 class="text-xl font-bold text-white">SEO Management</h3>
-                <p class="text-xs text-gray-400 mt-0.5">Optimize meta tags and search visibility</p>
-            </div>
-            <div class="text-gray-400 font-medium text-sm hidden md:block">
-                Active Language: <span
-                    class="text-white font-bold ml-1"><?php echo $available_langs[$_curr_lang]['flag']; ?>
-                    <?php echo $available_langs[$_curr_lang]['label']; ?></span>
-            </div>
-        </header>
-
-        <div class="p-8">
-            <?php if ($message): ?>
-                <div class="bg-fuchsia-50 text-fuchsia-700 p-4 rounded-xl mb-6 font-bold border border-fuchsia-100">
-                    <?php echo $message; ?>
-                </div>
-            <?php endif; ?>
-            <?php if ($error): ?>
-                <div class="bg-red-50 text-red-600 p-4 rounded-xl mb-6 font-medium border border-red-100">
-                    <?php echo $error; ?>
-                </div>
-            <?php endif; ?>
-
-            <!-- Info Card (Collapsible) -->
-            <div
-                class="bg-gradient-to-r from-violet-50 via-fuchsia-50 to-pink-50 border-2 border-fuchsia-200 rounded-2xl mb-8 overflow-hidden">
-                <!-- Header (Always Visible) -->
-                <button onclick="toggleInfoCard('seo-info')"
-                    class="w-full p-4 flex items-center justify-between hover:bg-fuchsia-100/50 transition-all">
-                    <div class="flex items-center gap-3">
-                        <div
-                            class="bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-600 p-2 rounded-lg shadow-lg">
-                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
+        <main class="app-main">
+            <div class="app-content-header">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h3 class="mb-0">SEO Management</h3>
                         </div>
-                        <div class="text-left">
-                            <h4 class="text-sm font-black text-gray-900">SEO Meta Tags Manager - How It Works</h4>
-                            <p class="text-xs text-gray-600">Click to expand/collapse</p>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-end">
+                                <li class="breadcrumb-item"><a href="dashboard.php">Home</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">SEO Manager</li>
+                            </ol>
                         </div>
-                    </div>
-                    <svg id="seo-info-icon" class="w-5 h-5 text-gray-600 transition-transform" fill="none"
-                        stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                    </svg>
-                </button>
-
-                <!-- Content (Collapsible) -->
-                <div id="seo-info" class="hidden px-6 pb-6">
-                    <p class="text-sm text-gray-600 leading-relaxed mb-3">
-                        This feature allows you to optimize your website's search engine visibility by customizing meta
-                        tags for each <strong>static page</strong> (Home, Video, Reels, Photo, IGTV, Carousel, etc.).
-                        Proper SEO meta tags help search engines understand your content and improve your rankings in
-                        search results.
-                    </p>
-
-                    <!-- Available Languages -->
-                    <div class="bg-white rounded-lg p-3 border border-fuchsia-100 mb-3">
-                        <p class="text-xs text-gray-700 font-semibold mb-2">🌍 <strong>Available Languages:</strong></p>
-                        <div class="flex flex-wrap gap-2">
-                            <?php foreach ($available_langs as $code => $info): ?>
-                                <span
-                                    class="inline-flex items-center gap-1 px-2 py-1 bg-gradient-to-r from-violet-50 to-fuchsia-50 border border-fuchsia-200 rounded-lg text-xs font-bold text-gray-700">
-                                    <span class="text-sm"><?php echo $info['flag']; ?></span>
-                                    <?php echo $info['label']; ?>
-                                </span>
-                            <?php endforeach; ?>
-                        </div>
-                    </div>
-
-                    <div class="bg-white rounded-lg p-4 border border-fuchsia-100">
-                        <p class="text-xs text-gray-700 font-semibold mb-2">💡 <strong>What you can manage:</strong></p>
-                        <ul class="text-xs text-gray-600 space-y-1 ml-4 list-disc">
-                            <li><strong>Meta Title</strong> - The title that appears in search results and browser tabs
-                                (50-60 characters recommended)</li>
-                            <li><strong>Meta Description</strong> - A brief summary shown in search results (150-160
-                                characters recommended)</li>
-                            <li><strong>OG Image</strong> - The image displayed when sharing on social media platforms
-                            </li>
-                            <li><strong>Static Pages Only</strong> - Manage SEO for Home, Video, Reels, Photo, IGTV,
-                                Carousel pages (not blog posts)</li>
-                        </ul>
                     </div>
                 </div>
             </div>
 
-            <!-- Language Navigation Tabs -->
-            <div class="flex flex-wrap gap-2 mb-8 bg-white p-2 rounded-2xl shadow-sm border border-gray-100">
-                <?php foreach ($available_langs as $code => $info): ?>
-                    <a href="?filter_lang=<?php echo $code; ?>"
-                        class="px-5 py-2.5 rounded-xl font-bold transition-all flex items-center gap-2 <?php echo $_curr_lang === $code ? 'bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-600 text-white shadow-lg shadow-fuchsia-500/30' : 'text-gray-500 hover:bg-gray-50'; ?> text-sm">
-                        <span class="text-base"><?php echo $info['flag']; ?></span>
-                        <span><?php echo $info['label']; ?></span>
-                    </a>
-                <?php endforeach; ?>
-            </div>
+            <div class="app-content">
+                <div class="container-fluid">
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 auto-rows-fr">
-                <?php foreach ($pages as $page):
-                    // Icons and Colors based on page
-                    $icon = '';
-                    $accentColor = 'border-emerald-500';
-                    $iconColor = 'text-emerald-500';
-                    $headerBg = 'bg-white';
+                    <?php if ($message): ?>
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <i class="bi bi-check-circle-fill me-2"></i> <?php echo $message; ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <?php endif; ?>
 
+                    <?php if ($error): ?>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i> <?php echo $error; ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <?php endif; ?>
 
-                    switch ($page) {
-                        case 'index':
-                            $icon = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />';
-                            $accentColor = 'border-t-4 border-fuchsia-500';
-                            $iconColor = 'text-fuchsia-500';
-                            break;
-                        case 'video':
-                            $icon = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />';
-                            $accentColor = 'border-t-4 border-blue-500';
-                            $iconColor = 'text-blue-500';
-                            break;
-                        case 'reels':
-                            $icon = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />';
-                            $accentColor = 'border-t-4 border-rose-500';
-                            $iconColor = 'text-rose-500';
-                            break;
-                        case 'photo':
-                            $icon = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h14a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />';
-                            $accentColor = 'border-t-4 border-amber-500';
-                            $iconColor = 'text-amber-500';
-                            break;
-                        case 'igtv':
-                            $icon = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />';
-                            $accentColor = 'border-t-4 border-purple-500';
-                            $iconColor = 'text-purple-500';
-                            break;
-                        case 'carousel':
-                            $icon = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM14 5a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 16a1 1 0 011-1h4a1 1 0 011 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-3zM14 16a1 1 0 011-1h4a1 1 0 011 1v3a1 1 0 01-1 1h-4a1 1 0 01-1-1v-3z" />';
-                            $accentColor = 'border-t-4 border-indigo-500';
-                            $iconColor = 'text-indigo-500';
-                            break;
-                        default:
-                            $icon = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />';
-                            $accentColor = 'border-t-4 border-gray-500';
-                            $iconColor = 'text-gray-500';
-                    }
-                    ?>
-                    <div
-                        class="seo-card bg-white rounded-3xl shadow-xl border-2 border-gray-100 overflow-hidden transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] group flex flex-col h-full <?php echo $accentColor; ?>">
-                        <!-- Card Header -->
-                        <div
-                            class="px-8 py-6 border-b border-gray-100 flex items-center justify-between <?php echo $headerBg; ?>">
-                            <div class="flex items-center gap-4">
-                                <span
-                                    class="w-12 h-12 rounded-2xl bg-gray-50 flex items-center justify-center <?php echo $iconColor; ?> shadow-sm border border-gray-100 group-hover:scale-105 transition-transform">
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <?php echo $icon; ?>
-                                    </svg>
-                                </span>
-                                <div>
-                                    <h2 class="text-xl font-bold text-black capitalize tracking-tight">
-                                        <?php echo $page; ?> Page
-                                    </h2>
-                                    <p class="text-xs text-gray-700 font-bold">SEO Configuration</p>
-                                </div>
-                            </div>
-                            <div
-                                class="text-xs font-black text-gray-900 bg-gray-100 px-3 py-1 rounded-full uppercase tracking-wider">
-                                Static
+                    <!-- Info Card -->
+                    <div class="card card-outline card-info collapsed-card mb-4">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="bi bi-info-circle me-2"></i> SEO Meta Tags Manager - How It Works
+                            </h3>
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse">
+                                    <i class="bi bi-plus"></i>
+                                </button>
                             </div>
                         </div>
+                        <div class="card-body" style="display: none;">
+                            <p class="text-muted">
+                                This feature allows you to optimize your website's search engine visibility by
+                                customizing meta
+                                tags for each <strong>static page</strong> (Home, Video, Reels, Photo, IGTV, Carousel,
+                                etc.).
+                                Proper SEO meta tags help search engines understand your content and improve your
+                                rankings in
+                                search results.
+                            </p>
 
-                        <div class="p-8 flex-1 flex flex-col">
-                            <?php
+                            <div class="callout callout-info">
+                                <h5>🌍 Available Languages:</h5>
+                                <p>
+                                    <?php foreach ($available_langs as $code => $info): ?>
+                                        <span class="badge text-bg-light border me-1"><?php echo $info['flag']; ?>
+                                            <?php echo $info['label']; ?></span>
+                                    <?php endforeach; ?>
+                                </p>
+                            </div>
+
+                            <div class="callout callout-warning">
+                                <h5>💡 What you can manage:</h5>
+                                <ul class="mb-0">
+                                    <li><strong>Meta Title</strong> - The title that appears in search results and
+                                        browser tabs (50-60 characters recommended)</li>
+                                    <li><strong>Meta Description</strong> - A brief summary shown in search results
+                                        (150-160 characters recommended)</li>
+                                    <li><strong>OG Image</strong> - The image displayed when sharing on social media
+                                        platforms</li>
+                                    <li><strong>Static Pages Only</strong> - Manage SEO for Home, Video, Reels, Photo,
+                                        IGTV, Carousel pages (not blog posts)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Language Filter -->
+                    <div class="card mb-4">
+                        <div class="card-body p-2">
+                            <div class="d-flex flex-wrap gap-2 justify-content-center">
+                                <?php foreach ($available_langs as $code => $info): ?>
+                                    <a href="?filter_lang=<?php echo $code; ?>"
+                                        class="btn <?php echo $_curr_lang === $code ? 'btn-primary' : 'btn-outline-secondary'; ?>">
+                                        <span class="fs-5 me-1"><?php echo $info['flag']; ?></span>
+                                        <?php echo $info['label']; ?>
+                                    </a>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <?php foreach ($pages as $page):
+                            // Map page to AdminLTE Card colors
+                            $cardClass = 'card-default';
+                            $iconClass = 'bi-file-earmark-text';
+
+                            switch ($page) {
+                                case 'index':
+                                    $cardClass = 'card-primary';
+                                    $iconClass = 'bi-house-door';
+                                    break;
+                                case 'video':
+                                    $cardClass = 'card-info';
+                                    $iconClass = 'bi-camera-video';
+                                    break;
+                                case 'reels':
+                                    $cardClass = 'card-danger';
+                                    $iconClass = 'bi-film';
+                                    break;
+                                case 'photo':
+                                    $cardClass = 'card-warning';
+                                    $iconClass = 'bi-image';
+                                    break;
+                                case 'igtv':
+                                    $cardClass = 'card-indigo';
+                                    $iconClass = 'bi-tv';
+                                    break;
+                                case 'carousel':
+                                    $cardClass = 'card-purple'; // Not standard bootstrap, use custom or closest
+                                    $iconClass = 'bi-images';
+                                    $cardClass = 'card-secondary'; // Fallback
+                                    break;
+                                default:
+                                    $cardClass = 'card-secondary';
+                                    $iconClass = 'bi-file-earmark';
+                            }
+
                             $code = $_curr_lang;
                             $info = $available_langs[$code];
                             $data = $seo_data[$page][$code] ?? [];
                             ?>
-                            <form action="" method="POST" class="space-y-4 flex flex-col flex-1">
-                                <input type="hidden" name="page_identifier" value="<?php echo $page; ?>">
-                                <input type="hidden" name="lang_code" value="<?php echo $code; ?>">
-
-                                <div class="flex-1 space-y-4">
-                                    <div class="flex items-center gap-2">
-                                        <span
-                                            class="text-xs font-black uppercase tracking-widest bg-gray-50 border border-gray-200 text-gray-500 px-3 py-1 rounded-lg shadow-sm">
-                                            <?php echo $info['flag']; ?>     <?php echo $info['label']; ?>
-                                        </span>
-                                    </div>
-                                    <div class="grid md:grid-cols-2 gap-6">
-                                        <div>
-                                            <label class="block text-xs font-black text-gray-800 uppercase mb-2">Meta
-                                                Title</label>
-                                            <input type="text" name="meta_title"
-                                                value="<?php echo htmlspecialchars($data['meta_title'] ?? ''); ?>"
-                                                class="w-full px-4 py-3 rounded-xl border-2 border-fuchsia-500 bg-white outline-none transition-all font-bold text-gray-900 placeholder-gray-400 focus:ring-4 focus:ring-fuchsia-500/20 shadow-sm shadow-fuchsia-100">
+                            <div class="col-lg-6 mb-4">
+                                <div class="card <?php echo $cardClass; ?> card-outline h-100 seo-card">
+                                    <form action="" method="POST" class="h-100 d-flex flex-column">
+                                        <div class="card-header">
+                                            <h3 class="card-title text-capitalize">
+                                                <i class="bi <?php echo $iconClass; ?> me-2"></i> <?php echo $page; ?> Page
+                                            </h3>
+                                            <div class="card-tools">
+                                                <span class="badge text-bg-light border">Static</span>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <label class="block text-xs font-black text-gray-800 uppercase mb-2">OG Image
-                                                URL</label>
-                                            <input type="text" name="og_image"
-                                                value="<?php echo htmlspecialchars($data['og_image'] ?? ''); ?>"
-                                                class="w-full px-4 py-3 rounded-xl border-2 border-fuchsia-500 bg-white outline-none transition-all font-semibold text-gray-900 placeholder-gray-400 focus:ring-4 focus:ring-fuchsia-500/20 shadow-sm shadow-fuchsia-100">
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <label class="block text-xs font-black text-gray-800 uppercase mb-2">Meta
-                                            Description</label>
-                                        <textarea name="meta_description" rows="3"
-                                            class="w-full px-4 py-3 rounded-xl border-2 border-fuchsia-500 bg-white outline-none transition-all font-semibold text-gray-900 leading-relaxed placeholder-gray-400 focus:ring-4 focus:ring-fuchsia-500/20 shadow-sm shadow-fuchsia-100"><?php echo htmlspecialchars($data['meta_description'] ?? ''); ?></textarea>
-                                    </div>
-                                    <div>
-                                        <label class="block text-xs font-black text-gray-800 uppercase mb-2">Schema
-                                            (JSON-LD)</label>
-                                        <textarea name="schema_markup" rows="2"
-                                            class="w-full px-4 py-3 rounded-xl border-2 border-fuchsia-500 bg-white outline-none transition-all font-mono text-xs font-semibold text-gray-900 placeholder-gray-400 focus:ring-4 focus:ring-fuchsia-500/20 shadow-sm shadow-fuchsia-100"><?php echo htmlspecialchars($data['schema_markup'] ?? ''); ?></textarea>
-                                    </div>
-                                </div>
+                                        <div class="card-body flex-grow-1">
+                                            <input type="hidden" name="page_identifier" value="<?php echo $page; ?>">
+                                            <input type="hidden" name="lang_code" value="<?php echo $code; ?>">
 
-                                <div class="pt-4">
-                                    <button type="submit"
-                                        class="w-full bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-600 text-white py-4 rounded-xl font-bold text-sm hover:shadow-lg hover:shadow-fuchsia-500/30 transition-all flex items-center justify-center gap-2 hover:scale-[1.02]">
-                                        <span>Save Changes</span>
-                                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M5 13l4 4L19 7" />
-                                        </svg>
-                                    </button>
+                                            <div class="d-flex align-items-center mb-3">
+                                                <span class="badge text-bg-light border">
+                                                    <?php echo $info['flag']; ?>     <?php echo $info['label']; ?>
+                                                </span>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label class="form-label fw-bold">Meta Title</label>
+                                                <input type="text" name="meta_title" class="form-control"
+                                                    value="<?php echo htmlspecialchars($data['meta_title'] ?? ''); ?>"
+                                                    placeholder="Page Title">
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label class="form-label fw-bold">OG Image URL</label>
+                                                <input type="text" name="og_image" class="form-control"
+                                                    value="<?php echo htmlspecialchars($data['og_image'] ?? ''); ?>"
+                                                    placeholder="https://example.com/image.jpg">
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label class="form-label fw-bold">Meta Description</label>
+                                                <textarea name="meta_description" class="form-control" rows="3"
+                                                    placeholder="Page summary..."><?php echo htmlspecialchars($data['meta_description'] ?? ''); ?></textarea>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label class="form-label fw-bold small text-uppercase">Schema
+                                                    (JSON-LD)</label>
+                                                <textarea name="schema_markup" class="form-control font-monospace" rows="2"
+                                                    style="font-size: 0.8rem;"
+                                                    placeholder="{...}"><?php echo htmlspecialchars($data['schema_markup'] ?? ''); ?></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer bg-transparent border-top-0">
+                                            <button type="submit" class="btn btn-primary w-100">
+                                                <i class="bi bi-save me-1"></i> Save Changes
+                                            </button>
+                                        </div>
+                                    </form>
                                 </div>
-                            </form>
-                        </div>
+                            </div>
+                        <?php endforeach; ?>
                     </div>
-                <?php endforeach; ?>
+
+                </div>
             </div>
-        </div>
-    </main>
-    
-    <script>
-        // Toggle Info Card Function
-        function toggleInfoCard(id) {
-            const content = document.getElementById(id);
-            const icon = document.getElementById(id + '-icon');
-            
-            if (content.classList.contains('hidden')) {
-                content.classList.remove('hidden');
-                icon.style.transform = 'rotate(180deg)';
-            } else {
-                content.classList.add('hidden');
-                icon.style.transform = 'rotate(0deg)';
-            }
-        }
-    </script>
+        </main>
+
+        <?php include 'includes/footer_lte.php'; ?>
+    </div>
+
+    <?php include 'includes/scripts_lte.php'; ?>
 </body>
 
 </html>

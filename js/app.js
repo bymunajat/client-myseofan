@@ -101,6 +101,28 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+// Mobile Menu Logic
+    const mobileBtn = document.getElementById('mobile-menu-btn');
+    const closeMenuBtn = document.getElementById('close-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    if (mobileBtn && mobileMenu) {
+        mobileBtn.addEventListener('click', () => {
+            mobileMenu.classList.remove('hidden');
+            // Small delay to allow display:block to apply before opacity transition if needed
+            // But we use 'active' class usually. Let's just remove hidden for now.
+            mobileMenu.classList.add('flex', 'active');
+            document.body.style.overflow = 'hidden'; // Prevent scrolling
+        });
+    }
+
+    if (closeMenuBtn && mobileMenu) {
+        closeMenuBtn.addEventListener('click', () => {
+             mobileMenu.classList.add('hidden');
+             mobileMenu.classList.remove('flex', 'active');
+             document.body.style.overflow = '';
+        });
+    }
 });
 
 function renderSingle(data, container) {

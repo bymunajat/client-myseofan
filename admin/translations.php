@@ -436,46 +436,51 @@ if (!empty($current_page_keys)) {
                         </div>
 
                         <div class="card-body p-0">
-                            <table class="table table-hover align-middle">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 20%;">Key</th>
-                                        <th style="width: 70%;">Translation</th>
-                                        <th style="width: 10%;">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach ($current_page_keys as $key): ?>
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle">
+                                    <thead>
                                         <tr>
-                                            <td class="align-top">
-                                                <code><?php echo $key; ?></code>
-                                                <?php if ($active_lang !== 'en'): ?>
-                                                    <div class="text-muted small mt-1">
-                                                        <em>"<?php echo htmlspecialchars($en_translations[$key] ?? '...'); ?>"</em>
-                                                    </div>
-                                                <?php endif; ?>
-                                            </td>
-                                            <td>
-                                                <form action="?lang=<?php echo $active_lang; ?>&p=<?php echo $_curr_p; ?>"
-                                                    method="POST" class="d-flex gap-2">
-                                                    <input type="hidden" name="lang_code"
-                                                        value="<?php echo $active_lang; ?>">
-                                                    <input type="hidden" name="t_key" value="<?php echo $key; ?>">
-                                                    <input type="hidden" name="p_redirect" value="<?php echo $_curr_p; ?>">
-
-                                                    <textarea name="t_value" rows="1" class="form-control"
-                                                        placeholder="Enter translation..."
-                                                        oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'><?php echo htmlspecialchars($current_translations[$key] ?? ''); ?></textarea>
-                                                    <button type="submit" class="btn btn-primary btn-sm align-self-start">
-                                                        <i class="bi bi-save"></i>
-                                                    </button>
-                                                </form>
-                                            </td>
-                                            <td></td>
+                                            <th style="width: 20%;">Key</th>
+                                            <th style="width: 70%;">Translation</th>
+                                            <th style="width: 10%;">Action</th>
                                         </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ($current_page_keys as $key): ?>
+                                            <tr>
+                                                <td class="align-top">
+                                                    <code><?php echo $key; ?></code>
+                                                    <?php if ($active_lang !== 'en'): ?>
+                                                        <div class="text-muted small mt-1">
+                                                            <em>"<?php echo htmlspecialchars($en_translations[$key] ?? '...'); ?>"</em>
+                                                        </div>
+                                                    <?php endif; ?>
+                                                </td>
+                                                <td>
+                                                    <form
+                                                        action="?lang=<?php echo $active_lang; ?>&p=<?php echo $_curr_p; ?>"
+                                                        method="POST" class="d-flex gap-2">
+                                                        <input type="hidden" name="lang_code"
+                                                            value="<?php echo $active_lang; ?>">
+                                                        <input type="hidden" name="t_key" value="<?php echo $key; ?>">
+                                                        <input type="hidden" name="p_redirect"
+                                                            value="<?php echo $_curr_p; ?>">
+
+                                                        <textarea name="t_value" rows="1" class="form-control"
+                                                            placeholder="Enter translation..."
+                                                            oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'><?php echo htmlspecialchars($current_translations[$key] ?? ''); ?></textarea>
+                                                        <button type="submit"
+                                                            class="btn btn-primary btn-sm align-self-start">
+                                                            <i class="bi bi-save"></i>
+                                                        </button>
+                                                    </form>
+                                                </td>
+                                                <td></td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
 

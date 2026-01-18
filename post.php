@@ -142,7 +142,7 @@ $seoHelper = new SEO_Helper($pdo, 'post', $lang);
     <script src="https://cdn.tailwindcss.com"></script>
 
     <style>
-        body {
+        <link rel="stylesheet" href="css/responsive.css">body {
             font-family: 'Outfit', sans-serif;
             background-color: #ffffff;
             color: #1a1a1a;
@@ -328,6 +328,11 @@ $seoHelper = new SEO_Helper($pdo, 'post', $lang);
                     </div>
                 </div>
             </div>
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-btn" class="md:hidden text-white ml-2 hover:text-[#ec4899] transition-colors">
+                <i data-lucide="menu" class="w-8 h-8"></i>
+            </button>
+        </div>
         </div>
     </nav>
 
@@ -420,6 +425,77 @@ $seoHelper = new SEO_Helper($pdo, 'post', $lang);
     <script>
         lucide.createIcons();
     </script>
+
+    <div id="mobile-menu"
+        class="fixed inset-0 bg-slate-900/98 z-[60] hidden flex-col transition-all duration-300 backdrop-blur-xl">
+        <div class="p-6 flex justify-between items-center border-b border-white/10">
+            <span
+                class="text-xl font-black bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">Menu</span>
+            <button id="close-menu-btn" class="text-white/80 hover:text-white transition-colors">
+                <i data-lucide="x" class="w-8 h-8"></i>
+            </button>
+        </div>
+        <div class="p-6 flex flex-col gap-6 overflow-y-auto">
+            <!-- Tools -->
+            <div class="space-y-4">
+                <h4 class="text-xs font-bold text-slate-500 uppercase tracking-widest pl-2">Tools</h4>
+                <div class="grid grid-cols-2 gap-3">
+                    <a href="video.php"
+                        class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 text-white transition-all">
+                        <i data-lucide="video" class="w-5 h-5 text-purple-400"></i> <span
+                            class="font-bold text-sm">Video</span>
+                    </a>
+                    <a href="photo.php"
+                        class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 text-white transition-all">
+                        <i data-lucide="image" class="w-5 h-5 text-pink-400"></i> <span
+                            class="font-bold text-sm">Photo</span>
+                    </a>
+                    <a href="reels.php"
+                        class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 text-white transition-all">
+                        <i data-lucide="clapperboard" class="w-5 h-5 text-fuchsia-400"></i> <span
+                            class="font-bold text-sm">Reels</span>
+                    </a>
+                    <a href="igtv.php"
+                        class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 text-white transition-all">
+                        <i data-lucide="tv" class="w-5 h-5 text-indigo-400"></i> <span
+                            class="font-bold text-sm">IGTV</span>
+                    </a>
+                    <a href="carousel.php"
+                        class="col-span-2 flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 text-white transition-all">
+                        <i data-lucide="layout" class="w-5 h-5 text-blue-400"></i> <span
+                            class="font-bold text-sm">Carousel</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="space-y-4">
+                <h4 class="text-xs font-bold text-slate-500 uppercase tracking-widest pl-2">Navigation</h4>
+                <div class="flex flex-col gap-2">
+                    <?php foreach ($headerItems as $item): ?>
+                        <a href="<?php echo htmlspecialchars($item['final_url']); ?>"
+                            class="p-3 text-lg font-bold text-white hover:text-pink-500 transition-colors border-l-2 border-transparent hover:border-pink-500 pl-4">
+                            <?php echo htmlspecialchars($item['label']); ?>
+                        </a>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+
+            <!-- Language Selector Mobile -->
+            <div class="mt-auto pt-6 border-t border-white/10">
+                <h4 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">Language</h4>
+                <div class="grid grid-cols-3 gap-2">
+                    <?php foreach (['en' => '🇺🇸 EN', 'id' => '🇮🇩 ID', 'es' => '🇪🇸 ES', 'fr' => '🇫🇷 FR', 'de' => '🇩🇪 DE', 'ja' => '🇯🇵 JA'] as $code => $label): ?>
+                        <a href="?lang=<?php echo $code; ?>"
+                            class="text-center p-2 rounded-lg bg-white/5 text-xs font-bold text-white <?php echo $lang === $code ? 'bg-purple-600' : ''; ?>">
+                            <?php echo $label; ?>
+                        </a>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="js/app.js?v=1.1"></script>
     <?php echo $settings['footer_code'] ?? ''; ?>
 </body>
 

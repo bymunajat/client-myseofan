@@ -745,8 +745,8 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
     <!-- Hero Section -->
     <section id="downloader" class="hero-section">
         <div class="max-w-5xl mx-auto text-center px-6 w-full">
-            <!-- Tool Bar -->
-            <div class="tool-bar animate-fade-up">
+            <!-- Tool Bar (Desktop) -->
+            <div class="tool-bar animate-fade-up hidden md:inline-flex">
                 <a href="video.php?lang=<?php echo $lang; ?>"
                     class="tool-item <?php echo $pageIdentifier == 'video' ? 'active' : ''; ?>"><i data-lucide="video"
                         class="w-4 h-4"></i> Video</a>
@@ -763,6 +763,16 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                     class="tool-item <?php echo $pageIdentifier == 'carousel' ? 'active' : ''; ?>"><i
                         data-lucide="layout" class="w-4 h-4"></i> Carousel</a>
             </div>
+
+            <!-- Tool Dropdown (Mobile) -->
+            <select class="hero-mobile-dropdown animate-fade-up md:hidden" onchange="window.location.href=this.value">
+                <option value="" disabled <?php echo empty($pageIdentifier) ? 'selected' : ''; ?>>Select Tool</option>
+                <option value="video.php?lang=<?php echo $lang; ?>" <?php echo $pageIdentifier == 'video' ? 'selected' : ''; ?>>Video Downloader</option>
+                <option value="photo.php?lang=<?php echo $lang; ?>" <?php echo $pageIdentifier == 'photo' ? 'selected' : ''; ?>>Photo Downloader</option>
+                <option value="reels.php?lang=<?php echo $lang; ?>" <?php echo $pageIdentifier == 'reels' ? 'selected' : ''; ?>>Reels Downloader</option>
+                <option value="igtv.php?lang=<?php echo $lang; ?>" <?php echo $pageIdentifier == 'igtv' ? 'selected' : ''; ?>>IGTV Downloader</option>
+                <option value="carousel.php?lang=<?php echo $lang; ?>" <?php echo $pageIdentifier == 'carousel' ? 'selected' : ''; ?>>Carousel Downloader</option>
+            </select>
 
             <!-- Title -->
             <h1 class="section-title animate-fade-up"><?php echo $t['hero_title']; ?></h1>

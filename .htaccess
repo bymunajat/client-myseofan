@@ -1,6 +1,25 @@
 RewriteEngine On
 RewriteBase /
 
+# ----------------------------------------------------------------------
+# SECURITY HEADERS & RULES
+# ----------------------------------------------------------------------
+
+# 1. Block access to sensitive files
+<FilesMatch "\.(db|sqlite|log|ini|sh|git|env|lock)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# 2. Block access to specific system names
+<FilesMatch "^(composer\.json|package\.json|readme\.md|license|changelog\.md)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# 3. Disable Directory Browsing
+Options -Indexes
+
 # Redirect root to default language if no lang param
 # This is handled in index.php logic, but we can help it here
 # RewriteRule ^$ /en [L,R=301]

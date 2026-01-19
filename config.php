@@ -13,6 +13,7 @@ define('COBALT_API_URL', 'http://localhost:9000'); // Ensure Cobalt server is ru
 define('SITE_VERSION', '1.0.0');
 
 // Error Reporting (Turn off in production)
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// Error Reporting (Turn off in production)
+error_reporting(0);
+ini_set('display_errors', 0);
 

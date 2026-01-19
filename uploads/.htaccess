@@ -1,0 +1,8 @@
+# Disable PHP Execution in this directory
+<FilesMatch "\.(php|phtml|php3|php4|php5|pl|py|jsp|asp|sh|cgi)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Prevent mime-sniffing execution
+Header set X-Content-Type-Options "nosniff"

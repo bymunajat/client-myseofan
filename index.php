@@ -55,6 +55,41 @@ $defaults = [
         'feat4_t' => 'Security',
         'feat4_d' => 'We prioritize your privacy. No login required and all downloads are processed securely.',
         'status_fetching' => 'Fetching media content...',
+
+        // New Feature Cards
+        'feature_fast_title' => 'Lightning Fast',
+        'feature_fast_desc' => 'Powered by top-tier server infrastructure to deliver your media in seconds.',
+        'feature_secure_title' => 'Private & Secure',
+        'feature_secure_desc' => 'We value your privacy. Your data is never stored, and you don\'t need an account.',
+        'feature_hd_title' => 'HD Quality',
+        'feature_hd_desc' => 'Always download the highest resolution available for Photos and Reels.',
+        'feature_unlimited_title' => 'Unlimited',
+        'feature_unlimited_desc' => 'No limits on how many videos or photos you can download. Completely free.',
+
+        // Detailed Features
+        'detailed_features_title' => 'MySeoFan.app features',
+        'detailed_features_subtitle' => 'With MySeoFan you can download any type of content from Instagram. Our service has an IG video downloader, Reels, IGTV, photo or carousel.',
+        'det_video_title' => 'Video Downloader',
+        'det_video_desc' => 'MySeoFan.app supports Instagram video download for singular videos and multiple videos from carousel. MySeoFan is created to enable you to download IG videos from your personal page.',
+        'det_photo_title' => 'Photos Downloader',
+        'det_photo_desc' => 'Instagram photo download provided by MySeoFan.app is a great tool for saving images from Instagram posts. With MySeoFan, you can download a single post image and multiple Instagram photos (carousel).',
+        'det_reels_title' => 'Reels Downloader',
+        'det_reels_desc' => 'Reels is a new video format that clones the principle of TikTok. Instagram Reels download with the help of MySeoFan. Our Instagram Reels downloader can help you to save your favorite Reels videos.',
+        'det_igtv_title' => 'IGTV Downloader',
+        'det_igtv_desc' => 'IGTV is a long video type. If you can\'t watch it now, you can download IGTV videos to your device to be sure that you can return to watching later, without the need to be online or in case the IGTV can be deleted.',
+        'det_carousel_title' => 'Carousel / Album Downloader',
+        'det_carousel_desc' => 'Carousel, also known as Album or Gallery posts type with multiple photos, videos, or mixed content. If you need to download multiple photos from Instagram, the MySeoFan.app is the best to download gallery.',
+
+        // FAQ
+        'faq_title' => 'Frequently asked questions (FAQ)',
+        'faq_1_q' => 'What exactly is MySeoFan.app?',
+        'faq_1_a' => 'MySeoFan.app is a browser-based helper that lets you save public Instagram content - videos, photos, Reels, Stories, IGTV and carousels - to your own device for offline viewing. It works straight from the website; no software install is required.',
+        'faq_2_q' => 'Is downloading from Instagram legal?',
+        'faq_2_a' => 'Saving public posts for personal use is generally allowed, but copyright always belongs to the creator. Please keep the files private unless you have the owner\'s permission to share or reuse them.',
+        'faq_3_q' => 'Do I need to log in or create an account?',
+        'faq_3_a' => 'No. Just paste the Instagram link - there\'s no registration, no Instagram credentials, and no cookies that track you across the web.',
+        'faq_4_q' => 'Can I grab content from private accounts?',
+        'faq_4_a' => 'Sorry, no. We respect user privacy, so only public posts are accessible. If you can\'t view the post in a logged-out browser tab, MySeoFan.app can\'t fetch it either.',
     ],
     // Other languages can be added or auto-translated via Translator::translate
 ];
@@ -1076,10 +1111,10 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                             <i data-lucide="zap" class="w-10 h-10"></i>
                         </div>
                         <h4 class="text-xl font-black text-slate-800 mb-3 group-hover:text-blue-600 transition-colors">
-                            Lightning Fast</h4>
-                        <p class="text-slate-700 font-medium text-sm leading-relaxed">Powered by top-tier server
-                            infrastructure to
-                            deliver your media in seconds.</p>
+                            <?php echo $t['feature_fast_title']; ?>
+                        </h4>
+                        <p class="text-slate-700 font-medium text-sm leading-relaxed">
+                            <?php echo $t['feature_fast_desc']; ?></p>
                     </div>
 
                     <!-- Private & Secure -->
@@ -1088,10 +1123,10 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                             <i data-lucide="shield-check" class="w-10 h-10"></i>
                         </div>
                         <h4 class="text-xl font-black text-slate-800 mb-3 group-hover:text-blue-600 transition-colors">
-                            Private & Secure</h4>
-                        <p class="text-slate-700 font-medium text-sm leading-relaxed">We value your privacy. Your data
-                            is never
-                            stored, and you don't need an account.</p>
+                            <?php echo $t['feature_secure_title']; ?>
+                        </h4>
+                        <p class="text-slate-700 font-medium text-sm leading-relaxed">
+                            <?php echo $t['feature_secure_desc']; ?></p>
                     </div>
 
                     <!-- HD Quality -->
@@ -1100,10 +1135,10 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                             <i data-lucide="sparkles" class="w-10 h-10"></i>
                         </div>
                         <h4 class="text-xl font-black text-slate-800 mb-3 group-hover:text-blue-600 transition-colors">
-                            HD Quality</h4>
-                        <p class="text-slate-700 font-medium text-sm leading-relaxed">Always download the highest
-                            resolution
-                            available for Photos and Reels.</p>
+                            <?php echo $t['feature_hd_title']; ?>
+                        </h4>
+                        <p class="text-slate-700 font-medium text-sm leading-relaxed">
+                            <?php echo $t['feature_hd_desc']; ?></p>
                     </div>
 
                     <!-- Unlimited Downloads -->
@@ -1112,20 +1147,20 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                             <i data-lucide="infinity" class="w-10 h-10"></i>
                         </div>
                         <h4 class="text-xl font-black text-slate-800 mb-3 group-hover:text-blue-600 transition-colors">
-                            Unlimited</h4>
-                        <p class="text-slate-700 font-medium text-sm leading-relaxed">No limits on how many videos or
-                            photos you can
-                            download. Completely free.</p>
+                            <?php echo $t['feature_unlimited_title']; ?>
+                        </h4>
+                        <p class="text-slate-700 font-medium text-sm leading-relaxed">
+                            <?php echo $t['feature_unlimited_desc']; ?></p>
                     </div>
                 </div>
             </section>
             <!-- Detailed Feature Cards -->
+            <!-- Detailed Feature Cards -->
             <section id="detailed-features" class="mt-32">
-                <h2 class="section-header-blue">MySeoFan.app features</h2>
+                <h2 class="section-header-blue"><?php echo $t['detailed_features_title']; ?></h2>
                 <div class="text-center mb-12">
                     <p class="features-subtitle-white max-w-2xl mx-auto">
-                        With MySeoFan you can download any type of content from Instagram. Our service has an IG video
-                        downloader, Reels, IGTV, photo or carousel.
+                        <?php echo $t['detailed_features_subtitle']; ?>
                     </p>
                 </div>
 
@@ -1133,11 +1168,8 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                     <!-- Video Downloader -->
                     <div class="feature-detail-card">
                         <div class="feature-detail-content">
-                            <h3 class="feature-detail-title">Video Downloader</h3>
-                            <p class="feature-detail-text">MySeoFan.app supports Instagram video download for singular
-                                videos and multiple videos from carousel. MySeoFan is created to enable you to download
-                                IG
-                                videos from your personal page.</p>
+                            <h3 class="feature-detail-title"><?php echo $t['det_video_title']; ?></h3>
+                            <p class="feature-detail-text"><?php echo $t['det_video_desc']; ?></p>
                         </div>
                         <div class="feature-detail-visual">
                             <img src="images/video-feature.png" alt="Video Downloader">
@@ -1147,11 +1179,8 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                     <!-- Photos Downloader -->
                     <div class="feature-detail-card">
                         <div class="feature-detail-content">
-                            <h3 class="feature-detail-title">Photos Downloader</h3>
-                            <p class="feature-detail-text">Instagram photo download provided by MySeoFan.app is a great
-                                tool for saving images from Instagram posts. With MySeoFan, you can download a single
-                                post
-                                image and multiple Instagram photos (carousel).</p>
+                            <h3 class="feature-detail-title"><?php echo $t['det_photo_title']; ?></h3>
+                            <p class="feature-detail-text"><?php echo $t['det_photo_desc']; ?></p>
                         </div>
                         <div class="feature-detail-visual">
                             <img src="images/photo-feature.png" alt="Photos Downloader">
@@ -1161,11 +1190,8 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                     <!-- Reels Downloader -->
                     <div class="feature-detail-card">
                         <div class="feature-detail-content">
-                            <h3 class="feature-detail-title">Reels Downloader</h3>
-                            <p class="feature-detail-text">Reels is a new video format that clones the principle of
-                                TikTok. Instagram Reels download with the help of MySeoFan. Our Instagram Reels
-                                downloader
-                                can help you to save your favorite Reels videos.</p>
+                            <h3 class="feature-detail-title"><?php echo $t['det_reels_title']; ?></h3>
+                            <p class="feature-detail-text"><?php echo $t['det_reels_desc']; ?></p>
                         </div>
                         <div class="feature-detail-visual">
                             <img src="images/reels-feature.png" alt="Reels Downloader">
@@ -1175,10 +1201,8 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                     <!-- IGTV Downloader -->
                     <div class="feature-detail-card">
                         <div class="feature-detail-content">
-                            <h3 class="feature-detail-title">IGTV Downloader</h3>
-                            <p class="feature-detail-text">IGTV is a long video type. If you can't watch it now, you can
-                                download IGTV videos to your device to be sure that you can return to watching later,
-                                without the need to be online or in case the IGTV can be deleted.</p>
+                            <h3 class="feature-detail-title"><?php echo $t['det_igtv_title']; ?></h3>
+                            <p class="feature-detail-text"><?php echo $t['det_igtv_desc']; ?></p>
                         </div>
                         <div class="feature-detail-visual">
                             <img src="images/igtv-feature.png" alt="IGTV Downloader">
@@ -1188,10 +1212,8 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                     <!-- Carousel Downloader -->
                     <div class="feature-detail-card">
                         <div class="feature-detail-content">
-                            <h3 class="feature-detail-title">Carousel / Album Downloader</h3>
-                            <p class="feature-detail-text">Carousel, also known as Album or Gallery posts type with
-                                multiple photos, videos, or mixed content. If you need to download multiple photos from
-                                Instagram, the MySeoFan.app is the best to download gallery.</p>
+                            <h3 class="feature-detail-title"><?php echo $t['det_carousel_title']; ?></h3>
+                            <p class="feature-detail-text"><?php echo $t['det_carousel_desc']; ?></p>
                         </div>
                         <div class="feature-detail-visual">
                             <img src="images/carousel-feature.png" alt="Carousel Downloader">
@@ -1284,7 +1306,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                                 </h3>
 
                                 <p class="text-gray-500 text-sm line-clamp-3 mb-4">
-                                    <?php echo htmlspecialchars($post['excerpt']); ?>
+                                    <?php echo htmlspecialchars($post['excerpt'] ?? ''); ?>
                                 </p>
 
                                 <a href="blog-detail.php?slug=<?php echo htmlspecialchars($post['slug']); ?>"
@@ -1314,37 +1336,31 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
     <!-- FAQ -->
     <section id="faq" class="py-24 bg-slate-100">
         <div class="max-w-4xl mx-auto px-6">
-            <h2 class="section-header-blue">Frequently asked questions (FAQ)</h2>
+            <h2 class="section-header-blue"><?php echo $t['faq_title']; ?></h2>
             <div class="faq-list mt-12">
                 <!-- FAQ items remain static as they are part of the demo1 design -->
                 <div class="faq-item">
-                    <span class="faq-question">What exactly is MySeoFan.app?</span>
+                    <span class="faq-question"><?php echo $t['faq_1_q']; ?></span>
                     <div class="faq-answer">
-                        MySeoFan.app is a browser-based helper that lets you save public Instagram content - videos,
-                        photos, Reels, Stories, IGTV and carousels - to your own device for offline viewing. It works
-                        straight from the website; no software install is required.
+                        <?php echo $t['faq_1_a']; ?>
                     </div>
                 </div>
                 <div class="faq-item">
-                    <span class="faq-question">Is downloading from Instagram legal?</span>
+                    <span class="faq-question"><?php echo $t['faq_2_q']; ?></span>
                     <div class="faq-answer">
-                        Saving public posts for personal use is generally allowed, but copyright always belongs to the
-                        creator. Please keep the files private unless you have the owner's permission to share or reuse
-                        them.
+                        <?php echo $t['faq_2_a']; ?>
                     </div>
                 </div>
                 <div class="faq-item">
-                    <span class="faq-question">Do I need to log in or create an account?</span>
+                    <span class="faq-question"><?php echo $t['faq_3_q']; ?></span>
                     <div class="faq-answer">
-                        No. Just paste the Instagram link - there's no registration, no Instagram credentials, and no
-                        cookies that track you across the web.
+                        <?php echo $t['faq_3_a']; ?>
                     </div>
                 </div>
                 <div class="faq-item">
-                    <span class="faq-question">Can I grab content from private accounts?</span>
+                    <span class="faq-question"><?php echo $t['faq_4_q']; ?></span>
                     <div class="faq-answer">
-                        Sorry, no. We respect user privacy, so only public posts are accessible. If you can't view the
-                        post in a logged-out browser tab, MySeoFan.app can't fetch it either.
+                        <?php echo $t['faq_4_a']; ?>
                     </div>
                 </div>
             </div>

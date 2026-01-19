@@ -45,18 +45,29 @@ $defaults = [
         'feat3_t' => 'Fast Speed',
         'feat3_d' => 'High-speed servers for quick downloads.',
         'feat4_t' => 'No Limits',
-        'feat4_d' => 'Download as many IGTV videos as you need.',
+        'feat4_d' => 'Your activity is private and secure.',
         'status_fetching' => 'Fetching IGTV...',
+
+        // Shared Feature Cards
+        'feature_fast_title' => 'Lightning Fast',
+        'feature_fast_desc' => 'Powered by top-tier server infrastructure to deliver your media in seconds.',
+        'feature_secure_title' => 'Private & Secure',
+        'feature_secure_desc' => 'We value your privacy. Your data is never stored, and you don\'t need an account.',
+        'feature_hd_title' => 'HD Quality',
+        'feature_hd_desc' => 'Always download the highest resolution available for Photos and Reels.',
+        'feature_unlimited_title' => 'Unlimited',
+        'feature_unlimited_desc' => 'No limits on how many videos or photos you can download. Completely free.',
+
         // FAQ
         'faq_title' => 'Frequently Asked Questions (FAQ)',
-        'faq_q1' => 'Are long videos supported?',
-        'faq_a1' => 'Yes, we support downloading IGTV videos of any duration.',
-        'faq_q2' => 'How big can the file be?',
-        'faq_a2' => 'There is no file size limit for our downloader.',
+        'faq_q1' => 'Are there length limits?',
+        'faq_a1' => 'No, you can download IGTV videos of any length.',
+        'faq_q2' => 'Do I need a login?',
+        'faq_a2' => 'No login required for public IGTV videos.',
         'faq_q3' => 'Is it free?',
-        'faq_a3' => 'Yes, our IGTV downloader is 100% free.',
-        'faq_q4' => 'Where is the file saved?',
-        'faq_a4' => 'It will be saved in your default Download folder.',
+        'faq_a3' => 'Yes, our service is completely free.',
+        'faq_q4' => 'Where are videos saved?',
+        'faq_a4' => 'Videos are saved to your device\'s default download folder.',
     ],
 ];
 
@@ -894,10 +905,10 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                             <i data-lucide="zap" class="w-10 h-10"></i>
                         </div>
                         <h4 class="text-xl font-black text-slate-800 mb-3 group-hover:text-blue-600 transition-colors">
-                            Lightning Fast</h4>
-                        <p class="text-slate-700 font-medium text-sm leading-relaxed">Powered by top-tier server
-                            infrastructure to
-                            deliver your media in seconds.</p>
+                            <?php echo $t['feature_fast_title']; ?>
+                        </h4>
+                        <p class="text-slate-700 font-medium text-sm leading-relaxed">
+                            <?php echo $t['feature_fast_desc']; ?></p>
                     </div>
 
                     <!-- Private & Secure -->
@@ -906,10 +917,10 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                             <i data-lucide="shield-check" class="w-10 h-10"></i>
                         </div>
                         <h4 class="text-xl font-black text-slate-800 mb-3 group-hover:text-blue-600 transition-colors">
-                            Private & Secure</h4>
-                        <p class="text-slate-700 font-medium text-sm leading-relaxed">We value your privacy. Your data
-                            is never
-                            stored, and you don't need an account.</p>
+                            <?php echo $t['feature_secure_title']; ?>
+                        </h4>
+                        <p class="text-slate-700 font-medium text-sm leading-relaxed">
+                            <?php echo $t['feature_secure_desc']; ?></p>
                     </div>
 
                     <!-- HD Quality -->
@@ -918,10 +929,10 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                             <i data-lucide="sparkles" class="w-10 h-10"></i>
                         </div>
                         <h4 class="text-xl font-black text-slate-800 mb-3 group-hover:text-blue-600 transition-colors">
-                            HD Quality</h4>
-                        <p class="text-slate-700 font-medium text-sm leading-relaxed">Always download the highest
-                            resolution
-                            available for Photos and Reels.</p>
+                            <?php echo $t['feature_hd_title']; ?>
+                        </h4>
+                        <p class="text-slate-700 font-medium text-sm leading-relaxed">
+                            <?php echo $t['feature_hd_desc']; ?></p>
                     </div>
 
                     <!-- Unlimited Downloads -->
@@ -930,10 +941,10 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                             <i data-lucide="infinity" class="w-10 h-10"></i>
                         </div>
                         <h4 class="text-xl font-black text-slate-800 mb-3 group-hover:text-blue-600 transition-colors">
-                            Unlimited</h4>
-                        <p class="text-slate-700 font-medium text-sm leading-relaxed">No limits on how many videos or
-                            photos you can
-                            download. Completely free.</p>
+                            <?php echo $t['feature_unlimited_title']; ?>
+                        </h4>
+                        <p class="text-slate-700 font-medium text-sm leading-relaxed">
+                            <?php echo $t['feature_unlimited_desc']; ?></p>
                     </div>
                 </div>
             </section>

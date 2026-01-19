@@ -45,18 +45,29 @@ $defaults = [
         'feat3_t' => 'Easy Selection',
         'feat3_d' => 'Preview all slides before downloading.',
         'feat4_t' => 'Free',
-        'feat4_d' => 'No cost to download full albums.',
-        'status_fetching' => 'Fetching Carousel...',
+        'feat4_d' => 'Your activity is private and secure.',
+        'status_fetching' => 'Fetching carousel...',
+
+        // Shared Feature Cards
+        'feature_fast_title' => 'Lightning Fast',
+        'feature_fast_desc' => 'Powered by top-tier server infrastructure to deliver your media in seconds.',
+        'feature_secure_title' => 'Private & Secure',
+        'feature_secure_desc' => 'We value your privacy. Your data is never stored, and you don\'t need an account.',
+        'feature_hd_title' => 'HD Quality',
+        'feature_hd_desc' => 'Always download the highest resolution available for Photos and Reels.',
+        'feature_unlimited_title' => 'Unlimited',
+        'feature_unlimited_desc' => 'No limits on how many videos or photos you can download. Completely free.',
+
         // FAQ
         'faq_title' => 'Frequently Asked Questions (FAQ)',
-        'faq_q1' => 'Can I download all slides at once?',
-        'faq_a1' => 'Currently, you must download each item individually, but we fetch them all for you.',
-        'faq_q2' => 'Does it work with mixed content?',
-        'faq_a2' => 'Yes, if a carousel has both photos and videos, we support both.',
-        'faq_q3' => 'Is there a limit on slides?',
-        'faq_a3' => 'No, we show all slides contained in the post (up to 10-20).',
-        'faq_q4' => 'Do I need to login?',
-        'faq_a4' => 'No, you do not need an Instagram account to use our tool.',
+        'faq_q1' => 'Are all slides downloaded?',
+        'faq_a1' => 'Yes, our tool detects and downloads all images/videos in the carousel.',
+        'faq_q2' => 'Do I have to pay?',
+        'faq_a2' => 'No, it is completely free to use.',
+        'faq_q3' => 'Is quality reduced?',
+        'faq_a3' => 'No, we download the highest quality available.',
+        'faq_q4' => 'Where are they saved?',
+        'faq_a4' => 'Files are saved to your default download folder.',
     ],
 ];
 
@@ -894,10 +905,10 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                             <i data-lucide="zap" class="w-10 h-10"></i>
                         </div>
                         <h4 class="text-xl font-black text-slate-800 mb-3 group-hover:text-blue-600 transition-colors">
-                            Lightning Fast</h4>
-                        <p class="text-slate-700 font-medium text-sm leading-relaxed">Powered by top-tier server
-                            infrastructure to
-                            deliver your media in seconds.</p>
+                            <?php echo $t['feature_fast_title']; ?>
+                        </h4>
+                        <p class="text-slate-700 font-medium text-sm leading-relaxed">
+                            <?php echo $t['feature_fast_desc']; ?></p>
                     </div>
 
                     <!-- Private & Secure -->
@@ -906,10 +917,10 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                             <i data-lucide="shield-check" class="w-10 h-10"></i>
                         </div>
                         <h4 class="text-xl font-black text-slate-800 mb-3 group-hover:text-blue-600 transition-colors">
-                            Private & Secure</h4>
-                        <p class="text-slate-700 font-medium text-sm leading-relaxed">We value your privacy. Your data
-                            is never
-                            stored, and you don't need an account.</p>
+                            <?php echo $t['feature_secure_title']; ?>
+                        </h4>
+                        <p class="text-slate-700 font-medium text-sm leading-relaxed">
+                            <?php echo $t['feature_secure_desc']; ?></p>
                     </div>
 
                     <!-- HD Quality -->
@@ -918,10 +929,10 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                             <i data-lucide="sparkles" class="w-10 h-10"></i>
                         </div>
                         <h4 class="text-xl font-black text-slate-800 mb-3 group-hover:text-blue-600 transition-colors">
-                            HD Quality</h4>
-                        <p class="text-slate-700 font-medium text-sm leading-relaxed">Always download the highest
-                            resolution
-                            available for Photos and Reels.</p>
+                            <?php echo $t['feature_hd_title']; ?>
+                        </h4>
+                        <p class="text-slate-700 font-medium text-sm leading-relaxed">
+                            <?php echo $t['feature_hd_desc']; ?></p>
                     </div>
 
                     <!-- Unlimited Downloads -->
@@ -930,10 +941,10 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                             <i data-lucide="infinity" class="w-10 h-10"></i>
                         </div>
                         <h4 class="text-xl font-black text-slate-800 mb-3 group-hover:text-blue-600 transition-colors">
-                            Unlimited</h4>
-                        <p class="text-slate-700 font-medium text-sm leading-relaxed">No limits on how many videos or
-                            photos you can
-                            download. Completely free.</p>
+                            <?php echo $t['feature_unlimited_title']; ?>
+                        </h4>
+                        <p class="text-slate-700 font-medium text-sm leading-relaxed">
+                            <?php echo $t['feature_unlimited_desc']; ?></p>
                     </div>
                 </div>
             </section>

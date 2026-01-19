@@ -47,6 +47,16 @@ $defaults = [
         'feat4_t' => 'Secure',
         'feat4_d' => 'Your downloads are private and anonymous.',
         'status_fetching' => 'Fetching video...',
+
+        // Shared Feature Cards
+        'feature_fast_title' => 'Lightning Fast',
+        'feature_fast_desc' => 'Powered by top-tier server infrastructure to deliver your media in seconds.',
+        'feature_secure_title' => 'Private & Secure',
+        'feature_secure_desc' => 'We value your privacy. Your data is never stored, and you don\'t need an account.',
+        'feature_hd_title' => 'HD Quality',
+        'feature_hd_desc' => 'Always download the highest resolution available for Photos and Reels.',
+        'feature_unlimited_title' => 'Unlimited',
+        'feature_unlimited_desc' => 'No limits on how many videos or photos you can download. Completely free.',
         // FAQ
         'faq_title' => 'Frequently Asked Questions (FAQ)',
         'faq_q1' => 'Are the videos free?',
@@ -894,10 +904,10 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                             <i data-lucide="zap" class="w-10 h-10"></i>
                         </div>
                         <h4 class="text-xl font-black text-slate-800 mb-3 group-hover:text-blue-600 transition-colors">
-                            Lightning Fast</h4>
-                        <p class="text-slate-700 font-medium text-sm leading-relaxed">Powered by top-tier server
-                            infrastructure to
-                            deliver your media in seconds.</p>
+                            <?php echo $t['feature_fast_title']; ?>
+                        </h4>
+                        <p class="text-slate-700 font-medium text-sm leading-relaxed">
+                            <?php echo $t['feature_fast_desc']; ?></p>
                     </div>
 
                     <!-- Private & Secure -->
@@ -906,10 +916,10 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                             <i data-lucide="shield-check" class="w-10 h-10"></i>
                         </div>
                         <h4 class="text-xl font-black text-slate-800 mb-3 group-hover:text-blue-600 transition-colors">
-                            Private & Secure</h4>
-                        <p class="text-slate-700 font-medium text-sm leading-relaxed">We value your privacy. Your data
-                            is never
-                            stored, and you don't need an account.</p>
+                            <?php echo $t['feature_secure_title']; ?>
+                        </h4>
+                        <p class="text-slate-700 font-medium text-sm leading-relaxed">
+                            <?php echo $t['feature_secure_desc']; ?></p>
                     </div>
 
                     <!-- HD Quality -->
@@ -918,10 +928,10 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                             <i data-lucide="sparkles" class="w-10 h-10"></i>
                         </div>
                         <h4 class="text-xl font-black text-slate-800 mb-3 group-hover:text-blue-600 transition-colors">
-                            HD Quality</h4>
-                        <p class="text-slate-700 font-medium text-sm leading-relaxed">Always download the highest
-                            resolution
-                            available for Photos and Reels.</p>
+                            <?php echo $t['feature_hd_title']; ?>
+                        </h4>
+                        <p class="text-slate-700 font-medium text-sm leading-relaxed">
+                            <?php echo $t['feature_hd_desc']; ?></p>
                     </div>
 
                     <!-- Unlimited Downloads -->
@@ -930,10 +940,10 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                             <i data-lucide="infinity" class="w-10 h-10"></i>
                         </div>
                         <h4 class="text-xl font-black text-slate-800 mb-3 group-hover:text-blue-600 transition-colors">
-                            Unlimited</h4>
-                        <p class="text-slate-700 font-medium text-sm leading-relaxed">No limits on how many videos or
-                            photos you can
-                            download. Completely free.</p>
+                            <?php echo $t['feature_unlimited_title']; ?>
+                        </h4>
+                        <p class="text-slate-700 font-medium text-sm leading-relaxed">
+                            <?php echo $t['feature_unlimited_desc']; ?></p>
                     </div>
                 </div>
             </section>

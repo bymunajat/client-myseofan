@@ -35,3 +35,4 @@ if (isset($data[0])) {
 
 header('Content-Type: application/json');
 echo json_encode(['translatedText' => $translated_text]);
+

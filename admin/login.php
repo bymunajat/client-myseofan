@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
         crossorigin="anonymous">
     <!-- AdminLTE -->
-    <link rel="stylesheet" href="../AdminLTE/dist/css/adminlte.css">
+    <link rel="stylesheet" href="../assets/AdminLTE/dist/css/adminlte.css">
 </head>
 
 <body class="login-page bg-body-secondary">
@@ -112,7 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <!-- AdminLTE JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         crossorigin="anonymous"></script>
-    <script src="../AdminLTE/dist/js/adminlte.js"></script>
+    <script src="../assets/AdminLTE/dist/js/adminlte.js"></script>
 </body>
 
 </html>

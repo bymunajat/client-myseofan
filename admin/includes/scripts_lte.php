@@ -7,7 +7,7 @@
     integrity="sha256-CDOy6cOibCWEdsRiZuaHf8dSGGJRYuBGC+mjoJimHGw=" crossorigin="anonymous"></script>
 
 <!-- AdminLTE App -->
-<script src="../AdminLTE/dist/js/adminlte.js"></script>
+<script src="../assets/AdminLTE/dist/js/adminlte.js"></script>
 
 <!-- Icon/Font Config -->
 <script>

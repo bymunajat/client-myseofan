@@ -15,3 +15,4 @@ define('SITE_VERSION', '1.0.0');
 // Error Reporting (Turn off in production)
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
+

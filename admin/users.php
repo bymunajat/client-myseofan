@@ -126,7 +126,7 @@ if ($action === 'list') {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
         crossorigin="anonymous">
     <!-- AdminLTE -->
-    <link rel="stylesheet" href="../AdminLTE/dist/css/adminlte.css">
+    <link rel="stylesheet" href="../assets/AdminLTE/dist/css/adminlte.css">
     <style>
         .user-avatar-circle {
             width: 64px;

@@ -260,7 +260,7 @@ try {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
         crossorigin="anonymous">
     <!-- AdminLTE -->
-    <link rel="stylesheet" href="../AdminLTE/dist/css/adminlte.css">
+    <link rel="stylesheet" href="../assets/AdminLTE/dist/css/adminlte.css">
 
     <!-- TinyMCE -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.2/tinymce.min.js" referrerpolicy="origin"></script>

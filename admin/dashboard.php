@@ -37,7 +37,7 @@ $recentPosts = $pdo->query("SELECT title, created_at FROM blog_posts WHERE lang_
         crossorigin="anonymous">
 
     <!-- AdminLTE -->
-    <link rel="stylesheet" href="../AdminLTE/dist/css/adminlte.css">
+    <link rel="stylesheet" href="../assets/AdminLTE/dist/css/adminlte.css">
 </head>
 
 <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">

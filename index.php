@@ -144,7 +144,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
 
     <!-- Custom Header Code -->
     <?php echo $settings['header_code'] ?? ''; ?>
-    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="assets/css/responsive.css">
 
     <style>
         :root {
@@ -1172,7 +1172,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                             <p class="feature-detail-text"><?php echo $t['det_video_desc']; ?></p>
                         </div>
                         <div class="feature-detail-visual">
-                            <img src="images/video-feature.png" alt="Video Downloader">
+                            <img src="assets/images/video-feature.png" alt="Video Downloader">
                         </div>
                     </div>
 
@@ -1183,7 +1183,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                             <p class="feature-detail-text"><?php echo $t['det_photo_desc']; ?></p>
                         </div>
                         <div class="feature-detail-visual">
-                            <img src="images/photo-feature.png" alt="Photos Downloader">
+                            <img src="assets/images/photo-feature.png" alt="Photos Downloader">
                         </div>
                     </div>
 
@@ -1194,7 +1194,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                             <p class="feature-detail-text"><?php echo $t['det_reels_desc']; ?></p>
                         </div>
                         <div class="feature-detail-visual">
-                            <img src="images/reels-feature.png" alt="Reels Downloader">
+                            <img src="assets/images/reels-feature.png" alt="Reels Downloader">
                         </div>
                     </div>
 
@@ -1205,7 +1205,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                             <p class="feature-detail-text"><?php echo $t['det_igtv_desc']; ?></p>
                         </div>
                         <div class="feature-detail-visual">
-                            <img src="images/igtv-feature.png" alt="IGTV Downloader">
+                            <img src="assets/images/igtv-feature.png" alt="IGTV Downloader">
                         </div>
                     </div>
 
@@ -1216,7 +1216,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                             <p class="feature-detail-text"><?php echo $t['det_carousel_desc']; ?></p>
                         </div>
                         <div class="feature-detail-visual">
-                            <img src="images/carousel-feature.png" alt="Carousel Downloader">
+                            <img src="assets/images/carousel-feature.png" alt="Carousel Downloader">
                         </div>
                     </div>
                 </div>
@@ -1490,7 +1490,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
         </div>
     </div>
 
-    <script src="js/app.js?v=1.1"></script>
+    <script src="assets/js/app.js?v=1.1"></script>
     <?php echo $settings['footer_code'] ?? ''; ?>
 </body>
 

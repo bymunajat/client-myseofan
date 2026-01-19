@@ -120,7 +120,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
 
     <!-- Custom Header Code -->
     <?php echo $settings['header_code'] ?? ''; ?>
-    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="assets/css/responsive.css">
 
     <style>
         /* Reusing exact CSS from index.php for consistency */
@@ -960,7 +960,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                         </p>
                     </div>
                     <div class="flex items-center justify-center p-8 bg-slate-100 rounded-xl">
-                        <img src="images/video-feature.png" alt="Video Features"
+                        <img src="assets/images/video-feature.png" alt="Video Features"
                             class="rounded-xl shadow-lg transform rotate-2 hover:rotate-0 transition-transform duration-500">
                     </div>
                 </div>
@@ -1119,7 +1119,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
         </div>
     </div>
 
-    <script src="js/app.js?v=1.1"></script>
+    <script src="assets/js/app.js?v=1.1"></script>
     <?php echo $settings['footer_code'] ?? ''; ?>
 </body>
 

@@ -103,7 +103,7 @@ $pageIdentifier = 'blog';
     <script src="https://cdn.tailwindcss.com"></script>
 
     <style>
-        <link rel="stylesheet" href="css/responsive.css">body {
+        <link rel="stylesheet" href="assets/css/responsive.css">body {
             font-family: 'Outfit', sans-serif;
             background-color: #f8fafc;
             color: #1a1a1a;
@@ -462,7 +462,7 @@ $pageIdentifier = 'blog';
             </div>
         </div>
     </div>
-    <script src="js/app.js?v=1.1"></script>
+    <script src="assets/js/app.js?v=1.1"></script>
     <?php echo $settings['footer_code'] ?? ''; ?>
 </body>
 

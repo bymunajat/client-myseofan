@@ -27,7 +27,15 @@ if (isset($_GET['delete'])) {
 // Get Files
 $files = [];
 if (is_dir($uploadsDir)) {
-    $files = array_diff(scandir($uploadsDir), array('.', '..', '.gitignore'));
+    $allItems = scandir($uploadsDir);
+    foreach ($allItems as $item) {
+        if ($item === '.' || $item === '..' || $item === '.gitignore')
+            continue;
+        // Only show files, hide directories like 'blog'
+        if (is_file($uploadsDir . $item)) {
+            $files[] = $item;
+        }
+    }
 }
 ?>
 <!DOCTYPE html>

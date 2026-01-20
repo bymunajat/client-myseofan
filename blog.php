@@ -349,31 +349,26 @@ $pageIdentifier = 'blog';
                     class="footer-logo-text"><?php echo htmlspecialchars($settings['site_name'] ?: 'MySeoFan'); ?></span>
             </div>
 
-            <div class="footer-links-container flex flex-wrap gap-x-12 gap-y-8 mt-10">
-                <?php foreach ($footerItems as $group): ?>
-                    <div class="footer-group">
-                        <?php if ($group['type'] === 'label'): ?>
-                            <h4 class="text-xs font-bold text-slate-800 uppercase tracking-widest mb-4">
-                                <?php echo htmlspecialchars($group['label']); ?></h4>
-                            <div class="flex flex-col gap-2">
-                                <?php if (isset($group['children'])): ?>
-                                    <?php foreach ($group['children'] as $item): ?>
-                                        <a href="<?php echo htmlspecialchars($item['final_url']); ?>"
-                                            class="text-sm text-slate-500 hover:text-pink-500 transition-colors">
-                                            <?php echo htmlspecialchars($item['label']); ?>
-                                        </a>
-                                    <?php endforeach; ?>
+            <?php foreach ($footerItems as $group): ?>
+                <div class="footer-links-group">
+                    <?php if ($group['type'] === 'label'): ?>
+                        <?php if (isset($group['children']) && !empty($group['children'])): ?>
+                            <?php foreach ($group['children'] as $index => $item): ?>
+                                <a href="<?php echo htmlspecialchars($item['final_url']); ?>" class="footer-link">
+                                    <?php echo htmlspecialchars($item['label']); ?>
+                                </a>
+                                <?php if ($index < count($group['children']) - 1): ?>
+                                    <span class="text-slate-200 px-1">|</span>
                                 <?php endif; ?>
-                            </div>
-                        <?php else: ?>
-                            <a href="<?php echo htmlspecialchars($group['final_url']); ?>"
-                                class="text-sm font-bold text-slate-800 hover:text-pink-500 transition-colors">
-                                <?php echo htmlspecialchars($group['label']); ?>
-                            </a>
+                            <?php endforeach; ?>
                         <?php endif; ?>
-                    </div>
-                <?php endforeach; ?>
-            </div>
+                    <?php else: ?>
+                        <a href="<?php echo htmlspecialchars($group['final_url']); ?>" class="footer-link">
+                            <?php echo htmlspecialchars($group['label']); ?>
+                        </a>
+                    <?php endif; ?>
+                </div>
+            <?php endforeach; ?>
 
             <div class="footer-divider"></div>
 

@@ -757,19 +757,19 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
         <div class="max-w-5xl mx-auto text-center px-6 w-full">
             <!-- Tool Bar (Desktop) -->
             <div class="tool-bar animate-fade-up hidden md:inline-flex">
-                <a href="video.php?lang=<?php echo $lang; ?>"
+                <a href="video-downloader<?php echo ($lang !== 'en') ? '/' . $lang : ''; ?>"
                     class="tool-item <?php echo $pageIdentifier == 'video' ? 'active' : ''; ?>"><i data-lucide="video"
                         class="w-4 h-4"></i> Video</a>
-                <a href="photo.php?lang=<?php echo $lang; ?>"
+                <a href="photo-downloader<?php echo ($lang !== 'en') ? '/' . $lang : ''; ?>"
                     class="tool-item <?php echo $pageIdentifier == 'photo' ? 'active' : ''; ?>"><i data-lucide="image"
                         class="w-4 h-4"></i> Photo</a>
-                <a href="reels.php?lang=<?php echo $lang; ?>"
+                <a href="reels-downloader<?php echo ($lang !== 'en') ? '/' . $lang : ''; ?>"
                     class="tool-item <?php echo $pageIdentifier == 'reels' ? 'active' : ''; ?>"><i
                         data-lucide="clapperboard" class="w-4 h-4"></i> Reels</a>
-                <a href="igtv.php?lang=<?php echo $lang; ?>"
+                <a href="igtv-downloader<?php echo ($lang !== 'en') ? '/' . $lang : ''; ?>"
                     class="tool-item <?php echo $pageIdentifier == 'igtv' ? 'active' : ''; ?>"><i data-lucide="tv"
                         class="w-4 h-4"></i> IGTV</a>
-                <a href="carousel.php?lang=<?php echo $lang; ?>"
+                <a href="carousel-downloader<?php echo ($lang !== 'en') ? '/' . $lang : ''; ?>"
                     class="tool-item <?php echo $pageIdentifier == 'carousel' ? 'active' : ''; ?>"><i
                         data-lucide="layout" class="w-4 h-4"></i> Carousel</a>
             </div>
@@ -777,11 +777,11 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
             <!-- Tool Dropdown (Mobile) -->
             <select class="hero-mobile-dropdown animate-fade-up md:hidden" onchange="window.location.href=this.value">
                 <option value="" disabled <?php echo empty($pageIdentifier) ? 'selected' : ''; ?>>Select Tool</option>
-                <option value="video.php?lang=<?php echo $lang; ?>" <?php echo $pageIdentifier == 'video' ? 'selected' : ''; ?>>Video Downloader</option>
-                <option value="photo.php?lang=<?php echo $lang; ?>" <?php echo $pageIdentifier == 'photo' ? 'selected' : ''; ?>>Photo Downloader</option>
-                <option value="reels.php?lang=<?php echo $lang; ?>" <?php echo $pageIdentifier == 'reels' ? 'selected' : ''; ?>>Reels Downloader</option>
-                <option value="igtv.php?lang=<?php echo $lang; ?>" <?php echo $pageIdentifier == 'igtv' ? 'selected' : ''; ?>>IGTV Downloader</option>
-                <option value="carousel.php?lang=<?php echo $lang; ?>" <?php echo $pageIdentifier == 'carousel' ? 'selected' : ''; ?>>Carousel Downloader</option>
+                <option value="video-downloader<?php echo ($lang !== 'en') ? '/' . $lang : ''; ?>" <?php echo $pageIdentifier == 'video' ? 'selected' : ''; ?>>Video Downloader</option>
+                <option value="photo-downloader<?php echo ($lang !== 'en') ? '/' . $lang : ''; ?>" <?php echo $pageIdentifier == 'photo' ? 'selected' : ''; ?>>Photo Downloader</option>
+                <option value="reels-downloader<?php echo ($lang !== 'en') ? '/' . $lang : ''; ?>" <?php echo $pageIdentifier == 'reels' ? 'selected' : ''; ?>>Reels Downloader</option>
+                <option value="igtv-downloader<?php echo ($lang !== 'en') ? '/' . $lang : ''; ?>" <?php echo $pageIdentifier == 'igtv' ? 'selected' : ''; ?>>IGTV Downloader</option>
+                <option value="carousel-downloader<?php echo ($lang !== 'en') ? '/' . $lang : ''; ?>" <?php echo $pageIdentifier == 'carousel' ? 'selected' : ''; ?>>Carousel Downloader</option>
             </select>
 
             <!-- Title -->
@@ -907,7 +907,8 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                             <?php echo $t['feature_fast_title']; ?>
                         </h4>
                         <p class="text-slate-700 font-medium text-sm leading-relaxed">
-                            <?php echo $t['feature_fast_desc']; ?></p>
+                            <?php echo $t['feature_fast_desc']; ?>
+                        </p>
                     </div>
 
                     <!-- Private & Secure -->
@@ -919,7 +920,8 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                             <?php echo $t['feature_secure_title']; ?>
                         </h4>
                         <p class="text-slate-700 font-medium text-sm leading-relaxed">
-                            <?php echo $t['feature_secure_desc']; ?></p>
+                            <?php echo $t['feature_secure_desc']; ?>
+                        </p>
                     </div>
 
                     <!-- HD Quality -->
@@ -931,7 +933,8 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                             <?php echo $t['feature_hd_title']; ?>
                         </h4>
                         <p class="text-slate-700 font-medium text-sm leading-relaxed">
-                            <?php echo $t['feature_hd_desc']; ?></p>
+                            <?php echo $t['feature_hd_desc']; ?>
+                        </p>
                     </div>
 
                     <!-- Unlimited Downloads -->
@@ -943,7 +946,8 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                             <?php echo $t['feature_unlimited_title']; ?>
                         </h4>
                         <p class="text-slate-700 font-medium text-sm leading-relaxed">
-                            <?php echo $t['feature_unlimited_desc']; ?></p>
+                            <?php echo $t['feature_unlimited_desc']; ?>
+                        </p>
                     </div>
                 </div>
             </section>

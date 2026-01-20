@@ -233,15 +233,15 @@ $pageIdentifier = 'blog';
 
             <div class="flex items-center gap-6 text-white font-bold text-sm uppercase tracking-wider">
                 <nav class="hidden lg:flex items-center gap-6">
-                    <a href="video.php?lang=<?php echo $lang; ?>"
+                    <a href="video-downloader<?php echo ($lang !== 'en') ? '/' . $lang : ''; ?>"
                         class="text-white hover:text-[#ec4899] transition-colors">Video</a>
-                    <a href="photo.php?lang=<?php echo $lang; ?>"
+                    <a href="photo-downloader<?php echo ($lang !== 'en') ? '/' . $lang : ''; ?>"
                         class="text-white hover:text-[#ec4899] transition-colors">Photo</a>
-                    <a href="reels.php?lang=<?php echo $lang; ?>"
+                    <a href="reels-downloader<?php echo ($lang !== 'en') ? '/' . $lang : ''; ?>"
                         class="text-white hover:text-[#ec4899] transition-colors">Reels</a>
-                    <a href="igtv.php?lang=<?php echo $lang; ?>"
+                    <a href="igtv-downloader<?php echo ($lang !== 'en') ? '/' . $lang : ''; ?>"
                         class="text-white hover:text-[#ec4899] transition-colors">IGTV</a>
-                    <a href="carousel.php?lang=<?php echo $lang; ?>"
+                    <a href="carousel-downloader<?php echo ($lang !== 'en') ? '/' . $lang : ''; ?>"
                         class="text-white hover:text-[#ec4899] transition-colors">Carousel</a>
                     <div class="w-px h-4 bg-white/20 mx-2"></div>
                     <?php foreach ($headerItems as $item): ?>
@@ -407,27 +407,27 @@ $pageIdentifier = 'blog';
             <div class="space-y-4">
                 <h4 class="text-xs font-bold text-slate-500 uppercase tracking-widest pl-2">Tools</h4>
                 <div class="grid grid-cols-2 gap-3">
-                    <a href="video.php"
+                    <a href="video-downloader<?php echo ($lang !== 'en') ? '/' . $lang : ''; ?>"
                         class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 text-white transition-all">
                         <i data-lucide="video" class="w-5 h-5 text-purple-400"></i> <span
                             class="font-bold text-sm">Video</span>
                     </a>
-                    <a href="photo.php"
+                    <a href="photo-downloader<?php echo ($lang !== 'en') ? '/' . $lang : ''; ?>"
                         class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 text-white transition-all">
                         <i data-lucide="image" class="w-5 h-5 text-pink-400"></i> <span
                             class="font-bold text-sm">Photo</span>
                     </a>
-                    <a href="reels.php"
+                    <a href="reels-downloader<?php echo ($lang !== 'en') ? '/' . $lang : ''; ?>"
                         class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 text-white transition-all">
                         <i data-lucide="clapperboard" class="w-5 h-5 text-fuchsia-400"></i> <span
                             class="font-bold text-sm">Reels</span>
                     </a>
-                    <a href="igtv.php"
+                    <a href="igtv-downloader<?php echo ($lang !== 'en') ? '/' . $lang : ''; ?>"
                         class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 text-white transition-all">
                         <i data-lucide="tv" class="w-5 h-5 text-indigo-400"></i> <span
                             class="font-bold text-sm">IGTV</span>
                     </a>
-                    <a href="carousel.php"
+                    <a href="carousel-downloader<?php echo ($lang !== 'en') ? '/' . $lang : ''; ?>"
                         class="col-span-2 flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 text-white transition-all">
                         <i data-lucide="layout" class="w-5 h-5 text-blue-400"></i> <span
                             class="font-bold text-sm">Carousel</span>

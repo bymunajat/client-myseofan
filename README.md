@@ -2,8 +2,6 @@
 
 MySeoFan is a high-speed, privacy-focused media downloader for Instagram. It allows users to download Videos, Photos, Reels, IGTV, and Carousel albums anonymously without logging in.
 
-![Project Banner](assets/images/banner_placeholder.png) 
-*(Note: Replace `banner_placeholder.png` with an actual screenshot if available)*
 
 ## 🌟 Features
 *   **No Login Required**: Completely anonymous usage.

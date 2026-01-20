@@ -1,4 +1,4 @@
-# MySeoFan - Premium Instagram Downloader
+# MySeoFan - Premium Instagram Downloader ![Deploy Status](https://github.com/bymunajat/client-myseofan/actions/workflows/deploy.yml/badge.svg)
 
 MySeoFan is a high-speed, privacy-focused media downloader for Instagram. It allows users to download Videos, Photos, Reels, IGTV, and Carousel albums anonymously without logging in.
 

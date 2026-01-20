@@ -14,7 +14,8 @@ $articles = [
                       <p>Using MySeoFan, downloading is simple. Just copy the link, paste it into our tool, and click download. It's fast, free, and keeps the original quality.</p>",
         'category' => "Tutorial",
         'tags' => "instagram, reels, downloader, guide",
-        'excerpt' => "Learn the easiest and fastest way to download Instagram Reels to your mobile or desktop for free."
+        'excerpt' => "Learn the easiest and fastest way to download Instagram Reels to your mobile or desktop for free.",
+        'thumbnail' => "assets/images/blog/reels_download.png"
     ],
     [
         'title' => "The Best Instagram Video Downloader Apps in 2024",
@@ -28,7 +29,8 @@ $articles = [
                       </ol>",
         'category' => "News",
         'tags' => "apps, 2024, instagram, video",
-        'excerpt' => "A review of the top-performing Instagram video downloader tools and why MySeoFan is a leading choice."
+        'excerpt' => "A review of the top-performing Instagram video downloader tools and why MySeoFan is a leading choice.",
+        'thumbnail' => "assets/images/blog/video_apps.png"
     ],
     [
         'title' => "How to Save High-Quality Photos from Instagram",
@@ -36,7 +38,8 @@ $articles = [
                       <p>Our Photo Downloader tool allows you to grab the original file size from any public Instagram post. Simply copy the post URL and let our system do the rest.</p>",
         'category' => "Tutorial",
         'tags' => "photos, instagram, hd, save",
-        'excerpt' => "Stop taking screenshots! Discover how to download high-resolution photos from Instagram without losing quality."
+        'excerpt' => "Stop taking screenshots! Discover how to download high-resolution photos from Instagram without losing quality.",
+        'thumbnail' => "assets/images/blog/photo_quality.png"
     ],
     [
         'title' => "The Ultimate Guide to Downloading Instagram Stories",
@@ -44,7 +47,8 @@ $articles = [
                       <p>MySeoFan's Story Downloader lets you watch and save stories anonymously. This means you can keep the content without the uploader knowing you've viewed or saved it.</p>",
         'category' => "Tips",
         'tags' => "stories, instagram, guide, tips",
-        'excerpt' => "Never miss a story again. Learn how to download and save Instagram Stories anonymously and quickly."
+        'excerpt' => "Never miss a story again. Learn how to download and save Instagram Stories anonymously and quickly.",
+        'thumbnail' => "assets/images/blog/story_anon.png"
     ],
     [
         'title' => "Why You Should Use MySeoFan for Instagram Media",
@@ -52,7 +56,8 @@ $articles = [
                       <p>Whether it's a Video, Reel, Photo, or IGTV, our multi-functional downloader handles it all. Plus, it's optimized for SEO, making sure you get the fastest experience possible.</p>",
         'category' => "General",
         'tags' => "myseofan, features, safety, downloader",
-        'excerpt' => "Discover the unique benefits of using MySeoFan for all your Instagram media downloading needs."
+        'excerpt' => "Discover the unique benefits of using MySeoFan for all your Instagram media downloading needs.",
+        'thumbnail' => "assets/images/blog/safety_speed.png"
     ],
     [
         'title' => "Tips for Growing Your Instagram Following in 2024",
@@ -60,7 +65,8 @@ $articles = [
                       <p>Collaborations and using trending audio can also boost your reach significantly. Don't forget to engage with your followers to build a loyal community.</p>",
         'category' => "Tips",
         'tags' => "growth, 2024, followers, engagement",
-        'excerpt' => "Master the latest strategies to grow your Instagram audience and increase your engagement in 2024."
+        'excerpt' => "Master the latest strategies to grow your Instagram audience and increase your engagement in 2024.",
+        'thumbnail' => "assets/images/blog/growth_rocket.png"
     ],
     [
         'title' => "How to Backup Your Instagram Profile Data",
@@ -68,7 +74,8 @@ $articles = [
                       <p>While Instagram offers a built-in download tool, using third-party saves for specific high-value posts can ensure you have multiple copies of your most important content.</p>",
         'category' => "Tutorial",
         'tags' => "backup, security, data, instagram",
-        'excerpt' => "Step-by-step guide on how to protect your digital legacy by backing up your Instagram account data."
+        'excerpt' => "Step-by-step guide on how to protect your digital legacy by backing up your Instagram account data.",
+        'thumbnail' => "assets/images/blog/backup_cloud.png"
     ],
     [
         'title' => "Understanding Instagram's Copyright Rules for Creators",
@@ -76,7 +83,8 @@ $articles = [
                       <p>Always give credit to the original creators and, whenever possible, ask for permission before using their content for commercial purposes.</p>",
         'category' => "General",
         'tags' => "copyright, legal, creators, instagram",
-        'excerpt' => "A comprehensive look at Instagram's copyright policies and how to stay safe while sharing and downloading."
+        'excerpt' => "A comprehensive look at Instagram's copyright policies and how to stay safe while sharing and downloading.",
+        'thumbnail' => "assets/images/blog/legal_gavel.png"
     ],
     [
         'title' => "How to Download Carousels from Instagram",
@@ -84,7 +92,8 @@ $articles = [
                       <p>You can choose to download all items at once or pick only the ones you like. It's the most flexible way to manage multi-item posts.</p>",
         'category' => "Tutorial",
         'tags' => "carousel, multi-post, downloader, guide",
-        'excerpt' => "Learn how to easily download all images and videos from an Instagram carousel post in one go."
+        'excerpt' => "Learn how to easily download all images and videos from an Instagram carousel post in one go.",
+        'thumbnail' => "assets/images/blog/carousel_multi.png"
     ],
     [
         'title' => "Managing Your Instagram Reach and Engagement",
@@ -92,11 +101,12 @@ $articles = [
                       <p>Analyzing your insights can help you understand what works and what doesn't. Focus on quality over quantity to keep your audience coming back for more.</p>",
         'category' => "Tips",
         'tags' => "reach, engagement, metrics, marketing",
-        'excerpt' => "A deep dive into Instagram metrics and how to improve your content strategy for better results."
+        'excerpt' => "A deep dive into Instagram metrics and how to improve your content strategy for better results.",
+        'thumbnail' => "assets/images/blog/metrics_analytics.png"
     ]
 ];
 
-echo "Starting blog seeding...\n";
+echo "Starting blog seeding with images...\n";
 
 foreach ($articles as $art) {
     $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $art['title'])));
@@ -104,33 +114,43 @@ foreach ($articles as $art) {
     // Check if already exists
     $check = $pdo->prepare("SELECT id FROM blog_posts WHERE slug = ?");
     $check->execute([$slug]);
-    if ($check->fetch()) {
-        echo "Skipping: " . $art['title'] . " (Already exists)\n";
-        continue;
-    }
+    $existing = $check->fetch();
 
     try {
-        $stmt = $pdo->prepare("INSERT INTO blog_posts (title, slug, content, excerpt, lang_code, meta_title, meta_description, category, status, tags, translation_group, author_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        if ($existing) {
+            // Update instead of skip
+            echo "Updating existing: " . $art['title'] . "\n";
+            $stmt = $pdo->prepare("UPDATE blog_posts SET thumbnail = ?, category = ?, tags = ?, excerpt = ? WHERE id = ?");
+            $stmt->execute([
+                $art['thumbnail'],
+                $art['category'],
+                $art['tags'],
+                $art['excerpt'],
+                $existing['id']
+            ]);
+        } else {
+            echo "Seeding new: " . $art['title'] . "\n";
+            $stmt = $pdo->prepare("INSERT INTO blog_posts (title, slug, content, excerpt, thumbnail, lang_code, meta_title, meta_description, category, status, tags, translation_group, author_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
-        $group = uniqid('group_', true);
-        $stmt->execute([
-            $art['title'],
-            $slug,
-            $art['content'],
-            $art['excerpt'],
-            'en',
-            $art['title'] . " - MySeoFan Blog",
-            $art['excerpt'],
-            $art['category'],
-            'published',
-            $art['tags'],
-            $group,
-            1 // Admin
-        ]);
-
-        echo "Seeded: " . $art['title'] . "\n";
+            $group = uniqid('group_', true);
+            $stmt->execute([
+                $art['title'],
+                $slug,
+                $art['content'],
+                $art['excerpt'],
+                $art['thumbnail'],
+                'en',
+                $art['title'] . " - MySeoFan Blog",
+                $art['excerpt'],
+                $art['category'],
+                'published',
+                $art['tags'],
+                $group,
+                1 // Admin
+            ]);
+        }
     } catch (Exception $e) {
-        echo "Error seeding " . $art['title'] . ": " . $e->getMessage() . "\n";
+        echo "Error in " . $art['title'] . ": " . $e->getMessage() . "\n";
     }
 }
 

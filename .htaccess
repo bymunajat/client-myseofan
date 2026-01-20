@@ -17,6 +17,9 @@ RewriteBase /
     Deny from all
 </FilesMatch>
 
+# 2b. Block access to sensitive directories
+RedirectMatch 403 ^/(scripts|includes|migrations|database)/.*$
+
 # 3. Disable Directory Browsing
 Options -Indexes
 

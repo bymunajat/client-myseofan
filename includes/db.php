@@ -211,9 +211,6 @@ try {
     } catch (\Exception $e) {
     }
 
-    } catch (\Exception $e) {
-    }
-
     // Migration Check: Blog posts table migrations
     try {
         $colsBlog = $pdo->query("PRAGMA table_info(blog_posts)")->fetchAll();
@@ -224,19 +221,31 @@ try {
         $hasGroup = false;
         $hasAuthor = false;
         foreach ($colsBlog as $col) {
-            if ($col['name'] == 'excerpt') $hasExcerpt = true;
-            if ($col['name'] == 'category') $hasCategory = true;
-            if ($col['name'] == 'status') $hasStatus = true;
-            if ($col['name'] == 'tags') $hasTags = true;
-            if ($col['name'] == 'translation_group') $hasGroup = true;
-            if ($col['name'] == 'author_id') $hasAuthor = true;
+            if ($col['name'] == 'excerpt')
+                $hasExcerpt = true;
+            if ($col['name'] == 'category')
+                $hasCategory = true;
+            if ($col['name'] == 'status')
+                $hasStatus = true;
+            if ($col['name'] == 'tags')
+                $hasTags = true;
+            if ($col['name'] == 'translation_group')
+                $hasGroup = true;
+            if ($col['name'] == 'author_id')
+                $hasAuthor = true;
         }
-        if (!$hasExcerpt) $pdo->exec("ALTER TABLE blog_posts ADD COLUMN excerpt TEXT");
-        if (!$hasCategory) $pdo->exec("ALTER TABLE blog_posts ADD COLUMN category TEXT DEFAULT 'General'");
-        if (!$hasStatus) $pdo->exec("ALTER TABLE blog_posts ADD COLUMN status TEXT DEFAULT 'published'");
-        if (!$hasTags) $pdo->exec("ALTER TABLE blog_posts ADD COLUMN tags TEXT");
-        if (!$hasGroup) $pdo->exec("ALTER TABLE blog_posts ADD COLUMN translation_group TEXT");
-        if (!$hasAuthor) $pdo->exec("ALTER TABLE blog_posts ADD COLUMN author_id INTEGER DEFAULT 1");
+        if (!$hasExcerpt)
+            $pdo->exec("ALTER TABLE blog_posts ADD COLUMN excerpt TEXT");
+        if (!$hasCategory)
+            $pdo->exec("ALTER TABLE blog_posts ADD COLUMN category TEXT DEFAULT 'General'");
+        if (!$hasStatus)
+            $pdo->exec("ALTER TABLE blog_posts ADD COLUMN status TEXT DEFAULT 'published'");
+        if (!$hasTags)
+            $pdo->exec("ALTER TABLE blog_posts ADD COLUMN tags TEXT");
+        if (!$hasGroup)
+            $pdo->exec("ALTER TABLE blog_posts ADD COLUMN translation_group TEXT");
+        if (!$hasAuthor)
+            $pdo->exec("ALTER TABLE blog_posts ADD COLUMN author_id INTEGER DEFAULT 1");
     } catch (\Exception $e) {
     }
 

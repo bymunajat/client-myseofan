@@ -1,0 +1,4 @@
+deploy.zip
+*.log
+vendor/
+.env

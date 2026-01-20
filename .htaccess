@@ -40,6 +40,18 @@ RewriteRule ^post/([^/]+)$ post.php?slug=$1 [QSA,L]
 RewriteRule ^page/([^/]+)/([a-z]{2})$ page.php?slug=$1&lang=$2 [QSA,L]
 RewriteRule ^page/([^/]+)$ page.php?slug=$1 [QSA,L]
 
+# SEO Friendly URLs for Downloader Pages
+RewriteRule ^video-downloader/([a-z]{2})$ video.php?lang=$1 [QSA,L]
+RewriteRule ^video-downloader$ video.php [QSA,L]
+RewriteRule ^photo-downloader/([a-z]{2})$ photo.php?lang=$1 [QSA,L]
+RewriteRule ^photo-downloader$ photo.php [QSA,L]
+RewriteRule ^reels-downloader/([a-z]{2})$ reels.php?lang=$1 [QSA,L]
+RewriteRule ^reels-downloader$ reels.php [QSA,L]
+RewriteRule ^igtv-downloader/([a-z]{2})$ igtv.php?lang=$1 [QSA,L]
+RewriteRule ^igtv-downloader$ igtv.php [QSA,L]
+RewriteRule ^carousel-downloader/([a-z]{2})$ carousel.php?lang=$1 [QSA,L]
+RewriteRule ^carousel-downloader$ carousel.php [QSA,L]
+
 # Remove .php from URL (as fallback)
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}\.php -f

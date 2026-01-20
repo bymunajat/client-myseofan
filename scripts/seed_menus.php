@@ -3,11 +3,11 @@ require_once __DIR__ . '/../includes/db.php';
 
 // 1. Define the Standard Tool List
 $tools = [
-    ['label' => 'Video', 'url' => 'video.php'],
-    ['label' => 'Photo', 'url' => 'photo.php'],
-    ['label' => 'Reels', 'url' => 'reels.php'],
-    ['label' => 'IGTV', 'url' => 'igtv.php'],
-    ['label' => 'Carousel', 'url' => 'carousel.php']
+    ['label' => 'Video', 'url' => 'video-downloader'],
+    ['label' => 'Photo', 'url' => 'photo-downloader'],
+    ['label' => 'Reels', 'url' => 'reels-downloader'],
+    ['label' => 'IGTV', 'url' => 'igtv-downloader'],
+    ['label' => 'Carousel', 'url' => 'carousel-downloader']
 ];
 
 // Helper to reset and seed

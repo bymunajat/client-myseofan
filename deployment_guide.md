@@ -133,3 +133,31 @@ Coba akses URL berikut di browser untuk memastikan `.htaccess` bekerja:
 
 ## Selesai!
 Website Anda sekarang sudah live di VPS.
+
+## 8. Strategi Git Workflow (Teraman)
+
+Untuk menjaga website tetap aman dan mudah diperbaiki jika ada error, gunakan strategi **3 Branch** ini:
+
+### 1. Main Branch (`main`) - Production
+*   **Fungsi**: Kode yang sedang live di website `snapyolo.com`.
+*   **Aturan**: **JANGAN PERNAH** commit langsung ke sini. Hanya boleh menerima update (Merge) dari branch `dev`.
+*   **Kondisi**: Kode di sini harus 100% stabil dan bebas bug fatal.
+
+### 2. Dev Branch (`dev`) - Staging/Beta
+*   **Fungsi**: Tempat mengumpulkan semua fitur baru sebelum dirilis ke `main`.
+*   **Aturan**: Coding sehari-hari dilakukan atau digabungkan di sini.
+*   **Kondisi**: Boleh ada bug minor, tapi secara umum harus jalan.
+
+### 3. Feature Branch (`feature/...`) - Eksperimen
+*   **Fungsi**: Cabang khusus untuk membuat 1 fitur tertentu.
+*   **Contoh Nama**: `feature/tambah-login`, `feature/ganti-warna-header`, `fix/tombol-error`.
+*   **Aturan**: Bikin branch ini dari `dev`. Kalau fitur sudah selesai dan dites di localhost, baru di-merge ke `dev`.
+
+---
+### Alur Kerja (Workflow):
+1.  **Mulai**: Buat branch baru dari `dev` (misal: `feature/tombol-baru`).
+2.  **Coding**: Edit kode di laptop (Localhost).
+3.  **Test**: Pastikan jalan lancar di laptop.
+4.  **Merge ke Dev**: Gabungkan `feature/tombol-baru` ke `dev`.
+5.  **Merge ke Main**: Kalau di `dev` sudah oke, gabungkan `dev` ke `main`.
+6.  **Deploy**: Login ke Server -> `git pull`.

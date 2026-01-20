@@ -16,7 +16,7 @@ $post = $stmt->fetch();
 
 if (!$post) {
     // 404 - Redirect to blog
-    header("Location: blog.php?lang=$lang");
+    header("Location: " . (($lang !== 'en') ? 'blog/' . $lang : 'blog'));
     exit;
 }
 
@@ -40,7 +40,7 @@ if ($post['lang_code'] !== $lang) {
 
     if ($existing_translation) {
         // Found! Redirect to the correct slug for this language
-        header("Location: post.php?slug=" . $existing_translation['slug'] . "&lang=" . $lang);
+        header("Location: post/" . $existing_translation['slug'] . ($lang !== 'en' ? '/' . $lang : ''));
         exit;
     } else {
         // B. Not found? AUTO-TRANSLATE and SAVE (The Magic Step)
@@ -83,7 +83,7 @@ if ($post['lang_code'] !== $lang) {
             ]);
 
             // Redirect to the new baby
-            header("Location: post.php?slug=" . $new_slug . "&lang=" . $lang);
+            header("Location: post/" . $new_slug . ($lang !== 'en' ? '/' . $lang : ''));
             exit;
 
         } catch (\Exception $e) {
@@ -283,7 +283,7 @@ $seoHelper = new SEO_Helper($pdo, 'post', $lang);
     <!-- Navigation -->
     <nav class="fixed top-0 w-full z-50 py-4 glass-header">
         <div class="max-w-7xl mx-auto px-6 flex items-center justify-between">
-            <a href="index.php?lang=<?php echo $lang; ?>" class="logo-text">
+            <a href="<?php echo ($lang !== 'en') ? $lang : './'; ?>" class="logo-text">
                 <?php if (!empty($settings['logo_path'])): ?>
                     <img src="<?php echo htmlspecialchars($settings['logo_path']); ?>" class="h-8 w-auto" alt="Logo">
                 <?php else: ?>
@@ -319,7 +319,7 @@ $seoHelper = new SEO_Helper($pdo, 'post', $lang);
                     <div class="absolute right-0 top-full pt-2 hidden group-hover:block z-50">
                         <div class="w-32 bg-slate-900 shadow-2xl rounded-xl p-2 border border-slate-800">
                             <?php foreach (['en' => '🇺🇸 EN', 'id' => '🇮🇩 ID', 'es' => '🇪🇸 ES', 'fr' => '🇫🇷 FR', 'de' => '🇩🇪 DE', 'ja' => '🇯🇵 JA'] as $code => $label): ?>
-                                <a href="?lang=<?php echo $code; ?>"
+                                <a href="<?php echo ($code === 'en') ? './' : $code; ?>"
                                     class="block px-4 py-2 text-xs hover:bg-slate-800 rounded-lg <?php echo $lang === $code ? 'text-[#ec4899] font-bold' : 'text-slate-200'; ?>">
                                     <?php echo $label; ?>
                                 </a>
@@ -486,7 +486,7 @@ $seoHelper = new SEO_Helper($pdo, 'post', $lang);
                 <h4 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">Language</h4>
                 <div class="grid grid-cols-3 gap-2">
                     <?php foreach (['en' => '🇺🇸 EN', 'id' => '🇮🇩 ID', 'es' => '🇪🇸 ES', 'fr' => '🇫🇷 FR', 'de' => '🇩🇪 DE', 'ja' => '🇯🇵 JA'] as $code => $label): ?>
-                        <a href="?lang=<?php echo $code; ?>"
+                        <a href="<?php echo ($code === 'en') ? './' : $code; ?>"
                             class="text-center p-2 rounded-lg bg-white/5 text-xs font-bold text-white <?php echo $lang === $code ? 'bg-purple-600' : ''; ?>">
                             <?php echo $label; ?>
                         </a>

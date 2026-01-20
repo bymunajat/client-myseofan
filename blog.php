@@ -222,7 +222,7 @@ $pageIdentifier = 'blog';
     <!-- Navigation -->
     <nav class="fixed top-0 w-full z-50 py-4 glass-header">
         <div class="max-w-7xl mx-auto px-6 flex items-center justify-between">
-            <a href="index.php?lang=<?php echo $lang; ?>" class="logo-text">
+            <a href="<?php echo ($lang !== 'en') ? $lang : './'; ?>" class="logo-text">
                 <?php if (!empty($settings['logo_path'])): ?>
                     <img src="<?php echo htmlspecialchars($settings['logo_path']); ?>" class="h-8 w-auto" alt="Logo">
                 <?php else: ?>
@@ -258,7 +258,7 @@ $pageIdentifier = 'blog';
                     <div class="absolute right-0 top-full pt-2 hidden group-hover:block z-50">
                         <div class="w-32 bg-slate-900 shadow-2xl rounded-xl p-2 border border-slate-800">
                             <?php foreach (['en' => '🇺🇸 EN', 'id' => '🇮🇩 ID', 'es' => '🇪🇸 ES', 'fr' => '🇫🇷 FR', 'de' => '🇩🇪 DE', 'ja' => '🇯🇵 JA'] as $code => $label): ?>
-                                <a href="?lang=<?php echo $code; ?>"
+                                <a href="<?php echo ($code === 'en') ? './' : $code; ?>"
                                     class="block px-4 py-2 text-xs hover:bg-slate-800 rounded-lg <?php echo $lang === $code ? 'text-[#ec4899] font-bold' : 'text-slate-200'; ?>">
                                     <?php echo $label; ?>
                                 </a>
@@ -330,7 +330,7 @@ $pageIdentifier = 'blog';
                 <p class="text-slate-400 font-bold uppercase tracking-widest text-sm">
                     <?php echo $t['coming_soon']; ?>
                 </p>
-                <a href="index.php?lang=<?php echo $lang; ?>"
+                <a href="<?php echo ($lang !== 'en') ? $lang : './'; ?>"
                     class="mt-8 inline-block px-8 py-3 bg-purple-600 text-white rounded-2xl font-bold text-sm hover:bg-purple-700 transition-all shadow-lg shadow-purple-200"><?php echo $t['back']; ?></a>
             </div>
         <?php endif; ?>
@@ -453,7 +453,7 @@ $pageIdentifier = 'blog';
                 <h4 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">Language</h4>
                 <div class="grid grid-cols-3 gap-2">
                     <?php foreach (['en' => '🇺🇸 EN', 'id' => '🇮🇩 ID', 'es' => '🇪🇸 ES', 'fr' => '🇫🇷 FR', 'de' => '🇩🇪 DE', 'ja' => '🇯🇵 JA'] as $code => $label): ?>
-                        <a href="?lang=<?php echo $code; ?>"
+                        <a href="<?php echo ($code === 'en') ? './' : $code; ?>"
                             class="text-center p-2 rounded-lg bg-white/5 text-xs font-bold text-white <?php echo $lang === $code ? 'bg-purple-600' : ''; ?>">
                             <?php echo $label; ?>
                         </a>

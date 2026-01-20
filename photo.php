@@ -711,7 +711,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
     <!-- Navigation -->
     <nav class="fixed top-0 w-full z-50 py-4 glass-header">
         <div class="max-w-7xl mx-auto px-6 flex items-center justify-between">
-            <a href="index.php?lang=<?php echo $lang; ?>" class="logo-text">
+            <a href="<?php echo ($lang !== 'en') ? $lang : './'; ?>" class="logo-text">
                 <?php if (!empty($settings['logo_path'])): ?>
                     <img src="<?php echo htmlspecialchars($settings['logo_path']); ?>" class="h-8 w-auto" alt="Logo">
                 <?php else: ?>
@@ -736,7 +736,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                     <div class="absolute right-0 top-full pt-2 hidden group-hover:block z-50">
                         <div class="w-32 bg-slate-900 shadow-2xl rounded-xl p-2 border border-slate-800">
                             <?php foreach (['en' => '🇺🇸 EN', 'id' => '🇮🇩 ID', 'es' => '🇪🇸 ES', 'fr' => '🇫🇷 FR', 'de' => '🇩🇪 DE', 'ja' => '🇯🇵 JA'] as $code => $label): ?>
-                                <a href="?lang=<?php echo $code; ?>"
+                                <a href="<?php echo ($code === 'en') ? './' : $code; ?>"
                                     class="block px-4 py-2 text-xs hover:bg-slate-800 rounded-lg <?php echo $lang === $code ? 'text-[#ec4899] font-bold' : 'text-slate-300'; ?>">
                                     <?php echo $label; ?>
                                 </a>
@@ -1068,27 +1068,27 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
             <div class="space-y-4">
                 <h4 class="text-xs font-bold text-slate-500 uppercase tracking-widest pl-2">Tools</h4>
                 <div class="grid grid-cols-2 gap-3">
-                    <a href="video.php"
+                    <a href="video-downloader<?php echo ($lang !== 'en') ? '/' . $lang : ''; ?>"
                         class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 text-white transition-all">
                         <i data-lucide="video" class="w-5 h-5 text-purple-400"></i> <span
                             class="font-bold text-sm">Video</span>
                     </a>
-                    <a href="photo.php"
+                    <a href="photo-downloader<?php echo ($lang !== 'en') ? '/' . $lang : ''; ?>"
                         class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 text-white transition-all">
                         <i data-lucide="image" class="w-5 h-5 text-pink-400"></i> <span
                             class="font-bold text-sm">Photo</span>
                     </a>
-                    <a href="reels.php"
+                    <a href="reels-downloader<?php echo ($lang !== 'en') ? '/' . $lang : ''; ?>"
                         class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 text-white transition-all">
                         <i data-lucide="clapperboard" class="w-5 h-5 text-fuchsia-400"></i> <span
                             class="font-bold text-sm">Reels</span>
                     </a>
-                    <a href="igtv.php"
+                    <a href="igtv-downloader<?php echo ($lang !== 'en') ? '/' . $lang : ''; ?>"
                         class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 text-white transition-all">
                         <i data-lucide="tv" class="w-5 h-5 text-indigo-400"></i> <span
                             class="font-bold text-sm">IGTV</span>
                     </a>
-                    <a href="carousel.php"
+                    <a href="carousel-downloader<?php echo ($lang !== 'en') ? '/' . $lang : ''; ?>"
                         class="col-span-2 flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 text-white transition-all">
                         <i data-lucide="layout" class="w-5 h-5 text-blue-400"></i> <span
                             class="font-bold text-sm">Carousel</span>
@@ -1114,7 +1114,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                 <h4 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">Language</h4>
                 <div class="grid grid-cols-3 gap-2">
                     <?php foreach (['en' => '🇺🇸 EN', 'id' => '🇮🇩 ID', 'es' => '🇪🇸 ES', 'fr' => '🇫🇷 FR', 'de' => '🇩🇪 DE', 'ja' => '🇯🇵 JA'] as $code => $label): ?>
-                        <a href="?lang=<?php echo $code; ?>"
+                        <a href="<?php echo ($code === 'en') ? './' : $code; ?>"
                             class="text-center p-2 rounded-lg bg-white/5 text-xs font-bold text-white <?php echo $lang === $code ? 'bg-purple-600' : ''; ?>">
                             <?php echo $label; ?>
                         </a>

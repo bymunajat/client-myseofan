@@ -282,14 +282,14 @@ function getMenuTree($pdo, $location, $lang)
     foreach ($items as &$item) {
         // Resolve Final URL
         if ($item['type'] === 'page') {
-            $item['final_url'] = 'page.php?slug=' . ($item['page_slug'] ?? '');
-
-            // Special cases for Home/Blog slugs which should just link to the main PHP files
             $slug = $item['page_slug'] ?? '';
+
             if (str_starts_with($slug, 'home-') || $slug === 'home') {
-                $item['final_url'] = 'index.php?lang=' . $lang;
+                $item['final_url'] = ($lang !== 'en') ? $lang : './';
             } elseif (str_starts_with($slug, 'blog-') || $slug === 'blog') {
-                $item['final_url'] = 'blog.php?lang=' . $lang;
+                $item['final_url'] = ($lang !== 'en') ? 'blog/' . $lang : 'blog';
+            } else {
+                $item['final_url'] = ($lang !== 'en') ? 'page/' . $slug . '/' . $lang : 'page/' . $slug;
             }
         } elseif ($item['type'] === 'custom_link') {
             $item['final_url'] = $item['url'];

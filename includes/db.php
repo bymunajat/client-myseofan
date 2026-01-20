@@ -70,141 +70,159 @@ try {
     }
 
     // Migration Check: Add lang_code to seo_data if it doesn't exist
-    $cols = $pdo->query("PRAGMA table_info(seo_data)")->fetchAll();
-    $hasLang = false;
-    foreach ($cols as $col) {
-        if ($col['name'] == 'lang_code')
-            $hasLang = true;
+    try {
+        $cols = $pdo->query("PRAGMA table_info(seo_data)")->fetchAll();
+        $hasLang = false;
+        foreach ($cols as $col) {
+            if ($col['name'] == 'lang_code')
+                $hasLang = true;
+        }
+        if (!$hasLang)
+            $pdo->exec("ALTER TABLE seo_data ADD COLUMN lang_code TEXT DEFAULT 'en'");
+    } catch (\Exception $e) {
     }
-    if (!$hasLang)
-        $pdo->exec("ALTER TABLE seo_data ADD COLUMN lang_code TEXT DEFAULT 'en'");
 
     // Migration Check: Create translations table if it doesn't exist
-    $pdo->exec("CREATE TABLE IF NOT EXISTS translations (id INTEGER PRIMARY KEY AUTOINCREMENT, lang_code TEXT, t_key TEXT, t_value TEXT, UNIQUE(lang_code, t_key))");
+    try {
+        $pdo->exec("CREATE TABLE IF NOT EXISTS translations (id INTEGER PRIMARY KEY AUTOINCREMENT, lang_code TEXT, t_key TEXT, t_value TEXT, UNIQUE(lang_code, t_key))");
+    } catch (\Exception $e) {
+    }
 
     // Migration Check: Create blog_posts and pages tables if they don't exist
-    $pdo->exec("CREATE TABLE IF NOT EXISTS blog_posts (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, slug TEXT UNIQUE, content TEXT, thumbnail TEXT, lang_code TEXT DEFAULT 'en', meta_title TEXT, meta_description TEXT, created_at DATETIME DEFAULT CURRENT_TIMESTAMP)");
-    $pdo->exec("CREATE TABLE IF NOT EXISTS pages (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, slug TEXT UNIQUE, content TEXT, lang_code TEXT DEFAULT 'en', meta_title TEXT, meta_description TEXT)");
+    try {
+        $pdo->exec("CREATE TABLE IF NOT EXISTS blog_posts (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, slug TEXT UNIQUE, content TEXT, thumbnail TEXT, lang_code TEXT DEFAULT 'en', meta_title TEXT, meta_description TEXT, created_at DATETIME DEFAULT CURRENT_TIMESTAMP)");
+        $pdo->exec("CREATE TABLE IF NOT EXISTS pages (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, slug TEXT UNIQUE, content TEXT, lang_code TEXT DEFAULT 'en', meta_title TEXT, meta_description TEXT)");
+    } catch (\Exception $e) {
+    }
 
     // Migration Check: Add category to blog_posts
-    $cols = $pdo->query("PRAGMA table_info(blog_posts)")->fetchAll();
-    $hasCat = false;
-    foreach ($cols as $col) {
-        if ($col['name'] == 'category')
-            $hasCat = true;
+    try {
+        $cols = $pdo->query("PRAGMA table_info(blog_posts)")->fetchAll();
+        $hasCat = false;
+        foreach ($cols as $col) {
+            if ($col['name'] == 'category')
+                $hasCat = true;
+        }
+        if (!$hasCat)
+            $pdo->exec("ALTER TABLE blog_posts ADD COLUMN category TEXT DEFAULT 'General'");
+    } catch (\Exception $e) {
     }
-    if (!$hasCat)
-        $pdo->exec("ALTER TABLE blog_posts ADD COLUMN category TEXT DEFAULT 'General'");
 
     // Migration Check: Add translation_group to blog_posts
-    $colsPost = $pdo->query("PRAGMA table_info(blog_posts)")->fetchAll();
-    $hasGroupPost = false;
-    foreach ($colsPost as $col) {
-        if ($col['name'] == 'translation_group')
-            $hasGroupPost = true;
-    }
-    if (!$hasGroupPost)
-        $pdo->exec("ALTER TABLE blog_posts ADD COLUMN translation_group TEXT");
+    try {
+        $colsPost = $pdo->query("PRAGMA table_info(blog_posts)")->fetchAll();
+        $hasGroupPost = false;
+        $hasStatus = false;
+        $hasTags = false;
+        $hasExcerpt = false;
+        $hasAuthorId = false;
 
-    // Migration Check: Add status, tags, excerpt, and author_id to blog_posts
-    $hasStatus = false;
-    $hasTags = false;
-    $hasExcerpt = false;
-    $hasAuthorId = false;
-    foreach ($colsPost as $col) {
-        if ($col['name'] == 'status')
-            $hasStatus = true;
-        if ($col['name'] == 'tags')
-            $hasTags = true;
-        if ($col['name'] == 'excerpt')
-            $hasExcerpt = true;
-        if ($col['name'] == 'author_id')
-            $hasAuthorId = true;
+        foreach ($colsPost as $col) {
+            if ($col['name'] == 'translation_group')
+                $hasGroupPost = true;
+            if ($col['name'] == 'status')
+                $hasStatus = true;
+            if ($col['name'] == 'tags')
+                $hasTags = true;
+            if ($col['name'] == 'excerpt')
+                $hasExcerpt = true;
+            if ($col['name'] == 'author_id')
+                $hasAuthorId = true;
+        }
+
+        if (!$hasGroupPost)
+            $pdo->exec("ALTER TABLE blog_posts ADD COLUMN translation_group TEXT");
+        if (!$hasStatus)
+            $pdo->exec("ALTER TABLE blog_posts ADD COLUMN status TEXT DEFAULT 'published'");
+        if (!$hasTags)
+            $pdo->exec("ALTER TABLE blog_posts ADD COLUMN tags TEXT");
+        if (!$hasExcerpt)
+            $pdo->exec("ALTER TABLE blog_posts ADD COLUMN excerpt TEXT");
+        if (!$hasAuthorId)
+            $pdo->exec("ALTER TABLE blog_posts ADD COLUMN author_id INTEGER");
+    } catch (\Exception $e) {
     }
-    if (!$hasStatus)
-        $pdo->exec("ALTER TABLE blog_posts ADD COLUMN status TEXT DEFAULT 'published'");
-    if (!$hasTags)
-        $pdo->exec("ALTER TABLE blog_posts ADD COLUMN tags TEXT");
-    if (!$hasExcerpt)
-        $pdo->exec("ALTER TABLE blog_posts ADD COLUMN excerpt TEXT");
-    if (!$hasAuthorId)
-        $pdo->exec("ALTER TABLE blog_posts ADD COLUMN author_id INTEGER");
+
 
     // Migration Check: Create categories table
-    $pdo->exec("CREATE TABLE IF NOT EXISTS categories (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT,
-        slug TEXT,
-        lang_code TEXT DEFAULT 'en',
-        UNIQUE(slug, lang_code)
-    )");
+    try {
+        $pdo->exec("CREATE TABLE IF NOT EXISTS categories (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT,
+            slug TEXT,
+            lang_code TEXT DEFAULT 'en',
+            UNIQUE(slug, lang_code)
+        )");
 
-    // Seed default categories if empty
-    $catCount = $pdo->query("SELECT COUNT(*) FROM categories")->fetchColumn();
-    if ($catCount == 0) {
-        $defaultCats = [
-            ['General', 'general', 'en'],
-            ['Tutorial', 'tutorial', 'en'],
-            ['News', 'news', 'en'],
-            ['Tips', 'tips', 'en'],
-            ['Umum', 'umum', 'id'],
-            ['Berita', 'berita', 'id']
-        ];
-        $stmtC = $pdo->prepare("INSERT INTO categories (name, slug, lang_code) VALUES (?, ?, ?)");
-        foreach ($defaultCats as $dc) {
-            $stmtC->execute($dc);
+        // Seed default categories if empty
+        $catCount = $pdo->query("SELECT COUNT(*) FROM categories")->fetchColumn();
+        if ($catCount == 0) {
+            $defaultCats = [
+                ['General', 'general', 'en'],
+                ['Tutorial', 'tutorial', 'en'],
+                ['News', 'news', 'en'],
+                ['Tips', 'tips', 'en'],
+                ['Umum', 'umum', 'id'],
+                ['Berita', 'berita', 'id']
+            ];
+            $stmtC = $pdo->prepare("INSERT INTO categories (name, slug, lang_code) VALUES (?, ?, ?)");
+            foreach ($defaultCats as $dc) {
+                $stmtC->execute($dc);
+            }
         }
+    } catch (\Exception $e) {
     }
 
     // Migration Check: Pages table migrations
-    $colsPage = $pdo->query("PRAGMA table_info(pages)")->fetchAll();
-    $hasGroupPage = false;
-    $hasHeader = false;
-    $hasFooter = false;
-    $hasOrder = false;
-    $hasSection = false;
-    foreach ($colsPage as $col) {
-        if ($col['name'] == 'translation_group')
-            $hasGroupPage = true;
-        if ($col['name'] == 'show_in_header')
-            $hasHeader = true;
-        if ($col['name'] == 'show_in_footer')
-            $hasFooter = true;
-        if ($col['name'] == 'menu_order')
-            $hasOrder = true;
-        if ($col['name'] == 'footer_section')
-            $hasSection = true;
+    try {
+        $colsPage = $pdo->query("PRAGMA table_info(pages)")->fetchAll();
+        $hasGroupPage = false;
+        $hasHeader = false;
+        $hasFooter = false;
+        $hasOrder = false;
+        $hasSection = false;
+        foreach ($colsPage as $col) {
+            if ($col['name'] == 'translation_group')
+                $hasGroupPage = true;
+            if ($col['name'] == 'show_in_header')
+                $hasHeader = true;
+            if ($col['name'] == 'show_in_footer')
+                $hasFooter = true;
+            if ($col['name'] == 'menu_order')
+                $hasOrder = true;
+            if ($col['name'] == 'footer_section')
+                $hasSection = true;
+        }
+        if (!$hasGroupPage)
+            $pdo->exec("ALTER TABLE pages ADD COLUMN translation_group TEXT");
+        if (!$hasHeader)
+            $pdo->exec("ALTER TABLE pages ADD COLUMN show_in_header INTEGER DEFAULT 0");
+        if (!$hasFooter)
+            $pdo->exec("ALTER TABLE pages ADD COLUMN show_in_footer INTEGER DEFAULT 0");
+        if (!$hasOrder)
+            $pdo->exec("ALTER TABLE pages ADD COLUMN menu_order INTEGER DEFAULT 0");
+        if (!$hasSection)
+            $pdo->exec("ALTER TABLE pages ADD COLUMN footer_section TEXT DEFAULT 'legal'");
+    } catch (\Exception $e) {
     }
-    if (!$hasGroupPage)
-        $pdo->exec("ALTER TABLE pages ADD COLUMN translation_group TEXT");
-    if (!$hasHeader)
-        $pdo->exec("ALTER TABLE pages ADD COLUMN show_in_header INTEGER DEFAULT 0");
-    if (!$hasFooter)
-        $pdo->exec("ALTER TABLE pages ADD COLUMN show_in_footer INTEGER DEFAULT 0");
-    if (!$hasOrder)
-        $pdo->exec("ALTER TABLE pages ADD COLUMN menu_order INTEGER DEFAULT 0");
-    if (!$hasSection)
-        $pdo->exec("ALTER TABLE pages ADD COLUMN footer_section TEXT DEFAULT 'legal'");
 
     // Migration Check: Add role to admins
-    $colsAdmin = $pdo->query("PRAGMA table_info(admins)")->fetchAll();
-    $hasRole = false;
-    foreach ($colsAdmin as $col) {
-        if ($col['name'] == 'role')
-            $hasRole = true;
+    try {
+        $colsAdmin = $pdo->query("PRAGMA table_info(admins)")->fetchAll();
+        $hasRole = false;
+        $hasCreatedAt = false;
+        foreach ($colsAdmin as $col) {
+            if ($col['name'] == 'role')
+                $hasRole = true;
+            if ($col['name'] == 'created_at')
+                $hasCreatedAt = true;
+        }
+        if (!$hasRole)
+            $pdo->exec("ALTER TABLE admins ADD COLUMN role TEXT DEFAULT 'super_admin'");
+        if (!$hasCreatedAt)
+            $pdo->exec("ALTER TABLE admins ADD COLUMN created_at DATETIME DEFAULT CURRENT_TIMESTAMP");
+    } catch (\Exception $e) {
     }
-    if (!$hasRole)
-        $pdo->exec("ALTER TABLE admins ADD COLUMN role TEXT DEFAULT 'super_admin'");
-
-    // Migration Check: Add created_at to admins
-    $colsAdmin = $pdo->query("PRAGMA table_info(admins)")->fetchAll();
-    $hasCreatedAt = false;
-    foreach ($colsAdmin as $col) {
-        if ($col['name'] == 'created_at')
-            $hasCreatedAt = true;
-    }
-    if (!$hasCreatedAt)
-        $pdo->exec("ALTER TABLE admins ADD COLUMN created_at DATETIME DEFAULT CURRENT_TIMESTAMP");
 
     // Emergency Seed
     try {

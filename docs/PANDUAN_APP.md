@@ -1,117 +1,150 @@
-# Panduan Setup Aplikasi Web (MySeoFan)
+# Panduan Setup Website MySeoFan (Untuk Pemula)
 
-Panduan ini adalah langkah lanjutan setelah Anda menyiapkan **Cobalt API** (lihat `PANDUAN_COBALT.md`). Dokumen ini fokus agar aplikasi web berjalan sempurna di VPS.
+Setelah Cobalt (backend) berhasil jalan, sekarang kita setup tampilan websitenya (frontend).
 
-## 1. Install Web Server & PHP
-MySeoFan berjalan dengan Apache dan PHP.
+---
+
+## Langkah 1: Install Web Server (Apache & PHP)
+
+Copy paste perintah ini di terminal VPS Anda:
 
 ```bash
-# Update
-sudo apt update
-
-# Install Apache & PHP 8.x + Ekstensi
+# 1. Install semua software pendukung
 sudo apt install apache2 php libapache2-mod-php php-sqlite3 php-curl php-xml php-mbstring php-zip unzip -y
 
-# Aktifkan Mod Recall (Wajib untuk .htaccess)
+# 2. Aktifkan fitur URL cantik (Rewrite)
 sudo a2enmod rewrite
+
+# 3. Restart Apache agar efeknya jalan
 sudo systemctl restart apache2
 ```
 
-## 2. Upload File Project
-Taruh file project Anda di `/var/www/html/myseofan`.
+---
+
+## Langkah 2: Upload File Website
+
+Karena Anda pemula, cara termudah upload file bukan pakai Git, tapi pakai aplikasi **WinSCP** atau **FileZilla** di komputer Anda.
+
+1.  Download & Install **WinSCP** (Gratis).
+2.  Buka WinSCP, masukkan IP VPS, User (`root`), dan Password VPS. Klik **Login**.
+3.  Di panel sebelah **Kanan** (itu isi VPS Anda), navigasi ke folder: `/var/www/html`.
+4.  Hapus file `index.html` bawaan (jika ada).
+5.  Di panel sebelah **Kiri** (itu isi komputer Anda), cari folder project `client-myseofan` Anda.
+6.  **Drag & Drop** folder `client-myseofan` dari Kiri ke Kanan.
+    *(Atau bisa juga copy semua isinya langsung ke dalam root html)*
+
+Mari asumsikan Anda mengupload folder projectnya menjadi: `/var/www/html/myseofan`.
+
+---
+
+## Langkah 3: Setting Permission (PENTING!)
+
+Kembali ke Terminal VPS (layar hitam). Kita harus memberi izin server untuk membaca file yang baru diupload.
 
 ```bash
-# Contoh menggunakan git (rekomendasi)
+# Masuk ke folder html
 cd /var/www/html
-sudo git clone https://github.com/username-anda/myseofan.git myseofan
+
+# Berikan hak milik ke 'www-data' (User Apache)
+# Ganti 'myseofan' dengan nama folder yang Anda upload tadi
+sudo chown -R www-data:www-data myseofan
+
+# Berikan izin tulis untuk database
+sudo chmod -R 775 myseofan/database
+sudo chmod -R 775 myseofan/admin
 ```
 
-## 3. Setup Permission (Wajib!)
-Agar database SQLite dan Logs bisa ditulis oleh server, atur hak aksesnya.
+---
+
+## Langkah 4: Install Library PHP
+
+Kita perlu menginstall "Composer" untuk mendownload library tambahan.
 
 ```bash
-cd /var/www/html/myseofan
-
-# Berikan kepemilikan ke user Apache (www-data)
-sudo chown -R www-data:www-data .
-
-# Pastikan folder database dan scripts writeable (jika perlu)
-sudo chmod -R 775 database
-sudo chmod -R 775 admin
-```
-
-## 4. Install Vendor (Composer)
-Masuk ke folder project dan install library PHP.
-
-```bash
-# Install Composer dulu jika belum
+# 1. Install Composer
 sudo apt install composer -y
 
-# Install dependensi project
+# 2. Masuk ke folder project
 cd /var/www/html/myseofan
-composer install --no-dev --optimize-autoloader
+
+# 3. Jalankan install
+sudo -u www-data composer install --no-dev
 ```
+*(Tunggu sampai proses selesai)*
 
-## 5. Setting Virtual Host (Domain)
-Agar domain Anda (misal: `myseofan.com`) mengarah ke folder yang benar.
+---
 
-```bash
-sudo nano /etc/apache2/sites-available/myseofan.conf
-```
+## Langkah 5: Setting Domain (Virtual Host)
 
-Isi file tersebut:
-```apache
-<VirtualHost *:80>
-    ServerName myseofan.com
-    ServerAlias www.myseofan.com
+Agar website bisa dibuka pakai nama domain (misal: `myseofan.com`), bukan cuma IP.
+
+1.  Buat file setting baru:
+    ```bash
+    nano /etc/apache2/sites-available/myseofan.conf
+    ```
+
+2.  Copy paste kode ini (GANTI `myseofan.com` dengan domain Anda):
+    ```apache
+    <VirtualHost *:80>
+        ServerName myseofan.com
+        ServerAlias www.myseofan.com
+        
+        # Arahkan ke folder project Anda
+        DocumentRoot /var/www/html/myseofan
+        
+        <Directory /var/www/html/myseofan>
+            Options -Indexes +FollowSymLinks
+            AllowOverride All
+            Require all granted
+        </Directory>
     
-    # Arahkan langsung ke folder project
-    DocumentRoot /var/www/html/myseofan
-    
-    <Directory /var/www/html/myseofan>
-        Options -Indexes +FollowSymLinks
-        AllowOverride All
-        Require all granted
-    </Directory>
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+    </VirtualHost>
+    ```
 
-    ErrorLog ${APACHE_LOG_DIR}/myseofan_error.log
-    CustomLog ${APACHE_LOG_DIR}/myseofan_access.log combined
-</VirtualHost>
-```
+3.  Simpan: `Ctrl+O` -> Enter -> `Ctrl+X`.
 
-Aktifkan konfigurasi:
-```bash
-sudo a2ensite myseofan
-sudo systemctl reload apache2
-```
+4.  Aktifkan website:
+    ```bash
+    sudo a2ensite myseofan
+    sudo systemctl reload apache2
+    ```
 
-## 6. Pasang SSL (HTTPS)
-Agar website aman (Gembok Hijau) dan SEO bagus.
+---
+
+## Langkah 6: Pasang Gembok Hijau (SSL HTTPS)
+
+Supaya aman dan browser tidak warning.
 
 ```bash
 sudo apt install certbot python3-certbot-apache -y
 sudo certbot --apache -d myseofan.com -d www.myseofan.com
 ```
+*(Ikuti petunjuk di layar, pilih opsi Redirect/2 jika ditanya)*
 
-## 7. Cek Konfigurasi Akhir (`config.php`)
-Buka file config di VPS:
-```bash
-sudo nano /var/www/html/myseofan/config.php
-```
+---
 
-Pastikan isinya sesuai:
-```php
-// Jika Cobalt ada di VPS yang sama via Docker
-define('COBALT_API_URL', 'http://localhost:9000'); 
+## Langkah 7: Edit Config Terakhir
 
-// Matikan error untuk production
-error_reporting(0);
-```
+1.  Buka file config:
+    ```bash
+    nano /var/www/html/myseofan/config.php
+    ```
 
-## 8. Verifikasi "Sempurna"
-Checklist agar berjalan 100% smooth:
-1.  Buka web `https://myseofan.com` -> Harus load cepat.
-2.  Coba download video Instagram -> Harus sukses (artinya koneksi ke Cobalt lancar).
-3.  Coba akses `https://myseofan.com/scripts/` -> Harus **403 Forbidden** (Security OK).
+2.  Pastikan baris ini sudah benar:
+    ```php
+    define('COBALT_API_URL', 'http://localhost:9000');
+    // Matikan error
+    error_reporting(0);
+    ini_set('display_errors', 0);
+    ```
 
-**Selesai!** Website Anda sudah production-ready.
+3.  Simpan (`Ctrl+O` -> Enter -> `Ctrl+X`).
+
+---
+
+## 🎉 SELESAI!!
+
+Sekarang buka browser dan ketik domain Anda: `https://myseofan.com`.
+Website harusnya sudah muncul dan bisa dipakai download video!

@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  cobalt-api:
+    image: ghcr.io/imputnet/cobalt:latest
+    container_name: cobalt-api
+    restart: unless-stopped
+    ports:
+      - "9000:9000"
+    environment:
+      # URL website utama Anda (untuk Security/CORS)
+      # Ganti dengan domain VPS Anda nanti, misal https://myseofan.com
+      - API_URL=https://myseofan.com
+      
+      # Optional: Jika ingin membatasi recording duration dsb
+      # - REC_URL=
+      
+      # Optional: Cookie untuk layanan tertentu (jika butuh)
+      # - COOKIE_REMOTE=

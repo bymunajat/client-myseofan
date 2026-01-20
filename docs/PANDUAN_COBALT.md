@@ -1,101 +1,107 @@
-# Panduan Setup Cobalt API (Backend Downloader)
+# Panduan Setup Cobalt API (Untuk Pemula)
 
-Dokumen ini menjelaskan cara menginstal **Cobalt API** di VPS yang sama dengan aplikasi MySeoFan agar fitur download Instagram berjalan lancar. Cobalt akan dijalankan menggunakan **Docker** di port `9000`.
+Panduan ini dibuat khusus agar Anda yang baru pertama kali menggunakan VPS bisa mengikutinya dengan mudah sampai sukses.
 
-## 1. Install Docker & Docker Compose
-Cobalt membutuhkan Docker. Jalankan perintah ini di terminal VPS Anda:
+## Persiapan
+- Pastikan Anda sudah menyewa **VPS Ubuntu 22.04** (contoh: di DigitalOcean/Vultr/Contabo).
+- Siapkan **IP Address** VPS Anda (misal: `103.20.10.5`).
+- Siapkan **Password Root** VPS Anda.
+
+---
+
+## Langkah 1: Masuk ke VPS (Login)
+
+1.  Buka terminal di komputer Anda (PowerShell di Windows, atau Terminal di Mac).
+2.  Ketik perintah login:
+    ```bash
+    ssh root@103.20.10.5
+    ```
+    *(Ganti `103.20.10.5` dengan IP VPS Anda)*
+3.  Ketik **yes** jika ditanya "Are you sure..." lalu Enter.
+4.  Masukkan **Password VPS** Anda (ketikan password tidak akan muncul di layar, itu normal. Ketik saja lalu Enter).
+
+---
+
+## Langkah 2: Install Docker (Mesin Penggerak)
+
+Copy perintah di bawah ini satu per satu dan Paste ke terminal VPS (biasanya klik kanan mouse untuk paste):
 
 ```bash
-# Update repository
+# 1. Update daftar aplikasi di VPS
 sudo apt update
 
-# Install Docker
+# 2. Install Docker
 sudo apt install docker.io -y
 
-# Install Docker Compose Plugin
+# 3. Install Plugin Docker Compose
 sudo apt install docker-compose-plugin -y
 
-# Start & Enable Docker
+# 4. Nyalakan Docker
 sudo systemctl start docker
 sudo systemctl enable docker
-
-# Cek apakah Docker sudah berjalan
-sudo docker --version
 ```
 
-## 2. Siapkan Folder Cobalt
-Buat folder khusus untuk menyimpan konfigurasi Cobalt.
+---
+
+## Langkah 3: Membuat Folder untuk Cobalt
+
+Kita buat "kamar" khusus untuk Cobalt agar rapi.
 
 ```bash
+# Buat folder
 mkdir -p /opt/cobalt
+
+# Masuk ke folder itu
 cd /opt/cobalt
 ```
 
-## 3. Buat File `docker-compose.yml`
-Kita akan menggunakan Docker Compose agar mudah dikelola. Buat filenya:
+---
 
-```bash
-nano docker-compose.yml
-```
+## Langkah 4: Membuat File Setting (docker-compose.yml)
 
-Salin dan tempel konfigurasi berikut:
+Kita akan membuat file setting di dalam VPS.
 
-```yaml
-version: '3.8'
+1.  Ketik perintah ini untuk membuka text editor:
+    ```bash
+    nano docker-compose.yml
+    ```
 
-services:
-  cobalt-api:
-    image: ghcr.io/imputnet/cobalt:latest
-    container_name: cobalt-api
-    restart: unless-stopped
-    ports:
-      - "9000:9000"
-    environment:
-      # URL website utama Anda (untuk CORS/Security)
-      - API_URL=https://domain-anda.com
-      # Biarkan kosong atau sesuaikan jika Anda punya instance processing sendiri
-      - REC_URL=
-      # Ganti dengan random string yang aman jika ingin membatasi akses (opsional)
-      - API_KEY=
-    networks:
-      - cobalt-net
+2.  Copy kode di bawah ini:
+    ```yaml
+    version: '3.8'
 
-networks:
-  cobalt-net:
-    driver: bridge
-```
-*(Tekan `Ctrl+O` lalu `Enter` untuk simpan, `Ctrl+X` untuk keluar)*
+    services:
+      cobalt-api:
+        image: ghcr.io/imputnet/cobalt:latest
+        container_name: cobalt-api
+        restart: unless-stopped
+        ports:
+          - "9000:9000"
+        environment:
+          # Ganti dengan domain website Anda nanti (penting!)
+          - API_URL=https://myseofan.com
+    ```
 
-## 4. Jalankan Cobalt
-Jalankan container Cobalt di background:
+3.  Paste ke jendela terminal tadi (klik kanan).
+4.  Simpan dengan cara tekan tombol keyboard:
+    -   `Ctrl` + `O` (Lalu tekan `Enter`)
+    -   `Ctrl` + `X` (Untuk keluar)
+
+---
+
+## Langkah 5: Jalankan Cobalt!
+
+Sekarang saatnya menghidupkan mesin.
 
 ```bash
 sudo docker compose up -d
 ```
+*(Tunggu sebentar, VPS akan mendownload Cobalt dari internet...)*
 
-Cek apakah sudah jalan:
+Kalau sudah selesai, cek apakah sudah hidup dengan perintah:
 ```bash
 sudo docker ps
 ```
-Anda harusnya melihat `cobalt-api` status `Up` dan port `9000->9000`.
+Jika muncul tulisan `cobalt-api` dan status `Up`, berarti **SUKSES!** 🎉
 
-## 5. Tes Koneksi Cobalt
-Dari dalam VPS, coba ping API-nya:
-
-```bash
-curl http://localhost:9000/api/serverInfo
-```
-Jika muncul respon JSON (misal: `{"version":"..."}`), berarti Cobalt sukses berjalan!
-
----
-
-## Integrasi dengan MySeoFan
-Karena Cobalt berjalan di `localhost:9000` pada VPS yang sama, Anda **TIDAK PERLU** mengubah `config.php` jika settingnya sudah:
-
-```php
-define('COBALT_API_URL', 'http://localhost:9000');
-```
-
-Aplikasi PHP (MySeoFan) akan menghubungi Cobalt via jaringan internal server (localhost), sehingga **sangat cepat** dan **lebih aman** karena port 9000 tidak perlu dibuka ke publik (cukup localhost yang akses).
-
-**Selesai!** Backend downloader sudah siap. Lanjutkan ke instalasi aplikasi web (lihat `PANDUAN_APP.md`).
+Cobalt sekarang sudah jalan di `localhost:9000` di dalam VPS Anda. L lanjut ke panduan setup Website.

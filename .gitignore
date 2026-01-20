@@ -2,3 +2,8 @@ deploy.zip
 *.log
 vendor/
 .env
+database/*.db
+database/*.sqlite
+database/*.db-journal
+database/*.db-wal
+database/*.db-shm

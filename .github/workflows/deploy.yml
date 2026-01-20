@@ -23,6 +23,19 @@ jobs:
           script: |
             cd /home/snapyolo/public_html
             git pull origin main
-            # Fix permissions just in case
-            # chmod -R 755 .
-            # chmod -R 644 ./*.php ./*.html ./*.css ./*.js
+            
+            # 1. Fix Ownership (Crucial for cPanel/suPHP)
+            # This ensures the 'snapyolo' user owns everything, not 'root'
+            chown -R snapyolo:snapyolo /home/snapyolo/public_html
+            
+            # 2. Fix Default Permissions
+            # Folders: 755, Files: 644
+            find /home/snapyolo/public_html -type d -exec chmod 755 {} \;
+            find /home/snapyolo/public_html -type f -exec chmod 644 {} \;
+            
+            # 3. Dedicated SQLite Permissions
+            # The directory MUST be writable for SQLite to create journal files
+            chmod 775 /home/snapyolo/public_html/database
+            if [ -f /home/snapyolo/public_html/database/myseofan.db ]; then
+                chmod 664 /home/snapyolo/public_html/database/myseofan.db
+            fi

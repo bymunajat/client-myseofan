@@ -434,33 +434,6 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
             margin-bottom: 40px;
         }
 
-        .faq-item {
-            margin-bottom: 40px;
-        }
-
-        .faq-question {
-            color: #a78bfa;
-            font-size: 1.125rem;
-            font-weight: 700;
-            margin-bottom: 12px;
-            display: block;
-        }
-
-        .faq-answer {
-            color: #cbd5e1;
-            font-size: 0.875rem;
-            line-height: 1.7;
-            font-weight: 500;
-        }
-
-        .footer-brand {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 40px;
-        }
-
         .footer-logo-text {
             font-size: 2.25rem;
             font-weight: 800;
@@ -1414,9 +1387,11 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
             <div class="footer-links-container">
                 <?php
                 $rootItems = array_filter($footerItems, function ($item) {
-                    return $item['type'] !== 'label'; });
+                    return $item['type'] !== 'label';
+                });
                 $labeledGroups = array_filter($footerItems, function ($item) {
-                    return $item['type'] === 'label'; });
+                    return $item['type'] === 'label';
+                });
                 ?>
 
                 <?php if (!empty($rootItems)): ?>

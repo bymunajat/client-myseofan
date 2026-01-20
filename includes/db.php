@@ -35,6 +35,11 @@ try {
         $pdo->exec("CREATE TABLE blog_posts (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, slug TEXT UNIQUE, content TEXT, thumbnail TEXT, lang_code TEXT DEFAULT 'en', meta_title TEXT, meta_description TEXT, created_at DATETIME DEFAULT CURRENT_TIMESTAMP)");
         $pdo->exec("CREATE TABLE pages (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, slug TEXT UNIQUE, content TEXT, lang_code TEXT DEFAULT 'en', meta_title TEXT, meta_description TEXT)");
 
+        // Advanced Tables (Activity, Menus, Redirects)
+        $pdo->exec("CREATE TABLE activity_logs (id INTEGER PRIMARY KEY AUTOINCREMENT, admin_id INTEGER, action TEXT, details TEXT, ip_address TEXT, created_at DATETIME DEFAULT CURRENT_TIMESTAMP)");
+        $pdo->exec("CREATE TABLE menu_items (id INTEGER PRIMARY KEY AUTOINCREMENT, menu_location TEXT, lang_code TEXT DEFAULT 'en', type TEXT, label TEXT, url TEXT, related_id INTEGER, parent_id INTEGER DEFAULT 0, sort_order INTEGER DEFAULT 0)");
+        $pdo->exec("CREATE TABLE redirects (id INTEGER PRIMARY KEY AUTOINCREMENT, source_url TEXT UNIQUE, target_url TEXT, redirect_type INTEGER DEFAULT 301, is_active INTEGER DEFAULT 1, created_at DATETIME DEFAULT CURRENT_TIMESTAMP)");
+
         $pdo->exec("INSERT INTO admins (username, password_hash) VALUES ('admin', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi')");
         $pdo->exec("INSERT INTO seo_data (page_identifier, lang_code, meta_title, meta_description) VALUES ('home', 'id', 'Pengunduh Media Instagram - MySeoFan', 'Alat online gratis terbaik untuk mengunduh media Instagram.')");
 
@@ -244,6 +249,14 @@ try {
                 $_SESSION['role'] = 'super_admin';
         } catch (\Exception $e) {
         }
+    }
+
+    // Migration Check: Activity Logs, Menus, Redirects
+    try {
+        $pdo->exec("CREATE TABLE IF NOT EXISTS activity_logs (id INTEGER PRIMARY KEY AUTOINCREMENT, admin_id INTEGER, action TEXT, details TEXT, ip_address TEXT, created_at DATETIME DEFAULT CURRENT_TIMESTAMP)");
+        $pdo->exec("CREATE TABLE IF NOT EXISTS menu_items (id INTEGER PRIMARY KEY AUTOINCREMENT, menu_location TEXT, lang_code TEXT DEFAULT 'en', type TEXT, label TEXT, url TEXT, related_id INTEGER, parent_id INTEGER DEFAULT 0, sort_order INTEGER DEFAULT 0)");
+        $pdo->exec("CREATE TABLE IF NOT EXISTS redirects (id INTEGER PRIMARY KEY AUTOINCREMENT, source_url TEXT UNIQUE, target_url TEXT, redirect_type INTEGER DEFAULT 301, is_active INTEGER DEFAULT 1, created_at DATETIME DEFAULT CURRENT_TIMESTAMP)");
+    } catch (\Exception $e) {
     }
 } catch (\PDOException $e) {
     error_log("DB Migration Error: " . $e->getMessage());

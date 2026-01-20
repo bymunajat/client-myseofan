@@ -1,5 +1,5 @@
 RewriteEngine On
-RewriteBase /
+# RewriteBase /
 
 # ----------------------------------------------------------------------
 # SECURITY HEADERS & RULES
@@ -18,7 +18,7 @@ RewriteBase /
 </FilesMatch>
 
 # 2b. Block access to sensitive directories
-RedirectMatch 403 ^/(scripts|includes|migrations|database)/.*$
+RewriteRule ^(scripts|includes|migrations|database)/ - [F,L]
 
 # 3. Disable Directory Browsing
 Options -Indexes

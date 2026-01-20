@@ -434,6 +434,33 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
             margin-bottom: 40px;
         }
 
+        .faq-item {
+            margin-bottom: 40px;
+        }
+
+        .faq-question {
+            color: #a78bfa;
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .faq-answer {
+            color: #cbd5e1;
+            font-size: 0.875rem;
+            line-height: 1.7;
+            font-weight: 500;
+        }
+
+        .footer-brand {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 40px;
+        }
+
         .footer-logo-text {
             font-size: 2.25rem;
             font-weight: 800;
@@ -1384,9 +1411,32 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                     class="footer-logo-text"><?php echo htmlspecialchars($settings['site_name'] ?: 'MySeoFan'); ?></span>
             </div>
 
-            <?php foreach ($footerItems as $group): ?>
-                <div class="footer-links-group">
-                    <?php if ($group['type'] === 'label'): ?>
+            <div class="footer-links-container">
+                <?php
+                $rootItems = array_filter($footerItems, function ($item) {
+                    return $item['type'] !== 'label'; });
+                $labeledGroups = array_filter($footerItems, function ($item) {
+                    return $item['type'] === 'label'; });
+                ?>
+
+                <?php if (!empty($rootItems)): ?>
+                    <div class="footer-links-group">
+                        <?php
+                        $rootItems = array_values($rootItems);
+                        foreach ($rootItems as $index => $item):
+                            ?>
+                            <a href="<?php echo htmlspecialchars($item['final_url']); ?>" class="footer-link">
+                                <?php echo htmlspecialchars($item['label']); ?>
+                            </a>
+                            <?php if ($index < count($rootItems) - 1): ?>
+                                <span class="text-slate-200 px-1">|</span>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+
+                <?php foreach ($labeledGroups as $group): ?>
+                    <div class="footer-links-group">
                         <?php if (isset($group['children']) && !empty($group['children'])): ?>
                             <?php foreach ($group['children'] as $index => $item): ?>
                                 <a href="<?php echo htmlspecialchars($item['final_url']); ?>" class="footer-link">
@@ -1397,13 +1447,9 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                                 <?php endif; ?>
                             <?php endforeach; ?>
                         <?php endif; ?>
-                    <?php else: ?>
-                        <a href="<?php echo htmlspecialchars($group['final_url']); ?>" class="footer-link">
-                            <?php echo htmlspecialchars($group['label']); ?>
-                        </a>
-                    <?php endif; ?>
-                </div>
-            <?php endforeach; ?>
+                    </div>
+                <?php endforeach; ?>
+            </div>
 
             <div class="footer-divider"></div>
 

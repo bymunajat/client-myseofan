@@ -14,9 +14,12 @@ $tools = [
 $pdo->exec("DELETE FROM menu_items WHERE lang_code = 'en'"); // Clear all English menus to be safe/clean
 
 // 2. Update Header Menu
-// Insert Home + Tools
+// Insert Home + Blog + Tools
 $headerItems = array_merge(
-    [['label' => 'Home', 'url' => 'index.php']],
+    [
+        ['label' => 'Home', 'url' => 'index.php'],
+        ['label' => 'Blog', 'url' => 'blog']
+    ],
     $tools
 );
 
@@ -46,6 +49,7 @@ $stmt->execute();
 $pagesGroupId = $pdo->lastInsertId();
 
 $footerLinks = [
+    ['label' => 'Blog', 'slug' => 'blog'],
     ['label' => 'About MySeoFan', 'slug' => 'about'],
     ['label' => 'Contact', 'slug' => 'contact'],
     ['label' => 'Privacy Policy', 'slug' => 'privacy-policy'],
@@ -54,6 +58,7 @@ $footerLinks = [
 
 // Ensure pages exist
 $pages = [
+    ['title' => 'Blog', 'slug' => 'blog', 'content' => '[blog_index]'],
     ['title' => 'About MySeoFan', 'slug' => 'about', 'content' => '<h1>About MySeoFan</h1><p>MySeoFan is the best tool for Instagram media downloading.</p>'],
     ['title' => 'Contact', 'slug' => 'contact', 'content' => '<h1>Contact Us</h1><p>Email: support@myseofan.link</p>'],
     ['title' => 'Privacy Policy', 'slug' => 'privacy-policy', 'content' => '<h1>Privacy Policy</h1><p>Your privacy is important to us.</p>'],

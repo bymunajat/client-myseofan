@@ -211,21 +211,32 @@ try {
     } catch (\Exception $e) {
     }
 
-    // Migration Check: Add role to admins
+    } catch (\Exception $e) {
+    }
+
+    // Migration Check: Blog posts table migrations
     try {
-        $colsAdmin = $pdo->query("PRAGMA table_info(admins)")->fetchAll();
-        $hasRole = false;
-        $hasCreatedAt = false;
-        foreach ($colsAdmin as $col) {
-            if ($col['name'] == 'role')
-                $hasRole = true;
-            if ($col['name'] == 'created_at')
-                $hasCreatedAt = true;
+        $colsBlog = $pdo->query("PRAGMA table_info(blog_posts)")->fetchAll();
+        $hasExcerpt = false;
+        $hasCategory = false;
+        $hasStatus = false;
+        $hasTags = false;
+        $hasGroup = false;
+        $hasAuthor = false;
+        foreach ($colsBlog as $col) {
+            if ($col['name'] == 'excerpt') $hasExcerpt = true;
+            if ($col['name'] == 'category') $hasCategory = true;
+            if ($col['name'] == 'status') $hasStatus = true;
+            if ($col['name'] == 'tags') $hasTags = true;
+            if ($col['name'] == 'translation_group') $hasGroup = true;
+            if ($col['name'] == 'author_id') $hasAuthor = true;
         }
-        if (!$hasRole)
-            $pdo->exec("ALTER TABLE admins ADD COLUMN role TEXT DEFAULT 'super_admin'");
-        if (!$hasCreatedAt)
-            $pdo->exec("ALTER TABLE admins ADD COLUMN created_at DATETIME DEFAULT CURRENT_TIMESTAMP");
+        if (!$hasExcerpt) $pdo->exec("ALTER TABLE blog_posts ADD COLUMN excerpt TEXT");
+        if (!$hasCategory) $pdo->exec("ALTER TABLE blog_posts ADD COLUMN category TEXT DEFAULT 'General'");
+        if (!$hasStatus) $pdo->exec("ALTER TABLE blog_posts ADD COLUMN status TEXT DEFAULT 'published'");
+        if (!$hasTags) $pdo->exec("ALTER TABLE blog_posts ADD COLUMN tags TEXT");
+        if (!$hasGroup) $pdo->exec("ALTER TABLE blog_posts ADD COLUMN translation_group TEXT");
+        if (!$hasAuthor) $pdo->exec("ALTER TABLE blog_posts ADD COLUMN author_id INTEGER DEFAULT 1");
     } catch (\Exception $e) {
     }
 

@@ -315,16 +315,54 @@ function getMenuTree($pdo, $location, $lang)
         // Resolve Final URL
         if ($item['type'] === 'page') {
             $slug = $item['page_slug'] ?? '';
+            $type = 'page';
 
-            if (str_starts_with($slug, 'home-') || $slug === 'home') {
-                $item['final_url'] = ($lang !== 'en') ? $lang : './';
-            } elseif (str_starts_with($slug, 'blog-') || $slug === 'blog') {
-                $item['final_url'] = ($lang !== 'en') ? 'blog/' . $lang : 'blog';
-            } else {
-                $item['final_url'] = ($lang !== 'en') ? 'page/' . $slug . '/' . $lang : 'page/' . $slug;
+            if (str_starts_with($slug, 'blog-') || $slug === 'blog') {
+                $type = 'blog';
+                $slug = 'blog';
             }
+
+            $item['final_url'] = getUrl($slug, $lang, $type);
         } elseif ($item['type'] === 'custom_link') {
-            $item['final_url'] = $item['url'];
+            // SANITIZE CUSTOM LINKS: Strip disk paths if present
+            $rawUrl = $item['url'];
+
+            // 1. Strip drive letters and disk paths
+            $rawUrl = preg_replace('/^\/?[a-z]:/i', '', $rawUrl);
+            $docRoot = str_replace('\\', '/', $_SERVER['DOCUMENT_ROOT'] ?? ''); // e.g. /laragon/www
+
+            // CRITICAL: Also strip drive letter from docRoot so it matches the scrubbed rawUrl
+            $docRoot = preg_replace('/^\/?[a-z]:/i', '', $docRoot);
+
+            if (!empty($docRoot)) {
+                $rawUrl = str_ireplace($docRoot, '', $rawUrl);
+            }
+
+            // Calculate Base Path (same as getUrl/getAssetUrl logic)
+            $scriptName = str_replace('\\', '/', $_SERVER['SCRIPT_NAME']);
+            $docRoot = str_replace('\\', '/', $_SERVER['DOCUMENT_ROOT'] ?? '');
+            $scriptName = preg_replace('/^\/?[a-z]:/i', '', $scriptName);
+            if (!empty($docRoot)) {
+                $scriptName = str_ireplace($docRoot, '', $scriptName);
+            }
+            $scriptName = str_replace(':', '', $scriptName);
+            $scriptName = '/' . ltrim($scriptName, '/');
+            $base = str_replace(basename($scriptName), '', $scriptName);
+            $base = rtrim($base, '/');
+
+            // 2. Handle Relative vs Absolute
+            if (preg_match('/^https?:\/\//', $rawUrl) || str_starts_with($rawUrl, '#')) {
+                $item['final_url'] = $rawUrl;
+            } else {
+                // It's a local path.
+                if (str_starts_with($rawUrl, '/')) {
+                    // Already starts with slash. Leave it (user might mean root, or already included subfolder)
+                    $item['final_url'] = $rawUrl;
+                } else {
+                    // Relative path (e.g. 'blog.php'). Prepend base.
+                    $item['final_url'] = $base . '/' . $rawUrl;
+                }
+            }
         } else {
             $item['final_url'] = '#'; // Label
         }
@@ -400,4 +438,72 @@ function getTranslations($pdo, $lang = 'en')
     } catch (\Exception $e) {
         return [];
     }
+}
+
+function getUrl($slug, $lang = 'en', $type = 'page')
+{
+    // Normalize paths for Windows/Laragon environments
+    $scriptName = str_replace('\\', '/', $_SERVER['SCRIPT_NAME']);
+    $docRoot = str_replace('\\', '/', $_SERVER['DOCUMENT_ROOT'] ?? '');
+
+    // 1. Strip drive letter even if it has a leading slash (like /C:/)
+    $scriptName = preg_replace('/^\/?[a-z]:/i', '', $scriptName);
+    $docRoot = preg_replace('/^\/?[a-z]:/i', '', $docRoot);
+
+    // 2. Aggressively strip DOCUMENT_ROOT (case-insensitive)
+    if (!empty($docRoot)) {
+        $scriptName = str_ireplace($docRoot, '', $scriptName);
+    }
+
+    // 3. Final safety: remove any remaining colons or double slashes
+    $scriptName = str_replace(':', '', $scriptName);
+    $scriptName = '/' . ltrim($scriptName, '/');
+
+    $base = str_replace(basename($scriptName), '', $scriptName);
+    $base = rtrim($base, '/');
+
+    $prefix = ($lang !== 'en') ? "/$lang" : "";
+
+    // Normalize slug
+    $slug = trim($slug, '/');
+
+    if ($slug === '' || $slug === 'home' || $slug === 'index' || $slug === 'index.php') {
+        return $base . (($lang === 'en') ? "/" : "/$lang/");
+    }
+
+    if ($slug === 'blog') {
+        return "$base$prefix/blog/";
+    }
+
+    $tools = ['video-downloader', 'photo-downloader', 'reels-downloader', 'igtv-downloader', 'carousel-downloader', 'story-downloader', 'image-downloader'];
+
+    if (in_array($slug, $tools)) {
+        return "$base$prefix/$slug/";
+    }
+
+    if ($type === 'post') {
+        return "$base$prefix/post/$slug/";
+    }
+
+    return "$base$prefix/page/$slug/";
+}
+
+function getAssetUrl($path)
+{
+    $scriptName = str_replace('\\', '/', $_SERVER['SCRIPT_NAME']);
+    $docRoot = str_replace('\\', '/', $_SERVER['DOCUMENT_ROOT'] ?? '');
+
+    $scriptName = preg_replace('/^\/?[a-z]:/i', '', $scriptName);
+    $docRoot = preg_replace('/^\/?[a-z]:/i', '', $docRoot);
+
+    if (!empty($docRoot)) {
+        $scriptName = str_ireplace($docRoot, '', $scriptName);
+    }
+
+    $scriptName = str_replace(':', '', $scriptName);
+    $scriptName = '/' . ltrim($scriptName, '/');
+
+    $base = str_replace(basename($scriptName), '', $scriptName);
+    $base = rtrim($base, '/');
+    return $base . '/' . ltrim($path, '/');
 }

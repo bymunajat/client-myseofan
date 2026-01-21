@@ -25,7 +25,7 @@ if (!$page && $lang !== 'en') {
 }
 
 if (!$page) {
-    header("Location: " . (($lang !== 'en') ? $lang : './'));
+    header("Location: " . getUrl('/', $lang));
     exit;
 }
 
@@ -54,11 +54,12 @@ $pageIdentifier = 'page';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $seoHelper->getTitle(); ?></title>
     <meta name="description" content="<?php echo $seoHelper->getDescription(); ?>">
+    <meta name="robots" content="noindex, nofollow">
     <?php echo $seoHelper->getOGTags(); ?>
     <?php echo $seoHelper->getHreflangTags(); ?>
     <?php echo $seoHelper->getSchemaMarkup(); ?>
     <?php if (!empty($settings['favicon_path'])): ?>
-        <link rel="icon" type="image/x-icon" href="<?php echo htmlspecialchars($settings['favicon_path']); ?>">
+        <link rel="icon" type="image/x-icon" href="<?php echo getAssetUrl($settings['favicon_path']); ?>">
     <?php endif; ?>
 
     <!-- Fonts -->
@@ -73,12 +74,13 @@ $pageIdentifier = 'page';
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 
+    <link rel="stylesheet" href="<?php echo getAssetUrl('assets/css/responsive.css'); ?>">
     <style>
-        <link rel="stylesheet" href="assets/css/responsive.css">body {
-            font-family: 'Outfit', sans-serif;
-            background-color: #f8fafc;
-            color: #1a1a1a;
-            line-height: 1.8;
+        font-family: 'Outfit',
+        sans-serif;
+        background-color: #f8fafc;
+        color: #1a1a1a;
+        line-height: 1.8;
         }
 
         .glass-header {
@@ -187,16 +189,16 @@ $pageIdentifier = 'page';
     <!-- Navigation -->
     <nav class="fixed top-0 w-full z-50 py-4 glass-header">
         <div class="max-w-7xl mx-auto px-6 flex items-center justify-between">
-            <a href="<?php echo ($lang !== 'en') ? $lang : './'; ?>" class="logo-text">
+            <a href="<?php echo getUrl('/', $lang); ?>" class="logo-text">
                 <?php if (!empty($settings['logo_path'])): ?>
-                    <img src="<?php echo htmlspecialchars($settings['logo_path']); ?>" class="h-8 w-auto" alt="Logo">
+                    <img src="<?php echo getAssetUrl($settings['logo_path']); ?>" class="h-8 w-auto" alt="Logo">
                 <?php else: ?>
                     <i data-lucide="layers" class="w-8 h-8 text-purple-600"></i>
                 <?php endif; ?>
                 <?php echo htmlspecialchars($settings['site_name'] ?: 'MySeoFan'); ?>
             </a>
 
-            <div class="flex items-center gap-6 text-slate-700 font-bold text-sm uppercase tracking-wider">
+            <div class="flex items-center gap-6 text-slate-800 font-bold text-sm uppercase tracking-wider">
                 <nav class="hidden md:flex items-center gap-6">
                     <?php foreach ($headerItems as $item): ?>
                         <a href="<?php echo htmlspecialchars($item['final_url']); ?>"
@@ -207,12 +209,13 @@ $pageIdentifier = 'page';
                 </nav>
                 <div class="relative group cursor-pointer">
                     <div class="flex items-center gap-1 hover:text-purple-600 transition-colors uppercase">
-                        <?php echo $lang; ?> <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                        <?php echo $lang; ?> <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400"></i>
                     </div>
                     <div class="absolute right-0 top-full pt-2 hidden group-hover:block z-50">
                         <div class="w-32 bg-white shadow-xl rounded-xl p-2 border border-gray-100">
                             <?php foreach (['en' => '🇺🇸 EN', 'id' => '🇮🇩 ID', 'es' => '🇪🇸 ES', 'fr' => '🇫🇷 FR', 'de' => '🇩🇪 DE', 'ja' => '🇯🇵 JA'] as $code => $label): ?>
-                                <a href="<?php echo ($code === 'en') ? './' : $code; ?>"
+                                <?php $switchUrl = getUrl($slug, $code, 'page'); ?>
+                                <a href="<?php echo $switchUrl; ?>"
                                     class="block px-4 py-2 text-xs hover:bg-purple-50 rounded-lg <?php echo $lang === $code ? 'text-purple-600 font-bold' : ''; ?>">
                                     <?php echo $label; ?>
                                 </a>
@@ -222,7 +225,7 @@ $pageIdentifier = 'page';
                 </div>
             </div>
             <!-- Mobile Menu Button -->
-            <button id="mobile-menu-btn" class="md:hidden text-white ml-2 hover:text-[#ec4899] transition-colors">
+            <button id="mobile-menu-btn" class="md:hidden text-slate-800 ml-2 hover:text-purple-600 transition-colors">
                 <i data-lucide="menu" class="w-8 h-8"></i>
             </button>
         </div>
@@ -253,7 +256,7 @@ $pageIdentifier = 'page';
         <div class="max-w-4xl mx-auto px-6">
             <div class="footer-brand">
                 <?php if (!empty($settings['logo_path'])): ?>
-                    <img src="<?php echo htmlspecialchars($settings['logo_path']); ?>" class="h-10 w-auto" alt="Logo">
+                    <img src="<?php echo getAssetUrl($settings['logo_path']); ?>" class="h-10 w-auto" alt="Logo">
                 <?php else: ?>
                     <i data-lucide="layers" class="footer-logo-icon"></i>
                 <?php endif; ?>
@@ -317,27 +320,27 @@ $pageIdentifier = 'page';
             <div class="space-y-4">
                 <h4 class="text-xs font-bold text-slate-500 uppercase tracking-widest pl-2">Tools</h4>
                 <div class="grid grid-cols-2 gap-3">
-                    <a href="video-downloader<?php echo ($lang !== 'en') ? '/' . $lang : ''; ?>"
+                    <a href="<?php echo getUrl('video-downloader', $lang); ?>"
                         class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 text-white transition-all">
                         <i data-lucide="video" class="w-5 h-5 text-purple-400"></i> <span
                             class="font-bold text-sm">Video</span>
                     </a>
-                    <a href="photo-downloader<?php echo ($lang !== 'en') ? '/' . $lang : ''; ?>"
+                    <a href="<?php echo getUrl('photo-downloader', $lang); ?>"
                         class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 text-white transition-all">
                         <i data-lucide="image" class="w-5 h-5 text-pink-400"></i> <span
                             class="font-bold text-sm">Photo</span>
                     </a>
-                    <a href="reels-downloader<?php echo ($lang !== 'en') ? '/' . $lang : ''; ?>"
+                    <a href="<?php echo getUrl('reels-downloader', $lang); ?>"
                         class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 text-white transition-all">
                         <i data-lucide="clapperboard" class="w-5 h-5 text-fuchsia-400"></i> <span
                             class="font-bold text-sm">Reels</span>
                     </a>
-                    <a href="igtv-downloader<?php echo ($lang !== 'en') ? '/' . $lang : ''; ?>"
+                    <a href="<?php echo getUrl('igtv-downloader', $lang); ?>"
                         class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 text-white transition-all">
                         <i data-lucide="tv" class="w-5 h-5 text-indigo-400"></i> <span
                             class="font-bold text-sm">IGTV</span>
                     </a>
-                    <a href="carousel-downloader<?php echo ($lang !== 'en') ? '/' . $lang : ''; ?>"
+                    <a href="<?php echo getUrl('carousel-downloader', $lang); ?>"
                         class="col-span-2 flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 text-white transition-all">
                         <i data-lucide="layout" class="w-5 h-5 text-blue-400"></i> <span
                             class="font-bold text-sm">Carousel</span>
@@ -363,7 +366,7 @@ $pageIdentifier = 'page';
                 <h4 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">Language</h4>
                 <div class="grid grid-cols-3 gap-2">
                     <?php foreach (['en' => '🇺🇸 EN', 'id' => '🇮🇩 ID', 'es' => '🇪🇸 ES', 'fr' => '🇫🇷 FR', 'de' => '🇩🇪 DE', 'ja' => '🇯🇵 JA'] as $code => $label): ?>
-                        <a href="<?php echo ($code === 'en') ? './' : $code; ?>"
+                        <a href="<?php echo getUrl($slug, $code, 'page'); ?>"
                             class="text-center p-2 rounded-lg bg-white/5 text-xs font-bold text-white <?php echo $lang === $code ? 'bg-purple-600' : ''; ?>">
                             <?php echo $label; ?>
                         </a>
@@ -372,7 +375,7 @@ $pageIdentifier = 'page';
             </div>
         </div>
     </div>
-    <script src="assets/js/app.js?v=1.1"></script>
+    <script src="<?php echo getAssetUrl('assets/js/app.js?v=1.1'); ?>"></script>
     <?php echo $settings['footer_code'] ?? ''; ?>
 </body>
 

@@ -46,6 +46,7 @@ class SEO_Helper
         $image = $this->seo['og_image'] ?? '';
 
         return "
+        <meta name=\"robots\" content=\"noindex, nofollow\">
         <meta property=\"og:title\" content=\"$title\">
         <meta property=\"og:description\" content=\"$desc\">
         <meta property=\"og:image\" content=\"$image\">
@@ -60,20 +61,31 @@ class SEO_Helper
 
         $tags = "";
         $host = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]";
+        $langs = ['en', 'id', 'es', 'fr', 'de', 'ja', 'it', 'pt', 'tr', 'ru', 'ar', 'zh', 'ko']; // Expanded list
 
-        // Base URL logic - assumes current file is index.php/blog.php/pages.php
-        $file = basename($_SERVER['PHP_SELF']);
-
+        // Current Path Logic
         if ($this->page === 'home') {
-            $langs = ['en', 'id', 'es', 'fr', 'de', 'ja'];
             foreach ($langs as $l) {
-                $tags .= "<link rel=\"alternate\" hreflang=\"$l\" href=\"$host/$file?lang=$l\">\n";
+                $path = ($l === 'en') ? '/' : "/$l/";
+                $tags .= "<link rel=\"alternate\" hreflang=\"$l\" href=\"$host$path\">\n";
             }
+            // Canonical
+            $current_path = ($this->lang === 'en') ? '/' : "/{$this->lang}/";
+            $tags .= "<link rel=\"canonical\" href=\"$host$current_path\">\n";
+        } elseif (in_array($this->page, ['video', 'photo', 'reels', 'igtv', 'carousel'])) {
+            $tool_slug = $this->page . "-downloader";
+            foreach ($langs as $l) {
+                $path = ($l === 'en') ? "/$tool_slug/" : "/$l/$tool_slug/";
+                $tags .= "<link rel=\"alternate\" hreflang=\"$l\" href=\"$host$path\">\n";
+            }
+            // Canonical
+            $current_path = ($this->lang === 'en') ? "/$tool_slug/" : "/{$this->lang}/$tool_slug/";
+            $tags .= "<link rel=\"canonical\" href=\"$host$current_path\">\n";
         } elseif ($this->page === 'blog_detail' || $this->page === 'static_page') {
             $table = ($this->page === 'blog_detail') ? 'blog_posts' : 'pages';
             $slug = $_GET['slug'] ?? '';
+            $prefix = ($this->page === 'blog_detail') ? 'post' : 'page';
 
-            // Find the group of the current item
             $stmt = $this->pdo->prepare("SELECT translation_group FROM $table WHERE slug = ? LIMIT 1");
             $stmt->execute([$slug]);
             $group = $stmt->fetchColumn();
@@ -83,7 +95,14 @@ class SEO_Helper
                 $stmt->execute([$group]);
                 $variants = $stmt->fetchAll();
                 foreach ($variants as $v) {
-                    $tags .= "<link rel=\"alternate\" hreflang=\"{$v['lang_code']}\" href=\"$host/$file?lang={$v['lang_code']}&slug={$v['slug']}\">\n";
+                    $l = $v['lang_code'];
+                    $s = $v['slug'];
+                    $path = ($l === 'en') ? "/$prefix/$s/" : "/$l/$prefix/$s/";
+                    $tags .= "<link rel=\"alternate\" hreflang=\"$l\" href=\"$host$path\">\n";
+
+                    if ($l === $this->lang) {
+                        $tags .= "<link rel=\"canonical\" href=\"$host$path\">\n";
+                    }
                 }
             }
         }

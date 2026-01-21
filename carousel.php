@@ -98,13 +98,14 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $seoHelper->getTitle(); ?></title>
     <meta name="description" content="<?php echo $seoHelper->getDescription(); ?>">
+    <meta name="robots" content="noindex, nofollow">
     <?php echo $seoHelper->getOGTags(); ?>
     <?php echo $seoHelper->getHreflangTags(); ?>
     <?php echo $seoHelper->getSchemaMarkup(); ?>
 
     <!-- Favicon -->
     <?php if (!empty($settings['favicon_path'])): ?>
-        <link rel="icon" type="image/x-icon" href="<?php echo htmlspecialchars($settings['favicon_path']); ?>">
+        <link rel="icon" type="image/x-icon" href="<?php echo getAssetUrl($settings['favicon_path']); ?>">
     <?php endif; ?>
 
     <!-- Fonts -->
@@ -121,7 +122,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
 
     <!-- Custom Header Code -->
     <?php echo $settings['header_code'] ?? ''; ?>
-    <link rel="stylesheet" href="assets/css/responsive.css">
+    <link rel="stylesheet" href="<?php echo getAssetUrl('assets/css/responsive.css'); ?>">
 
     <style>
         /* Reusing exact CSS from index.php for consistency */
@@ -711,9 +712,9 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
     <!-- Navigation -->
     <nav class="fixed top-0 w-full z-50 py-4 glass-header">
         <div class="max-w-7xl mx-auto px-6 flex items-center justify-between">
-            <a href="<?php echo ($lang !== 'en') ? $lang : './'; ?>" class="logo-text">
+            <a href="<?php echo getUrl('/', $lang); ?>" class="logo-text">
                 <?php if (!empty($settings['logo_path'])): ?>
-                    <img src="<?php echo htmlspecialchars($settings['logo_path']); ?>" class="h-8 w-auto" alt="Logo">
+                    <img src="<?php echo getAssetUrl($settings['logo_path']); ?>" class="h-8 w-auto" alt="Logo">
                 <?php else: ?>
                     <i data-lucide="layers" class="w-8 h-8 text-purple-600"></i>
                 <?php endif; ?>
@@ -736,7 +737,8 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                     <div class="absolute right-0 top-full pt-2 hidden group-hover:block z-50">
                         <div class="w-32 bg-slate-900 shadow-2xl rounded-xl p-2 border border-slate-800">
                             <?php foreach (['en' => '🇺🇸 EN', 'id' => '🇮🇩 ID', 'es' => '🇪🇸 ES', 'fr' => '🇫🇷 FR', 'de' => '🇩🇪 DE', 'ja' => '🇯🇵 JA'] as $code => $label): ?>
-                                <a href="<?php echo ($code === 'en') ? './' : $code; ?>"
+                                <?php $switchUrl = getUrl($pageIdentifier . '-downloader', $code); ?>
+                                <a href="<?php echo $switchUrl; ?>"
                                     class="block px-4 py-2 text-xs hover:bg-slate-800 rounded-lg <?php echo $lang === $code ? 'text-[#ec4899] font-bold' : 'text-slate-300'; ?>">
                                     <?php echo $label; ?>
                                 </a>
@@ -756,34 +758,25 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
     <!-- Hero Section -->
     <section id="downloader" class="hero-section">
         <div class="max-w-5xl mx-auto text-center px-6 w-full">
-            <!-- Tool Bar (Desktop) -->
-            <div class="tool-bar animate-fade-up hidden md:inline-flex">
-                <a href="video-downloader<?php echo ($lang !== 'en') ? '/' . $lang : ''; ?>"
-                    class="tool-item <?php echo $pageIdentifier == 'video' ? 'active' : ''; ?>"><i data-lucide="video"
-                        class="w-4 h-4"></i> Video</a>
-                <a href="photo-downloader<?php echo ($lang !== 'en') ? '/' . $lang : ''; ?>"
-                    class="tool-item <?php echo $pageIdentifier == 'photo' ? 'active' : ''; ?>"><i data-lucide="image"
-                        class="w-4 h-4"></i> Photo</a>
-                <a href="reels-downloader<?php echo ($lang !== 'en') ? '/' . $lang : ''; ?>"
-                    class="tool-item <?php echo $pageIdentifier == 'reels' ? 'active' : ''; ?>"><i
-                        data-lucide="clapperboard" class="w-4 h-4"></i> Reels</a>
-                <a href="igtv-downloader<?php echo ($lang !== 'en') ? '/' . $lang : ''; ?>"
-                    class="tool-item <?php echo $pageIdentifier == 'igtv' ? 'active' : ''; ?>"><i data-lucide="tv"
-                        class="w-4 h-4"></i> IGTV</a>
-                <a href="carousel-downloader<?php echo ($lang !== 'en') ? '/' . $lang : ''; ?>"
-                    class="tool-item <?php echo $pageIdentifier == 'carousel' ? 'active' : ''; ?>"><i
-                        data-lucide="layout" class="w-4 h-4"></i> Carousel</a>
+            <!-- Tool Bar (Desktop & Mobile Icons) -->
+            <?php
+            $allTools = [
+                ['id' => 'video', 'slug' => 'video-downloader', 'label' => 'Video', 'icon' => 'video'],
+                ['id' => 'photo', 'slug' => 'photo-downloader', 'label' => 'Photo', 'icon' => 'image'],
+                ['id' => 'reels', 'slug' => 'reels-downloader', 'label' => 'Reels', 'icon' => 'clapperboard'],
+                ['id' => 'igtv', 'slug' => 'igtv-downloader', 'label' => 'IGTV', 'icon' => 'tv'],
+                ['id' => 'carousel', 'slug' => 'carousel-downloader', 'label' => 'Carousel', 'icon' => 'layout'],
+            ];
+            ?>
+            <div class="tool-bar animate-fade-up">
+                <?php foreach ($allTools as $tool): ?>
+                    <a href="<?php echo getUrl($tool['slug'], $lang); ?>"
+                        class="tool-item <?php echo $pageIdentifier == $tool['id'] ? 'active' : ''; ?>">
+                        <i data-lucide="<?php echo $tool['icon']; ?>" class="w-4 h-4"></i>
+                        <span class="tool-label"><?php echo $tool['label']; ?></span>
+                    </a>
+                <?php endforeach; ?>
             </div>
-
-            <!-- Tool Dropdown (Mobile) -->
-            <select class="hero-mobile-dropdown animate-fade-up md:hidden" onchange="window.location.href=this.value">
-                <option value="" disabled <?php echo empty($pageIdentifier) ? 'selected' : ''; ?>>Select Tool</option>
-                <option value="video-downloader<?php echo ($lang !== 'en') ? '/' . $lang : ''; ?>" <?php echo $pageIdentifier == 'video' ? 'selected' : ''; ?>>Video Downloader</option>
-                <option value="photo-downloader<?php echo ($lang !== 'en') ? '/' . $lang : ''; ?>" <?php echo $pageIdentifier == 'photo' ? 'selected' : ''; ?>>Photo Downloader</option>
-                <option value="reels-downloader<?php echo ($lang !== 'en') ? '/' . $lang : ''; ?>" <?php echo $pageIdentifier == 'reels' ? 'selected' : ''; ?>>Reels Downloader</option>
-                <option value="igtv-downloader<?php echo ($lang !== 'en') ? '/' . $lang : ''; ?>" <?php echo $pageIdentifier == 'igtv' ? 'selected' : ''; ?>>IGTV Downloader</option>
-                <option value="carousel-downloader<?php echo ($lang !== 'en') ? '/' . $lang : ''; ?>" <?php echo $pageIdentifier == 'carousel' ? 'selected' : ''; ?>>Carousel Downloader</option>
-            </select>
 
             <!-- Title -->
             <h1 class="section-title animate-fade-up"><?php echo $t['hero_title']; ?></h1>
@@ -1068,27 +1061,27 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
             <div class="space-y-4">
                 <h4 class="text-xs font-bold text-slate-500 uppercase tracking-widest pl-2">Tools</h4>
                 <div class="grid grid-cols-2 gap-3">
-                    <a href="video-downloader<?php echo ($lang !== 'en') ? '/' . $lang : ''; ?>"
+                    <a href="<?php echo getUrl('video-downloader', $lang); ?>"
                         class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 text-white transition-all">
                         <i data-lucide="video" class="w-5 h-5 text-purple-400"></i> <span
                             class="font-bold text-sm">Video</span>
                     </a>
-                    <a href="photo-downloader<?php echo ($lang !== 'en') ? '/' . $lang : ''; ?>"
+                    <a href="<?php echo getUrl('photo-downloader', $lang); ?>"
                         class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 text-white transition-all">
                         <i data-lucide="image" class="w-5 h-5 text-pink-400"></i> <span
                             class="font-bold text-sm">Photo</span>
                     </a>
-                    <a href="reels-downloader<?php echo ($lang !== 'en') ? '/' . $lang : ''; ?>"
+                    <a href="<?php echo getUrl('reels-downloader', $lang); ?>"
                         class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 text-white transition-all">
                         <i data-lucide="clapperboard" class="w-5 h-5 text-fuchsia-400"></i> <span
                             class="font-bold text-sm">Reels</span>
                     </a>
-                    <a href="igtv-downloader<?php echo ($lang !== 'en') ? '/' . $lang : ''; ?>"
+                    <a href="<?php echo getUrl('igtv-downloader', $lang); ?>"
                         class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 text-white transition-all">
                         <i data-lucide="tv" class="w-5 h-5 text-indigo-400"></i> <span
                             class="font-bold text-sm">IGTV</span>
                     </a>
-                    <a href="carousel-downloader<?php echo ($lang !== 'en') ? '/' . $lang : ''; ?>"
+                    <a href="<?php echo getUrl('carousel-downloader', $lang); ?>"
                         class="col-span-2 flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 text-white transition-all">
                         <i data-lucide="layout" class="w-5 h-5 text-blue-400"></i> <span
                             class="font-bold text-sm">Carousel</span>
@@ -1114,7 +1107,8 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
                 <h4 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">Language</h4>
                 <div class="grid grid-cols-3 gap-2">
                     <?php foreach (['en' => '🇺🇸 EN', 'id' => '🇮🇩 ID', 'es' => '🇪🇸 ES', 'fr' => '🇫🇷 FR', 'de' => '🇩🇪 DE', 'ja' => '🇯🇵 JA'] as $code => $label): ?>
-                        <a href="<?php echo ($code === 'en') ? './' : $code; ?>"
+                        <?php $switchUrl = getUrl($pageIdentifier . '-downloader', $code); ?>
+                        <a href="<?php echo $switchUrl; ?>"
                             class="text-center p-2 rounded-lg bg-white/5 text-xs font-bold text-white <?php echo $lang === $code ? 'bg-purple-600' : ''; ?>">
                             <?php echo $label; ?>
                         </a>
@@ -1124,7 +1118,7 @@ $seoHelper = new SEO_Helper($pdo ?? null, $pageIdentifier, $lang);
         </div>
     </div>
 
-    <script src="assets/js/app.js?v=1.1"></script>
+    <script src="<?php echo getAssetUrl('assets/js/app.js?v=1.1'); ?>"></script>
     <?php echo $settings['footer_code'] ?? ''; ?>
 </body>
 

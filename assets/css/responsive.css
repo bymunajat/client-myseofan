@@ -71,56 +71,79 @@
     }
 }
 
-/* 3. Toolbar Mobile Fix */
-/* 3. Hero Mobile Dropdown Styles */
-.hero-mobile-dropdown {
-    display: none;
-    /* Hidden by default (desktop) */
-}
-
+/* 3. Hero Mobile Tool Bar (Icons instead of dropdown) */
 @media (max-width: 768px) {
-    .hero-mobile-dropdown {
-        display: block;
-        width: 100%;
-        padding: 12px 16px;
-        background: rgba(30, 41, 59, 0.6);
-        color: white;
-        border: 1px solid rgba(139, 92, 246, 0.3);
-        border-radius: 16px;
-        backdrop-filter: blur(12px);
-        margin-bottom: 2rem;
-        outline: none;
-        appearance: none;
-        font-size: 1rem;
-        font-weight: 600;
-        cursor: pointer;
-        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-        background-repeat: no-repeat;
-        background-position: right 1rem center;
-        background-size: 1.2rem;
+    .tool-bar {
+        display: flex !important;
+        overflow-x: auto !important;
+        white-space: nowrap !important;
+        width: 100% !important;
+        padding: 5px !important;
+        border-radius: 12px !important;
+        gap: 5px !important;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none; /* Hide scrollbar Firefox */
+    }
+    
+    .tool-bar::-webkit-scrollbar {
+        display: none; /* Hide scrollbar Chrome/Safari */
     }
 
-    .hero-mobile-dropdown:focus {
-        border-color: #ec4899;
-        box-shadow: 0 0 0 2px rgba(236, 72, 153, 0.2);
+    .tool-item {
+        flex: 0 0 auto !important;
+        padding: 10px 16px !important;
+        font-size: 0.85rem !important;
+        border-radius: 10px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 4px !important;
+        border-right: none !important;
+        background: rgba(30, 41, 59, 0.4) !important;
+    }
+
+    .tool-item i {
+        width: 1.25rem !important; /* Fix oversized icons */
+        height: 1.25rem !important;
+    }
+
+    .tool-label {
+        font-size: 0.75rem !important;
+    }
+
+    .tool-item.active {
+        background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%) !important;
     }
 }
 
-/* 4. Typography Adjustments */
+/* 4. Fix Oversized Icons globally on Mobile */
+@media (max-width: 640px) {
+    [data-lucide] {
+        width: 24px !important;
+        height: 24px !important;
+    }
+    
+    .icon-circle {
+        width: 60px !important;
+        height: 60px !important;
+    }
+    
+    .icon-circle svg {
+        width: 28px !important;
+        height: 28px !important;
+    }
+}
+
+/* 5. Typography & Layout Adjustments */
 @media (max-width: 640px) {
     .section-title {
-        font-size: 2.5rem !important;
-        line-height: 1.1 !important;
-        padding: 0 10px !important;
+        font-size: 2rem !important;
+        line-height: 1.2 !important;
     }
 
     .section-subtitle {
-        font-size: 1rem !important;
-        padding: 0 20px !important;
-    }
-
-    .logo-text {
-        font-size: 1.4rem !important;
+        font-size: 0.95rem !important;
+        margin-bottom: 2rem !important;
     }
 }
 

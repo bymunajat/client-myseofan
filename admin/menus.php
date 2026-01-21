@@ -23,10 +23,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     try {
         $pdo->beginTransaction();
 
-        // 1. Delete existing items for this specific location/language combo
-        //    (In a real WP system we might update, but delete-replace is safer for structure changes here)
-        $stmt = $pdo->prepare("DELETE FROM menu_items WHERE menu_location = ? AND lang_code = ?");
-        $stmt->execute([$location, $_curr_lang]);
+        // 1. Delete existing items for this location (English only)
+        $stmt = $pdo->prepare("DELETE FROM menu_items WHERE menu_location = ? AND lang_code = 'en'");
+        $stmt->execute([$location]);
 
         // 2. Recursive function to insert items
         function insertMenuItems($items, $pdo, $location, $lang, $parentId = 0)
@@ -52,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             }
         }
 
-        insertMenuItems($menuData, $pdo, $location, $_curr_lang);
+        insertMenuItems($menuData, $pdo, $location, 'en');
 
         $pdo->commit();
         echo json_encode(['success' => true, 'message' => 'Menu saved successfully!']);
@@ -89,8 +88,8 @@ function buildMenuTree($items, $parentId = 0)
     return $branch;
 }
 
-$stmt = $pdo->prepare("SELECT * FROM menu_items WHERE menu_location = ? AND lang_code = ? ORDER BY sort_order ASC");
-$stmt->execute([$location, $_curr_lang]);
+$stmt = $pdo->prepare("SELECT * FROM menu_items WHERE menu_location = ? AND lang_code = 'en' ORDER BY sort_order ASC");
+$stmt->execute([$location]);
 $rawItems = $stmt->fetchAll();
 $menuTree = buildMenuTree($rawItems);
 

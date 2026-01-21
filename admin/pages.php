@@ -26,18 +26,8 @@ $available_langs = [
     'ja' => ['label' => '日本語', 'flag' => '🇯🇵']
 ];
 
-// Determine Active Language for Filtering
-if (isset($_GET['filter_lang'])) {
-    $_curr_lang = $_GET['filter_lang'];
-    $_SESSION['last_page_lang'] = $_curr_lang;
-} elseif (isset($_SESSION['last_page_lang'])) {
-    $_curr_lang = $_SESSION['last_page_lang'];
-} else {
-    $_curr_lang = 'en';
-}
-
-if (!array_key_exists($_curr_lang, $available_langs))
-    $_curr_lang = 'en';
+// Always use English for pages (single source of truth)
+$_curr_lang = 'en';
 
 
 // AJAX Reorder Handler
@@ -61,51 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'reord
     }
 }
 
-// Handle Page Cloning
-if ($action === 'clone' && $id && isset($_GET['target_lang'])) {
-    $target_lang = $_GET['target_lang'];
-    try {
-        // Fetch original
-        $stmt = $pdo->prepare("SELECT * FROM pages WHERE id = ?");
-        $stmt->execute([$id]);
-        $original = $stmt->fetch();
 
-        if ($original) {
-            // Check collision
-            $stmt = $pdo->prepare("SELECT id FROM pages WHERE translation_group = ? AND lang_code = ?");
-            $stmt->execute([$original['translation_group'], $target_lang]);
-            if ($stmt->fetch()) {
-                $error = "A page in " . $available_langs[$target_lang]['label'] . " already exists for this group.";
-            } else {
-                // Insert clone
-                $stmt = $pdo->prepare("INSERT INTO pages (title, slug, content, lang_code, meta_title, meta_description, translation_group, show_in_header, show_in_footer, menu_order, footer_section) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-                // Append lang code to slug to avoid unique constraint if slug is unique (though schema might allow same slug diff lang, let's be safe)
-                $new_slug = $original['slug'] . '-' . $target_lang;
-                // Modify title slightly to indicate clone? No, usually keep same.
-
-                $stmt->execute([
-                    $original['title'],
-                    $new_slug,
-                    $original['content'],
-                    $target_lang,
-                    $original['meta_title'],
-                    $original['meta_description'],
-                    $original['translation_group'],
-                    $original['show_in_header'],
-                    $original['show_in_footer'],
-                    $original['menu_order'],
-                    $original['footer_section']
-                ]);
-                $message = "Page cloned to " . $available_langs[$target_lang]['label'] . " successfully!";
-                $_curr_lang = $target_lang; // Switch view to target
-                $action = 'list';
-            }
-        }
-    } catch (\Exception $e) {
-        $error = "Clone failed: " . $e->getMessage();
-        $action = 'list';
-    }
-}
 
 // Handle CRUD Logic
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $action !== 'reorder') {
@@ -165,8 +111,8 @@ $pages = [];
 $cu_p = null;
 if ($action === 'list') {
     try {
-        $stmt = $pdo->prepare("SELECT * FROM pages WHERE lang_code = ? ORDER BY title ASC");
-        $stmt->execute([$_curr_lang]);
+        $stmt = $pdo->prepare("SELECT * FROM pages WHERE lang_code = 'en' ORDER BY title ASC");
+        $stmt->execute();
         $pages = $stmt->fetchAll();
     } catch (\Exception $e) {
         $error = "Query Error: " . $e->getMessage();
@@ -263,22 +209,7 @@ $page_title = "Pages";
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h3 class="card-title">Pages List</h3>
                                     <div class="card-tools">
-                                        <div class="btn-group me-2">
-                                            <button type="button" class="btn btn-tool dropdown-toggle"
-                                                data-bs-toggle="dropdown">
-                                                <i class="bi bi-globe me-1"></i>
-                                                <?php echo $available_langs[$_curr_lang]['label']; ?>
-                                            </button>
-                                            <ul class="dropdown-menu dropdown-menu-end">
-                                                <?php foreach ($available_langs as $code => $lang): ?>
-                                                    <li><a href="?filter_lang=<?php echo $code; ?>"
-                                                            class="dropdown-item <?php echo $_curr_lang === $code ? 'active' : ''; ?>"><?php echo $lang['flag'] . ' ' . $lang['label']; ?></a>
-                                                    </li>
-                                                <?php endforeach; ?>
-                                            </ul>
-                                        </div>
-                                        <a href="?action=add&filter_lang=<?php echo $_curr_lang; ?>"
-                                            class="btn btn-primary btn-sm">
+                                        <a href="?action=add" class="btn btn-primary btn-sm">
                                             <i class="bi bi-plus-lg"></i> New Page
                                         </a>
                                     </div>
@@ -325,22 +256,14 @@ $page_title = "Pages";
                                                             </button>
                                                             <ul class="dropdown-menu">
                                                                 <li><a class="dropdown-item"
-                                                                        href="?action=edit&id=<?php echo $p['id']; ?>&filter_lang=<?php echo $_curr_lang; ?>"><i
+                                                                        href="?action=edit&id=<?php echo $p['id']; ?>"><i
                                                                             class="bi bi-pencil me-2"></i> Edit</a></li>
-                                                                <?php foreach ($available_langs as $code => $lang): ?>
-                                                                    <?php if ($code !== $_curr_lang): ?>
-                                                                        <li><a class="dropdown-item"
-                                                                                href="?action=clone&id=<?php echo $p['id']; ?>&target_lang=<?php echo $code; ?>"><i
-                                                                                    class="bi bi-copy me-2"></i> Clone to
-                                                                                <?php echo $lang['label']; ?></a></li>
-                                                                    <?php endif; ?>
-                                                                <?php endforeach; ?>
                                                                 <li>
                                                                     <hr class="dropdown-divider">
                                                                 </li>
                                                                 <li><a class="dropdown-item text-danger"
                                                                         href="javascript:void(0);"
-                                                                        onclick="confirmDelete('?action=delete&id=<?php echo $p['id']; ?>&filter_lang=<?php echo $_curr_lang; ?>')"><i
+                                                                        onclick="confirmDelete('?action=delete&id=<?php echo $p['id']; ?>')"><i
                                                                             class="bi bi-trash me-2"></i> Delete</a></li>
                                                             </ul>
                                                         </div>
